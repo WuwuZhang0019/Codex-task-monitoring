@@ -55,6 +55,7 @@ export function inspectReceipts(projectId,m){
  const latest=s=>log.receipts.filter(e=>e.receipt.stationId===s.id&&!identity(projectId,m,e.receipt)).at(-1);
  const initial=m.plans.find(p=>p.id===m.initialPlanId),current=m.plans.find(p=>p.id===m.currentPlanId);
  const projectCriteria=[...new Set([...(m.acceptance??[]),...(initial?.acceptance??[]),...(current?.acceptance??[]),...(nonempty(initial?.goal)?[`原始目标：${initial.goal}`]:[])])];
+ const taskCriteria=task=>[...task.acceptance,...(nonempty(task.initialGoal)?[`原始任务目标：${task.initialGoal}`]:[])];
  function criteria(required,checks,evidence,version){
   if(!Array.isArray(required)||!required.length)return {result:'pending',reason:'缺少既定验收条件'};
   const outcomes=required.map(criterion=>{
@@ -91,7 +92,7 @@ export function inspectReceipts(projectId,m){
   }).at(-1);
   if(!candidate)return false;
   const e=log.receipts.find(e=>e.id===candidate.receiptId);
-  return candidate.headHash===headDigest(m,e.receipt)&&!log.invalidations.some(i=>i.reviewId===candidate.id)&&criteria(task.acceptance,candidate.review.taskChecks,candidate.review.evidence,e.receipt.deliveryVersion).result==='passed';
+  return candidate.headHash===headDigest(m,e.receipt)&&!log.invalidations.some(i=>i.reviewId===candidate.id)&&criteria(taskCriteria(task),candidate.review.taskChecks,candidate.review.evidence,e.receipt.deliveryVersion).result==='passed';
  }
  const taskDone=t=>m.stations.some(s=>s.taskId===t.id)&&m.stations.filter(s=>s.taskId===t.id).every(s=>passed(s.id))&&terminalChecks(t);
  const allTasks=m.tasks.length>0&&m.tasks.every(taskDone);
@@ -110,18 +111,18 @@ export function inspectReceipts(projectId,m){
   if(out.handoffs.some(h=>h.match==='mismatch')){decide('G','头尾范围或交付要求不匹配，不解锁后继');continue;}
   if(out.handoffs.some(h=>h.match==='pending')){decide('B','头尾匹配证据不足');continue;}
   const owner=m.tasks.find(t=>t.id===s.taskId);
-  if(!s.successors.some(id=>m.stations.find(x=>x.id===id)?.taskId===s.taskId)&&criteria(owner.acceptance,v.review.taskChecks,v.review.evidence,e.receipt.deliveryVersion).result==='failed'){decide('A','任务终点验收未通过，继续本站必要修复');continue;}
+  if(!s.successors.some(id=>m.stations.find(x=>x.id===id)?.taskId===s.taskId)&&criteria(taskCriteria(owner),v.review.taskChecks,v.review.evidence,e.receipt.deliveryVersion).result==='failed'){decide('A','任务终点验收未通过，继续本站必要修复');continue;}
   if(!s.successors.some(id=>m.stations.find(x=>x.id===id)?.taskId===s.taskId)&&taskDone(owner)){
    const projectPassed=allTasks&&criteria(projectCriteria,v.review.projectChecks,v.review.evidence,e.receipt.deliveryVersion).result==='passed';
-   decide(projectPassed?'F':'E',projectPassed?'项目全部预设条件通过（关闭执行属于 M04）':`本任务线交付通过；交接对象：${owner.handoff||'无'}，下游依赖与项目条件另行核对`);continue;
+   decide(projectPassed?'F':'E',projectPassed?'项目全部预设条件通过':`本任务线交付通过；交接对象：${owner.handoff||'无'}，下游依赖与项目条件另行核对`);continue;
   }
   if(out.handoffs.some(h=>h.waiting.length)){decide('C','后继尚有其他必要依赖未满足');continue;}
   if(s.successors.length){decide('D','本站与全部后继交接通过；可开始不代表已经开始');continue;}
   const task=m.tasks.find(t=>t.id===s.taskId);
-  if(criteria(task.acceptance,v.review.taskChecks,v.review.evidence,e.receipt.deliveryVersion).result==='failed'){decide('A','任务终点验收未通过，继续本站必要修复');continue;}
+  if(criteria(taskCriteria(task),v.review.taskChecks,v.review.evidence,e.receipt.deliveryVersion).result==='failed'){decide('A','任务终点验收未通过，继续本站必要修复');continue;}
   if(!taskDone(task)){decide('B','终点还需任务全部站点及终点条件的有效证据');continue;}
   const projectPassed=allTasks&&criteria(projectCriteria,v.review.projectChecks,v.review.evidence,e.receipt.deliveryVersion).result==='passed';
-  decide(projectPassed?'F':'E',projectPassed?'项目全部预设条件通过（关闭执行属于 M04）':`本任务线交付通过；交接对象：${task.handoff||'无'}，项目完成条件另行核对`);
+  decide(projectPassed?'F':'E',projectPassed?'项目全部预设条件通过':`本任务线交付通过；交接对象：${task.handoff||'无'}，项目完成条件另行核对`);
  }
  return {ruleVersion:'m03-v1',results,log,quarantined:log.receipts.filter(e=>identity(projectId,m,e.receipt)).map(e=>({id:e.id,reason:identity(projectId,m,e.receipt)}))};
 }

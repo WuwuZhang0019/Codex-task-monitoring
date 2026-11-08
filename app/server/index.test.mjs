@@ -68,6 +68,25 @@ function modelResponse(value, { fenced = false, finish = 'stop' } = {}) {
 const validExtraction = () => ({ name: '导入项目', goal: '实现工作台', steps: [step()], warnings: ['M01未明确依赖，未推断依赖'] });
 const SUMMARY_STEP = { id: 'M01', title: '服务', purpose: '本地运行', acceptance: ['测试通过'] };
 
+test('M04 HTTP 开始来源核对、自动关闭、关闭幂等与保存重开',async t=>{
+ const f=await fixture(t),p=await create(f),base=`/api/projects/${p.id}`,modelPath=base+'/model',url=base+'/monitor';
+ let value=(await f.request(modelPath)).value;const m=value.model,s=m.stations[0],task=m.tasks[0];
+ m.folders=[{id:'F'}];task.folderId='F';task.goal='任务目标';task.initialGoal='任务目标';task.acceptance=['任务验收'];
+ m.chats=[{id:'C',taskId:task.id,folderId:'F'}];m.plans=[{id:'V',version:'1',source:'方案',goal:'项目目标',acceptance:['项目验收'],previousId:null}];m.initialPlanId='V';m.currentPlanId='V';s.planId='V';m.acceptance=['项目验收'];
+ assert.equal((await f.request(modelPath,{method:'PUT',body:value})).status,200);
+ let monitor=(await f.request(url)).value;assert.equal(monitor.stations[0].color,'dark');
+ assert.equal((await f.request(url,{method:'POST',body:{revision:monitor.revision,stationId:s.id,sourceId:'wrong',evidence:'消息',executionId:'x'}})).status,400);
+ let res=await f.request(url,{method:'POST',body:{revision:monitor.revision,stationId:s.id,sourceId:'C',evidence:'消息',executionId:'x'}});assert.equal(res.status,200);monitor=res.value;assert.equal(monitor.stations[0].color,'green');
+ const receipt={projectId:p.id,folderId:'F',taskId:task.id,stationId:s.id,planId:'V',sourceId:'C',deliveryVersion:'sha',raw:'原回执',actual:'实际交付',checks:[],blockers:[],next:[]};
+ const imported=(await f.request(base+'/receipts',{method:'POST',body:{revision:monitor.revision,action:'import',receipt}})).value;assert.equal((await f.request(url)).value.stations[0].color,'dark');
+ const check=criterion=>({criterion,result:'passed',reason:'实际检查通过',evidenceIds:['e']});
+ const review={reviewer:'验收人',method:'对照方案和输出',checks:['本地测试通过'].map(check),taskChecks:['任务验收','原始任务目标：任务目标'].map(check),projectChecks:['项目验收','原始目标：项目目标'].map(check),handoffs:[],evidence:[{id:'e',location:'结果',deliveryVersion:'sha',method:'读取结果',reason:'版本和结果通过',result:'valid'}]};
+ assert.equal((await f.request(base+'/receipts',{method:'POST',body:{revision:imported.revision,action:'review',receiptId:imported.log.receipts[0].id,review}})).status,200);
+ monitor=(await f.request(url)).value;assert.equal(monitor.stations[0].color,'red');assert.equal(monitor.project.status,'closed');assert.equal(monitor.tasks[0].status,'closed');assert.equal(monitor.lifecycle.closures.length,2);
+ assert.deepEqual((await f.request(url)).value,monitor);await f.stop();await f.start();assert.deepEqual((await f.request(url)).value,monitor);
+ assert.equal((await f.request(url,{method:'POST',body:{revision:monitor.revision,stationId:s.id,sourceId:'C',evidence:'消息',executionId:'new'}})).status,400);
+});
+
 test('M03 HTTP 导入、核验、重复幂等、重启历史与失效',async t=>{
  const f=await fixture(t),p=await create(f),modelPath=`/api/projects/${p.id}/model`,url=`/api/projects/${p.id}/receipts`;
  let saved=(await f.request(modelPath)).value;const m=saved.model,s=m.stations[0],task=m.tasks[0];

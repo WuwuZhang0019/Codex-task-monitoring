@@ -20,7 +20,7 @@ try{
  await page.getByRole('button',{name:'添加聊天来源',exact:true}).click();await page.locator('[aria-label$=" 聊天标识（可待绑定）"]').last().fill('chat-two');
  await page.getByRole('button',{name:'添加方案版本',exact:true}).click();await page.locator('[aria-label$=" 版本号"]').fill('1.0');
  await page.getByLabel('初始方案',{exact:true}).selectOption({label:'1.0'});await page.getByLabel('当前方案',{exact:true}).selectOption({label:'1.0'});
- await page.getByRole('button',{name:'保存任务关系',exact:true}).click();await page.getByText('关系与方案版本已保存，验收状态仍为待核验。',{exact:true}).waitFor();
+ await page.getByRole('button',{name:'保存任务关系',exact:true}).click();await page.getByText('关系与方案版本已保存，验收结果请查看核验监测。',{exact:true}).waitFor();
  const endpoint=`/api/projects/${p.project.id}/model`;const saved=await fetch(base+endpoint).then(r=>r.json());
  assert.equal(saved.model.chats.length,2);assert.equal(saved.model.stations[0].verification,'pending');assert.equal(saved.model.stations[0].report.status,'done');
  assert.equal(await page.locator('[aria-label$=" 唯一所属文件夹"]').isDisabled(),true);

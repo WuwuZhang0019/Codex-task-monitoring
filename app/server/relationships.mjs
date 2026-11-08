@@ -17,6 +17,7 @@ export function validateRelationships(model) {
   const externalFolders=new Set();
   for(const folder of model.folders){if(folder.externalId){if(externalFolders.has(folder.externalId))fail('文件夹外部标识重复');externalFolders.add(folder.externalId);}}
   for (const task of model.tasks) {
+    if(task.initialGoal!==undefined&&task.initialGoal!==null&&typeof task.initialGoal!=='string')fail('原始任务目标必须是字符串或待确认');
     if (Object.hasOwn(task,'folderIds')) fail('任务只能有一个文件夹归属');
     if (task.folderId !== null && !maps.folders.has(task.folderId)) fail('任务文件夹不存在');
     if (!Array.isArray(task.acceptance)) fail('任务缺少终点验收条件');

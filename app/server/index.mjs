@@ -125,6 +125,13 @@ export async function createServer(options = {}) {
         throw new HttpError(405, '不支持的请求方法');
       }
       const modelMatch = pathname.match(/^\/api\/projects\/([^/]+)\/model$/);
+      const monitorMatch=pathname.match(/^\/api\/projects\/([^/]+)\/monitor$/);
+      if(monitorMatch){
+        if(!UUID.test(monitorMatch[1]))throw new HttpError(400,'项目 ID 必须是 UUID');
+        if(method==='GET')return sendJSON(res,200,await models.monitor(monitorMatch[1]));
+        if(method==='POST'){await models.start(monitorMatch[1],await jsonBody(req));return sendJSON(res,200,await models.monitor(monitorMatch[1]));}
+        throw new HttpError(405,'不支持的请求方法');
+      }
       const receiptMatch = pathname.match(/^\/api\/projects\/([^/]+)\/receipts$/);
       if(receiptMatch){
         if(!UUID.test(receiptMatch[1]))throw new HttpError(400,'项目 ID 必须是 UUID');
