@@ -7,7 +7,7 @@ import {createServer} from '../server/index.mjs';
 import {model,receipt,review} from './helpers/output-fixture.mjs';
 
 const dataDir=await mkdtemp(path.join(tmpdir(),'m05-browser-'));let server,browser;
-const archive=new URL('../../docs/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url),initialPlan=new URL('../../docs/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md',import.meta.url);
+const archive=new URL('../../docs/01_任务监测工作台_v1.0/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url),initialPlan=new URL('../../docs/01_任务监测工作台_v1.0/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md',import.meta.url);
 const originals=await Promise.all([readFile(archive,'utf8'),readFile(initialPlan,'utf8')]);
 try{
  server=await createServer({dataDir,env:{}});await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;

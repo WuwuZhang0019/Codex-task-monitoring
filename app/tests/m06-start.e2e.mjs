@@ -13,9 +13,9 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),repo=p
 const probe=net.createServer();await new Promise((resolve,reject)=>{probe.once('error',reject);probe.listen(4318,'127.0.0.1',resolve);});await new Promise(r=>probe.close(r));
 const dataDir=await mkdtemp(path.join(out,'startup-')),isolated=path.join(dataDir,'release');let child;let log='';
 try{
- await mkdir(path.join(isolated,'app'),{recursive:true});await mkdir(path.join(isolated,'docs'),{recursive:true});
+ await mkdir(path.join(isolated,'app'),{recursive:true});await mkdir(path.join(isolated,'docs/01_任务监测工作台_v1.0'),{recursive:true});
  for(const name of ['server','dist'])await cp(path.join(app,name),path.join(isolated,'app',name),{recursive:true});
- await cp(path.join(repo,'docs/02_任务收敛与交接指令_原文_2026-11-08.md'),path.join(isolated,'docs/02_任务收敛与交接指令_原文_2026-11-08.md'));
+ await cp(path.join(repo,'docs/01_任务监测工作台_v1.0/02_任务收敛与交接指令_原文_2026-11-08.md'),path.join(isolated,'docs/01_任务监测工作台_v1.0/02_任务收敛与交接指令_原文_2026-11-08.md'));
  const env=Object.fromEntries(['PATH','SystemRoot','WINDIR','ComSpec','TMP','TEMP'].filter(k=>process.env[k]).map(k=>[k,process.env[k]]));env.WORKBENCH_DATA_DIR=dataDir;
  child=spawn(process.execPath,['app/server/index.mjs'],{cwd:isolated,env,windowsHide:true,stdio:['ignore','pipe','pipe']});child.stdout.on('data',v=>{log+=v;});child.stderr.on('data',v=>{log+=v;});
  await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(new Error('启动超时：'+log)),10000);child.stdout.on('data',()=>{if(log.includes('http://127.0.0.1:4318')){clearTimeout(timeout);resolve();}});child.once('exit',code=>{clearTimeout(timeout);reject(new Error('启动退出 '+code+': '+log));});});
