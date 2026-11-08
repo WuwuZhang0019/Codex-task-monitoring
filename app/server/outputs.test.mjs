@@ -13,7 +13,7 @@ const template=await loadOutputTemplate();
 const output=(m,stationId='A',extra={})=>generateOutput(project,view(m),{stationId,...extra},template);
 
 test('最新模板按方案原文确定圈号和逐行完整步骤，登记子集不改变方案总数',async()=>{
- const source=await readFile(new URL('../../docs/01_任务监测工作台_v1.0/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md',import.meta.url),'utf8');
+ const source=await readFile(new URL('../../docs/01_任务监测工作台_v1.0/01_执行方案/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md',import.meta.url),'utf8');
  const steps=planSteps({source});assert.equal(steps.length,6);
  const m=model();m.plans[0].source=source;m.stations=[{...m.stations[0],id:'M06',code:'M06',title:steps[5].title,successors:[]}];
  const o=output(m,'M06'),text=o.instructions[0].text;
@@ -52,8 +52,8 @@ test('历史关闭后证据失效改为 B，后继不能复用失效依赖；缺
 });
 test('身份和方案缺失明确待核实，多个来源不猜测，不改变原文和验收历史',async()=>{
  const m=model();m.chats.push({...m.chats[0],id:'C2'});m.plans[0].sourcePath='';delete m.folders[0].externalId;
- const before=structuredClone(m),archive=await readFile(new URL('../../docs/01_任务监测工作台_v1.0/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url),'utf8');const b=output(m);
- assert.ok(b.warnings.some(w=>w.includes('方案路径待核实')));assert.ok(b.warnings.some(w=>w.includes('聊天来源待核实')));assert.match(b.instructions[0].text,/项目标识：待核实/);assert.deepEqual(m,before);assert.equal(await readFile(new URL('../../docs/01_任务监测工作台_v1.0/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url),'utf8'),archive);
+ const before=structuredClone(m),archive=await readFile(new URL('../../docs/01_任务监测工作台_v1.0/01_执行方案/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url),'utf8');const b=output(m);
+ assert.ok(b.warnings.some(w=>w.includes('方案路径待核实')));assert.ok(b.warnings.some(w=>w.includes('聊天来源待核实')));assert.match(b.instructions[0].text,/项目标识：待核实/);assert.deepEqual(m,before);assert.equal(await readFile(new URL('../../docs/01_任务监测工作台_v1.0/01_执行方案/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url),'utf8'),archive);
  const selected=output(m,'A',{sourceId:'C2'});assert.ok(!selected.warnings.some(w=>w.includes('聊天来源待核实')));
 });
 test('站点绑定不能证明方案步骤完整，不将已登记子集冒充方案总步数',()=>{
