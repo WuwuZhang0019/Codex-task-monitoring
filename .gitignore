@@ -1,0 +1,8 @@
+app/node_modules/
+app/data/
+app/.env
+app/.env.*
+!app/.env.example
+app/.test-build/
+app/test-results/
+*.log

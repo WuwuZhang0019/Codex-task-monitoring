@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>任务工作台 · 交互原型</title>
+<style>
+:root{color-scheme:light;--paper:#fff;--wash:#f3f6fa;--ink:#23324a;--muted:#65738a;--faint:#8a96a8;--line:#e1e7f0;--blue:#365edc;--blue-soft:#edf2ff;--green:#187968;--green-soft:#eaf5f0;--amber:#a65e14;--amber-soft:#fff5e6;--sidebar:202px;--assistant:316px;--font:"Aptos","Microsoft YaHei UI","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--wash);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}button,input,textarea,select{font:inherit}button,a,input,textarea,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button{color:inherit}button:disabled{cursor:not-allowed;opacity:.5}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #7496f3;outline-offset:3px}button,input,textarea,select{border-radius:7px}button{border:0;background:none}a{color:var(--blue)}h1,h2,h3,p{margin:0}h1,h2,h3{line-height:1.35}svg{display:block;flex:none}button svg{pointer-events:none}textarea{resize:vertical}textarea,input[type=text],input[type=search],select{border:1px solid #d6dfeb;background:white;color:var(--ink)}textarea,input[type=text],input[type=search]{padding:10px 12px}textarea:focus,input:focus,select:focus{border-color:var(--blue)}textarea::placeholder,input::placeholder{color:#8a95a6}textarea{width:100%;min-height:118px;line-height:1.8}input[type=text],input[type=search]{min-width:0;width:100%}input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue);flex:none}select{max-width:100%;padding:7px 28px 7px 10px}code{font:inherit;font-variant-numeric:tabular-nums}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.9 var(--font)}[hidden]{display:none!important}.skip-link{position:fixed;left:16px;top:-70px;z-index:100;background:white;padding:10px 20px}.skip-link:focus{top:12px}.app{display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr);min-height:100dvh}.app.ai-open{grid-template-columns:var(--sidebar) minmax(0,1fr) var(--assistant)}.icon{width:18px;height:18px}.icon.sm{width:15px;height:15px}.icon.lg{width:22px;height:22px}.icon-button{display:inline-flex;align-items:center;justify-content:center;flex:none;width:34px;height:34px;color:var(--muted);border:1px solid transparent}.icon-button:hover{background:#eaf0f8;color:var(--ink)}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:7px 12px;line-height:1.45;font-size:13px;font-weight:600;border:1px solid var(--line);background:white;white-space:nowrap}.btn:hover{background:#f7f9fe;border-color:#becbe0}.btn.primary{background:var(--blue);border-color:var(--blue);color:white}.btn.primary:hover{background:#294fc5}.btn.soft{background:var(--blue-soft);color:#2c51c7;border-color:#dfe7fe}.btn.text{background:none;border-color:transparent;color:var(--muted);padding:5px 8px}.btn.text:hover{color:var(--blue);background:var(--blue-soft)}.btn.compact{min-height:30px;padding:5px 9px;font-size:12px}.tag{display:inline-flex;align-items:center;gap:5px;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:500;line-height:1.65;white-space:nowrap;background:#eef2f7;color:#65738a}.tag.blue{background:var(--blue-soft);color:#3156c5}.tag.green{background:var(--green-soft);color:#126957}.tag.amber{background:var(--amber-soft);color:#98520c}.tag.outline{background:none;border:1px solid #dce3ed;color:#6b7890}.muted{color:var(--muted)}.small{font-size:12px}.num{font-family:"Bahnschrift","Aptos",var(--font);font-variant-numeric:tabular-nums}.empty-icon{display:flex;justify-content:center;margin:0 auto 20px;color:var(--blue)}
+.sidebar{position:sticky;top:0;height:100dvh;display:flex;flex-direction:column;border-right:1px solid var(--line);background:#f0f4f9;padding:27px 16px 20px;overflow-y:auto}.brand{display:flex;align-items:center;gap:10px;padding:0 7px 30px}.brand-mark{display:flex;align-items:center;justify-content:center;width:35px;height:35px;border-radius:11px;background:#365edc;color:white;flex:none}.brand-name{font-size:17px;font-weight:700;letter-spacing:.3px}.brand-note{font-size:10px;color:#738198;margin-top:2px}.side-heading{display:flex;justify-content:space-between;align-items:center;margin:0 9px 11px;color:#5e6e86;font-size:12px}.side-heading span:last-child{font-size:11px}.project-search{position:relative;margin:0 0 12px}.project-search .icon{position:absolute;left:10px;top:11px;color:#8793a5;width:15px;height:15px}.project-search input{background:rgba(255,255,255,.65);font-size:12px;border-color:#e0e6f0;padding:9px 10px 9px 32px}.project-list{display:flex;flex-direction:column;gap:7px}.project-item{width:100%;padding:13px 10px;text-align:left;display:flex;gap:10px;align-items:flex-start;border:1px solid transparent;border-radius:8px;position:relative}.project-item:hover{background:#e8edf6}.project-item.active{background:white;border-color:#dce5f5;box-shadow:0 2px 5px #263b6810}.project-item.active:before{content:"";position:absolute;left:-1px;top:15px;bottom:15px;width:3px;background:var(--blue);border-radius:0 3px 3px 0}.project-avatar{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#e7edf9;color:#4566bc;flex:none;font-size:12px;font-weight:700}.project-item:nth-child(2) .project-avatar{background:#e7efee;color:#46766c}.project-label{min-width:0;flex:1}.project-name{display:block;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.project-meta{display:block;font-size:10px;color:#7c889b;margin-top:3px}.new-project{width:100%;justify-content:flex-start;margin:12px 0 0;padding-left:12px;background:transparent;border-style:dashed;border-color:#cad5e6;color:#57708f;font-weight:500}.sidebar-spacer{flex:1;min-height:54px}.side-note{padding:13px 11px;margin:0 0 13px;border-top:1px solid #dce4ef;font-size:11px;color:#7a879b;line-height:1.9}.side-note strong{font-size:12px;font-weight:500;color:#50627b;display:block;margin-bottom:5px}.side-footer{display:grid;gap:4px}.side-footer button{justify-content:flex-start;font-size:12px;padding-left:9px}.sidebar-close{display:none}.mobile-menu{display:none}.nav-backdrop,.ai-backdrop{display:none}
+.workspace{min-width:0}.topbar{height:65px;padding:0 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(255,255,255,.87);gap:12px}.breadcrumb{display:flex;align-items:center;gap:9px;color:#7b889b;font-size:12px;min-width:0}.breadcrumb .crumb-name{color:#4c5c75;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.top-actions{display:flex;align-items:center;gap:7px;flex:none}.prototype-tag{font-size:11px;color:#718099;padding-right:8px}.main-content{padding:29px 30px 22px;max-width:1520px;margin:0 auto}.project-heading{margin-bottom:24px}.heading-row{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.project-heading h1{font-size:28px;letter-spacing:-.6px;font-weight:650;margin-bottom:8px}.heading-badges{display:flex;align-items:center;gap:7px;margin-top:10px}.goal{max-width:61ch;color:#67768a;font-size:13px;line-height:1.9}.goal-prefix{color:#415472;margin-right:8px}.project-counts{display:flex;align-items:center;gap:18px;margin-top:18px;font-size:12px;flex-wrap:wrap}.project-counts strong{font-size:14px;font-weight:600;color:var(--ink);margin-right:4px}.count-item{display:flex;gap:5px;align-items:center}.status-dot{width:6px;height:6px;border-radius:50%;background:#b3bfd0;display:inline-block;flex:none}.status-dot.done{background:var(--green)}.status-dot.active{background:var(--blue)}.status-dot.blocked{background:var(--amber)}.project-actions{display:flex;gap:8px;margin-top:3px;flex:none}.attention-strip{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;padding:11px 14px;background:#fff9ed;border:1px solid #f1e4c8;border-radius:7px;font-size:12px;line-height:1.65}.attention-strip .strip-text{display:flex;gap:9px;align-items:flex-start;min-width:0;color:#805a26}.attention-strip .strip-text svg{margin-top:2px}.attention-strip .strip-text strong{font-weight:600}.attention-strip button{color:#925914;flex:none}.attention-strip.neutral{background:#edf2f8;border-color:#dfe6f0}.attention-strip.neutral .strip-text{color:#5a6d86}.attention-strip.neutral button{color:#4462a3}.route-panel{border:1px solid #dce4ef;border-radius:12px;background:white;overflow:hidden;margin-bottom:21px}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 20px 0}.panel-heading h2{font-size:16px;font-weight:650;display:flex;gap:9px;align-items:center}.panel-heading .sub-label{font-size:11px;font-weight:400;color:#8a95a5;margin-left:1px}.map-scroll{overflow:auto;max-height:510px;overscroll-behavior-inline:contain;margin:4px 9px 0;scrollbar-width:thin;scrollbar-color:#d0d9e8 transparent}.map-surface{position:relative;isolation:isolate}.rails{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:-1}.rail{fill:none;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}.rail.pending{stroke-dasharray:6 6}.lane-label{position:absolute;font-size:10px;color:#8390a6;letter-spacing:.2px;pointer-events:none;transform:translateX(-50%);padding:0 7px;background:#fff}.station{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;width:142px;padding:0;border-radius:8px;background:transparent;text-align:center;line-height:1.5}.station:focus-visible{outline-offset:8px}.orb{position:relative;width:27px;height:27px;border:2.5px solid #b8c3d3;background:#fff;border-radius:50%;color:#9caabe;display:flex;align-items:center;justify-content:center;flex:none;z-index:1}.orb .icon{width:16px;height:16px;stroke-width:2.7}.station.done .orb{background:var(--green);border-color:var(--green);color:white}.station.active .orb{background:var(--blue);border-color:var(--blue);color:white}.station.active .orb:after{content:"";width:7px;height:7px;background:white;border-radius:50%}.station.blocked .orb,.station.review .orb{background:#fff4e5;border-color:#ba7628;color:#9d5a12}.station.ready .orb{border-color:var(--blue);color:var(--blue)}.station.transfer .orb{outline:2px solid #b8c3d3;outline-offset:4px}.station.transfer.done .orb{outline-color:#75aa9e}.station.transfer.active .orb{outline-color:#809aed}.station.selected:before{content:"";position:absolute;top:-10px;left:calc(50% - 24px);width:48px;height:48px;background:#e9efff;border-radius:50%;z-index:0}.station.selected .orb{box-shadow:0 0 0 4px white}.station.blocked.selected:before{background:#fcf0dc}.station-code{font-size:11px;color:#7f8b9e;margin-top:11px;font-weight:500}.station-title{font-size:12px;font-weight:600;max-width:132px;white-space:normal;overflow-wrap:anywhere;line-height:1.6;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.station-state{font-size:10px;color:#8a96a8;margin-top:4px;display:flex;align-items:center;gap:3px}.station.selected .station-title{color:#2e55c6}.station.active .station-state{color:#365edc}.station.done .station-state{color:#29816f}.station.blocked .station-state,.station.review .station-state{color:#a46922}.station:hover .station-title{color:var(--blue)}.map-footer{padding:12px 20px;border-top:1px solid #edf0f6;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;font-size:10px;color:#8490a3}.legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.legend span{display:flex;align-items:center;gap:5px}.legend-orb{width:12px;height:12px;border:1.5px solid #bdc7d7;border-radius:50%;font-size:9px;line-height:1;display:inline-flex!important;align-items:center;justify-content:center;font-style:normal}.legend-orb.done{background:var(--green);border-color:var(--green);color:white}.legend-orb.active{border-color:var(--blue);background:var(--blue);box-shadow:inset 0 0 0 3px white}.legend-orb.blocked{color:#9d5a12;border-color:#b57932;font-weight:700}.route-empty{padding:53px 24px 48px;text-align:center}.route-empty h3{font-size:18px;margin-bottom:9px}.route-empty p{font-size:13px;color:var(--muted);margin:0 auto 20px;max-width:40ch}.route-empty .btn{margin:4px}
+.detail-panel{background:white;border:1px solid #dce4ef;border-radius:12px;overflow:hidden}.detail-heading{padding:20px 22px 17px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.detail-title{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.step-id{color:#50669b;background:#eff3fb;font-size:12px;font-weight:600;padding:4px 7px;line-height:1.5;border-radius:5px;flex:none}.detail-title h2{font-size:18px;letter-spacing:-.3px;font-weight:650}.detail-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#8290a4;font-size:11px;margin-top:10px}.dep-button{font-size:11px;padding:2px 6px;background:#f1f4f8;color:#536887;border:1px solid #e6ebf3;border-radius:4px;line-height:1.6}.dep-button:hover{background:#e9efff;color:var(--blue)}.detail-heading .btn{font-size:11px}.detail-tabs{display:flex;gap:26px;padding:0 22px;border-bottom:1px solid var(--line);overflow-x:auto}.detail-tab{border-radius:0;font-size:12px;color:#758299;padding:0 0 12px;position:relative;flex:none;line-height:1.6}.detail-tab.active{color:var(--blue);font-weight:600}.detail-tab.active:after{content:"";position:absolute;bottom:-1px;height:3px;background:var(--blue);left:0;right:0;border-radius:2px 2px 0 0}.detail-body{padding:21px 22px}.record-top{display:grid;grid-template-columns:124px minmax(0,1fr);gap:16px;margin-bottom:16px}.field{display:block;min-width:0}.field-label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;font-size:12px;font-weight:500;color:#52647d}.field-label small{font-size:10px;font-weight:400;color:#8994a7}.field select{width:100%;height:41px}.field input{font-size:12px;min-height:41px}.field textarea{font-size:12px}.record-summary{min-height:122px}.summary-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}.summary-heading .field-label{margin:0}.summary-heading .btn{min-height:25px;font-size:11px;padding:3px 5px}.blocker-field{margin-bottom:16px}.blocker-field input{background:#fffbf3;border-color:#e7d6b5}.save-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:17px}.save-note{font-size:10px;color:#8190a4;max-width:48ch}.save-note.dirty{color:#a36a21}.save-actions{display:flex;gap:8px}.inline-error{padding:10px 13px;margin-top:12px;background:#fff1ed;color:#a3422b;font-size:12px;border-radius:6px}.section-label{font-size:12px;font-weight:600;color:#4b5f7b;margin:0 0 10px}.requirement-text{font-size:13px;color:#5f6d82;line-height:1.9;padding:13px 15px;background:#f7f9fc;border-left:3px solid #d4dff4;margin-bottom:22px;white-space:pre-wrap;overflow-wrap:anywhere}.check-list{display:grid;gap:11px;margin:0 0 20px}.check-row{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:#586c84;line-height:1.8;cursor:pointer}.check-row input{margin-top:3px}.criterion-note{font-size:10px;color:#8c97a8;margin:-10px 0 18px}.evidence-field textarea{min-height:65px}.session-empty{text-align:center;padding:18px 10px 24px}.session-empty .empty-icon{margin-bottom:12px}.session-empty h3{font-size:15px;margin-bottom:9px}.session-empty p{font-size:12px;color:var(--muted);max-width:46ch;margin:0 auto 19px;line-height:1.9}.session-empty .btn{margin:3px}.main-footer{display:flex;justify-content:space-between;gap:12px;padding:17px 2px 0;font-size:10px;color:#8b97aa}.empty-detail{padding:30px 25px;text-align:center;color:#8591a4;font-size:12px}
+.ai-panel{display:none;border-left:1px solid var(--line);background:white;position:sticky;top:0;height:100dvh;min-height:500px;flex-direction:column;min-width:0}.ai-open .ai-panel{display:flex}.ai-heading{height:65px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line)}.ai-heading-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}.ai-heading-title>.icon{color:var(--blue)}.ai-context{margin:18px 18px 0;padding:11px 12px;background:#f5f7fc;border-radius:7px;border:1px solid #e9edf6;flex:none}.context-label{font-size:10px;color:#8793a6;display:flex;align-items:center;gap:5px;margin-bottom:4px}.context-step{font-size:12px;color:#526785;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.context-step span{margin-right:7px;color:var(--blue)}.ai-messages{flex:1;min-height:0;overflow:auto;padding:23px 19px 16px;scrollbar-width:thin;scrollbar-color:#d7dfeb transparent}.chat-message{font-size:12px;line-height:1.9;margin-bottom:23px;overflow-wrap:anywhere}.message-heading{display:flex;align-items:center;gap:7px;font-size:10px;color:#8a96a7;margin-bottom:9px}.assistant-avatar{width:21px;height:21px;background:#eff3ff;color:#466bd8;display:flex;align-items:center;justify-content:center;border-radius:6px}.assistant-avatar svg{width:13px;height:13px}.chat-message.assistant .message-text{color:#596b83;white-space:pre-wrap}.chat-message.user .message-text{background:#eef3ff;color:#4a618a;padding:11px 13px;border-radius:9px 9px 3px 9px;white-space:pre-wrap}.chat-message.user .message-heading{justify-content:flex-end}.message-actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}.message-actions .btn{justify-content:flex-start;font-size:11px;font-weight:500;white-space:normal;text-align:left;padding:10px 11px;line-height:1.6}.message-actions .btn:first-child{background:#f7f9fe;border-color:#e1e8f7;color:#4b6491}.demo-notice{border-left:2px solid #d6e0f7;padding-left:11px;margin-top:16px;color:#8a96a7;font-size:10px;line-height:1.9}.ai-composer-wrap{padding:13px 16px 18px;border-top:1px solid #edf0f7;flex:none}.ai-composer{border:1px solid #d8e1ee;border-radius:9px;padding:10px;background:white}.ai-composer:focus-within{border-color:#90a9ed}.ai-composer textarea{font-size:12px;border:0;border-radius:0;min-height:66px;max-height:160px;padding:0 2px;resize:vertical;line-height:1.8;outline:none;background:transparent}.ai-composer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:6px}.ai-composer-bottom span{font-size:10px;color:#9aa5b5}.send-button{width:29px;height:29px;border-radius:7px;color:white;background:var(--blue);display:flex;align-items:center;justify-content:center}.send-button:hover{background:#294fc5}.send-button .icon{width:15px;height:15px}.ai-privacy{display:flex;align-items:center;justify-content:center;gap:5px;font-size:9px;color:#8e99ac;margin-top:9px}
+dialog{border:1px solid #dce4f0;border-radius:14px;padding:0;color:var(--ink);background:white;width:min(660px,calc(100vw - 36px));max-height:88dvh;box-shadow:0 24px 90px #1c315831;overflow:auto}dialog::backdrop{background:#23324a50;backdrop-filter:blur(2px)}.modal-head{padding:23px 26px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:18px;border-bottom:1px solid #e8edf5;position:sticky;top:0;z-index:2;background:white}.modal-head h2{font-size:20px;font-weight:650}.modal-head p{font-size:12px;color:#7a899e;margin-top:7px;line-height:1.8}.modal-body{padding:22px 26px}.modal-body .field{margin-bottom:17px}.modal-body .field:last-child{margin-bottom:0}.modal-footer{display:flex;align-items:center;justify-content:flex-end;gap:9px;padding:16px 26px;border-top:1px solid #e8edf5;position:sticky;bottom:0;background:#fff;z-index:2}.modal-footer .footer-note{margin-right:auto;font-size:10px;color:#8490a3;max-width:33ch}.modal-info{padding:11px 14px;background:#f1f5ff;border:1px solid #e0e8fb;color:#64779b;font-size:12px;line-height:1.85;border-radius:7px;margin-bottom:18px}.modal-info.amber{background:#fff7e9;color:#92642a;border-color:#f0dfc3}.modal-tools{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px;align-items:center}.modal-tools span{font-size:11px;color:#8794a7}.plan-input{min-height:290px;font-size:12px;line-height:1.85;tab-size:2}.preview-list{display:grid;gap:13px}.preview-row{border:1px solid #e0e7f1;border-radius:8px;padding:14px}.preview-row-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}.preview-row-head .step-id{flex:none}.preview-row-head input{font-size:13px;font-weight:600;padding:7px 10px}.preview-row .field{margin-bottom:9px}.preview-row .field-label{font-size:11px}.preview-row .field input{font-size:12px;padding:7px 10px;min-height:34px}.preview-row textarea{min-height:54px;font-size:11px;padding:8px 10px}.preview-confirm{display:flex;align-items:center;gap:7px;font-size:11px;color:#6d7d94}.preview-confirm input{margin:0}.preview-confirm.needs-confirm{color:#9b621d}.source-title{font-size:12px;color:#5f7395;margin-bottom:15px;overflow-wrap:anywhere}.source-content{padding:17px;background:#f6f8fc;border-radius:7px;max-height:49dvh;overflow:auto;font-size:12px}.about-content p{font-size:13px;color:#60718a;line-height:1.9;margin-bottom:14px}.about-content h3{font-size:14px;margin:20px 0 8px}.json-area{font:11px/1.8 "Bahnschrift",var(--font);min-height:220px;color:#637797;background:#f8faff}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:9px;background:#243750;color:white;font-size:12px;padding:12px 18px;border-radius:9px;box-shadow:0 8px 25px #23324a20;max-width:calc(100vw - 32px)}.toast.error{background:#8d5023}.toast .icon{width:17px;height:17px}.restore-choice{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.restore-choice p{font-size:12px;color:#71819a}.modal-step{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#8591a6;margin-top:10px}.modal-step strong{color:#4769c5;font-weight:500}.kbd-note{font-size:10px;color:#8e9bb0}
+@media(min-width:1650px){:root{--sidebar:222px;--assistant:350px}.main-content{padding:35px 42px 26px}.topbar{padding:0 42px}.project-heading h1{font-size:30px}.goal{font-size:14px}.station-title{font-size:13px}.ai-messages{padding:25px 23px}.chat-message{font-size:13px}.ai-context{margin-left:22px;margin-right:22px}}
+@media(max-width:1239px){.app,.app.ai-open{grid-template-columns:var(--sidebar) minmax(0,1fr)}.ai-panel{position:fixed;right:0;top:0;width:340px;z-index:31;box-shadow:-12px 0 40px #23324a18}.ai-open .ai-backdrop{display:block;position:fixed;inset:0;background:#23324a30;z-index:30}.main-content{padding:26px}.topbar{padding:0 26px}.project-heading h1{font-size:27px}}
+@media(max-width:900px){:root{--sidebar:178px}.sidebar{padding:24px 10px 16px}.brand{gap:8px;padding-left:4px}.brand-name{font-size:15px}.brand-mark{width:31px;height:31px}.project-item{padding:12px 8px;gap:7px}.project-name{font-size:11px}.main-content{padding:23px 20px}.topbar{padding:0 20px}.project-actions .source-button span{display:none}.project-actions .source-button{padding:8px}.heading-row{gap:12px}.project-heading h1{font-size:25px}.project-counts{gap:13px}.prototype-tag{display:none}.detail-heading{padding:18px}.detail-tabs{padding:0 18px;gap:22px}.detail-body{padding:18px}.goal{font-size:12px}}
+@media(max-width:680px){.app,.app.ai-open{display:block}.sidebar{display:none;position:fixed;top:0;bottom:0;left:0;width:242px;z-index:41;padding:24px 18px}.nav-open .sidebar{display:flex}.nav-open .nav-backdrop{display:block;position:fixed;inset:0;background:#23324a50;z-index:40}.sidebar-close{display:flex;position:absolute;right:7px;top:7px}.brand{padding-left:7px;padding-bottom:25px}.brand-name{font-size:17px}.brand-mark{width:35px;height:35px}.project-item{padding:14px 10px}.project-name{font-size:13px}.mobile-menu{display:flex}.breadcrumb{gap:6px;font-size:11px}.topbar{height:57px;padding:0 13px;gap:7px}.top-actions{gap:3px}.top-actions .btn{padding:7px 9px;min-height:33px}.top-actions .export-button span{display:none}.top-actions .ai-toggle span{font-size:11px}.main-content{padding:22px 15px}.project-heading{margin-bottom:19px}.project-heading h1{font-size:24px}.heading-row{display:block}.project-actions{margin-top:15px}.project-actions .source-button span{display:inline}.project-actions .source-button{padding:7px 11px}.project-actions .btn{font-size:12px}.heading-badges{margin-top:0}.project-counts{gap:12px;margin-top:16px;font-size:11px}.project-counts strong{font-size:13px}.attention-strip{padding:10px 11px;align-items:flex-start;gap:4px}.attention-strip .strip-text{font-size:11px;gap:6px}.attention-strip button{font-size:10px;padding-right:1px}.panel-heading{padding:15px 15px 0}.panel-heading h2{font-size:15px}.panel-heading .sub-label{display:none}.panel-heading .btn{font-size:10px}.map-footer{padding:10px 14px;gap:7px}.legend{gap:10px}.route-panel{margin-bottom:16px}.detail-heading{padding:17px 16px 15px;flex-wrap:wrap}.detail-title{gap:8px}.detail-title h2{font-size:16px}.detail-heading>.btn{margin-left:auto}.detail-tabs{padding:0 16px;gap:24px}.detail-body{padding:17px 16px}.record-top{grid-template-columns:104px minmax(0,1fr);gap:12px}.field-label{font-size:11px}.field-label small{display:none}.save-bar{align-items:flex-end}.save-note{max-width:23ch;line-height:1.8}.save-actions{gap:4px}.save-actions .btn{font-size:11px;padding:7px 10px}.main-footer{font-size:9px;gap:10px}.main-footer span:last-child{display:none}.ai-panel{width:min(360px,100vw);height:100dvh;min-height:0}.ai-heading{height:57px}.modal-head{padding:19px 18px 14px}.modal-head h2{font-size:18px}.modal-body{padding:18px}.modal-footer{padding:14px 18px}.modal-footer .footer-note{display:none}.modal-tools{align-items:flex-start}.modal-tools span{font-size:10px}.preview-row{padding:11px}.source-content{padding:12px}.toast{bottom:14px;white-space:normal;font-size:11px}}
+@media(prefers-reduced-motion:no-preference){dialog[open]{animation:dialog-in .14s ease-out}@keyframes dialog-in{from{transform:translateY(7px);opacity:.6}to{transform:translateY(0);opacity:1}}}
+@media print{.sidebar,.topbar,.ai-panel,.ai-backdrop,.nav-backdrop,.save-actions,.main-footer,dialog,.toast{display:none!important}.app,.app.ai-open{display:block}.main-content{padding:0}.route-panel,.detail-panel{break-inside:avoid}.map-scroll{overflow:visible}.map-surface{zoom:.8}.project-actions,.detail-heading>.btn{display:none}.detail-body textarea{min-height:100px}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳转到项目路线</a>
+<div class="app" id="app">
+  <button class="nav-backdrop" data-action="toggle-nav" aria-label="关闭项目导航" tabindex="-1"></button>
+  <aside class="sidebar" aria-label="项目导航">
+    <button class="icon-button sidebar-close" data-action="toggle-nav" aria-label="关闭项目导航"><span data-icon="close"></span></button>
+    <div class="brand"><div class="brand-mark"><span data-icon="route"></span></div><div><div class="brand-name">任务工作台</div><div class="brand-note">让每一步有迹可循</div></div></div>
+    <div class="side-heading"><span>我的项目</span><span id="project-count">2</span></div>
+    <div class="project-search"><span data-icon="search"></span><input id="project-search" type="search" aria-label="查找项目" placeholder="查找项目" autocomplete="off"></div>
+    <nav class="project-list" id="project-list" aria-label="项目列表"></nav>
+    <button class="btn new-project" data-action="new-project"><span data-icon="plus"></span><span>新建项目</span></button>
+    <div class="sidebar-spacer"></div>
+    <div class="side-note"><strong>你的方案，你的节奏</strong>导入方案，确认路线。<br>在对应站点留下执行总结。</div>
+    <div class="side-footer">
+      <button class="btn text" data-action="restore"><span data-icon="folder"></span>打开项目文件</button>
+      <button class="btn text" data-action="about"><span data-icon="info"></span>原型说明</button>
+    </div>
+  </aside>
+  <main class="workspace" id="main" tabindex="-1">
+    <header class="topbar">
+      <div class="breadcrumb"><button class="icon-button mobile-menu" data-action="toggle-nav" aria-label="打开项目导航"><span data-icon="menu"></span></button><span>项目</span><span data-icon="chevron"></span><span class="crumb-name" id="breadcrumb-name"></span></div>
+      <div class="top-actions"><span class="prototype-tag">交互原型</span><button class="btn export-button" data-action="export"><span data-icon="export"></span><span>导出项目</span></button><button class="btn soft ai-toggle" data-action="toggle-ai" aria-controls="ai-panel"><span data-icon="spark"></span><span>AI 助手</span></button></div>
+    </header>
+    <div class="main-content">
+      <section class="project-heading" id="project-heading" aria-label="项目目标与关注事项"></section>
+      <section class="route-panel" id="route-panel" aria-label="站点路线图"></section>
+      <section class="detail-panel" id="detail-panel" aria-label="选中站点详情"></section>
+      <footer class="main-footer"><span>所有进度均为原型数据，不代表真实开发状态</span><span>无需拖拽，依赖自动连线</span></footer>
+    </div>
+  </main>
+  <button class="ai-backdrop" data-action="toggle-ai" aria-label="关闭 AI 助手" tabindex="-1"></button>
+  <aside class="ai-panel" id="ai-panel" aria-label="AI 助手演示">
+    <header class="ai-heading"><div class="ai-heading-title"><span data-icon="spark"></span>AI 助手<span class="tag outline">演示</span></div><button class="icon-button" data-action="toggle-ai" aria-label="收起 AI 助手"><span data-icon="panel"></span></button></header>
+    <div class="ai-context" id="ai-context"></div>
+    <div class="ai-messages" id="ai-messages" role="log" aria-label="助手演示消息" aria-live="polite"></div>
+    <div class="ai-composer-wrap">
+      <form class="ai-composer" id="chat-form"><textarea id="chat-input" aria-label="输入执行方案或总结" placeholder="粘贴方案，或写下本站的执行总结…" maxlength="20000"></textarea><div class="ai-composer-bottom"><span>Ctrl + Enter 发送</span><button class="send-button" id="send-button" type="submit" aria-label="发送演示消息" disabled><span data-icon="arrow-up"></span></button></div></form>
+      <div class="ai-privacy"><span data-icon="shield"></span><span>未连接模型，内容不会上传</span></div>
+    </div>
+  </aside>
+</div>
+<dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<input id="plan-file" type="file" accept=".md,.markdown,.txt,text/plain,text/markdown" hidden>
+<input id="project-file" type="file" accept=".json,application/json" hidden>
+<noscript><p style="padding:30px">这个交互原型需要启用 JavaScript。请使用现代浏览器打开本文件；原型不需要网络。</p></noscript>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = value => JSON.parse(JSON.stringify(value));
+const ICONS = {
+  route:'<circle cx="5" cy="5" r="2.5"/><circle cx="19" cy="5" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M5 7.5v3a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3M12 13.5v3"/>',
+  search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  folder:'<path d="M3 7V5a1 1 0 0 1 1-1h5l2 3h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  close:'<path d="m6 6 12 12M18 6 6 18"/>',
+  chevron:'<path d="m9 5 7 7-7 7"/>',
+  export:'<path d="M12 15V3m-4 4 4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>',
+  spark:'<path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3ZM20 3v4M18 5h4"/>',
+  panel:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16m-6-12 3 4-3 4"/>',
+  'arrow-up':'<path d="M12 19V5m-6 6 6-6 6 6"/>',
+  shield:'<path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/>',
+  check:'<path d="m5 12 4 4L19 6"/>',
+  alert:'<path d="M12 8v5M12 17h.01"/><path d="m10.2 3.8-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.8-3.2l-8-14a2 2 0 0 0-3.6 0Z"/>',
+  bang:'<path d="M12 6v8M12 18h.01"/>',
+  file:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+  target:'<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
+  copy:'<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4"/>',
+  link:'<path d="m10 14 4-4m-6-1 2-2a4 4 0 0 1 6 6l-2 2m-4-2-2 2a4 4 0 0 0 6 6l2-2" transform="translate(0 -2)"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  download:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/>',
+  back:'<path d="m10 5-7 7 7 7M3 12h18"/>',
+  edit:'<path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14l-1 7Z"/>',
+  lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>'
+};
+function icon(name, extra='') { return `<svg class="icon ${extra}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ICONS.file}</svg>`; }
+function hydrateIcons(root=document) { root.querySelectorAll('[data-icon]').forEach(el => { el.outerHTML = icon(el.dataset.icon); }); }
+const SAMPLE_PLAN = `# 监测器工作台 MVP（界面演示方案）
+目标：从执行方案生成路线，在站点记录总结，减少跨会话找回上下文的负担。
+
+## M01 输入契约
+前置：无
+要求：保留原步骤编号，区分路线定义与执行记录。
+完成条件：步骤编号唯一；依赖可以校验
+
+## S01 方案解析
+线路：服务线
+前置：M01
+要求：从 Markdown 中提取步骤和显式前置关系。
+完成条件：保留步骤编号和原文；未明确的依赖需要确认
+
+## S02 总结与存储
+线路：服务线
+前置：S01
+要求：按项目和步骤保存总结，并能再次打开。
+完成条件：总结与稳定步骤 ID 绑定；切换项目后记录不串写；导出的项目文件可以恢复
+
+## D01 圆圈路线
+线路：界面线
+前置：M01
+要求：用圆圈表示步骤，程序自动排列分叉与合流。
+完成条件：不需要手动拖拽；可以辨认顺序与并行关系
+
+## D02 站点详情
+线路：界面线
+前置：D01
+要求：显示下一步、原方案要求、完成条件与执行总结。
+完成条件：点击站点能切换详情；信息顺序经用户确认
+
+## I01 联调验证
+前置：S02, D02
+要求：验证方案导入、路线生成、填写总结和再次打开的闭环。
+完成条件：服务与界面数据一致；完整操作流程通过验证
+
+## I02 真实试点
+前置：I01
+要求：使用一份真实方案试用并记录限制，不接管 Codex 会话。
+完成条件：能找回当前步骤与下一动作；记录使用反馈和剩余限制`;
+const ORIGINAL_SOURCE = `# 独立任务进度监测器：可执行方案
+日期：2026-11-06
+状态：方案已编制；待实施；本次仅交付文档
+
+目标：提供独立的本地只读监测应用，用地铁路线图展示多分支开发任务的原始目标、已完成步骤、当前步骤、剩余步骤及阻塞，让用户继续在 Codex 中执行工作，不必跨会话记忆和搬运日常进度。
+
+## 9. 开发路线 M01—M05（摘录）
+本方案开发阶段总计 5 步，当前 0/5 完成。该数字仅表示监测器开发，不表示 PDSD 或 Aion 方案进度。本次文档交付不计为 M01 已完成。
+
+M01：固定输入契约与最小应用结构，记录技术选择；将本方案格式变成可校验的契约。
+依赖：本方案已确认。
+完成条件：能读取一个合法路线；缺字段、非法枚举、重复 ID、依赖环和路径越界有明确错误。
+
+M02：实现多线文件读取、监听、状态和依赖计算。
+依赖：M01。
+完成条件：修改单线文件只影响该线及其下游；缺失、损坏、旧版本、序号倒退不会误报完成；应用不写输入文件。
+
+M03：实现地铁路线图和站点详情。
+依赖：M02。
+完成条件：能清楚表达顺序、并行和合流；状态图标/文字一致；交叉线不被误认换乘；原始原因与目标可见。
+
+M04：完成 Codex 文件回报约定与一个真实方案试点。
+依赖：M03；试点路线及写入路径得到确认。
+完成条件：不接管会话，通过阶段文件更新刷新位置；不同线无共写；原任务编号和验收边界保持一致。
+
+M05：定向验证和集中界面验收，修复本范围问题并文档收口。
+依赖：M04。
+完成条件：下述 V01—V12 满足；用户能凭界面说明原始目标、当前站、阻塞和下一步；未通过项如实保留。
+
+实施按 M01→M02→M03→M04→M05 顺序，第一版不为开发监测器再次拆出大量并行会话。`;
+const ORIGINAL_FILENAME = '01_独立任务进度监测器_可执行方案_2026-11-06.md';
+function step(id,title,dependsOn,extra={}) {
+  return {id,title,dependsOn,line:'主线',status:'pending',purpose:'',criteria:[{text:'确认本站完成条件',met:false}],summary:'',next:'',blocker:'',evidence:'',updatedAt:null,...extra};
+}
+const projects = [
+  {id:'demo-workbench',name:'监测器 MVP',kind:'demo',lifecycle:'active',revision:1,goal:'把执行方案变成清晰的路线，随时找回当前步骤、阻塞和下一动作。',sourceTitle:'工作台 MVP 示例方案',source:SAMPLE_PLAN,selected:'S02',messages:[],steps:[
+    step('M01','输入契约',[],{status:'done',purpose:'保留原步骤编号，区分路线定义与执行记录。',criteria:[{text:'步骤编号唯一，依赖可以校验',met:true}],summary:'演示：已确认项目、路线、站点与总结的最小字段。',next:'按相同步骤 ID 开展解析与界面两条线路。',evidence:'演示引用：输入契约检查记录'}),
+    step('S01','方案解析',['M01'],{line:'服务线',status:'done',purpose:'从已有方案提取步骤、完成条件与显式依赖，保留原文出处。',criteria:[{text:'保留原编号与要求',met:true},{text:'不把相邻步骤直接视为依赖',met:true}],summary:'演示：已将示例方案中的步骤和显式依赖整理为路线数据。',next:'实现项目与站点总结的关联保存。',evidence:'演示引用：步骤解析检查记录'}),
+    step('S02','总结与存储',['S01'],{line:'服务线',status:'active',purpose:'每个项目保存自己的方案、路线与执行总结。总结按稳定步骤 ID 归属，不因标题修改而挂到其他站点。',criteria:[{text:'执行总结与稳定步骤 ID 绑定',met:true},{text:'切换项目和站点后，总结不串写',met:false},{text:'导出项目文件后，可以再次导入并恢复记录',met:false}],summary:'已完成项目与站点的数据结构，执行总结按步骤 ID 归档。\n正在验证项目切换和导出后的恢复流程，暂未确认全部完成条件。',next:'验证切换项目后总结不串写，再测试导出与恢复。',evidence:'演示：尚待补充恢复测试记录'}),
+    step('D01','圆圈路线',['M01'],{line:'界面线',status:'done',purpose:'以圆圈表示步骤，自动生成顺序、分叉与合流，不需要手动拖动节点。',criteria:[{text:'能够辨认步骤先后与并行关系',met:true},{text:'点击或键盘选择站点可以打开详情',met:true}],summary:'演示：圆圈和依赖连线已具备自动排列效果。',next:'确认详情区中各类信息的展示顺序。',evidence:'演示引用：路线布局检查记录'}),
+    step('D02','站点详情',['D01'],{line:'界面线',status:'blocked',purpose:'在选中站点展示状态、下一步、原方案要求、完成条件和执行总结。',criteria:[{text:'点击站点后显示对应要求与总结',met:true},{text:'用户确认详情区的信息顺序',met:false}],summary:'演示：详情区布局已有初稿，等待确认信息顺序后继续。',next:'确认优先展示“下一步 + 执行总结”，原文与验收放入第二个标签页。',blocker:'需要确认：站点详情是否优先展示下一步和执行总结。'}),
+    step('I01','联调验证',['S02','D02'],{line:'集成线',purpose:'将方案提取、路线生成、站点总结与项目保存串成可验证的完整流程。',criteria:[{text:'服务与界面使用一致的步骤 ID',met:false},{text:'导入、填写、导出与再次打开闭环通过验证',met:false}],next:'等待 S02 和 D02 完成后，验证整个操作闭环。'}),
+    step('I02','真实试点',['I01'],{line:'集成线',purpose:'用一个小规模真实方案检查是否能减少跨会话找回上下文的负担，不接管执行会话。',criteria:[{text:'可以从界面找回当前站点与下一动作',met:false},{text:'记录试用反馈与剩余限制',met:false}],next:'选择一份真实方案进行试用。'})
+  ]},
+  {id:'original-milestones',name:'原方案 M01–M05',kind:'snapshot',lifecycle:'draft',revision:1,goal:'用独立的本地只读监测应用，展示多分支任务的原始目标、当前位置、剩余步骤及阻塞。',sourceTitle:ORIGINAL_FILENAME,source:ORIGINAL_SOURCE,selected:'M01',messages:[],steps:[
+    step('M01','输入契约',[],{purpose:'固定输入契约与最小应用结构，记录技术选择；将本方案格式变成可校验的契约。',criteria:[{text:'能读取一个合法路线',met:false},{text:'缺字段、非法枚举、重复 ID、依赖环和路径越界有明确错误',met:false}],next:'先确认原方案与实施范围；本原型不代表已经授权开发。'}),
+    step('M02','读取与状态',['M01'],{purpose:'实现多线文件读取、监听、状态和依赖计算。',criteria:[{text:'修改单线文件只影响该线及其下游',met:false},{text:'缺失、损坏、旧版本、序号倒退不会误报完成',met:false},{text:'应用不写输入文件',met:false}],next:'在 M01 完成后实现只读监测与状态计算。'}),
+    step('M03','路线与详情',['M02'],{purpose:'实现地铁路线图和站点详情。',criteria:[{text:'清楚表达顺序、并行、合流与状态',met:false},{text:'交叉线不被误认换乘',met:false},{text:'原始原因与目标可见',met:false}],next:'在 M02 完成后实现地图与站点详情。'}),
+    step('M04','真实方案试点',['M03'],{purpose:'完成 Codex 文件回报约定与一个真实方案试点。除 M03 外，还需确认试点路线及写入路径。',criteria:[{text:'不接管会话，通过阶段文件更新刷新位置',met:false},{text:'不同线无共写',met:false},{text:'原任务编号和验收边界保持一致',met:false}],next:'确认试点路线及写入路径后接入小规模真实任务。'}),
+    step('M05','验证与验收',['M04'],{purpose:'定向验证和集中界面验收，修复本范围问题并文档收口。具体 V01—V12 以原方案第 10 节为准。',criteria:[{text:'原方案 V01—V12 满足',met:false},{text:'用户能说明目标、当前站、阻塞和下一步',met:false},{text:'未通过项及剩余限制如实保留',met:false}],next:'在 M04 完成后提交验证记录、使用说明和剩余限制。'})
+  ]}
+];
+const ui = {projectId:projects[0].id,tab:'record',aiOpen:window.innerWidth >= 1240,navOpen:false,search:'',modal:null};
+const drafts = new Map();
+const chatDrafts = new Map();
+let toastTimer;
+let resizeTimer;
+const current = () => projects.find(p => p.id === ui.projectId);
+const selected = (p=current()) => p.steps.find(s => s.id === p.selected) || p.steps[0];
+const draftKey = (p,s) => `${p.id}:${s.id}`;
+function savedFields(s) { return {status:s.status,summary:s.summary,next:s.next,blocker:s.blocker,evidence:s.evidence,criteria:clone(s.criteria)}; }
+function getDraft(p,s) { const key=draftKey(p,s); if(!drafts.has(key)) drafts.set(key,savedFields(s)); return drafts.get(key); }
+function isDirty(p,s) { return drafts.has(draftKey(p,s)) && JSON.stringify(drafts.get(draftKey(p,s))) !== JSON.stringify(savedFields(s)); }
+function dirtySteps(p) { return p.steps.filter(s => isDirty(p,s)); }
+function newId() { return `local-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`; }
+function validateGraph(steps) {
+  if(!Array.isArray(steps) || steps.length > 30) throw new Error('原型最多支持 30 个站点，请先用一份小规模方案验证。');
+  const byId=new Map();
+  for(const s of steps) {
+    if(!/^[A-Za-z][A-Za-z0-9_-]{0,31}$/.test(s.id)) throw new Error(`步骤编号“${s.id}”无效，请使用字母开头的编号，例如 M01。`);
+    if(byId.has(s.id)) throw new Error(`步骤编号 ${s.id} 重复。请保留唯一、稳定的编号。`);
+    if(!s.title || !s.title.trim() || s.title.length>100) throw new Error(`${s.id} 需要 1–100 字的步骤名称。`);
+    if(!Array.isArray(s.dependsOn) || new Set(s.dependsOn).size !== s.dependsOn.length) throw new Error(`${s.id} 的前置列表格式错误或含重复项。`);
+    byId.set(s.id,s);
+  }
+  const visiting=new Set(),done=new Set(),order=[];
+  function visit(id) {
+    if(visiting.has(id)) throw new Error(`存在循环依赖，涉及 ${id}。请修改前置步骤后再确认。`);
+    if(done.has(id)) return;
+    const s=byId.get(id); if(!s) throw new Error(`前置步骤 ${id} 不存在，请核对编号。`);
+    visiting.add(id); s.dependsOn.forEach(visit); visiting.delete(id); done.add(id); order.push(s);
+  }
+  steps.forEach(s=>visit(s.id));
+  return order;
+}
+function analyse(p) {
+  const order=validateGraph(p.steps),ranks=new Map(),valid=new Map(),depsReady=new Map(),display=new Map();
+  for(const s of order) {
+    ranks.set(s.id,s.dependsOn.length ? Math.max(...s.dependsOn.map(id=>ranks.get(id)))+1 : 0);
+    const ready=s.dependsOn.every(id=>valid.get(id)); depsReady.set(s.id,ready);
+    const complete=s.status==='done' && ready && s.criteria.length>0 && s.criteria.every(c=>c.met) && Boolean(s.evidence.trim());
+    valid.set(s.id,complete);
+    let state={code:'pending',label:'未开始'};
+    if(complete) state={code:'done',label:'已标记完成'};
+    else if(s.status==='done') state={code:'review',label:'完成待核对'};
+    else if(s.status==='active') state={code:'active',label:ready?'进行中':'前置待核对'};
+    else if(s.status==='blocked') state={code:'blocked',label:'受阻'};
+    else if(ready && p.lifecycle==='active') state={code:'ready',label:'可开始'};
+    else if(!ready) state={code:'pending',label:'等待前置'};
+    display.set(s.id,state);
+  }
+  return {order,ranks,valid,depsReady,display};
+}
+function notify(text,error=false) {
+  clearTimeout(toastTimer);const el=$('#toast');el.innerHTML=`${icon(error?'alert':'check')}<span>${esc(text)}</span>`;el.classList.toggle('error',error);el.hidden=false;toastTimer=setTimeout(()=>el.hidden=true,4500);
+}
+function modalError(text) { const el=$('#modal-error');if(el){el.hidden=false;el.textContent=text;el.scrollIntoView({block:'nearest'});} }
+function closeModal() { $('#dialog').close();ui.modal=null; }
+function showModal(title,subtitle,body,footer,kind) {
+  ui.modal={...(ui.modal || {}),kind};
+  $('#dialog-content').innerHTML=`<header class="modal-head"><div><h2 id="dialog-title">${esc(title)}</h2>${subtitle?`<p>${esc(subtitle)}</p>`:''}</div><button class="icon-button" data-action="close-modal" aria-label="关闭对话框">${icon('close')}</button></header><div class="modal-body">${body}<div class="inline-error" id="modal-error" role="alert" hidden></div></div><footer class="modal-footer">${footer}</footer>`;
+  if(!$('#dialog').open) $('#dialog').showModal();
+}
+async function copyText(text,label='内容') {
+  try { await navigator.clipboard.writeText(text);notify(`${label}已复制`);return; } catch(e) { /* File previews may not permit clipboard access. */ }
+  const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(ta);ta.select();let copied=false;
+  try{copied=document.execCommand('copy');}catch(e){}ta.remove();
+  if(copied){notify(`${label}已复制`);return;}
+  ui.modal={copyValue:text};showModal(`复制${label}`,'当前预览不允许直接访问剪贴板，请选中下方内容后手动复制。',`<textarea id="manual-copy" class="json-area" readonly aria-label="可复制内容">${esc(text)}</textarea>`,`<button class="btn primary" data-action="select-copy">全选内容</button>`,'copy');
+}
+function updateChrome() {
+  $('#app').classList.toggle('ai-open',ui.aiOpen);$('#app').classList.toggle('nav-open',ui.navOpen);
+  $$('.ai-toggle').forEach(b=>b.setAttribute('aria-expanded',String(ui.aiOpen)));
+}
+function renderSidebar() {
+  $('#project-count').textContent=String(projects.length);
+  const filtered=projects.filter(p=>p.name.toLowerCase().includes(ui.search.toLowerCase()));
+  $('#project-list').innerHTML=filtered.map(p=>{
+    const a=analyse(p),done=Array.from(a.valid.values()).filter(Boolean).length;
+    const type=p.kind==='demo'?'分叉演示':p.kind==='snapshot'?'原方案快照':'本页项目';
+    return `<button class="project-item ${p.id===ui.projectId?'active':''}" data-project="${esc(p.id)}" ${p.id===ui.projectId?'aria-current="page"':''} title="${esc(p.name)}"><span class="project-avatar">${p.kind==='snapshot'?'M':icon('route','sm')}</span><span class="project-label"><span class="project-name">${esc(p.name)}</span><span class="project-meta">${esc(type)}　${done} / ${p.steps.length} 站</span></span></button>`;
+  }).join('') || '<p class="small muted" style="padding:13px 10px">没有匹配的项目。可以换个名称查找。</p>';
+}
+// DATA_AND_UTILITIES_END
+function renderHeading() {
+  const p=current(),a=analyse(p),done=p.steps.filter(s=>a.valid.get(s.id)).length;
+  const active=p.steps.filter(s=>s.status==='active'),blocked=p.steps.filter(s=>s.status==='blocked'),review=p.steps.filter(s=>a.display.get(s.id).code==='review');
+  const badge=p.kind==='demo'?'演示数据':p.kind==='snapshot'?'原方案快照':'仅保留在本页';
+  let attention='';
+  if(review.length) attention=`<div class="attention-strip"><div class="strip-text">${icon('alert','sm')}<span><strong>${review.length} 站完成记录待核对</strong>，请检查前置、完成条件或证据。</span></div><button class="btn text compact" data-step="${esc(review[0].id)}">查看记录 ${icon('chevron','sm')}</button></div>`;
+  else if(blocked.length) attention=`<div class="attention-strip"><div class="strip-text">${icon('alert','sm')}<span><strong>${esc(blocked[0].id)} 需要你确认</strong>　${esc(blocked[0].blocker || '请填写阻塞原因和所需动作。')}</span></div><button class="btn text compact" data-step="${esc(blocked[0].id)}">查看 ${icon('chevron','sm')}</button></div>`;
+  else if(p.lifecycle==='draft') attention=`<div class="attention-strip neutral"><div class="strip-text">${icon('info','sm')}<span>原方案仍待实施。这里仅展示路线快照，不代表新的范围已获确认。</span></div></div>`;
+  else if(active.length) attention=`<div class="attention-strip neutral"><div class="strip-text">${icon('target','sm')}<span>当前停在 <strong>${esc(active[0].id)} ${esc(active[0].title)}</strong>。${esc(active[0].next)}</span></div><button class="btn text compact" data-step="${esc(active[0].id)}">查看 ${icon('chevron','sm')}</button></div>`;
+  else if(p.steps.length && done===p.steps.length) attention=`<div class="attention-strip neutral"><div class="strip-text">${icon('check','sm')}<span>全部站点已手动标记完成。这不代表已经自动验收或执行发布。</span></div></div>`;
+  $('#breadcrumb-name').textContent=p.name;
+  $('#project-heading').innerHTML=`<div class="heading-row"><div style="min-width:0"><h1>${esc(p.name)}</h1><p class="goal"><span class="goal-prefix">原始目标</span>${esc(p.goal || '先添加一份执行方案，保留最初的目标。')}</p></div><div class="project-actions">${p.source?`<button class="btn source-button" data-action="source">${icon('file','sm')}<span>${p.kind==='snapshot'?'查看原方案':'查看方案'}</span></button>`:''}<button class="btn primary" data-action="import-plan">${icon('plus','sm')}导入方案</button></div></div><div class="project-counts"><span class="tag ${p.kind==='demo'?'blue':'outline'}">${esc(badge)}</span><span class="count-item"><strong class="num">${p.steps.length}</strong>个站点</span><span class="count-item"><i class="status-dot done"></i><strong class="num">${done}</strong>完成</span><span class="count-item"><i class="status-dot active"></i><strong class="num">${active.length}</strong>进行中</span>${blocked.length?`<span class="count-item"><i class="status-dot blocked"></i><strong class="num">${blocked.length}</strong>受阻</span>`:''}</div>${attention}`;
+}
+function edgePath(from,to) {
+  const sx=from.x+14,ex=to.x-19,mid=(sx+ex)/2,dy=to.y-from.y;
+  if(Math.abs(dy)<1)return `M ${sx} ${from.y} H ${ex}`;
+  const sign=Math.sign(dy),r=Math.min(14,Math.abs(dy)/2);
+  return `M ${sx} ${from.y} H ${mid-r} Q ${mid} ${from.y} ${mid} ${from.y+sign*r} V ${to.y-sign*r} Q ${mid} ${to.y} ${mid+r} ${to.y} H ${ex}`;
+}
+function renderMap() {
+  const p=current(),a=analyse(p),panel=$('#route-panel');
+  if(!p.steps.length) {
+    panel.innerHTML=`<div class="route-empty"><div class="empty-icon"><svg width="156" height="61" viewBox="0 0 156 61" fill="none" aria-hidden="true"><path d="M22 30h36q10 0 10-10v-3q0-7 9-7h56M68 24v20q0 7 9 7h56" stroke="#c7d4ee" stroke-width="3"/><circle cx="22" cy="30" r="9" fill="#edf2ff" stroke="#6c88db" stroke-width="2"/><circle cx="133" cy="10" r="8" fill="white" stroke="#c5d1e8" stroke-width="2"/><circle cx="133" cy="51" r="8" fill="white" stroke="#c5d1e8" stroke-width="2"/></svg></div><h3>从一份执行方案开始</h3><p>粘贴已有方案，确认步骤和依赖。圆圈与分叉会自动排列，不需要自己画线。</p><button class="btn primary" data-action="import-plan">${icon('file')}导入执行方案</button><button class="btn" data-action="import-sample">使用示例方案</button></div>`;
+    return;
+  }
+  const previousScroll=panel.querySelector('.map-scroll')?.scrollLeft || 0;
+  panel.innerHTML=`<div class="panel-heading"><h2>站点路线<span class="sub-label">按依赖自动排列</span></h2><button class="btn text compact" data-action="locate-current">${icon('target','sm')}定位当前站</button></div><div class="map-scroll" role="region" aria-label="路线图，可水平滚动"><div class="map-surface" id="map-surface"></div></div><div class="map-footer"><div class="legend"><span><i class="legend-orb done">✓</i>完成</span><span><i class="legend-orb active"></i>进行中</span><span><i class="legend-orb blocked">!</i>受阻</span><span><i class="legend-orb"></i>未开始</span></div><span>点击圆圈查看详情，双环表示合流</span></div>`;
+  const maxRank=Math.max(...a.ranks.values()),groups=Array.from({length:maxRank+1},()=>[]);
+  p.steps.forEach(s=>groups[a.ranks.get(s.id)].push(s));
+  const maxLanes=Math.max(...groups.map(g=>g.length)),width=Math.max(panel.querySelector('.map-scroll').clientWidth,(maxRank+1)*156+12);
+  const top=maxLanes>1?45:65,gap=116,center=top+(maxLanes-1)*gap/2,height=Math.max(181,top+(maxLanes-1)*gap+100);
+  const positions=new Map(),laneLabels=new Map();
+  groups.forEach((group,rank)=>{
+    group.sort((aStep,bStep)=>{
+      const avg=s=>s.dependsOn.length?s.dependsOn.reduce((v,id)=>v+(positions.get(id)?.y ?? center),0)/s.dependsOn.length:center;
+      return avg(aStep)-avg(bStep);
+    });
+    group.forEach((s,index)=>{
+      const x=maxRank===0?width/2:78+rank*(width-156)/maxRank;
+      const y=center+(index-(group.length-1)/2)*gap;
+      positions.set(s.id,{x,y});
+      if(group.length>1 && s.line && s.line!=='主线' && !laneLabels.has(s.line))laneLabels.set(s.line,{x,y:y-32});
+    });
+  });
+  const edges=[];
+  for(const s of p.steps)for(const id of s.dependsOn){
+    const complete=a.valid.get(id)&&a.valid.get(s.id),from=positions.get(id),to=positions.get(s.id);
+    const color=complete?'#82b3a6':s.line.includes('界面')?'#c7bfd7':'#b8c6da';
+    edges.push(`<path class="rail ${complete?'':'pending'}" d="${edgePath(from,to)}" stroke="${color}" marker-end="url(#rail-arrow)"><title>${esc(id)} → ${esc(s.id)}</title></path>`);
+  }
+  const surface=$('#map-surface');surface.style.width=`${width}px`;surface.style.height=`${height}px`;
+  surface.innerHTML=`<svg class="rails" viewBox="0 0 ${width} ${height}" aria-hidden="true"><defs><marker id="rail-arrow" markerWidth="4" markerHeight="4" refX="3.2" refY="2" orient="auto"><path d="M0 .4 3.1 2 0 3.6" fill="none" stroke="#abb9cc" stroke-width=".8"/></marker></defs>${edges.join('')}</svg>${Array.from(laneLabels).map(([name,pos])=>`<span class="lane-label" style="left:${pos.x}px;top:${pos.y}px">${esc(name)}</span>`).join('')}${p.steps.map(s=>{
+    const pos=positions.get(s.id),state=a.display.get(s.id),chosen=selected(p)?.id===s.id;
+    const mark=state.code==='done'?icon('check'):['blocked','review'].includes(state.code)?icon('bang'):'';
+    return `<button class="station ${state.code} ${chosen?'selected':''} ${s.dependsOn.length>1?'transfer':''}" style="left:${pos.x}px;top:${pos.y-13.5}px" data-step="${esc(s.id)}" aria-pressed="${chosen}" aria-label="${esc(`${s.id} ${s.title}，${state.label}`)}"><span class="orb">${mark}</span><span class="station-code num">${esc(s.id)}</span><span class="station-title">${esc(s.title)}</span><span class="station-state">${esc(state.label)}</span></button>`;
+  }).join('')}`;
+  panel.querySelector('.map-scroll').scrollLeft=previousScroll;
+}
+function saveFooter(p,s) {
+  return `<div class="inline-error" id="record-error" role="alert" hidden></div><div class="save-bar"><span class="save-note" id="save-note"></span><div class="save-actions"><button class="btn text compact" data-action="discard-draft" id="discard-button">取消修改</button><button class="btn primary" data-action="save-record" id="save-button">保存记录</button></div></div>`;
+}
+function renderDetail() {
+  const p=current(),s=selected(p),panel=$('#detail-panel');
+  if(!s){panel.innerHTML='<div class="empty-detail">路线生成后，点击站点即可查看要求、填写总结。</div>';return;}
+  const a=analyse(p),d=getDraft(p,s),deps=s.dependsOn.map(id=>`<button class="dep-button" data-step="${esc(id)}" aria-label="查看前置 ${esc(id)}">${esc(id)} ${a.valid.get(id)?'✓':''}</button>`).join('');
+  const state=a.display.get(s.id),tagColor=state.code==='done'?'green':state.code==='active'||state.code==='ready'?'blue':state.code==='blocked'||state.code==='review'?'amber':'';
+  const statusOptions=[['pending','未开始'],['active','进行中'],['blocked','受阻'],['done','已完成']].map(([v,label])=>`<option value="${v}" ${d.status===v?'selected':''}>${label}</option>`).join('');
+  let content='';
+  if(ui.tab==='record') {
+    content=`<div class="record-top"><label class="field" for="record-status"><span class="field-label">本站状态</span><select id="record-status" data-field="status">${statusOptions}</select></label><label class="field" for="record-next"><span class="field-label">下一步做什么 <small>留给下次继续时的自己</small></span><input id="record-next" data-field="next" type="text" maxlength="600" value="${esc(d.next)}" placeholder="写下一个可以直接接续的具体动作"></label></div><label class="field blocker-field" id="blocker-field" for="record-blocker" ${d.status==='blocked'?'':'hidden'}><span class="field-label">阻塞原因 / 需要确认什么</span><input id="record-blocker" data-field="blocker" type="text" maxlength="600" value="${esc(d.blocker)}" placeholder="说明阻塞原因，以及需要谁做什么"></label><div class="summary-heading"><label class="field-label" for="record-summary">执行总结</label><button class="btn text compact" data-action="summary">${icon('spark','sm')}整理总结 <span class="tag outline">演示</span></button></div><textarea class="record-summary" id="record-summary" data-field="summary" maxlength="10000" placeholder="粘贴执行总结，记录已完成内容、剩余事项和阻塞。总结不会自动改变完成状态。">${esc(d.summary)}</textarea>${saveFooter(p,s)}`;
+  } else if(ui.tab==='requirements') {
+    content=`<h3 class="section-label">${p.kind==='demo'?'示例方案要求':'方案要求'}</h3><div class="requirement-text">${esc(s.purpose || '此步骤尚未填写要求，可在导入预览中补充。')}</div><h3 class="section-label">完成条件</h3><div class="check-list">${d.criteria.map((c,i)=>`<label class="check-row"><input type="checkbox" data-criterion="${i}" ${c.met?'checked':''}><span>${esc(c.text)}</span></label>`).join('')}</div><p class="criterion-note">由你核对并勾选；本原型不会执行测试或自动验收。</p><label class="field evidence-field" for="record-evidence"><span class="field-label">证据引用 <small>仅记录文字，不读取外部文件</small></span><textarea id="record-evidence" data-field="evidence" maxlength="2000" placeholder="填写验证记录、交付文件或其他可核对的位置">${esc(d.evidence)}</textarea></label>${saveFooter(p,s)}`;
+  } else {
+    content=`<div class="session-empty"><div class="empty-icon">${icon('link','lg')}</div><h3>这一步还没有关联执行会话</h3><p>原型不连接 Codex，也不会创建或启动任务。你可以先复制接续摘要，在现有会话中继续。</p><button class="btn" data-action="continuation">${icon('copy','sm')}复制接续摘要</button><button class="btn soft" data-action="task-prompt">预览任务指令</button><p style="font-size:10px;margin:14px auto 0">项目归属、会话跳转和批量创建仍需单独验证。</p></div>`;
+  }
+  panel.innerHTML=`<header class="detail-heading"><div><div class="detail-title"><span class="step-id num">${esc(s.id)}</span><h2>${esc(s.title)}</h2><span class="tag ${tagColor}">${esc(state.label)}</span></div><div class="detail-meta"><span>${esc(s.line || '主线')}</span><span>前置${s.dependsOn.length?'':'：无站点前置'}</span>${deps}${p.lifecycle==='draft'?'<span>范围待确认</span>':''}</div></div><button class="btn text compact" data-action="continuation">${icon('copy','sm')}接续摘要</button></header><div class="detail-tabs" role="tablist" aria-label="站点详情标签页">${[['record','执行与总结'],['requirements','要求与验收'],['session','会话关联']].map(([tab,label])=>`<button class="detail-tab ${ui.tab===tab?'active':''}" role="tab" id="tab-${tab}" aria-controls="detail-tab-panel" aria-selected="${ui.tab===tab}" tabindex="${ui.tab===tab?'0':'-1'}" data-tab="${tab}">${label}</button>`).join('')}</div><div class="detail-body" id="detail-tab-panel" role="tabpanel" aria-labelledby="tab-${ui.tab}">${content}</div>`;
+  updateDirtyIndicators();
+}
+function updateDirtyIndicators() {
+  const p=current(),s=selected(p);if(!s)return;
+  const dirty=isDirty(p,s),note=$('#save-note');
+  if(note){note.textContent=dirty?'有未保存修改。总结与完成状态分别记录。':s.updatedAt?'已保存到当前页面；刷新前请导出项目。':'示例或本页记录；刷新前请导出项目留存。';note.classList.toggle('dirty',dirty);}
+  if($('#save-button'))$('#save-button').disabled=!dirty;
+  if($('#discard-button'))$('#discard-button').hidden=!dirty;
+}
+function renderChat() {
+  const p=current(),s=selected(p);
+  $('#ai-context').innerHTML=`<div class="context-label">${icon('target','sm')}当前上下文</div><div class="context-step">${s?`<span class="num">${esc(s.id)}</span>${esc(s.title)}`:`${esc(p.name)}，还没有站点`}</div>`;
+  const welcome=`<div class="chat-message assistant"><div class="message-heading"><span class="assistant-avatar">${icon('spark')}</span>工作台助手</div><div class="message-text">把方案变成路线，把总结留在站点。\n\n先确认步骤和依赖，再生成你的路线图。</div><div class="message-actions"><button class="btn" data-action="import-plan">${icon('route','sm')}从执行方案生成路线</button><button class="btn" data-action="summary" ${s?'':'disabled'}>${icon('edit','sm')}整理当前站点的执行总结</button></div><div class="demo-notice">这是交互演示，尚未接入模型。步骤提取采用格式规则，总结整理只保留和编辑原文，不推断任务已完成。</div></div>`;
+  $('#ai-messages').innerHTML=welcome+p.messages.map((m,i)=>`<div class="chat-message ${m.role}"><div class="message-heading">${m.role==='assistant'?`<span class="assistant-avatar">${icon('spark')}</span>演示助手`:'你'}</div><div class="message-text">${esc(m.text)}</div>${m.actions?`<div class="message-actions"><button class="btn" data-action="message-plan" data-message="${i}">${icon('route','sm')}作为方案预览</button>${m.stepId?`<button class="btn" data-action="message-summary" data-message="${i}">${icon('edit','sm')}放入 ${esc(m.stepId)} 的总结草稿</button>`:''}</div>`:''}</div>`).join('');
+  $('#chat-input').value=chatDrafts.get(p.id)||'';$('#send-button').disabled=!$('#chat-input').value.trim();
+}
+function renderAll() {updateChrome();renderSidebar();renderHeading();renderMap();renderDetail();renderChat();}
+function selectStep(id,scroll=false) {
+  const p=current();if(!p.steps.some(s=>s.id===id))return;
+  p.selected=id;renderMap();renderDetail();renderChat();
+  if(scroll){const el=$$('.station').find(e=>e.dataset.step===id);el?.scrollIntoView({block:'nearest',inline:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
+}
+function chooseProject(id) {if(!projects.some(p=>p.id===id))return;ui.projectId=id;ui.tab='record';ui.navOpen=false;renderAll();}
+// RENDERING_END
+function openNewProject() {
+  ui.modal={};showModal('新建项目','项目用于归档同一份方案、站点路线和执行总结。',`<label class="field" for="new-name"><span class="field-label">项目名称</span><input id="new-name" type="text" maxlength="80" placeholder="例如：监测器的第一次真实试点" autofocus></label><label class="field" for="new-goal"><span class="field-label">最初想解决什么</span><textarea id="new-goal" maxlength="600" placeholder="用一两句话写下目标，回来时不用重新回忆。" style="min-height:95px"></textarea></label><div class="modal-info">新项目只保留在当前页面。完成编辑后可以导出文件，下次通过“打开项目文件”恢复。</div>`,`<button class="btn" data-action="close-modal">取消</button><button class="btn primary" data-action="create-project">创建项目</button>`,'new-project');
+}
+function createProject() {
+  const name=$('#new-name').value.trim(),goal=$('#new-goal').value.trim();
+  if(!name){modalError('请填写一个项目名称。');$('#new-name').focus();return;}
+  const p={id:newId(),name,goal,kind:'local',lifecycle:'draft',revision:1,sourceTitle:'',source:'',selected:null,steps:[],messages:[]};
+  projects.push(p);closeModal();ui.search='';$('#project-search').value='';chooseProject(p.id);notify('项目已创建，可以导入执行方案了。');
+}
+function openSource() {
+  const p=current();if(!p.source){notify('这个项目还没有执行方案，请先导入。');return;}
+  const note=p.kind==='snapshot'?'这里只摘录了原方案目标与第 9 节。完整范围、契约和 V01—V12 请查看项目目录中的原 Markdown。':'这是当前路线使用的方案文本。演示方案不是已批准的实施计划。';
+  ui.modal={};showModal(p.kind==='snapshot'?'原方案快照':'方案原文',p.sourceTitle,`<div class="modal-info">${esc(note)}</div><pre class="source-content">${esc(p.source)}</pre>`,`<button class="btn" data-action="copy-source">${icon('copy','sm')}复制方案文本</button><button class="btn primary" data-action="close-modal">返回路线</button>`,'source');
+}
+function openAbout() {
+  ui.modal={};showModal('这是界面原型，不是执行器','用于确认布局和操作流程；现有项目文件与原执行方案不会被修改。',`<div class="about-content"><h3>可以实际体验</h3><p>切换与新建项目、选择圆圈站点、编辑总结与完成条件、预览并确认依赖、导出和重新打开项目文件。</p><h3>尚未接入</h3><p>没有真实模型调用、Codex 会话控制、文件监听或自动验收。AI 区域的提取使用浏览器内格式规则，不等价于理解任意自然语言方案。</p><h3>如何保留修改</h3><p>数据只在当前页面内存中保存，不使用浏览器持久化存储。刷新或关闭页面会重置。请先保存记录，再导出项目 JSON；下次通过“打开项目文件”恢复。助手对话不包含在导出文件中。</p><h3>示例数据的边界</h3><p>“监测器 MVP”中的进度是虚构演示。“原方案 M01–M05”按本地方案第 9 节建立快照；任何本页编辑都不代表真实开发进度或实施授权。</p></div>`,`<button class="btn primary" data-action="close-modal">了解，返回工作台</button>`,'about');
+}
+function saveRecord() {
+  const p=current(),s=selected(p);if(!s)return;const d=getDraft(p,s),a=analyse(p);
+  function fail(text){const el=$('#record-error');el.textContent=text;el.hidden=false;el.scrollIntoView({block:'nearest'});}
+  if(d.status==='blocked'&&!d.blocker.trim()){fail('请填写阻塞原因，以及需要确认的具体事项。');return;}
+  if(d.status==='done') {
+    if(!a.depsReady.get(s.id)){fail('前置站点尚未全部满足完成条件。请先核对前置记录，不会自动解锁下游。');return;}
+    if(!d.criteria.length || !d.criteria.every(c=>c.met)){fail('请在“要求与验收”中逐项确认完成条件，再将本站标记为已完成。');return;}
+    if(!d.evidence.trim()){fail('请在“要求与验收”中填写证据引用。原型只记录引用，不验证外部文件。');return;}
+  }
+  Object.assign(s,clone(d),{updatedAt:new Date().toISOString()});drafts.delete(draftKey(p,s));
+  renderAll();notify('记录已保存到当前页面；导出项目可以留存。');
+}
+function continuationText(p,s) {
+  const d=getDraft(p,s),a=analyse(p);
+  return `项目：${p.name}\n原始目标：${p.goal}\n站点：${s.id} ${s.title}\n前置：${s.dependsOn.join('、') || '无站点前置'}\n已保存状态：${a.display.get(s.id).label}\n方案要求：${s.purpose}\n\n执行总结${isDirty(p,s)?'（包含本页未保存草稿）':''}：\n${d.summary || '尚未填写'}\n\n下一动作：${d.next || '待补充'}\n阻塞：${d.blocker || '未记录'}\n证据引用：${d.evidence || '尚未填写'}\n\n说明：来自界面原型，不代表真实任务已执行或自动验收。`;
+}
+function openTaskPrompt() {
+  const p=current(),s=selected(p);if(!s)return;
+  const text=`请先核对任务范围和依赖，再决定是否开始实施。\n\n${continuationText(p,s)}\n\n本站完成条件：\n${s.criteria.map(c=>`- ${c.text}`).join('\n')}\n\n请保留原步骤编号，完成后报告结果、证据与剩余问题。不要把本原型中的演示状态当作已验证事实。`;
+  ui.modal={promptText:text};showModal('任务指令草稿','只生成文字，不创建会话、不发送指令，也不启动任务。',`<div class="modal-info amber">是否能在 Codex 中创建会话、归入指定项目并跳转，仍需在实际环境验证。</div><textarea class="json-area" id="task-prompt-text" aria-label="任务指令草稿">${esc(text)}</textarea>`,`<button class="btn" data-action="close-modal">关闭</button><button class="btn primary" data-action="copy-task-prompt">${icon('copy','sm')}复制任务指令</button>`,'task-prompt');
+}
+let importDraft=null;
+function openImport(raw='') {
+  const p=current();importDraft={raw,fileName:'',targetId:p.steps.length?null:p.id,name:p.steps.length?'':p.name,goal:p.steps.length?'':p.goal,steps:[]};showImportForm();
+}
+function showImportForm() {
+  ui.modal={};showModal('导入执行方案','先提取步骤，再由你确认依赖。不会自动覆盖已有路线和总结。',`<div class="modal-info">此原型使用格式规则演示，不调用模型。支持“## M01 步骤名称”和“前置：M01”这样的显式字段；未写前置时会要求确认。</div><div class="modal-tools"><div style="display:flex;gap:7px;flex-wrap:wrap"><button class="btn compact" data-action="choose-plan-file">${icon('folder','sm')}选择 Markdown</button><button class="btn text compact" data-action="fill-sample">填入分叉示例</button></div><span>1 / 2　导入方案</span></div><label class="field" for="plan-input"><span class="field-label">方案文本 <small>仅在浏览器内处理，不上传</small></span><textarea id="plan-input" class="plan-input" maxlength="100000" placeholder="# 项目名称&#10;目标：希望达到的效果&#10;&#10;## M01 输入契约&#10;前置：无&#10;要求：固定输入字段&#10;完成条件：编号唯一；依赖可以校验">${esc(importDraft.raw)}</textarea></label><p class="small muted">${importDraft.targetId?'路线将加入刚创建的空项目。':'确认后新建一个项目，当前项目保持不变。'}</p>`,`<button class="btn" data-action="close-modal">取消</button><button class="btn primary" data-action="parse-plan">${icon('spark','sm')}演示提取步骤</button>`,'import');
+}
+function parsePlan(text) {
+  if(!text.trim())throw new Error('请先粘贴方案，或点击“填入分叉示例”。');
+  if(text.length>100000)throw new Error('方案过长。原型支持不超过 100,000 字符的小规模方案。');
+  const result={name:'导入的执行方案',goal:'',steps:[]};let active=null;
+  for(const line of text.split(/\r?\n/)) {
+    const heading=line.match(/^\s*(?:#{1,6}\s*)?([A-Za-z]{1,8}\d{1,4}(?:[_-][A-Za-z0-9]+)?)\s*(?:[.、:：]\s*|\s+)(.+?)\s*$/);
+    if(heading){active=step(heading[1],heading[2],[],{purpose:'',criteria:[],_known:false});result.steps.push(active);continue;}
+    if(!active){
+      const name=line.match(/^#\s+(.+)$/);if(name)result.name=name[1].trim().slice(0,80);
+      const goal=line.match(/^\s*目标\s*[:：]\s*(.*)$/);if(goal)result.goal=goal[1].trim().slice(0,600);
+      continue;
+    }
+    const dep=line.match(/^\s*(?:前置(?:步骤)?|依赖(?:步骤)?)\s*[:：]\s*(.*)$/);
+    const lane=line.match(/^\s*线路\s*[:：]\s*(.*)$/);
+    const criteria=line.match(/^\s*完成条件\s*[:：]\s*(.*)$/);
+    const purpose=line.match(/^\s*(?:要求|说明)\s*[:：]\s*(.*)$/);
+    if(dep){const value=dep[1].trim();active._known=Boolean(value);active.dependsOn=/^(?:无|无前置|无站点前置|none|起点|-|—)$/i.test(value)?[]:value.split(/[,，、;；\s]+/).filter(Boolean);}
+    else if(lane)active.line=lane[1].trim().slice(0,60)||'主线';
+    else if(criteria)active.criteria=criteria[1].split(/[;；]+/).map(s=>s.trim()).filter(Boolean).map(text=>({text,met:false}));
+    else if(purpose)active.purpose+=(active.purpose?'\n':'')+purpose[1].trim();
+    else if(line.trim())active.purpose+=(active.purpose?'\n':'')+line.trim();
+  }
+  if(!result.steps.length)throw new Error('没有识别到步骤。当前演示支持“## M01 步骤名称”格式，可先填入示例；任意自然语言方案需要后续接入真实模型。');
+  result.steps.forEach(s=>{if(!s.criteria.length)s.criteria=[{text:'请补充并确认本站的完成条件',met:false}];});
+  validateGraph(result.steps);return result;
+}
+function previewPlan() {
+  try {
+    importDraft.raw=$('#plan-input').value;
+    const parsed=parsePlan(importDraft.raw);importDraft.steps=parsed.steps;
+    importDraft.name=importDraft.name||parsed.name;importDraft.goal=importDraft.goal||parsed.goal;showPlanPreview();
+  }catch(e){modalError(e.message);}
+}
+function showPlanPreview() {
+  const unknown=importDraft.steps.filter(s=>!s._known).length;
+  ui.modal={};showModal('核对站点与依赖','预览不会启动任何任务。步骤顺序不等同于依赖关系。',`<div class="modal-info ${unknown?'amber':''}">识别到 ${importDraft.steps.length} 个站点。${unknown?`其中 ${unknown} 个站点未明确声明依赖，请核对后勾选确认。`:'所有前置都来自方案中的显式字段，仍请核对。'}多前置请用逗号分隔；无前置则留空并确认。</div><div style="display:grid;grid-template-columns:1fr;gap:0"><label class="field" for="preview-project-name"><span class="field-label">项目名称</span><input id="preview-project-name" type="text" maxlength="80" value="${esc(importDraft.name)}"></label><label class="field" for="preview-goal"><span class="field-label">原始目标</span><input id="preview-goal" type="text" maxlength="600" value="${esc(importDraft.goal)}" placeholder="保留你最初希望达成的效果"></label></div><div class="preview-list">${importDraft.steps.map((s,i)=>`<div class="preview-row" data-preview="${i}"><div class="preview-row-head"><span class="step-id num">${esc(s.id)}</span><input type="text" class="preview-title" aria-label="${esc(s.id)} 步骤名称" maxlength="100" value="${esc(s.title)}"></div><label class="field"><span class="field-label">前置步骤</span><input type="text" class="preview-deps" aria-label="${esc(s.id)} 前置步骤" maxlength="500" value="${esc(s.dependsOn.join(', '))}" placeholder="例如 S02, D02；没有前置则留空"></label><label class="preview-confirm ${s._known?'':'needs-confirm'}"><input type="checkbox" class="preview-confirmed" ${s._known?'checked':''}>我已确认此步骤的依赖关系</label><label class="field" style="margin-top:11px"><span class="field-label">完成条件（每行一项）</span><textarea class="preview-criteria" aria-label="${esc(s.id)} 完成条件" maxlength="4000">${esc(s.criteria.map(c=>c.text).join('\n'))}</textarea></label></div>`).join('')}</div>`,`<span class="footer-note">2 / 2　确认后自动排列圆圈与连线</span><button class="btn" data-action="back-to-plan">返回修改</button><button class="btn primary" data-action="confirm-route">确认并生成路线</button>`,'preview');
+}
+function confirmRoute() {
+  try {
+    const name=$('#preview-project-name').value.trim(),goal=$('#preview-goal').value.trim();if(!name)throw new Error('请填写项目名称。');
+    const steps=$$('.preview-row').map((row,i)=>{
+      const original=importDraft.steps[i];
+      if(!row.querySelector('.preview-confirmed').checked)throw new Error(`请先确认 ${original.id} 的前置关系。无前置也需要确认，不会自动猜测。`);
+      const criteria=row.querySelector('.preview-criteria').value.split('\n').map(x=>x.trim()).filter(Boolean);
+      if(!criteria.length)throw new Error(`请填写 ${original.id} 至少一项完成条件。`);
+      if(criteria.length>20)throw new Error(`${original.id} 的完成条件超过原型支持的 20 项，请拆分步骤。`);
+      const deps=row.querySelector('.preview-deps').value.trim().split(/[,，、;；\s]+/).filter(Boolean);
+      return step(original.id,row.querySelector('.preview-title').value.trim(),deps,{line:original.line,purpose:original.purpose,criteria:criteria.map(text=>({text,met:false})),next:deps.length?'前置完成后，按本站要求执行并记录结果。':'核对本站要求和完成条件后，开始执行。'});
+    });
+    validateGraph(steps);
+    let p=projects.find(p=>p.id===importDraft.targetId && p.steps.length===0);
+    if(!p){p={id:newId(),messages:[]};projects.push(p);}
+    Object.assign(p,{name,goal,kind:'local',lifecycle:'active',revision:1,source:importDraft.raw,sourceTitle:importDraft.fileName||`${name}.md`,selected:steps[0].id,steps});
+    closeModal();ui.search='';$('#project-search').value='';chooseProject(p.id);notify(`已生成 ${steps.length} 个站点。路线和记录仅保留在本页。`);
+  }catch(e){modalError(e.message);}
+}
+function openSummary(text,stepId) {
+  const p=current(),s=stepId?p.steps.find(s=>s.id===stepId):selected(p);
+  if(!s){notify('请先生成路线并选择一个站点。');return;}
+  const d=getDraft(p,s),raw=typeof text==='string'?text:d.summary;
+  ui.modal={projectId:p.id,stepId:s.id};
+  showModal('把总结放回对应站点',`${p.name} / ${s.id} ${s.title}`,`<div class="modal-info">这里演示“核对后写入”的交互，只保留、分段和编辑原文，不进行真实 AI 推断。确认后进入草稿，不会自动标记完成。</div><label class="field" for="summary-draft"><span class="field-label">执行总结草稿</span><textarea id="summary-draft" maxlength="10000" style="min-height:190px" placeholder="粘贴执行结果，保留已完成、剩余事项与阻塞的事实。">${esc(raw.trim().split(/\n{3,}/).join('\n\n'))}</textarea></label><label class="field" for="summary-next"><span class="field-label">下一动作</span><input type="text" id="summary-next" maxlength="600" value="${esc(d.next)}" placeholder="人工确认一个具体接续动作"></label>`,`<button class="btn" data-action="close-modal">取消</button><button class="btn primary" data-action="apply-summary">放入本站草稿</button>`,'summary');
+}
+function applySummary() {
+  const text=$('#summary-draft').value.trim();if(!text){modalError('请先填写总结内容。');return;}
+  const p=projects.find(p=>p.id===ui.modal.projectId),s=p?.steps.find(s=>s.id===ui.modal.stepId);
+  if(!s){modalError('原站点已不存在，请关闭后重新选择站点。');return;}
+  const d=getDraft(p,s);d.summary=text;d.next=$('#summary-next').value.trim();p.selected=s.id;ui.projectId=p.id;ui.tab='record';closeModal();renderAll();notify('已放入本站草稿。核对后点击“保存记录”，状态不会自动改变。');
+}
+function sendChat() {
+  const text=$('#chat-input').value.trim();if(!text)return;
+  const p=current(),s=selected(p);p.messages.push({role:'user',text});
+  p.messages.push({role:'assistant',text:/\b[A-Za-z]{1,8}\d{1,4}\b/.test(text)?'可以将这段文字作为方案预览，逐项核对步骤和显式前置；也可以放入对应站点的总结草稿。当前没有调用真实模型。':'这段内容还没有写入站点。你可以选择归属，核对草稿后再保存。本原型不会生成真实模型回答，也不会推断任务已完成。',actions:true,source:text,stepId:s?.id || null});
+  chatDrafts.set(p.id,'');renderChat();$('#ai-messages').scrollTop=$('#ai-messages').scrollHeight;
+}
+function exportPayload(p) {
+  return {format:'route-workbench-prototype',version:1,exportedAt:new Date().toISOString(),project:{name:p.name,goal:p.goal,lifecycle:p.lifecycle,revision:p.revision,sourceTitle:p.sourceTitle,source:p.source,selected:p.selected,steps:clone(p.steps)}};
+}
+function openExport() {
+  const p=current(),dirty=dirtySteps(p);
+  if(dirty.length){ui.tab='record';selectStep(dirty[0].id);notify(`${dirty[0].id} 有未保存修改。请先保存或取消，再导出项目。`,true);return;}
+  const text=JSON.stringify(exportPayload(p),null,2),filename=`${p.name.replace(/[\\/:*?"<>|\u0000-\u001f]/g,'_') || 'route-project'}.json`;
+  ui.modal={exportText:text,filename};
+  showModal('导出项目文件','保留当前项目的方案、路线与已保存记录，下次可以重新导入。',`<div class="modal-info">当前页面不会自动写入磁盘。下载或复制 JSON 后自行留存；助手对话和未保存草稿不包含在导出中。</div><div class="source-title">${icon('file','sm')} ${esc(filename)}</div><textarea class="json-area" id="export-json" readonly aria-label="项目 JSON">${esc(text)}</textarea>`,`<button class="btn" data-action="copy-export">${icon('copy','sm')}复制 JSON</button><button class="btn primary" data-action="download-export">${icon('download','sm')}下载 JSON</button>`,'export');
+}
+function downloadExport() {
+  const {exportText,filename}=ui.modal,blob=new Blob([exportText],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);notify('已发起文件下载。若预览阻止下载，请使用“复制 JSON”。');
+}
+function openRestore() {
+  ui.modal={};showModal('打开项目文件','导入本原型导出的 JSON，不覆盖现有项目。',`<div class="restore-choice"><p>选择之前导出的项目文件，或粘贴 JSON。</p><button class="btn" data-action="choose-project-file">${icon('folder','sm')}选择文件</button></div><label class="field" for="restore-json"><span class="field-label">项目 JSON</span><textarea class="json-area" id="restore-json" maxlength="500000" placeholder="粘贴通过“导出项目”得到的 JSON"></textarea></label><div class="modal-info">会检查文件版本、字段类型、重复编号、未知前置和循环依赖。文件中的任何文字都只作为数据处理，不会执行。</div>`,`<button class="btn" data-action="close-modal">取消</button><button class="btn primary" data-action="restore-project">打开项目</button>`,'restore');
+}
+function readString(obj,key,max,required=false) {
+  const val=obj[key];if(typeof val!=='string' || val.length>max || (required&&!val.trim()))throw new Error(`字段 ${key} 需要${required?'非空':''}文本，且不超过 ${max} 字符。`);return val;
+}
+function restoreProject() {
+  try{
+    const raw=$('#restore-json').value;if(raw.length>500000)throw new Error('项目文件超过 500 KB 的原型限制。');
+    let data;try{data=JSON.parse(raw);}catch(e){throw new Error('JSON 格式不正确，请选择本原型导出的项目文件。');}
+    if(!data || data.format!=='route-workbench-prototype' || data.version!==1)throw new Error('不支持这个文件格式或版本。请使用本原型导出的 version 1 项目文件。');
+    const src=data.project;if(!src || typeof src!=='object' || Array.isArray(src))throw new Error('项目字段缺失或类型错误。');
+    if(!Array.isArray(src.steps) || src.steps.length>30)throw new Error('站点列表无效，原型支持最多 30 站。');
+    if(!['active','draft'].includes(src.lifecycle))throw new Error('项目治理状态仅支持 active 或 draft。');
+    if(!Number.isInteger(src.revision) || src.revision<1)throw new Error('路线版本需要是正整数。');
+    const steps=src.steps.map(s=>{
+      if(!s || typeof s!=='object')throw new Error('站点需要是对象。');
+      if(!['pending','active','blocked','done'].includes(s.status))throw new Error('站点状态无效。');
+      if(!Array.isArray(s.dependsOn) || s.dependsOn.some(id=>typeof id!=='string'))throw new Error('前置列表需要由步骤编号组成。');
+      if(!Array.isArray(s.criteria) || !s.criteria.length || s.criteria.length>20)throw new Error('每站需有 1–20 条完成条件。');
+      const criteria=s.criteria.map(c=>{if(!c || typeof c.met!=='boolean')throw new Error('完成条件确认值必须为布尔值。');return {text:readString(c,'text',4000,true),met:c.met};});
+      if(s.updatedAt!==null && (typeof s.updatedAt!=='string' || !Number.isFinite(Date.parse(s.updatedAt))))throw new Error('站点更新时间无效。');
+      return step(readString(s,'id',32,true),readString(s,'title',100,true),s.dependsOn.slice(),{status:s.status,line:readString(s,'line',60),purpose:readString(s,'purpose',100000),summary:readString(s,'summary',10000),next:readString(s,'next',600),blocker:readString(s,'blocker',600),evidence:readString(s,'evidence',2000),criteria,updatedAt:s.updatedAt});
+    });
+    validateGraph(steps);let name=readString(src,'name',80,true);if(projects.some(p=>p.name===name))name=name.slice(0,72)+'（导入）';
+    const p={id:newId(),name,goal:readString(src,'goal',600),lifecycle:src.lifecycle,kind:'local',revision:src.revision,sourceTitle:readString(src,'sourceTitle',160),source:readString(src,'source',100000),selected:steps.some(s=>s.id===src.selected)?src.selected:steps[0]?.id || null,steps,messages:[]};
+    projects.push(p);closeModal();ui.search='';$('#project-search').value='';chooseProject(p.id);notify('项目文件已打开，路线和已保存记录已恢复到本页。');
+  }catch(e){modalError(e.message);}
+}
+// WORKFLOWS_END
+function setDrawerState() {
+  const navOverlay=ui.navOpen && window.innerWidth<=680,aiOverlay=ui.aiOpen && window.innerWidth<1240 && !navOverlay;
+  $('.workspace').inert=navOverlay || aiOverlay;
+  $('.sidebar').inert=aiOverlay;
+  $('.ai-panel').inert=navOverlay;
+  for(const [el,active] of [[$('.sidebar'),navOverlay],[$('.ai-panel'),aiOverlay]]){
+    el.setAttribute('role',active?'dialog':'complementary');
+    if(active)el.setAttribute('aria-modal','true');else el.removeAttribute('aria-modal');
+  }
+}
+function refreshChrome() {updateChrome();setDrawerState();requestAnimationFrame(renderMap);}
+document.addEventListener('click',event=>{
+  const target=event.target.closest('button');if(!target || target.disabled)return;
+  if(target.dataset.project){chooseProject(target.dataset.project);setDrawerState();return;}
+  if(target.dataset.step){const wasStation=target.classList.contains('station');selectStep(target.dataset.step);if(wasStation)$$('.station').find(b=>b.dataset.step===target.dataset.step)?.focus({preventScroll:true});return;}
+  if(target.dataset.tab){ui.tab=target.dataset.tab;renderDetail();$(`#tab-${ui.tab}`).focus({preventScroll:true});return;}
+  const action=target.dataset.action;if(!action)return;
+  switch(action){
+    case 'toggle-ai':ui.aiOpen=!ui.aiOpen;ui.navOpen=false;refreshChrome();if(ui.aiOpen && window.innerWidth<1240)requestAnimationFrame(()=>$('.ai-heading .icon-button').focus());else if(!ui.aiOpen)requestAnimationFrame(()=>$('.ai-toggle').focus({preventScroll:true}));break;
+    case 'toggle-nav':ui.navOpen=!ui.navOpen;refreshChrome();if(ui.navOpen)requestAnimationFrame(()=>$('.sidebar-close').focus());else requestAnimationFrame(()=>$('.mobile-menu').focus({preventScroll:true}));break;
+    case 'new-project':openNewProject();break;
+    case 'create-project':createProject();break;
+    case 'source':openSource();break;
+    case 'copy-source':copyText(current().source,'方案文本');break;
+    case 'about':openAbout();break;
+    case 'close-modal':closeModal();break;
+    case 'locate-current':{
+      const p=current(),a=analyse(p);const s=p.steps.find(s=>s.status==='active')||p.steps.find(s=>a.display.get(s.id).code==='ready')||selected(p);if(s){selectStep(s.id,true);$$('.station').find(b=>b.dataset.step===s.id)?.focus({preventScroll:true});}break;
+    }
+    case 'save-record':saveRecord();break;
+    case 'discard-draft':{const p=current(),s=selected(p);if(s){drafts.delete(draftKey(p,s));renderDetail();notify('已取消本站的未保存修改。');}break;}
+    case 'continuation':{const p=current(),s=selected(p);if(s)copyText(continuationText(p,s),'接续摘要');break;}
+    case 'task-prompt':openTaskPrompt();break;
+    case 'copy-task-prompt':copyText($('#task-prompt-text').value,'任务指令');break;
+    case 'import-plan':openImport();break;
+    case 'import-sample':openImport(SAMPLE_PLAN);break;
+    case 'fill-sample':$('#plan-input').value=SAMPLE_PLAN;importDraft.raw=SAMPLE_PLAN;$('#plan-input').focus();break;
+    case 'choose-plan-file':$('#plan-file').value='';$('#plan-file').click();break;
+    case 'parse-plan':previewPlan();break;
+    case 'back-to-plan':importDraft.name=$('#preview-project-name').value;importDraft.goal=$('#preview-goal').value;showImportForm();break;
+    case 'confirm-route':confirmRoute();break;
+    case 'summary':openSummary();break;
+    case 'apply-summary':applySummary();break;
+    case 'message-plan':{const m=current().messages[Number(target.dataset.message)];if(m)openImport(m.source);break;}
+    case 'message-summary':{const m=current().messages[Number(target.dataset.message)];if(m)openSummary(m.source,m.stepId);break;}
+    case 'export':openExport();break;
+    case 'copy-export':copyText($('#export-json').value,'项目 JSON');break;
+    case 'download-export':downloadExport();break;
+    case 'restore':openRestore();break;
+    case 'choose-project-file':$('#project-file').value='';$('#project-file').click();break;
+    case 'restore-project':restoreProject();break;
+    case 'select-copy':$('#manual-copy').focus();$('#manual-copy').select();break;
+  }
+});
+document.addEventListener('input',event=>{
+  const el=event.target;
+  if(el.id==='project-search'){ui.search=el.value;renderSidebar();return;}
+  if(el.id==='chat-input'){chatDrafts.set(current().id,el.value);$('#send-button').disabled=!el.value.trim();return;}
+  if(el.dataset.field && el.closest('#detail-panel')){
+    const p=current(),s=selected(p);if(!s)return;const d=getDraft(p,s);
+    if(['status','summary','next','blocker','evidence'].includes(el.dataset.field))d[el.dataset.field]=el.value;
+    if(el.dataset.field==='status' && $('#blocker-field'))$('#blocker-field').hidden=d.status!=='blocked';
+    if($('#record-error'))$('#record-error').hidden=true;updateDirtyIndicators();return;
+  }
+  if(el.hasAttribute('data-criterion')){
+    const p=current(),s=selected(p);if(s){getDraft(p,s).criteria[Number(el.dataset.criterion)].met=el.checked;updateDirtyIndicators();if($('#record-error'))$('#record-error').hidden=true;}return;
+  }
+  if(el.classList.contains('preview-deps')){const row=el.closest('.preview-row');row.querySelector('.preview-confirmed').checked=false;row.querySelector('.preview-confirm').classList.add('needs-confirm');}
+  if(el.classList.contains('preview-confirmed'))el.closest('.preview-confirm').classList.toggle('needs-confirm',!el.checked);
+});
+$('#chat-form').addEventListener('submit',e=>{e.preventDefault();sendChat();});
+$('#chat-input').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();sendChat();}});
+$('#dialog').addEventListener('cancel',()=>{ui.modal=null;});
+$('#dialog').addEventListener('click',e=>{if(e.target!==$('#dialog'))return;const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeModal();});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!$('#dialog').open){if(ui.navOpen){ui.navOpen=false;refreshChrome();$('.mobile-menu').focus();}else if(ui.aiOpen&&window.innerWidth<1240){ui.aiOpen=false;refreshChrome();$('.ai-toggle').focus();}}
+  if(e.key==='Enter' && ui.modal?.kind==='new-project' && e.target.id==='new-name'){e.preventDefault();createProject();return;}
+  if(e.target.matches('.detail-tab')&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){
+    e.preventDefault();const tabs=['record','requirements','session'],i=tabs.indexOf(ui.tab);ui.tab=e.key==='Home'?tabs[0]:e.key==='End'?tabs[2]:tabs[(i+(e.key==='ArrowRight'?1:2))%3];renderDetail();$(`#tab-${ui.tab}`).focus();return;
+  }
+  if(e.target.matches('.station')&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key)){
+    e.preventDefault();const buttons=$$('.station'),origin=e.target,x=parseFloat(origin.style.left),y=parseFloat(origin.style.top);let destination;
+    if(e.key==='Home')destination=buttons[0];else if(e.key==='End')destination=buttons[buttons.length-1];
+    else {
+      const horizontal=['ArrowLeft','ArrowRight'].includes(e.key),sign=['ArrowRight','ArrowDown'].includes(e.key)?1:-1;
+      destination=buttons.filter(b=>b!==origin).map(b=>({el:b,dx:parseFloat(b.style.left)-x,dy:parseFloat(b.style.top)-y})).filter(o=>(horizontal?o.dx:o.dy)*sign>1).sort((a,b)=>((horizontal?Math.abs(a.dx)*2+Math.abs(a.dy):Math.abs(a.dy)*2+Math.abs(a.dx))-(horizontal?Math.abs(b.dx)*2+Math.abs(b.dy):Math.abs(b.dy)*2+Math.abs(b.dx))))[0]?.el;
+    }
+    if(destination){const id=destination.dataset.step;selectStep(id,true);$$('.station').find(b=>b.dataset.step===id)?.focus({preventScroll:true});}return;
+  }
+  if(e.key==='Tab'&&!$('#dialog').open){
+    const drawer=ui.navOpen&&window.innerWidth<=680?$('.sidebar'):ui.aiOpen&&window.innerWidth<1240?$('.ai-panel'):null;
+    if(drawer){const items=Array.from(drawer.querySelectorAll('button:not([disabled]),input:not([disabled]),textarea:not([disabled]),a[href]')).filter(el=>el.getClientRects().length);const first=items[0],last=items[items.length-1];if(e.shiftKey&&(document.activeElement===first||!drawer.contains(document.activeElement))){e.preventDefault();last?.focus();}else if(!e.shiftKey&&(document.activeElement===last||!drawer.contains(document.activeElement))){e.preventDefault();first?.focus();}}
+  }
+});
+$('#plan-file').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;const thisDraft=importDraft;
+  if(f.size>500000){modalError('文件超过 500 KB，请使用较小的执行方案。');return;}
+  try{const text=(await f.text()).replace(/^﻿/,'');if(ui.modal?.kind!=='import'||thisDraft!==importDraft)return;if(text.length>100000){modalError('方案超过 100,000 字符，请使用较小的执行方案。');return;}importDraft.raw=text;importDraft.fileName=f.name.slice(0,160);$('#plan-input').value=text;notify('文件已读取到预览区，尚未生成或修改路线。');}catch(e){modalError('无法读取该文件，请改为粘贴纯文本方案。');}
+});
+$('#project-file').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;const modal=ui.modal;
+  if(f.size>500000){modalError('文件超过 500 KB 的原型限制。');return;}
+  try{const text=(await f.text()).replace(/^﻿/,'');if(ui.modal!==modal||ui.modal?.kind!=='restore')return;$('#restore-json').value=text;notify('项目文件已读取，请点击“打开项目”进行校验。');}catch(e){modalError('无法读取该文件，请粘贴项目 JSON。');}
+});
+window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{setDrawerState();renderMap();},100);});
+window.addEventListener('beforeunload',event=>{if(projects.some(p=>dirtySteps(p).length || p.kind==='local' || p.steps.some(s=>s.updatedAt))){event.preventDefault();event.returnValue='';}});
+hydrateIcons();renderAll();setDrawerState();
+// This prototype intentionally makes no network requests and uses no browser storage.
+</script>
+</body>
+</html>

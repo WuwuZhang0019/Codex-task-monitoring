@@ -1,0 +1,82 @@
+import assert from 'node:assert/strict';
+import { mkdtemp, mkdir, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { chromium } from '@playwright/test';
+import { createServer } from '../server/index.mjs';
+
+const appDir=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const dataDir=await mkdtemp(path.join(tmpdir(),'route-workbench-e2e-'));
+const outputDir=process.env.E2E_OUTPUT_DIR||path.join(appDir,'test-results');
+await mkdir(outputDir,{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH||undefined,args:['--no-sandbox']});
+let server;
+let checks=0;
+async function start(options={}){server=await createServer({dataDir,distDir:path.join(appDir,'dist'),env:{},...options});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));return `http://127.0.0.1:${server.address().port}`;}
+async function stop(){if(server){server.closeAllConnections();await new Promise(resolve=>server.close(resolve));server=null;}}
+async function check(name,fn){await fn();checks++;console.log(`PASS ${checks}: ${name}`);}
+async function expectText(locator,text){await locator.filter({hasText:text}).first().waitFor({state:'visible'});}
+const page=await browser.newPage({viewport:{width:1440,height:1100},deviceScaleFactor:1});
+const pageErrors=[];page.on('pageerror',e=>pageErrors.push(e.message));
+try{
+  let base=await start();
+  await page.goto(base);await page.getByRole('heading',{name:'让执行方案，有一条清晰的路线。'}).waitFor();
+  await page.screenshot({path:path.join(outputDir,'01-empty.png'),fullPage:true});
+  await check('empty project starts with an honest unconfigured AI status',async()=>{await page.getByText('尚未配置模型',{exact:true}).waitFor();assert.equal((await page.request.get(base+'/api/projects').then(r=>r.json())).projects.length,0);});
+  await page.getByRole('button',{name:'先用分叉样例试一遍'}).click();
+  await page.getByRole('dialog').getByRole('checkbox').check();
+  await page.getByRole('button',{name:'确认并生成路线'}).click();
+  await page.getByTestId('station-M01').waitFor();
+  await check('branch sample creates one durable project with four stations',async()=>{assert.equal(await page.locator('.station').count(),4);const p=(await page.request.get(base+'/api/projects').then(r=>r.json())).projects[0];assert.equal(p.steps.length,4);assert.deepEqual(p.steps.find(s=>s.id==='I01').dependsOn,['S01','D01']);});
+  await page.getByLabel('执行总结',{exact:true}).fill('已核对编号与依赖。下一步实现本地保存。');
+  await page.getByLabel('下一步做什么',{exact:true}).fill('验证服务线保存后重启恢复。');
+  await page.getByLabel('当前状态',{exact:true}).selectOption('done');
+  await page.getByRole('button',{name:'保存记录',exact:true}).click();
+  await page.getByRole('button',{name:'保存记录',exact:true}).waitFor({state:'visible'});
+  await page.waitForFunction(()=>document.querySelector('.save-bar')?.textContent.includes('已保存到本地'));
+  await check('save persists to disk and does not automatically change other stations',async()=>{const disk=JSON.parse(await readFile(path.join(dataDir,'projects.json'),'utf8'));const p=disk.projects[0];assert.equal(p.steps[0].status,'done');assert.ok(p.steps[0].summary.includes('已核对'));assert.equal(p.steps[1].status,'todo');});
+  await page.reload();
+  await check('browser reload restores record',async()=>{await page.getByLabel('执行总结',{exact:true}).waitFor();assert.ok((await page.getByLabel('执行总结',{exact:true}).inputValue()).includes('已核对'));});
+  await page.getByLabel('执行总结',{exact:true}).fill('未保存的内容');
+  page.once('dialog',d=>d.dismiss());await page.getByTestId('station-S01').click();
+  await check('cancel navigation preserves unsaved record',async()=>{assert.equal(await page.getByLabel('执行总结',{exact:true}).inputValue(),'未保存的内容');});
+  page.once('dialog',d=>d.accept());await page.getByTestId('station-S01').click();
+  await page.getByLabel('执行总结',{exact:true}).fill('服务线保存完成。');await page.getByLabel('当前状态',{exact:true}).selectOption('done');await page.getByRole('button',{name:'保存记录',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.save-bar')?.textContent.includes('已保存到本地'));
+  await check('merge waits for all predecessors',async()=>{assert.ok(!(await page.getByTestId('station-I01').textContent()).includes('可开始'));});
+  await page.getByTestId('station-D01').click();await page.getByLabel('当前状态',{exact:true}).selectOption('done');await page.getByRole('button',{name:'保存记录',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.save-bar')?.textContent.includes('已保存到本地'));
+  await check('merge unlocks after both branches have recorded completion',async()=>{await expectText(page.getByTestId('station-I01'),'可开始');});
+  await page.getByTestId('station-I01').click();
+  await page.locator('#summary-input').fill('联合验证中，剩余重启测试。');await page.getByRole('button',{name:'发送并整理总结'}).click();
+  await check('AI without credentials returns actionable error, no fake result',async()=>{await expectText(page.locator('.ai-content .error-box'),'未配置');assert.equal(await page.locator('.summary-preview').count(),0);assert.equal(await page.getByLabel('执行总结',{exact:true}).inputValue(),'');});
+  await page.getByTestId('station-S01').click();
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.waitForTimeout(5200);
+  await page.screenshot({path:path.join(outputDir,'02-workbench.png'),fullPage:false});
+  await page.screenshot({path:path.join(outputDir,'02-workbench-full.png'),fullPage:true});
+  await page.getByRole('button',{name:'新建项目',exact:true}).first().click();await page.getByRole('dialog').getByLabel('项目名称',{exact:true}).fill('隔离测试项目');await page.getByRole('button',{name:'创建项目',exact:true}).click();await page.getByRole('heading',{name:'这个项目还没有路线'}).waitFor();
+  await check('new project is empty and cannot inherit another project record',async()=>{assert.equal(await page.locator('.station').count(),0);const p=(await page.request.get(base+'/api/projects').then(r=>r.json())).projects.find(p=>p.name==='隔离测试项目');assert.deepEqual(p.steps,[]);});
+  await page.getByRole('button',{name:'导入执行方案',exact:true}).click();await page.getByRole('button',{name:'手动录入',exact:true}).click();
+  await page.getByLabel('站点 1 名称',{exact:true}).fill('手动站点');await page.getByLabel('站点 1 完成条件',{exact:true}).fill('记录能重新读取');await page.getByLabel('站点 1 前置编号',{exact:true}).fill('M01');await page.getByLabel('站点 1 名称',{exact:true}).focus();await page.getByRole('checkbox').check();await page.getByRole('button',{name:'确认并生成路线'}).click();
+  await check('invalid self dependency is blocked in preview',async()=>{await expectText(page.getByRole('dialog').getByRole('alert'),'不能依赖自己');});
+  await page.getByLabel('站点 1 前置编号',{exact:true}).fill('');await page.getByLabel('站点 1 名称',{exact:true}).focus();await page.getByRole('checkbox').check();await page.getByRole('button',{name:'确认并生成路线'}).click();await page.getByTestId('station-M01').waitFor();
+  await check('manual route is saved into the existing empty project',async()=>{const result=await page.request.get(base+'/api/projects').then(r=>r.json());assert.equal(result.projects.length,2);assert.equal(result.projects.find(p=>p.name==='隔离测试项目').steps.length,1);});
+  await page.locator('.project-item').filter({hasText:'并行路线验收样例'}).click();await page.getByTestId('station-M01').waitFor();
+  await page.setViewportSize({width:390,height:844});await page.getByRole('button',{name:'收起 AI 助手',exact:true}).click();await page.screenshot({path:path.join(outputDir,'03-mobile.png'),fullPage:true});
+  await check('mobile has no page-wide horizontal overflow',async()=>{assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1));});
+  await stop();base=await start();await page.goto(base);await page.getByTestId('station-M01').waitFor();
+  await check('server restart restores both projects from durable storage',async()=>{assert.equal((await page.request.get(base+'/api/projects').then(r=>r.json())).projects.length,2);const data=await page.request.get(base+'/api/projects').then(r=>r.json());assert.ok(data.projects.find(p=>p.name==='并行路线验收样例').steps[0].summary.includes('已核对'));});
+  await stop();
+  const aiData=await mkdtemp(path.join(tmpdir(),'route-ai-e2e-'));
+  const modelStep={id:'M01',title:'确认契约',line:'主线',purpose:'保留稳定编号',sourceExcerpt:'M01 确认契约',dependsOn:[],acceptance:['编号唯一'],status:'todo',summary:'',nextAction:'',blocker:'',evidence:''};
+  base=await start({dataDir:aiData,env:{OPENAI_API_KEY:'test-only',OPENAI_MODEL:'mock-model'},fetchImpl:async(_url,options)=>{const request=JSON.parse(options.body);const extract=request.messages[0].content.includes('路线提取');return new Response(JSON.stringify({choices:[{finish_reason:'stop',message:{content:JSON.stringify(extract?{name:'模型接口验收',goal:'核对后保存',steps:[modelStep],warnings:[]}:{summary:'已完成部分核对，尚未验收。',nextAction:'继续检查编号。',blocker:''})}}]}),{headers:{'content-type':'application/json'}});}});
+  await page.setViewportSize({width:1440,height:1100});await page.goto(base);await page.getByRole('button',{name:'导入方案',exact:true}).click();await page.getByLabel('执行方案文本',{exact:true}).fill('M01 确认契约\n要求：保留稳定编号\n完成条件：编号唯一');await page.getByRole('button',{name:'发送并提取路线'}).click();await page.getByLabel('站点 1 名称',{exact:true}).waitFor();
+  await check('mock provider extraction previews but does not persist before confirmation',async()=>{assert.equal((await page.request.get(base+'/api/projects').then(r=>r.json())).projects.length,0);});
+  await page.getByRole('checkbox').check();await page.getByRole('button',{name:'确认并生成路线'}).click();await page.getByTestId('station-M01').waitFor();await page.locator('#summary-input').fill('已完成部分核对，继续检查编号。');await page.getByRole('button',{name:'发送并整理总结'}).click();await page.locator('.summary-preview').waitFor();await page.getByRole('button',{name:'核对后放入草稿'}).click();
+  await check('AI suggestion goes only to draft and never marks step done',async()=>{assert.equal(await page.getByLabel('当前状态',{exact:true}).inputValue(),'todo');assert.equal(await page.getByLabel('执行总结',{exact:true}).inputValue(),'已完成部分核对，尚未验收。');const p=(await page.request.get(base+'/api/projects').then(r=>r.json())).projects[0];assert.equal(p.steps[0].summary,'');});
+  await page.getByRole('button',{name:'保存记录',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.save-bar')?.textContent.includes('已保存到本地'));
+  await check('explicit save writes AI draft without changing status',async()=>{const p=(await page.request.get(base+'/api/projects').then(r=>r.json())).projects[0];assert.equal(p.steps[0].status,'todo');assert.ok(p.steps[0].summary.includes('尚未验收'));});
+  await check('no unhandled browser errors',async()=>assert.deepEqual(pageErrors,[]));
+  await stop();await rm(aiData,{recursive:true,force:true});
+  console.log(`\n${checks} end-to-end checks passed. No real model requests were made. Screenshots: ${outputDir}`);
+}finally{await stop();await browser.close();await rm(dataDir,{recursive:true,force:true});}

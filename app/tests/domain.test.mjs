@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {blankStep,graphError,readiness,routeLayout} from '../.test-build/domain.js';
+const s=(id,deps=[],line='主线')=>({...blankStep(id),title:id,line,dependsOn:deps,acceptance:['人工核对']});
+test('linear steps keep one row and flow left to right',()=>{const steps=[s('A'),s('B',['A']),s('C',['B'])],layout=routeLayout(steps);assert.equal(layout.lanes.length,1);assert.ok(layout.positions.get('A').x<layout.positions.get('B').x);assert.equal(layout.positions.get('A').y,layout.positions.get('C').y);});
+test('same-line forks automatically occupy separate rows and merge back',()=>{const layout=routeLayout([s('A'),s('B',['A']),s('C',['A']),s('D',['B','C'])]);assert.notEqual(layout.positions.get('B').y,layout.positions.get('C').y);assert.equal(layout.positions.get('A').y,layout.positions.get('D').y);assert.ok(layout.positions.get('D').x>layout.positions.get('B').x);});
+test('layout respects unsorted dependencies rather than array order',()=>{const l=routeLayout([s('D',['B','C']),s('B',['A']),s('C',['A']),s('A')]);for(const [a,b] of [['A','B'],['A','C'],['B','D'],['C','D']])assert.ok(l.positions.get(a).x<l.positions.get(b).x);});
+test('every station position is distinct within a sixty-step DAG',()=>{const steps=Array.from({length:60},(_,i)=>s(`S${i}`,i<4?[]:[`S${i-4}`],i%2?'服务线':'主线'));const l=routeLayout(steps);assert.equal(new Set([...l.positions.values()].map(p=>`${p.x}:${p.y}`)).size,60);});
+test('graph validation rejects duplicate IDs, missing predecessor and cycle',()=>{assert.ok(graphError([s('A'),s('A')]));assert.ok(graphError([s('A',['missing'])]));assert.ok(graphError([s('A',['B']),s('B',['A'])]));assert.equal(graphError([s('A'),s('B',['A'])]),'');});
+test('manual done is not considered dependency-ready if an ancestor remains unfinished',()=>{const a=s('A'),b={...s('B',['A']),status:'done'},c=s('C',['B']);let r=readiness([a,b,c]);assert.equal(r.complete.get('B'),false);assert.equal(r.ready(c),false);a.status='done';r=readiness([a,b,c]);assert.equal(r.ready(c),true);assert.equal(c.status,'todo');});
