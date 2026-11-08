@@ -5,7 +5,7 @@ export interface Extraction { name:string; goal:string; steps:Step[]; warnings:s
 export const statusNames:Record<Status,string> = {todo:'未开始',active:'进行中',blocked:'受阻',done:'已记录完成'};
 export class ApiError extends Error { constructor(message:string,public status:number){super(message);} }
 export async function api<T>(path:string, method='GET',body?:unknown):Promise<T> {
-  const controller=new AbortController(); const timeout=setTimeout(()=>controller.abort(),100000);
+  const controller=new AbortController(); const timeout=setTimeout(()=>controller.abort(),path.startsWith('/ai/')?315000:100000);
   try {
     const response=await fetch(`/api${path}`,{method,headers:body?{'Content-Type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined,signal:controller.signal});
     const data=await response.json(); if(!response.ok)throw new ApiError(data.error||`请求失败 (${response.status})`,response.status);

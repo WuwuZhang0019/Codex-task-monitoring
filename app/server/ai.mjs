@@ -29,7 +29,10 @@ async function readLimited(response) {
   } finally { reader.releaseLock(); }
   return JSON.parse(Buffer.concat(chunks).toString('utf8'));
 }
-export function createAI({ env = process.env, fetchImpl = globalThis.fetch, timeoutMs = 30000 } = {}) {
+export function createAI({ env = process.env, fetchImpl = globalThis.fetch, timeoutMs } = {}) {
+  const configuredTimeout = Number(env.OPENAI_TIMEOUT_MS ?? 180000);
+  const requestTimeout = timeoutMs ?? configuredTimeout;
+  if (!Number.isInteger(requestTimeout) || requestTimeout < 1 || requestTimeout > 300000) throw new Error('OPENAI_TIMEOUT_MS 必须为1至300000的整数毫秒数');
   const key = (env.OPENAI_API_KEY ?? '').trim();
   const model = (env.OPENAI_MODEL ?? '').trim() || 'gpt-4o-mini';
   const base = (env.OPENAI_BASE_URL ?? '').trim() || 'https://api.openai.com/v1';
@@ -41,7 +44,7 @@ export function createAI({ env = process.env, fetchImpl = globalThis.fetch, time
       if (!['https:', 'http:'].includes(endpoint.protocol) || endpoint.username || endpoint.password || endpoint.search || endpoint.hash) throw new Error();
     } catch { throw new HttpError(503, 'OPENAI_BASE_URL 配置无效，必须是无凭据/查询/片段的 HTTP(S) API 基地址'); }
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const timer = setTimeout(() => controller.abort(), requestTimeout);
     try {
       const response = await fetchImpl(endpoint.href, {
         method: 'POST', redirect: 'error', signal: controller.signal,
@@ -60,7 +63,7 @@ export function createAI({ env = process.env, fetchImpl = globalThis.fetch, time
       if (choice?.message?.refusal) throw new Error('模型拒绝处理');
       return parseModelJSON(choice?.message?.content);
     } catch (error) {
-      if (controller.signal.aborted) throw new HttpError(504, '模型请求超时，请稍后重试');
+      if (controller.signal.aborted) throw new HttpError(504, `模型请求超时（${requestTimeout / 1000}秒），请检查模型连接或调整 OPENAI_TIMEOUT_MS 后重启服务；原方案文本仍保留`);
       if (error instanceof HttpError) throw error;
       // Never echo provider bodies, keys, or document text into API errors.
       throw new HttpError(502, '模型服务请求失败或返回无效 JSON');
