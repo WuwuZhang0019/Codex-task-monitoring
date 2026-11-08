@@ -4,6 +4,15 @@ import { HttpError } from './validation.mjs';
 export function validateRelationships(model) {
   const fail = message => { throw new HttpError(400, message); };
   if (!model || typeof model !== 'object') fail('关系模型必须是对象');
+  if(model.candidates!==undefined){
+    if(!Array.isArray(model.candidates))fail('独立候选记录必须是数组');
+    const ids=new Set();
+    for(const c of model.candidates){
+      if(!c||typeof c.id!=='string'||!c.id.trim()||ids.has(c.id))fail('候选标识缺失或重复');
+      ids.add(c.id);
+      if(typeof c.title!=='string'||!c.title.trim()||typeof c.reason!=='string'||!c.reason.trim()||!/^\d{4}-\d{2}-\d{2}$/.test(c.date)||!['candidate','paused'].includes(c.status))fail('候选名称、原因、日期或状态不完整');
+    }
+  }
   const maps = {};
   for (const key of ['folders', 'tasks', 'chats', 'stations', 'plans']) {
     if (!Array.isArray(model[key])) fail(`${key} 必须是数组`);

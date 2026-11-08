@@ -2,6 +2,7 @@ import {readFile} from 'node:fs/promises';
 import {digest} from './receipts.mjs';
 import {comparePlans} from './plan-diff.mjs';
 import {HttpError} from './validation.mjs';
+import {stepSummary,stepCircle} from './plan-steps.mjs';
 
 const TEMPLATE_URL=new URL('../../docs/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url);
 const known=v=>typeof v==='string'&&v.trim()?v:'待核实';
@@ -36,10 +37,9 @@ export function generateOutput(project,view,body,template){
  const warnings=[];
  const name=id=>{const x=m.stations.find(s=>s.id===id);return x?`${x.code} ${x.title}（${id}）`:id;};
  const planRef=p=>p?`${known(p.sourcePath)}；版本 ${known(p.version)}；日期 ${known(p.date)}；章节 ${known(p.chapter)}`:'待核实：未绑定方案';
- const allSteps=m.stations.filter(x=>x.planId===m.currentPlanId);
  // A bound model can be only a subset of the plan. Its size is not proof of
  // the plan's total step count, even when every saved station has a plan ID.
- const stepOverview=m.currentPlanId&&allSteps.length?`待核实：尚未独立核定所引用方案的完整步骤与总数；已登记的 ${allSteps.length} 个站点仅作定位，清单为：${allSteps.map((x,i)=>`${i+1}、${x.code}：${x.title}`).join('；')}。执行前对照方案原文核定，不将操作子项或登记站点数当作方案总步数`:'待核实：尚未完整绑定当前方案站点，不能核定总数';
+ const stepOverview=stepSummary(plan,m.stations);
  function context(target){
   const t=m.tasks.find(t=>t.id===target.taskId),folder=m.folders.find(f=>f.id===t.folderId),p=m.plans.find(p=>p.id===target.planId);
   const candidates=m.chats.filter(c=>c.taskId===t.id&&c.folderId===t.folderId);
@@ -59,7 +59,7 @@ export function generateOutput(project,view,body,template){
   const values={
    日期:date,
    方案文档为:planRef(m.plans.find(p=>p.id===target.planId)),
-   本方案一共为:stepOverview,
+   本方案一共为:stepSummary(m.plans.find(p=>p.id===target.planId),m.stations),
    本次执行步骤为:`${target.code}，${target.title}`,
    本步骤是否完成:actual?(r.localPassed?'是':'待核验'):'待核验；执行后按逐项证据填写',
    是否满足方案预期:actual?(r.passed?'满足本站当前方案；项目和初始符合性另列':'待核验'):'待核验；执行后按实际验收填写',
@@ -85,13 +85,13 @@ export function generateOutput(project,view,body,template){
   const items=r.acceptance.items??[];
   const limited=conclusion==='D'?target.acceptance:items.filter(i=>conclusion==='A'?i.result==='failed':i.result!=='passed').map(i=>i.criterion);
   const work=conclusion==='D'?`按方案目标和范围完成：${known(target.scope)}；交付全部验收项要求的结果：${lines(target.acceptance)}`:conclusion==='A'?`仅修复原验收失败项：${lines(limited)}；必要交付阻塞：${lines(entry?.receipt.blockers)}。若失败属于终点条件，逐项对照任务验收：${lines(task.acceptance)}。未明确的失败原因先核实，禁止增加优化或新站点。`:`仅补齐缺失证据或复核：${lines(limited)}；核验原因：${reason}。本站已通过且未受影响的检查不重复；终点或交接待核验时只补必要任务终点与逐边匹配证据。`;
-  return {stationId:target.id,kind:'execution',text:`日期：${date}\n状态：可复制，尚未发送；${mode}\n\n1. 任务名称\n${known(c.t.name)} / ${target.code}：${target.title}；${mode}\n\n2. 执行环境\n${c.text}\n\n3. 方案依据\n${planRef(c.p)}\n本方案一共为：${stepOverview}\n先读取方案原文及其引用的权威资料，核实当前步骤和范围。\n\n4. 本站目标\n${target.title}\n${known(target.scope)}\n任务原始目标：${known(c.t.initialGoal)}\n项目初始目标：${known(diff.initial?.goal)}\n\n5. 范围边界\n仅完成 ${target.code} 的既定目标、验收及交付；不新增主路线、不降低标准、不自行批准方案变更，不接入自动采集、注入或自动执行。\n\n6. 全部前置条件\n${dependencies(target)}\n当前有效判断：${reason}\n上游实际交付和证据：\n${evidenceText}\n可开始不表示已经开始；执行前重新核对全部依赖及其适用版本。\n\n7. 必要执行步骤\n${work}\n优先复用已有实现；如缺身份、方案出处、证据或依赖，先报告缺失及恢复条件，不越过前置。\n\n8. 逐项验收\n${target.acceptance?.map((a,i)=>`${i+1}、${a}：检查实际交付是否满足原文条件；记录输入场景、检查方法、预期要求、实际结果、适用版本、证据位置及限制；不能只凭提交或完成自述判通过。`).join('\n')||'待核实：方案未登记验收条件，补齐前停止执行'}\n任务终点条件：${lines(c.t.acceptance)}\n\n9. Git 提交\n按可验证阶段提交。提交前检查 diff 与暂存区，仅包含本站相关变更，不纳入真实运行数据、密钥、测试产物或他人改动；需要新分支时使用 codex/ 前缀。使用 Conventional Commits，summary 使用简体中文，不超过 72 字符且无句号结尾。同步必要生产构建。\n\n10. 停止条件\n本站原验收条件全部满足后停止扩展；证据不足、依赖缺失或方案冲突时准确报告等待对象、差异与恢复条件，不自行改变范围或验收要求。完成本指令后仅报告交接状态，不自动执行下一站。\n\n11. 执行完成后必须返回的回执\n${receipt(target)}\n`};
+  return {stationId:target.id,kind:'execution',text:`日期：${date}\n状态：可复制，尚未发送；${mode}\n\n1. 任务名称\n${stepCircle(c.p,target.code)} ${known(c.t.name)} / ${target.code}：${target.title}；${mode}\n\n2. 执行环境\n${c.text}\n\n3. 方案依据\n${planRef(c.p)}\n本方案一共为：${stepSummary(c.p,m.stations)}\n先读取方案原文及其引用的权威资料，核实当前步骤和范围。\n\n4. 本站目标\n${target.title}\n${known(target.scope)}\n任务原始目标：${known(c.t.initialGoal)}\n项目初始目标：${known(diff.initial?.goal)}\n\n5. 范围边界\n仅完成 ${target.code} 的既定目标、验收及交付；不新增主路线、不降低标准、不自行批准方案变更，不接入自动采集、注入或自动执行。\n\n6. 全部前置条件\n${dependencies(target)}\n当前有效判断：${reason}\n上游实际交付和证据：\n${evidenceText}\n可开始不表示已经开始；执行前重新核对全部依赖及其适用版本。\n\n7. 必要执行步骤\n${work}\n优先复用已有实现；如缺身份、方案出处、证据或依赖，先报告缺失及恢复条件，不越过前置。\n\n8. 逐项验收\n${target.acceptance?.map((a,i)=>`${i+1}、${a}：检查实际交付是否满足原文条件；记录输入场景、检查方法、预期要求、实际结果、适用版本、证据位置及限制；不能只凭提交或完成自述判通过。`).join('\n')||'待核实：方案未登记验收条件，补齐前停止执行'}\n任务终点条件：${lines(c.t.acceptance)}\n\n9. Git 提交\n按可验证阶段提交。提交前检查 diff 与暂存区，仅包含本站相关变更，不纳入真实运行数据、密钥、测试产物或他人改动；需要新分支时使用 codex/ 前缀。使用 Conventional Commits，summary 使用简体中文，不超过 72 字符且无句号结尾。同步必要生产构建。\n\n10. 停止条件\n本站原验收条件全部满足后停止扩展；证据不足、依赖缺失或方案冲突时准确报告等待对象、差异与恢复条件，不自行改变范围或验收要求。完成本指令后仅报告交接状态，不自动执行下一站。\n\n11. 执行完成后必须返回的回执\n${receipt(target)}\n`};
  });
  const waitIds=[...new Set([...(r.waiting??[]),...(r.handoffs??[]).flatMap(h=>h.waiting)])];
  const issues={C:`等待对象：${lines(waitIds.map(name))}。等待条件：上述依赖的必要验收及对应交接边有效通过。恢复条件：证据有效且全部前置重新核验通过后再生成合法后继指令。`,E:`交接对象：${known(task.handoff)}。本任务已交付；下游按自身方案和全部依赖接手，不将其工作追加到本任务。\n本任务无下一步执行指令，到此结束`,F:'项目有效关闭且全部最终条件适用，历史关闭证据仍保留。\n本任务无下一步执行指令，到此结束',G:`方案冲突：${reason}\n范围差异：${JSON.stringify(branches)}；方案对照：${diff.impact}\n待决定事项：明确是否修正回执或另行审批方案变更；保留初始目标、原文和历史，不自行批准或应用。恢复条件：处理决定明确，方案及证据重新核验通过。`};
  const report=instructions.length?null:{kind:'receipt',text:`日期：${date}\n状态：${conclusions[conclusion]}\n${ctx.text}\n\n${receipt(s,true)}\n\n${issues[conclusion]??reason}\n逐边交接：${JSON.stringify(branches)}\n历史状态：任务 ${taskState.status}；项目 ${view.project.status}。历史关闭不替代当前核验。`};
  const replacements={'完整路径':known(plan?.sourcePath),'完整路径；没有则写无':'待核实：读取方案原文引用的权威资料，不猜测其他文件路径','项目名称，未知写待核实':`${known(project.name)}（${project.id}）`,'文件夹名称或标识，未知写待核实':`${known(ctx.folder?.name)}（${known(ctx.folder?.externalId)}）`,'名称、编号；未知写待核实':`${known(task.name)} / ${s.code} ${s.title}`,'已知信息；未知写待核实，执行前重新核对':`${known(ctx.source?.repository)} / ${known(ctx.source?.worktree)} / ${known(ctx.source?.branch)}；HEAD ${known(ctx.source?.head)}`};
- const audit={kind:'audit',text:`日期：${date}\n状态：核对提示词，仅核对和生成，不执行开发\n${ctx.text}\n\n${template.general.replace(/【需填写：([^】]+)】/g,(_,k)=>replacements[k]??'待核实').replace(/^- 本方案一共为：.*$/m,`- 本方案一共为：${stepOverview}`)}`};
+ const audit={kind:'audit',text:`日期：${date}\n状态：核对提示词，仅核对和生成，不执行开发\n${ctx.text}\n\n${template.general.replace(/【需填写：([^】]+)】/g,(_,k)=>replacements[k]??'待核实').replace(/^- 本方案一共为：[\s\S]*?(?=^- 本次执行步骤为：)/m,`- 本方案一共为：${stepOverview}\n`)}`};
  const fingerprint=digest({project,model:m,revision:view.revision,stationId:s.id,sourceId:body.sourceId??'',successorId:body.successorId??'',date,template:template.hash});
  if(body.expectedFingerprint&&body.expectedFingerprint!==fingerprint)throw new HttpError(409,'状态或方案已变化，请重新生成并核对预览后复制');
  return {projectId:project.id,stationId:s.id,revision:view.revision,fingerprint,date,conclusion,reason,warnings:[...new Set(warnings)],audit,instructions,report,branches,diff,canSelectEdge,

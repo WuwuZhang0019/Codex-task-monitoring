@@ -7,9 +7,24 @@ import {loadOutputTemplate,generateOutput} from './outputs.mjs';
 import {comparePlans,capturePlanSnapshots} from './plan-diff.mjs';
 import {project,model,receipt,review,complete,command,view} from '../tests/helpers/output-fixture.mjs';
 import {createServer} from './index.mjs';
+import {planSteps} from './plan-steps.mjs';
 
 const template=await loadOutputTemplate();
 const output=(m,stationId='A',extra={})=>generateOutput(project,view(m),{stationId,...extra},template);
+
+test('最新模板按方案原文确定圈号和逐行完整步骤，登记子集不改变方案总数',async()=>{
+ const source=await readFile(new URL('../../docs/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md',import.meta.url),'utf8');
+ const steps=planSteps({source});assert.equal(steps.length,6);
+ const m=model();m.plans[0].source=source;m.stations=[{...m.stations[0],id:'M06',code:'M06',title:steps[5].title,successors:[]}];
+ const o=output(m,'M06'),text=o.instructions[0].text;
+ assert.match(text,/1\. 任务名称\n⑥ 样例任务 \/ M06/);
+ assert.match(text,/- 本方案一共为：共 6 步；分别是：\n\n  1\. M01：/);
+ assert.match(text,/\n  6\. M06：完成端到端场景验收与使用交付\n/);
+ assert.doesNotMatch(o.audit.text,/xx|3\. ……/);
+ assert.match(output(model()).instructions[0].text,/任务名称\n待核实（原方案步骤顺序未核定）/);
+ for(const bad of ['## 完整方案步骤\n1. A：一步\n3. B：两步','## 完整方案步骤\n1. A：一步\n2. A：重号',source+'\n## 完整方案步骤\n1. X：冲突'])assert.equal(planSteps({source:bad}),null);
+ assert.deepEqual(planSteps({source:'## 完整方案步骤\n1. X：原定一步\n2. Z：原定两步\n'}),[{code:'X',title:'原定一步'},{code:'Z',title:'原定两步'}]);
+});
 test('A/B/D 限于必要修复、核验或合法后继，独立指令含完整环境、验收和新版回执顺序',()=>{
  let m=model(),b=output(m);assert.equal(b.conclusion,'B');assert.equal(b.instructions.length,1);assert.match(b.instructions[0].text,/仅补齐缺失证据或复核/);
  m=complete(m,'A',false,{checks:[{criterion:'功能验收',result:'failed',reason:'实际功能失败',evidenceIds:['e']}]});

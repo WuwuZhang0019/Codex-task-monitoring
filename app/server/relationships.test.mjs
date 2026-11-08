@@ -16,3 +16,10 @@ test('跨任务依赖仍须无环，编号仅在任务内唯一', () => {
   model.stations.push({id:'R',taskId:'U',code:'M01',planId:null,dependsOn:['S'],successors:[]});
   validateRelationships(model);model.stations[0].dependsOn=['R'];assert.throws(()=>validateRelationships(model),/循环/);
 });
+
+test('候选和暂停记录与主路线分开，不接受执行中状态或重复身份',()=>{
+ const m=sample();m.candidates=[{id:'extra',title:'额外优化',reason:'非本期目标',date:'2026-11-08',status:'paused'}];
+ assert.equal(validateRelationships(m).candidates[0].status,'paused');
+ m.candidates[0].status='active';assert.throws(()=>validateRelationships(m),/候选/);
+ m.candidates[0].status='candidate';m.candidates.push({...m.candidates[0]});assert.throws(()=>validateRelationships(m),/候选标识/);
+});
