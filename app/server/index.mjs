@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { readFile, realpath, stat, readdir } from 'node:fs/promises';
 import { createStore } from './store.mjs';
+import { createModelStore } from './model-store.mjs';
 import { createAI } from './ai.mjs';
 import { HttpError, UUID } from './validation.mjs';
 
@@ -104,6 +105,7 @@ export async function createServer(options = {}) {
   if (!options.env) loadEnvironment();
   const env = options.env ?? process.env;
   const store = await createStore(options.dataDir ?? env.WORKBENCH_DATA_DIR ?? path.join(APP_DIR, 'data'));
+  const models = await createModelStore(path.join(options.dataDir ?? env.WORKBENCH_DATA_DIR ?? path.join(APP_DIR, 'data'), 'models'),store);
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const distDir = options.distDir ?? path.join(APP_DIR, 'dist');
   const server = http.createServer(async (req, res) => {
@@ -120,6 +122,13 @@ export async function createServer(options = {}) {
         if (method === 'GET') return sendJSON(res, 200, { projects: store.list() });
         if (method === 'POST') return sendJSON(res, 201, { project: await store.create(await jsonBody(req)) });
         throw new HttpError(405, '不支持的请求方法');
+      }
+      const modelMatch = pathname.match(/^\/api\/projects\/([^/]+)\/model$/);
+      if(modelMatch){
+        if(!UUID.test(modelMatch[1]))throw new HttpError(400,'项目 ID 必须是 UUID');
+        if(method==='GET')return sendJSON(res,200,await models.get(modelMatch[1]));
+        if(method==='PUT')return sendJSON(res,200,await models.update(modelMatch[1],await jsonBody(req)));
+        throw new HttpError(405,'不支持的请求方法');
       }
       const match = pathname.match(/^\/api\/projects\/([^/]+)$/);
       if (match) {

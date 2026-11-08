@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtemp,readFile,rm} from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import {createModelStore} from './model-store.mjs';
+test('迁移保留原报告，保存重开保留唯一归属、双聊天和方案版本',async t=>{
+ const dir=await mkdtemp(path.join(os.tmpdir(),'m02-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+ const project={id:'P',name:'测试',goal:'目标',source:'原文',steps:[{id:'M01',dependsOn:[],status:'done',acceptance:['检查'],purpose:'范围',title:'站点'}]};
+ const projects={get:()=>structuredClone(project)},store=await createModelStore(dir,projects);
+ const draft=await store.get('P');assert.equal(draft.model.stations[0].verification,'pending');assert.equal(draft.model.stations[0].report.status,'done');
+ draft.model.folders=[{id:'F',externalId:null}];draft.model.tasks[0].folderId='F';
+ draft.model.chats=['C1','C2'].map(id=>({id,taskId:draft.model.tasks[0].id,folderId:'F'}));
+ draft.model.plans=[{id:'V1',version:'1.0',source:'原文',previousId:null}];draft.model.initialPlanId='V1';draft.model.currentPlanId='V1';
+ const saved=await store.update('P',draft);const reopened=await createModelStore(dir,projects);assert.deepEqual(await reopened.get('P'),saved);
+ assert.deepEqual(JSON.parse(await readFile(path.join(dir,'P.json.legacy.json'),'utf8')),project);
+ await assert.rejects(store.update('P',draft),/冲突/);
+ const changed=structuredClone(saved);changed.model.plans[0].source='覆盖';await assert.rejects(store.update('P',changed),/不可覆盖/);
+ const invalid=structuredClone(saved);invalid.model.chats[0].folderId='OTHER';await assert.rejects(store.update('P',invalid),/归属/);
+ assert.deepEqual(await reopened.get('P'),saved);
+});
