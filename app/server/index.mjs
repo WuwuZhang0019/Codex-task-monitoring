@@ -93,7 +93,8 @@ async function staticFile(res, pathname, distDir, head) {
 }
 async function readSample(sampleFile) {
   if (sampleFile) return readFile(sampleFile, 'utf8');
-  const root = path.dirname(APP_DIR);
+  let root = path.dirname(APP_DIR);
+  if(!(await readdir(root)).some(name=>/^01_.*\.md$/i.test(name)))root=path.join(root,'docs','99_归档');
   const names = (await readdir(root)).filter(name => /^01_.*\.md$/i.test(name)).sort();
   if (names.length !== 1) throw new HttpError(500, '项目根目录必须存在唯一的 01_*.md 样例文档');
   return readFile(path.join(root, names[0]), 'utf8');

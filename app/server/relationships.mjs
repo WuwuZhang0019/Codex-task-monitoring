@@ -13,7 +13,11 @@ export function validateRelationships(model) {
       maps[key].set(item.id, item);
     }
   }
+  for(const key of ['initialPlanId','currentPlanId'])if(model[key]!==undefined&&model[key]!==null&&!maps.plans.has(model[key]))fail('项目方案版本不存在');
+  const externalFolders=new Set();
+  for(const folder of model.folders){if(folder.externalId){if(externalFolders.has(folder.externalId))fail('文件夹外部标识重复');externalFolders.add(folder.externalId);}}
   for (const task of model.tasks) {
+    if (Object.hasOwn(task,'folderIds')) fail('任务只能有一个文件夹归属');
     if (task.folderId !== null && !maps.folders.has(task.folderId)) fail('任务文件夹不存在');
     if (!Array.isArray(task.acceptance)) fail('任务缺少终点验收条件');
   }
@@ -31,6 +35,8 @@ export function validateRelationships(model) {
     if (station.planId !== null && !maps.plans.has(station.planId)) fail('站点方案版本不存在');
     if (!Array.isArray(station.dependsOn) || new Set(station.dependsOn).size !== station.dependsOn.length) fail('站点依赖非法或重复');
     if (!Array.isArray(station.successors)) fail('站点缺少合法后继');
+    if(new Set(station.successors).size!==station.successors.length)fail('合法后继重复');
+    if(station.verification !== undefined && station.verification !== 'pending')fail('M02 不能写入验收通过状态');
     for (const id of [...station.dependsOn, ...station.successors]) if (id === station.id || !maps.stations.has(id)) fail('站点引用缺失或自环');
   }
   const visited = new Set(), visiting = new Set();
@@ -45,6 +51,8 @@ export function validateRelationships(model) {
   for (const plan of model.plans) {
     if (typeof plan.source !== 'string' || typeof plan.version !== 'string') fail('方案原文或版本缺失');
     if (plan.previousId !== null && !maps.plans.has(plan.previousId)) fail('前版方案不存在');
+    const seen=new Set([plan.id]);let previous=plan.previousId;
+    while(previous!==null){if(seen.has(previous))fail('方案版本存在循环');seen.add(previous);previous=maps.plans.get(previous)?.previousId??null;}
   }
   return structuredClone(model);
 }

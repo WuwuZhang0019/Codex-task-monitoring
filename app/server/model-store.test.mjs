@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,readFile,rm} from 'node:fs/promises';
+import {mkdtemp,readFile,rm,mkdir,writeFile} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {createModelStore} from './model-store.mjs';
@@ -18,4 +18,16 @@ test('迁移保留原报告，保存重开保留唯一归属、双聊天和方�
  const changed=structuredClone(saved);changed.model.plans[0].source='覆盖';await assert.rejects(store.update('P',changed),/不可覆盖/);
  const invalid=structuredClone(saved);invalid.model.chats[0].folderId='OTHER';await assert.rejects(store.update('P',invalid),/归属/);
  assert.deepEqual(await reopened.get('P'),saved);
+});
+
+test('关系文件损坏不重置，备份写入失败保留当前版并可恢复重试',async t=>{
+ const dir=await mkdtemp(path.join(os.tmpdir(),'m02-failure-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+ const project={id:'P',name:'空项目',goal:'',source:'',steps:[]};
+ const store=await createModelStore(dir,{get:()=>structuredClone(project)});
+ const first=await store.update('P',await store.get('P'));
+ const file=path.join(dir,'P.json'),before=await readFile(file,'utf8');
+ await mkdir(file+'.bak');await assert.rejects(store.update('P',first));assert.equal(await readFile(file,'utf8'),before);
+ await rm(file+'.bak',{recursive:true});const next=await store.update('P',first);assert.equal(next.revision,2);
+ await writeFile(file,'{broken');await assert.rejects(store.get('P'));assert.equal(await readFile(file,'utf8'),'{broken');
+ await writeFile(file,JSON.stringify(next));assert.deepEqual(await store.get('P'),next);
 });

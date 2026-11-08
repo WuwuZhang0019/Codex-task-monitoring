@@ -68,6 +68,33 @@ function modelResponse(value, { fenced = false, finish = 'stop' } = {}) {
 const validExtraction = () => ({ name: '导入项目', goal: '实现工作台', steps: [step()], warnings: ['M01未明确依赖，未推断依赖'] });
 const SUMMARY_STEP = { id: 'M01', title: '服务', purpose: '本地运行', acceptance: ['测试通过'] };
 
+test('M02 HTTP保存重启、版本追加、归属与迁移边界',async t=>{
+ const f=await fixture(t);const p=await create(f,{name:'M02测试',source:SOURCE,steps:[step('S',{status:'done'})]});
+ const endpoint=`/api/projects/${p.id}/model`;
+ let value=(await f.request(endpoint)).value;
+ assert.equal(value.model.stations[0].verification,'pending');
+ value.model.folders=[{id:'F',name:'文件夹'}];value.model.tasks[0].folderId='F';
+ value.model.chats=['C1','C2'].map(id=>({id,taskId:value.model.tasks[0].id,folderId:'F'}));
+ value.model.plans=[{id:'V1',version:'1.0',source:SOURCE,previousId:null}];value.model.initialPlanId='V1';value.model.currentPlanId='V1';
+ let result=await f.request(endpoint,{method:'PUT',body:value});assert.equal(result.status,200);value=result.value;
+ const old=structuredClone(value);value.model.plans.push({id:'V2',version:'2.0',source:SOURCE+'修订',previousId:'V1'});value.model.currentPlanId='V2';
+ result=await f.request(endpoint,{method:'PUT',body:value});assert.equal(result.status,200);value=result.value;
+ await f.stop();await f.start();assert.deepEqual((await f.request(endpoint)).value,value);
+ assert.equal((await f.request(endpoint,{method:'PUT',body:old})).status,409);
+ for(const mutate of [m=>m.tasks[0].folderId=null,m=>m.stations[0].code='改号',m=>m.stations[0].verification='passed',m=>m.chats[0].folderId='OTHER',m=>m.stations[0].dependsOn=['missing']]){
+  const invalid=structuredClone(value);mutate(invalid.model);assert.equal((await f.request(endpoint,{method:'PUT',body:invalid})).status,400);
+ }
+ assert.deepEqual((await f.request(endpoint)).value,value);
+ const original=(await f.request(`/api/projects/${p.id}`)).value.project;assert.deepEqual(original,p);
+ assert.equal(value.model.stations[0].report.status,'done');
+ const snapshot=JSON.parse(await readFile(path.join(f.dataDir,'models',`${p.id}.json.legacy.json`),'utf8'));assert.deepEqual(snapshot,p);
+ // Missing main with backup must never remigrate or reset history.
+ await f.stop();await rm(path.join(f.dataDir,'models',`${p.id}.json`));await f.start();
+ assert.equal((await f.request(endpoint)).status,500);
+ await writeFile(path.join(f.dataDir,'models',`${p.id}.json`),JSON.stringify(value));
+ assert.deepEqual((await f.request(endpoint)).value,value);
+});
+
 test('CRUD, exact wire contract, empty project, manual done, isolation and durable restart', async t => {
   const f = await fixture(t);
   const health = await f.request('/api/health');
@@ -88,7 +115,7 @@ test('CRUD, exact wire contract, empty project, manual done, isolation and durab
   const before = (await f.request('/api/projects')).value;
   const backup = JSON.parse(await readFile(path.join(f.dataDir, 'projects.json.bak'), 'utf8'));
   assert.equal(backup.projects.find(item => item.id === first.id).revision, 1);
-  assert.deepEqual((await readdir(f.dataDir)).sort(), ['projects.json', 'projects.json.bak']);
+  assert.deepEqual((await readdir(f.dataDir)).sort(), ['models', 'projects.json', 'projects.json.bak']);
   await f.stop(); await f.start();
   assert.deepEqual((await f.request('/api/projects')).value, before);
   assert.equal((await f.request('/api/projects/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')).status, 404);
@@ -165,7 +192,7 @@ test('missing primary with backup is not silently reinitialized', async t => {
 
 test('sample is exact original 01 markdown, not a hardcoded approximation', async t => {
   const f = await fixture(t);
-  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../docs/99_归档');
   const sample = (await readdir(root)).find(name => /^01_.*\.md$/.test(name));
   assert.ok(sample);
   assert.deepEqual((await f.request('/api/sample')).value, { text: await readFile(path.join(root, sample), 'utf8') });
@@ -346,7 +373,7 @@ test('failed filesystem commit leaves previous data intact and subsequent writes
   assert.equal(errors.length, 1);
   await rm(path.join(f.dataDir, 'projects.json.bak'), { recursive: true });
   assert.equal((await create(f, { name: '恢复后正常写入' })).revision, 1);
-  assert.deepEqual((await readdir(f.dataDir)).sort(), ['projects.json', 'projects.json.bak']);
+  assert.deepEqual((await readdir(f.dataDir)).sort(), ['models', 'projects.json', 'projects.json.bak']);
   await f.stop(); await f.start();
   assert.equal((await f.request('/api/projects')).value.projects[0].name, '恢复后正常写入');
 });
