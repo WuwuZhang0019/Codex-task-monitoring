@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { validateRelationships } from './relationships.mjs';
 import { HttpError } from './validation.mjs';
+import {applyReceiptCommand,inspectReceipts} from './receipts.mjs';
 
 async function atomic(file,value){
   const temporary=`${file}.${randomUUID()}.tmp`;
@@ -31,11 +32,14 @@ export async function createModelStore(directory, projects) {
       return {revision:0,model:legacyModel(project)};
     }throw error;}
   }
-  return {get:read,update(id,body) {
+  function update(id,body,receiptCommand=false) {
     const operation=queue.then(async()=>{
       const old=await read(id);
       if(!body||body.revision!==old.revision)throw new HttpError(409,'关系版本冲突，请重新读取');
-      const model=validateRelationships(body.model);
+      const candidate=receiptCommand?applyReceiptCommand(id,old.model,body):body.model;
+      if(candidate===null)return old;
+      const model=validateRelationships(candidate);
+      if(!receiptCommand){if(old.model.receiptLog)model.receiptLog=old.model.receiptLog;else delete model.receiptLog;}
       for(const key of ['initialPlanId','currentPlanId'])if(model[key]!==null&&!model.plans.some(p=>p.id===model[key]))throw new HttpError(400,'项目方案引用不存在');
       if(old.revision>0){
         if(old.model.initialPlanId!==null&&model.initialPlanId!==old.model.initialPlanId)throw new HttpError(400,'初始方案引用不可覆盖');
@@ -57,5 +61,8 @@ export async function createModelStore(directory, projects) {
       await atomic(file,value);
       return structuredClone(value);
     });queue=operation.catch(()=>{});return operation;
-  }};
+  }
+  return {get:read,update,
+    inspect:async id=>{const value=await read(id);return {revision:value.revision,...inspectReceipts(id,value.model)};},
+    command:(id,body)=>update(id,body,true)};
 }

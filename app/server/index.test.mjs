@@ -68,6 +68,24 @@ function modelResponse(value, { fenced = false, finish = 'stop' } = {}) {
 const validExtraction = () => ({ name: '导入项目', goal: '实现工作台', steps: [step()], warnings: ['M01未明确依赖，未推断依赖'] });
 const SUMMARY_STEP = { id: 'M01', title: '服务', purpose: '本地运行', acceptance: ['测试通过'] };
 
+test('M03 HTTP 导入、核验、重复幂等、重启历史与失效',async t=>{
+ const f=await fixture(t),p=await create(f),modelPath=`/api/projects/${p.id}/model`,url=`/api/projects/${p.id}/receipts`;
+ let saved=(await f.request(modelPath)).value;const m=saved.model,s=m.stations[0],task=m.tasks[0];
+ m.folders=[{id:'F'}];task.folderId='F';m.chats=[{id:'C',taskId:task.id,folderId:'F'}];m.plans=[{id:'V',version:'1',source:SOURCE,previousId:null}];m.initialPlanId='V';m.currentPlanId='V';s.planId='V';
+ saved=(await f.request(modelPath,{method:'PUT',body:saved})).value;
+ let data=(await f.request(url)).value;
+ const receipt={projectId:p.id,folderId:'F',taskId:task.id,stationId:s.id,sourceId:'C',planId:'V',deliveryVersion:'sha1',raw:'原回执',actual:'已交付',blockers:[],checks:[],next:[]};
+ let res=await f.request(url,{method:'POST',body:{revision:data.revision,action:'import',receipt}});assert.equal(res.status,200);data=res.value;assert.equal(data.results[s.id].conclusion,'B');
+ const first=data;data=(await f.request(url,{method:'POST',body:{revision:data.revision,action:'import',receipt}})).value;assert.deepEqual(data,first);
+ const review={reviewer:'人工核验',method:'核对测试结果和提交',checks:[{criterion:'本地测试通过',result:'passed',reason:'结果对应',evidenceIds:['e']}],taskChecks:[],projectChecks:[],handoffs:[],evidence:[{id:'e',location:'结果路径',deliveryVersion:'sha1',result:'valid',method:'读取结果',reason:'版本匹配且通过'}]};
+ const body={revision:data.revision,action:'review',receiptId:data.log.receipts[0].id,review};res=await f.request(url,{method:'POST',body});assert.equal(res.status,200);data=res.value;assert.equal(data.results[s.id].acceptance.result,'passed');
+ await f.stop();await f.start();assert.deepEqual((await f.request(url)).value,data);
+ saved=(await f.request(modelPath)).value;saved.model.receiptLog={receipts:[],reviews:[],events:[],invalidations:[]};assert.equal((await f.request(modelPath,{method:'PUT',body:saved})).status,200);
+ data=(await f.request(url)).value;assert.equal(data.log.receipts.length,1);assert.equal(data.log.reviews.length,1);
+ data=(await f.request(url,{method:'POST',body:{revision:data.revision,action:'invalidate',reviewId:data.log.reviews[0].id,reason:'证据撤回'}})).value;assert.equal(data.results[s.id].conclusion,'B');assert.equal(data.log.reviews.length,1);
+ assert.equal((await f.request(url,{method:'POST',body:{revision:0,action:'import',receipt}})).status,409);
+});
+
 test('M02 HTTP保存重启、版本追加、归属与迁移边界',async t=>{
  const f=await fixture(t);const p=await create(f,{name:'M02测试',source:SOURCE,steps:[step('S',{status:'done'})]});
  const endpoint=`/api/projects/${p.id}/model`;
