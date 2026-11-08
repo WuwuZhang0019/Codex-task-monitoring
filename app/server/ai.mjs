@@ -45,7 +45,8 @@ export function createAI({ env = process.env, fetchImpl = globalThis.fetch, time
     try {
       const response = await fetchImpl(endpoint.href, {
         method: 'POST', redirect: 'error', signal: controller.signal,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+        headers: { 'Content-Type': 'application/json',
+          ...(env.OPENAI_AUTH_HEADER === 'api-key' ? { 'api-key': key } : { Authorization: `Bearer ${key}` }) },
         body: JSON.stringify({ model, temperature: 0, response_format: { type: 'json_object' },
           messages: [{ role: 'system', content: system }, { role: 'user', content: JSON.stringify(data) }] }),
       });
