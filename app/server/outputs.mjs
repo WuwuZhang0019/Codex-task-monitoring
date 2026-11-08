@@ -37,7 +37,9 @@ export function generateOutput(project,view,body,template){
  const name=id=>{const x=m.stations.find(s=>s.id===id);return x?`${x.code} ${x.title}（${id}）`:id;};
  const planRef=p=>p?`${known(p.sourcePath)}；版本 ${known(p.version)}；日期 ${known(p.date)}；章节 ${known(p.chapter)}`:'待核实：未绑定方案';
  const allSteps=m.stations.filter(x=>x.planId===m.currentPlanId);
- const stepOverview=m.currentPlanId&&m.plans.some(p=>p.id===m.currentPlanId&&p.source.trim())&&allSteps.length&&allSteps.length===m.stations.length?`共 ${allSteps.length} 步；分别是：${allSteps.map((x,i)=>`${i+1}、${x.code}：${x.title}`).join('；')}（来源：当前保存方案站点，执行前对照原文核实完整性）`:'待核实：尚未完整绑定当前方案站点，不能核定总数';
+ // A bound model can be only a subset of the plan. Its size is not proof of
+ // the plan's total step count, even when every saved station has a plan ID.
+ const stepOverview=m.currentPlanId&&allSteps.length?`待核实：尚未独立核定所引用方案的完整步骤与总数；已登记的 ${allSteps.length} 个站点仅作定位，清单为：${allSteps.map((x,i)=>`${i+1}、${x.code}：${x.title}`).join('；')}。执行前对照方案原文核定，不将操作子项或登记站点数当作方案总步数`:'待核实：尚未完整绑定当前方案站点，不能核定总数';
  function context(target){
   const t=m.tasks.find(t=>t.id===target.taskId),folder=m.folders.find(f=>f.id===t.folderId),p=m.plans.find(p=>p.id===target.planId);
   const candidates=m.chats.filter(c=>c.taskId===t.id&&c.folderId===t.folderId);
@@ -88,7 +90,7 @@ export function generateOutput(project,view,body,template){
  const waitIds=[...new Set([...(r.waiting??[]),...(r.handoffs??[]).flatMap(h=>h.waiting)])];
  const issues={C:`等待对象：${lines(waitIds.map(name))}。等待条件：上述依赖的必要验收及对应交接边有效通过。恢复条件：证据有效且全部前置重新核验通过后再生成合法后继指令。`,E:`交接对象：${known(task.handoff)}。本任务已交付；下游按自身方案和全部依赖接手，不将其工作追加到本任务。\n本任务无下一步执行指令，到此结束`,F:'项目有效关闭且全部最终条件适用，历史关闭证据仍保留。\n本任务无下一步执行指令，到此结束',G:`方案冲突：${reason}\n范围差异：${JSON.stringify(branches)}；方案对照：${diff.impact}\n待决定事项：明确是否修正回执或另行审批方案变更；保留初始目标、原文和历史，不自行批准或应用。恢复条件：处理决定明确，方案及证据重新核验通过。`};
  const report=instructions.length?null:{kind:'receipt',text:`日期：${date}\n状态：${conclusions[conclusion]}\n${ctx.text}\n\n${receipt(s,true)}\n\n${issues[conclusion]??reason}\n逐边交接：${JSON.stringify(branches)}\n历史状态：任务 ${taskState.status}；项目 ${view.project.status}。历史关闭不替代当前核验。`};
- const replacements={'完整路径':known(plan?.sourcePath),'完整路径；没有则写无':'无（其他权威依据以方案引用为准）','项目名称，未知写待核实':`${known(project.name)}（${project.id}）`,'文件夹名称或标识，未知写待核实':`${known(ctx.folder?.name)}（${known(ctx.folder?.externalId)}）`,'名称、编号；未知写待核实':`${known(task.name)} / ${s.code} ${s.title}`,'已知信息；未知写待核实，执行前重新核对':`${known(ctx.source?.repository)} / ${known(ctx.source?.worktree)} / ${known(ctx.source?.branch)}；HEAD ${known(ctx.source?.head)}`};
+ const replacements={'完整路径':known(plan?.sourcePath),'完整路径；没有则写无':'待核实：读取方案原文引用的权威资料，不猜测其他文件路径','项目名称，未知写待核实':`${known(project.name)}（${project.id}）`,'文件夹名称或标识，未知写待核实':`${known(ctx.folder?.name)}（${known(ctx.folder?.externalId)}）`,'名称、编号；未知写待核实':`${known(task.name)} / ${s.code} ${s.title}`,'已知信息；未知写待核实，执行前重新核对':`${known(ctx.source?.repository)} / ${known(ctx.source?.worktree)} / ${known(ctx.source?.branch)}；HEAD ${known(ctx.source?.head)}`};
  const audit={kind:'audit',text:`日期：${date}\n状态：核对提示词，仅核对和生成，不执行开发\n${ctx.text}\n\n${template.general.replace(/【需填写：([^】]+)】/g,(_,k)=>replacements[k]??'待核实').replace(/^- 本方案一共为：.*$/m,`- 本方案一共为：${stepOverview}`)}`};
  const fingerprint=digest({project,model:m,revision:view.revision,stationId:s.id,sourceId:body.sourceId??'',successorId:body.successorId??'',date,template:template.hash});
  if(body.expectedFingerprint&&body.expectedFingerprint!==fingerprint)throw new HttpError(409,'状态或方案已变化，请重新生成并核对预览后复制');

@@ -41,6 +41,10 @@ test('身份和方案缺失明确待核实，多个来源不猜测，不改变�
  assert.ok(b.warnings.some(w=>w.includes('方案路径待核实')));assert.ok(b.warnings.some(w=>w.includes('聊天来源待核实')));assert.match(b.instructions[0].text,/项目标识：待核实/);assert.deepEqual(m,before);assert.equal(await readFile(new URL('../../docs/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url),'utf8'),archive);
  const selected=output(m,'A',{sourceId:'C2'});assert.ok(!selected.warnings.some(w=>w.includes('聊天来源待核实')));
 });
+test('站点绑定不能证明方案步骤完整，不将已登记子集冒充方案总步数',()=>{
+ const m=model();m.plans[0].source+='\nC 尚未登记的原方案步骤';
+ const b=output(m);assert.match(b.instructions[0].text,/- 本方案一共为：待核实：尚未独立核定/);assert.match(b.instructions[0].text,/已登记的 2 个站点仅作定位/);assert.doesNotMatch(b.instructions[0].text,/共 2 步/);assert.match(b.audit.text,/其他权威方案或交接资料路径：待核实/);
+});
 test('两个方案版本目标、验收、站点与原文差异可查，缺历史快照不伪称已核验',()=>{
  const old=complete(complete(model(),'A'),'B',true),m=structuredClone(old);
  m.plans.push({...m.plans[0],id:'V2',version:'2.0',previousId:'V',source:'日期：2026-11-08\n新原文',goal:'新项目目标',acceptance:['新增验收'],impact:'修改验收，需重验'});m.currentPlanId='V2';m.stations[0].title='新版实现目标';m.stations[0].acceptance.push('新版验收');m.stations.forEach(s=>s.planId='V2');m.planSnapshots=capturePlanSnapshots(old,m,3);
