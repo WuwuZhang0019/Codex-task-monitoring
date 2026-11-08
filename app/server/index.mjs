@@ -6,6 +6,7 @@ import { createStore } from './store.mjs';
 import { createModelStore } from './model-store.mjs';
 import { createAI } from './ai.mjs';
 import { HttpError, UUID } from './validation.mjs';
+import {generateOutput,loadOutputTemplate} from './outputs.mjs';
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BODY_LIMIT = 2 * 1024 * 1024;
@@ -125,6 +126,15 @@ export async function createServer(options = {}) {
         throw new HttpError(405, '不支持的请求方法');
       }
       const modelMatch = pathname.match(/^\/api\/projects\/([^/]+)\/model$/);
+      const outputMatch=pathname.match(/^\/api\/projects\/([^/]+)\/outputs$/);
+      if(outputMatch){
+        if(!UUID.test(outputMatch[1]))throw new HttpError(400,'项目 ID 必须是 UUID');
+        if(method!=='POST')throw new HttpError(405,'不支持的请求方法');
+        const body=await jsonBody(req);
+        if(!body||typeof body!=='object'||Array.isArray(body)||['stationId','sourceId','successorId','expectedFingerprint'].some(k=>body[k]!==undefined&&typeof body[k]!=='string'))throw new HttpError(400,'输出请求需对象及字符串身份字段');
+        const view=await models.monitor(outputMatch[1]);
+        return sendJSON(res,200,generateOutput(store.get(outputMatch[1]),view,{...body,stationId:body.stationId||view.model.stations[0]?.id},await loadOutputTemplate()));
+      }
       const monitorMatch=pathname.match(/^\/api\/projects\/([^/]+)\/monitor$/);
       if(monitorMatch){
         if(!UUID.test(monitorMatch[1]))throw new HttpError(400,'项目 ID 必须是 UUID');

@@ -5,6 +5,7 @@ import { validateRelationships } from './relationships.mjs';
 import { HttpError } from './validation.mjs';
 import {applyReceiptCommand,inspectReceipts} from './receipts.mjs';
 import {applyStart,inspectMonitor,reconcileLifecycle} from './monitor.mjs';
+import {capturePlanSnapshots} from './plan-diff.mjs';
 
 async function atomic(file,value){
   const temporary=`${file}.${randomUUID()}.tmp`;
@@ -59,6 +60,9 @@ export async function createModelStore(directory, projects) {
       }
       // Legacy evidence and report history are immutable migration provenance.
       model.legacy=old.model.legacy;model.migration=old.model.migration;
+      // Never trust client-supplied historical station snapshots. Observe versions
+      // only on relationship writes; receipt/monitor reads preserve prior history.
+      model.planSnapshots=receiptCommand?structuredClone(old.model.planSnapshots??[]):capturePlanSnapshots(old.model,model,old.revision);
       const reconciled=reconcileLifecycle(id,model);
       if(receiptCommand==='sync'&&JSON.stringify(reconciled)===JSON.stringify(old.model))return old;
       const value={revision:old.revision+1,model:reconciled},file=fileFor(id);
