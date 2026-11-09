@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="UTF-8">
+<title>U01 原生输入测试</title>
+<style>
+  body { font: 18px system-ui; background: #dfebfa; padding: 80px 20px; }
+  textarea { width: 95%; height: 250px; font: 20px monospace; }
+  button { margin: 10px; padding: 15px; }
+</style>
+<h2>U01 原生输入与命中测试</h2><p>日期：2026-11-09</p>
+<p>顶部覆盖固定宿主。轮廓外蓝色区域应接收点击。自动开合期间在下方持续输入。</p>
+<textarea id="input" aria-label="持续输入测试" placeholder="在此输入固定样例"></textarea><p id="count">输入长度 0</p>
+<script>
+const invoke = window.__TAURI__.core.invoke;
+document.querySelector('#input').oninput = event => {
+  document.querySelector('#count').textContent = `输入长度 ${event.target.value.length}`;
+  invoke('probe_input', { kind: 'input', value: event.target.value });
+};
+document.addEventListener('click', event => invoke('probe_input', {
+  kind: 'click',
+  value: JSON.stringify({ x: event.clientX, y: event.clientY, target: event.target.id }),
+}));
+</script></html>

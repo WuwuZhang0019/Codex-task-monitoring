@@ -1,0 +1,16 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "task-workbench",
+  "version": "0.1.3",
+  "description": "2026-11-09 U01 本地工作台只读探测与路线交接",
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true,
+      "interface": {
+        "displayName": "任务工作台 U01 探测",
+        "shortDescription": "隔离项目读取与路线交接",
+        "capabilities": []
+      }
+    }
+  }
+}
