@@ -1,0 +1,288 @@
+{
+  "date": "2026-11-09",
+  "executionId": "U01-EX01",
+  "source": "manual",
+  "applicableCommit": "ff2dfcc1d241edd6db691b5653066994366faa47",
+  "independentReviewer": null,
+  "originalArtifactsRoot": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01",
+  "schemaVersion": "1.0.0",
+  "schemaSha256": "2c2cb3736557640e5b63806ccd1c31369401604dfb94b23f208f5cf544ed1e71",
+  "items": [
+    {
+      "id": "U01-E01",
+      "conditions": [
+        "U01-K01"
+      ],
+      "verification": "pending",
+      "files": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\baseline.json",
+          "sha256": "c74ab97e425eccff36627a4a608dcbf5f441086977c11c5aec34d90c20fec1c2",
+          "bytes": 2914
+        }
+      ]
+    },
+    {
+      "id": "U01-E02",
+      "conditions": [
+        "U01-K02",
+        "U01-K04"
+      ],
+      "verification": "pending",
+      "files": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\host.json",
+          "sha256": "ff0f3e03a527e9949d50b629edb040ea574b5266870bf769fa4a6857ebdbcc95",
+          "bytes": 481
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\host-verified.json",
+          "sha256": "2a379a993d6fbd8706add2bdf30af154e44427f38d1c450eb1e057336bb21848",
+          "bytes": 24850
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\selected-session.json",
+          "sha256": "7b0a2a839b3531b2e180ae995e04fc6c91fbeec4118a4079f9f2d7002cc7c56b",
+          "bytes": 1300
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\selected-session-verified.json",
+          "sha256": "cb55b3bd8dd4be01524362d6f19b42d80245fb47c50dc2fb91b22489423f9160",
+          "bytes": 2076
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\embedded-codex-version.log",
+          "sha256": "36af3de05a8ba184a8582626caed8ec6427c47c6d8f482773bf569f28de6f256",
+          "bytes": 276
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\webview-version.json",
+          "sha256": "ced20d307d28fc541fc58954bef8f3ffa5572a739e3e64d9040f83d5832e938a",
+          "bytes": 154
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\cc-switch-codex.rs",
+          "sha256": "902386d270d5c588d48d280ba4640d69fba079f5e9882dffc4f85a4041849127",
+          "bytes": 148007
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\cc-switch-state.rs",
+          "sha256": "7d6dcde1cc8885b2ad83bc301688f68a5ec5f521892c689f7c28250d426ed205",
+          "bytes": 6179
+        }
+      ]
+    },
+    {
+      "id": "U01-E03",
+      "conditions": [
+        "U01-K03",
+        "U01-K08"
+      ],
+      "verification": "pending",
+      "files": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\generator-pack.log",
+          "sha256": "c2b57b487fe20722074af109c5bfd0fb3fb1501169aaa4058e9bb5bf4d003f45",
+          "bytes": 819
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\generator-fixed-version.log",
+          "sha256": "ef349c6ba42ffccb8a4ff6cb950f0a061ee7d19a7fc61cbbc0af086c8df6747f",
+          "bytes": 7
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\generator-fixed-help.log",
+          "sha256": "5bc67d292549b994590bc861ef13ca62f806d1bb3839905ce73acb1a466cca27",
+          "bytes": 1731
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\generator\\package-lock.json",
+          "sha256": "f55a1574d0de90adb81621aa523a7e2da61a361380b5ac17ec6f1eaded26d209",
+          "bytes": 6371
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\generator\\node_modules\\create-tauri-app-win32-x64-msvc\\create-tauri-app.win32-x64-msvc.node",
+          "sha256": "4cce9f9eab2a7590e2c3dc70d2c51a5f593ac3584b2231f3ce783359faa6b12e",
+          "bytes": 943616
+        }
+      ]
+    },
+    {
+      "id": "U01-E04",
+      "conditions": [
+        "U01-K05"
+      ],
+      "verification": "pending",
+      "files": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\mcp-protocol.json",
+          "sha256": "fba805352f8e1ea65a3ec900aa5120e40c7888e6fc016611a7f49c1d8916acde",
+          "bytes": 207934
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\installed-default-roundtrip.json",
+          "sha256": "d3a803c5a0da4f2c8c1a90e6f78faaa978847d448fe5c9f1ceae9dd3f95ae27e",
+          "bytes": 202508
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\installed-default-roundtrip.log",
+          "sha256": "b2dbd119e45af67a49add10751ee240c8981bbff856536206e80ce7c8b42bd55",
+          "bytes": 664
+        }
+      ]
+    },
+    {
+      "id": "U01-E05",
+      "conditions": [
+        "U01-K06"
+      ],
+      "verification": "pending",
+      "files": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\portable-plugin-schema.json",
+          "sha256": "0a4aad95ce337878ad38802ebf0daa3fde76abe3f65400c86bcbb1ec0b3ab883",
+          "bytes": 1805
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\portable-mcp-schema.json",
+          "sha256": "6539175bfcdf43085855183e86da40ea94b166547a72b47ae9a0a390516d3acb",
+          "bytes": 3408
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\plugin-schema-check.log",
+          "sha256": "afd8b7af3fd72b1c6c21d81822bf36e1b22d9423333309b45a8d6b9e1e616067",
+          "bytes": 89
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\final-plugin-install.log",
+          "sha256": "f32d545bf884d71a77d53869d032da4798c0f1de37c067a7c9495417500e3bcf",
+          "bytes": 307
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\installed-hashes.json",
+          "sha256": "19bb56b9f9dcb89251e1248f8f97c45f09d3dbd5526d2722e93e597e7da6c55e",
+          "bytes": 1233
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\delivered-plugin-0.1.3\\plugin.json",
+          "sha256": "f109b4a7f7f97fcfa72c3b69b0fe9537bd7d7003e77ceaf98871addb35e78434",
+          "bytes": 468
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\delivered-plugin-0.1.3\\mcp.json",
+          "sha256": "d9691d585d4ba18b275bc7ab29ba587eb2b86cdbaa4b475fe071e30d7500aaa9",
+          "bytes": 262
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\delivered-plugin-0.1.3\\runtime\\probe.mjs",
+          "sha256": "c69a0629f00e46f59b663587b23f85d4362aaca89ad56819ff2a246fdb7b2a40",
+          "bytes": 753744
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\delivered-plugin-0.1.3\\THIRD-PARTY-NOTICES.txt",
+          "sha256": "fafd5a6c60771fe57076afe59972b6ac1422dbe81f493792918dcb787171db09",
+          "bytes": 9303
+        }
+      ]
+    },
+    {
+      "id": "U01-E06",
+      "conditions": [
+        "U01-K07"
+      ],
+      "verification": "pending",
+      "files": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-bundled-frames.jsonl",
+          "sha256": "cfa2d61d3197c560857d1468e0db040018640bea02b8f695b5c1aee0724d979c",
+          "bytes": 348785
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-summary.json",
+          "sha256": "c0754bef922b6840003fce42de9c40489a1b9bbee1fe65028ee5c35401db1569",
+          "bytes": 1301
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-input.png",
+          "sha256": "97353db6ebdb3a1cb152f26cd84cd44ce535298641232699699dfa44e46a776f",
+          "bytes": 53148
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-ui-observation.json",
+          "sha256": "91aacbbaabd3e4aad97db92bbbca02adbbf7684332e41cfefb358478bdbc87e1",
+          "bytes": 1804
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-measured.exe",
+          "sha256": "2c452c7b8cf893a0fb1f77eecbe737e0c29f6c772ae49fad78ad67a6a375bd17",
+          "bytes": 12928000
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-final.exe",
+          "sha256": "76b914bc01d2d80c4e1fa998024a1a96b5e6ecb122bc07dd0313f1893f9ca48b",
+          "bytes": 12928000
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-final-frames.jsonl",
+          "sha256": "c6f913aa48e2fe35dbf64caef774e9431e88394a6a2d011cfc6f4cc6ff68997e",
+          "bytes": 348465
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-final-summary.json",
+          "sha256": "95e1dd2c130bfeefa7b67834fb6c7ce05e9755188fe939ee8eb9f6d53f98ae38",
+          "bytes": 298
+        }
+      ]
+    },
+    {
+      "id": "U01-E07",
+      "conditions": [
+        "U01-K05",
+        "U01-K08"
+      ],
+      "verification": "pending",
+      "files": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\final-app-tests.log",
+          "sha256": "b438e8cebe5f24a6c2c85a935f93b88c7ff8f4b8460f292a9e4c1e618a2d6247",
+          "bytes": 7705
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\final-installed-tests.log",
+          "sha256": "1cc402ba42c3beed4baecfe0772bb0ea414095e77f819e8ed876fe221cb2793a",
+          "bytes": 501
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\app-build.log",
+          "sha256": "0e8be8dfb5ec3ceea8ac4fb667ef8ec6f0796078e2ade0e004782b1a5d862cdb",
+          "bytes": 404
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\e2e.log",
+          "sha256": "5ab7166e7e6532c64cb6c102957ffc366cd7ac0b1977a51fc41e2938c8d5cf8e",
+          "bytes": 1190
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\m06-start.log",
+          "sha256": "b6832489f6135986913c4bbfb61d06440bed95fa13309542f604e7aa15229c12",
+          "bytes": 106
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\final-bundled-tests.log",
+          "sha256": "ecfd16100ecee5f25c66d19b02096144a4516def0e72dc6937d7b3fa53999bc5",
+          "bytes": 501
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-final-web-build.log",
+          "sha256": "73a1644358cf2a496cc861844c4a1e8d775b02df61feb12acd3cea9558e4a6d1",
+          "bytes": 407
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01\\native-final-build.log",
+          "sha256": "82c7eaa724fb403561fa51b08c6d2c990a2c347e4edb802e9150135f7c886a6f",
+          "bytes": 178
+        }
+      ]
+    }
+  ]
+}
