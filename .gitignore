@@ -11,3 +11,7 @@ prototypes/top-panel/node_modules/
 prototypes/top-panel/dist/
 prototypes/top-panel/src-tauri/target/
 prototypes/top-panel/src-tauri/gen/
+
+app/src-tauri/target/
+app/src-tauri/gen/
+app/desktop/resources/

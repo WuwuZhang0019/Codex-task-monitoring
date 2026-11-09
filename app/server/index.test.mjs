@@ -152,7 +152,7 @@ test('CRUD, exact wire contract, empty project, manual done, isolation and durab
   const before = (await f.request('/api/projects')).value;
   const backup = JSON.parse(await readFile(path.join(f.dataDir, 'projects.json.bak'), 'utf8'));
   assert.equal(backup.projects.find(item => item.id === first.id).revision, 1);
-  assert.deepEqual((await readdir(f.dataDir)).sort(), ['models', 'projects.json', 'projects.json.bak']);
+  assert.deepEqual((await readdir(f.dataDir)).sort(), ['.owner-lock.sqlite', 'models', 'projects.json', 'projects.json.bak']);
   await f.stop(); await f.start();
   assert.deepEqual((await f.request('/api/projects')).value, before);
   assert.equal((await f.request('/api/projects/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')).status, 404);
@@ -410,7 +410,7 @@ test('failed filesystem commit leaves previous data intact and subsequent writes
   assert.equal(errors.length, 1);
   await rm(path.join(f.dataDir, 'projects.json.bak'), { recursive: true });
   assert.equal((await create(f, { name: '恢复后正常写入' })).revision, 1);
-  assert.deepEqual((await readdir(f.dataDir)).sort(), ['models', 'projects.json', 'projects.json.bak']);
+  assert.deepEqual((await readdir(f.dataDir)).sort(), ['.owner-lock.sqlite', 'models', 'projects.json', 'projects.json.bak']);
   await f.stop(); await f.start();
   assert.equal((await f.request('/api/projects')).value.projects[0].name, '恢复后正常写入');
 });
@@ -419,7 +419,7 @@ test('WORKBENCH_DATA_DIR supports isolated data without a dataDir option', async
   const root = await mkdtemp(path.join(os.tmpdir(), 'workbench-env-dir-'));
   let server;
   t.after(async () => {
-    if (server?.listening) { const closed = once(server, 'close'); server.close(); server.closeAllConnections(); await closed; }
+    if (server) { const closed = once(server, 'close'); server.close(); server.closeAllConnections(); await closed; }
     await rm(root, { recursive: true, force: true });
   });
   server = await createServer({ env: { WORKBENCH_DATA_DIR: root } });

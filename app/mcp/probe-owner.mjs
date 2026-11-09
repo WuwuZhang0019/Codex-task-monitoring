@@ -4,15 +4,18 @@ import { timingSafeEqual, randomUUID } from 'node:crypto';
 import { createStore } from '../server/store.mjs';
 import { createModelStore } from '../server/model-store.mjs';
 import { inspectMonitor } from '../server/monitor.mjs';
+import { acquireDataLease } from '../server/data-lease.mjs';
 
 // U01 read-only facade. The fixture creator and this owner share the existing stores.
 export async function createProbeOwner({ dataDir, projectId, token, audit = () => {} }) {
   if (!path.isAbsolute(dataDir) || !token || token.length < 32) throw new Error('Invalid probe owner configuration');
+  const release = acquireDataLease(dataDir);
+  try {
   const projects = await createStore(dataDir);
   const models = await createModelStore(path.join(dataDir, 'models'), projects);
   projects.get(projectId);
   const expected = Buffer.from(`Bearer ${token}`);
-  return http.createServer(async (req, res) => {
+  const server = http.createServer(async (req, res) => {
     const requestId = randomUUID();
     const reply = (status, value) => {
       audit({ requestId, status, time: new Date().toISOString() });
@@ -49,4 +52,7 @@ export async function createProbeOwner({ dataDir, projectId, token, audit = () =
       return reply(500, { error: 'OWNER_READ_FAILED' });
     }
   });
+  server.once('close', release);
+  return server;
+  } catch (error) { release(); throw error; }
 }

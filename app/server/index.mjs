@@ -7,6 +7,8 @@ import { createModelStore } from './model-store.mjs';
 import { createAI } from './ai.mjs';
 import { HttpError, UUID } from './validation.mjs';
 import {generateOutput,loadOutputTemplate} from './outputs.mjs';
+import { acquireDataLease } from './data-lease.mjs';
+import { existsSync } from 'node:fs';
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BODY_LIMIT = 2 * 1024 * 1024;
@@ -105,6 +107,22 @@ async function readSample(sampleFile) {
 // Configuration paths / fetchImpl are trusted caller options, never request data.
 export async function createServer(options = {}) {
   if (!options.env) loadEnvironment();
+  const directory = options.dataDir ?? options.env?.WORKBENCH_DATA_DIR ?? process.env.WORKBENCH_DATA_DIR ?? path.join(APP_DIR, 'data');
+  const release = acquireDataLease(directory);
+  try {
+    if (existsSync(path.join(directory, '.migration-pending.json'))) throw new Error('MIGRATION_PENDING: 迁移中断，请先执行恢复');
+    const server = await createOwnedServer({ ...options, dataDir: directory });
+    server.once('close', release);
+    server.once('error', () => { if (!server.listening) server.close(); });
+    return server;
+  } catch (error) {
+    release();
+    throw error;
+  }
+}
+
+async function createOwnedServer(options) {
+  if (!options.env) loadEnvironment();
   const env = options.env ?? process.env;
   const store = await createStore(options.dataDir ?? env.WORKBENCH_DATA_DIR ?? path.join(APP_DIR, 'data'));
   const models = await createModelStore(path.join(options.dataDir ?? env.WORKBENCH_DATA_DIR ?? path.join(APP_DIR, 'data'), 'models'),store);
@@ -117,6 +135,7 @@ export async function createServer(options = {}) {
     try {
       checkLocalRequest(req);
       const pathname = safePath(req.url);
+      if (options.authorize) options.authorize(req, pathname);
       const method = req.method;
       if (pathname === '/api/health' && method === 'GET') return sendJSON(res, 200, { ok: true, ai: ai.health });
       if (pathname === '/api/sample' && method === 'GET') return sendJSON(res, 200, { text: await readSample(options.sampleFile) });

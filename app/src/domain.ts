@@ -1,3 +1,4 @@
+import { desktopInvoke, isDesktop } from './desktop.js';
 export type Status = 'todo' | 'active' | 'blocked' | 'done';
 export interface Step { id:string; title:string; line:string; purpose:string; sourceExcerpt:string; dependsOn:string[]; acceptance:string[]; status:Status; summary:string; nextAction:string; blocker:string; evidence:string }
 export interface Project { id:string; name:string; goal:string; source:string; steps:Step[]; revision:number; createdAt:string; updatedAt:string }
@@ -7,6 +8,11 @@ export class ApiError extends Error { constructor(message:string,public status:n
 export async function api<T>(path:string, method='GET',body?:unknown):Promise<T> {
   const controller=new AbortController(); const timeout=setTimeout(()=>controller.abort(),path.startsWith('/ai/')?315000:100000);
   try {
+    if(isDesktop()) {
+      const response=await desktopInvoke<{status:number;data:T & {error?:string}}>('api_request',{path,method,body:body??null});
+      if(response.status>=400)throw new ApiError(response.data.error||`请求失败 (${response.status})`,response.status);
+      return response.data;
+    }
     const response=await fetch(`/api${path}`,{method,headers:body?{'Content-Type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined,signal:controller.signal});
     const data=await response.json(); if(!response.ok)throw new ApiError(data.error||`请求失败 (${response.status})`,response.status);
     return data as T;

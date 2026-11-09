@@ -1,0 +1,9 @@
+.desktop-setup { padding: 40px; max-width: 860px; margin: 30px auto; }
+.desktop-setup h1 { margin-bottom: 16px; }
+.desktop-setup h2 { margin-top: 36px; margin-bottom: 12px; }
+.desktop-setup p { margin-bottom: 16px; overflow-wrap: anywhere; }
+.desktop-setup label { display: flex; gap: 10px; align-items: center; margin: 16px 0; }
+.desktop-setup input[type="checkbox"] { width: auto; }
+.desktop-runtime { display: flex; align-items: center; gap: 12px; padding: 6px 12px; font-size: 11px; background: #e6eef1; }
+.desktop-runtime span:first-child { flex: 1; overflow-wrap: anywhere; }
+.desktop-runtime button { border: 1px solid #b7c8d3; border-radius: 5px; padding: 4px 8px; background: white; cursor: pointer; }
