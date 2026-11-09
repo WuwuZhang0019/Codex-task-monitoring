@@ -128,6 +128,22 @@ fn probe_input(
     )
 }
 
+#[tauri::command]
+fn probe_control(
+    window: WebviewWindow,
+    app: tauri::AppHandle,
+    progress: f64,
+    animate: bool,
+) -> Result<(), String> {
+    if window.label() != "u01-input" || !progress.is_finite() || !(0.0..=1.0).contains(&progress) {
+        return Err("Invalid probe control".into());
+    }
+    app.get_webview_window("u01-panel")
+        .ok_or("Missing probe panel")?
+        .eval(&format!("window.probeControl({progress}, {animate})"))
+        .map_err(|error| error.to_string())
+}
+
 fn main() {
     let log_path =
         std::env::var("U01_NATIVE_LOG").expect("Set U01_NATIVE_LOG to an isolated evidence file");
@@ -185,7 +201,11 @@ fn main() {
             )?;
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![probe_frame, probe_input])
+        .invoke_handler(tauri::generate_handler![
+            probe_frame,
+            probe_input,
+            probe_control
+        ])
         .run(context)
         .expect("U01 native feasibility probe failed");
 }

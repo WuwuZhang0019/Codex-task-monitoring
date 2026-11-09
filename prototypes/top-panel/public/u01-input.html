@@ -9,9 +9,21 @@
 </style>
 <h2>U01 原生输入与命中测试</h2><p>日期：2026-11-09</p>
 <p>顶部覆盖固定宿主。轮廓外蓝色区域应接收点击。自动开合期间在下方持续输入。</p>
+<div id="controls" style="position:fixed;bottom:24px;left:24px">
+  <button data-progress="0">暂停 0%</button>
+  <button data-progress="0.25">暂停 25%</button>
+  <button data-progress="0.5">暂停 50%</button>
+  <button data-progress="0.75">暂停 75%</button>
+  <button data-progress="1">暂停 100%</button>
+  <button id="animate">延迟三秒后开合20次</button>
+</div>
 <textarea id="input" aria-label="持续输入测试" placeholder="在此输入固定样例"></textarea><p id="count">输入长度 0</p>
 <script>
 const invoke = window.__TAURI__.core.invoke;
+for (const button of document.querySelectorAll('[data-progress]')) {
+  button.onclick = () => invoke('probe_control', { progress: Number(button.dataset.progress), animate: false });
+}
+document.querySelector('#animate').onclick = () => invoke('probe_control', { progress: 0, animate: true });
 document.querySelector('#input').oninput = event => {
   document.querySelector('#count').textContent = `输入长度 ${event.target.value.length}`;
   invoke('probe_input', { kind: 'input', value: event.target.value });
