@@ -3,7 +3,7 @@
   "executionId": "U01-EX01",
   "source": "manual",
   "applicableCommit": "ff2dfcc1d241edd6db691b5653066994366faa47",
-  "independentReviewer": "用户本人，2026-11-09 指定，观感已确认，其余条件待核验",
+  "independentReviewer": "用户本人，2026-11-09 确认原生体验并明确 U01 整站验收通过",
   "originalArtifactsRoot": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U01-EX01",
   "schemaVersion": "1.0.0",
   "schemaSha256": "2c2cb3736557640e5b63806ccd1c31369401604dfb94b23f208f5cf544ed1e71",
@@ -448,6 +448,17 @@
   "latestExecutionId": "U01-EX02",
   "validityNotes": {
     "U01-E06": "保留历史，当前原生补测引用 U01-E09",
-    "U01-E09": "用户体验已确认，测量记录待用户核验"
+    "U01-E09": "用户原生体验确认且 U01 整站验收通过，历史测量及其适用范围保留"
+  },
+  "stationAcceptance": {
+    "date": "2026-11-09",
+    "stationId": "U01",
+    "status": "accepted",
+    "source": "user",
+    "statement": "那这一步没什么问题，U01完成验收",
+    "technicalEvidenceReview": "执行聊天采集核对，原 verification 保留历史状态",
+    "nextStation": "U02",
+    "nextStationState": "readyNotStarted",
+    "visualFollowup": "原始样式复用与接入后复测交接 U06"
   }
 }
