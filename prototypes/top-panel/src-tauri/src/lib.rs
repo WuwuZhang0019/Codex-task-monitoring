@@ -38,7 +38,7 @@ pub fn run() {
                 .get_webview_window("main")
                 .ok_or("Missing panel window")?;
             window.set_focusable(false)?;
-            resize_panel(window.clone(), 420.0, 38.0)?;
+            resize_panel(window.clone(), 600.0, 38.0)?;
             window.show()?;
             Ok(())
         })

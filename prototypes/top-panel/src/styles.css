@@ -72,6 +72,58 @@ button:focus-visible {
 #status {
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+}
+.mini-route {
+  display: flex;
+  flex: 0 0 154px;
+  align-items: center;
+  height: 30px;
+}
+.mini-station {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  min-width: 0;
+  gap: 3px;
+  font-size: 7px;
+  line-height: 8px;
+  color: #9696a1;
+}
+.mini-station::before {
+  content: "";
+  position: absolute;
+  height: 1px;
+  background: #494950;
+  top: 4px;
+  left: 0;
+  right: 0;
+}
+.mini-station:first-child::before {
+  left: 50%;
+}
+.mini-station:last-child::before {
+  right: 50%;
+}
+.mini-node {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  border: 1px solid #5b5b66;
+  border-radius: 50%;
+  background: #141416;
+  align-self: center;
+}
+.accepted .mini-node {
+  background: #ed736e;
+  border-color: #ed736e;
+}
+.running .mini-node {
+  background: #78d7a2;
+  border-color: #78d7a2;
+  box-shadow: 0 0 0 2px #78d7a220;
 }
 .live {
   color: #73d6a0;

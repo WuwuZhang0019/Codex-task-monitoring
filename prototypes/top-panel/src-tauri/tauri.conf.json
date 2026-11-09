@@ -19,7 +19,7 @@
         "shadow": false,
         "skipTaskbar": true,
         "resizable": false,
-        "width": 420,
+        "width": 600,
         "focus": false,
         "label": "main",
         "visible": false,
