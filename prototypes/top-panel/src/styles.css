@@ -39,7 +39,7 @@ button:focus-visible {
   border-top: 0;
   border-radius: 0 0 18px 18px;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   scrollbar-width: thin;
   scrollbar-color: #444 transparent;
 }
@@ -47,7 +47,8 @@ button:focus-visible {
   border: 0;
   border-radius: 0;
   background: transparent;
-  width: 100%;
+  width: min(600px, 100%);
+  margin-inline: auto;
   height: 38px;
   display: flex;
   align-items: center;
@@ -140,6 +141,8 @@ button:focus-visible {
 }
 .content {
   display: none;
+  max-height: calc(100vh - 38px);
+  overflow: auto;
   padding: 14px 26px 8px;
 }
 .expanded .content {

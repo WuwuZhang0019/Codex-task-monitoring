@@ -1,4 +1,6 @@
-use tauri::{LogicalPosition, LogicalSize, Manager};
+use tauri::Manager;
+#[cfg(not(windows))]
+use tauri::{LogicalPosition, LogicalSize};
 
 #[tauri::command]
 fn resize_panel(window: tauri::WebviewWindow, width: f64, height: f64) -> Result<(), String> {
@@ -16,12 +18,38 @@ fn resize_panel(window: tauri::WebviewWindow, width: f64, height: f64) -> Result
         .min(area.size.height as f64 / scale - 32.0);
     let x = area.position.x as f64 / scale + (area.size.width as f64 / scale - width) / 2.0;
     let y = area.position.y as f64 / scale;
-    window
-        .set_size(LogicalSize::new(width, height))
-        .map_err(|e| e.to_string())?;
-    window
-        .set_position(LogicalPosition::new(x, y))
-        .map_err(|e| e.to_string())?;
+    // Update native position and size together so centered content never paints
+    // between a resize and the matching move.
+    #[cfg(windows)]
+    {
+        use windows_sys::Win32::UI::WindowsAndMessaging::{
+            SWP_NOACTIVATE, SWP_NOZORDER, SetWindowPos,
+        };
+        let hwnd = window.hwnd().map_err(|e| e.to_string())?;
+        let result = unsafe {
+            SetWindowPos(
+                hwnd.0 as _,
+                std::ptr::null_mut(),
+                (x * scale).round() as i32,
+                (y * scale).round() as i32,
+                (width * scale).round() as i32,
+                (height * scale).round() as i32,
+                SWP_NOACTIVATE | SWP_NOZORDER,
+            )
+        };
+        if result == 0 {
+            return Err(std::io::Error::last_os_error().to_string());
+        }
+    }
+    #[cfg(not(windows))]
+    {
+        window
+            .set_size(LogicalSize::new(width, height))
+            .map_err(|e| e.to_string())?;
+        window
+            .set_position(LogicalPosition::new(x, y))
+            .map_err(|e| e.to_string())?;
+    }
     Ok(())
 }
 

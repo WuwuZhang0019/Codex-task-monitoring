@@ -1,6 +1,7 @@
 import "./styles.css";
 import { invoke, isTauri } from "@tauri-apps/api/core";
 let notificationUntil = 0;
+let animationVersion = 0;
 let pinned = false,
   hovered = false,
   expanded = false,
@@ -48,6 +49,7 @@ function text(query: string, value: string) {
   get(query).textContent = value;
 }
 function resize(open: boolean) {
+  const version = ++animationVersion;
   cancelAnimationFrame(frame);
   if (!isTauri()) return;
   const startWidth = width,
@@ -63,7 +65,7 @@ function resize(open: boolean) {
     height = startHeight + ((open ? 560 : 38) - startHeight) * ease;
     try {
       await invoke("resize_panel", { width, height });
-      if (progress < 1 && expanded === open)
+      if (progress < 1 && version === animationVersion)
         frame = requestAnimationFrame(tick);
     } catch (error) {
       text("#error", `窗口调整失败 ${String(error)}`);
@@ -72,6 +74,7 @@ function resize(open: boolean) {
   frame = requestAnimationFrame(tick);
 }
 function show(open: boolean) {
+  if (expanded === open) return;
   expanded = open;
   app.classList.toggle("expanded", open);
   get(".compact").setAttribute("aria-expanded", String(open));
