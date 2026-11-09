@@ -152,6 +152,20 @@ button:focus-visible {
 .expanded .compact {
   border-bottom: 1px solid #28282e;
 }
+.native-bar .content {
+  display: none;
+}
+.native-drawer .content {
+  display: block;
+  max-height: 100vh;
+}
+.native-drawer .island {
+  border-top: 1px solid #303034;
+  border-radius: 14px;
+}
+.native-drawer.drawer-open .content {
+  animation: reveal 220ms ease;
+}
 header {
   display: flex;
   align-items: flex-start;

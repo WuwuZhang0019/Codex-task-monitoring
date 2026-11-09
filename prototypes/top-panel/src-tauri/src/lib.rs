@@ -1,56 +1,69 @@
-use tauri::Manager;
-#[cfg(not(windows))]
-use tauri::{LogicalPosition, LogicalSize};
+use tauri::{Emitter, LogicalPosition, LogicalSize, Manager};
 
-#[tauri::command]
-fn resize_panel(window: tauri::WebviewWindow, width: f64, height: f64) -> Result<(), String> {
-    let monitor = window
-        .primary_monitor()
-        .map_err(|e| e.to_string())?
+// The compact bar is positioned once. Opening the drawer never resizes or moves it.
+fn position_windows(app: &tauri::AppHandle) -> Result<(), Box<dyn std::error::Error>> {
+    let bar = app
+        .get_webview_window("main")
+        .ok_or("Missing compact bar")?;
+    let drawer = app.get_webview_window("drawer").ok_or("Missing drawer")?;
+    let monitor = bar
+        .primary_monitor()?
         .ok_or("No primary monitor available")?;
     let scale = monitor.scale_factor();
     let area = monitor.work_area();
-    let width = width
-        .clamp(200.0, 980.0)
-        .min(area.size.width as f64 / scale - 32.0);
-    let height = height
-        .clamp(38.0, 560.0)
-        .min(area.size.height as f64 / scale - 32.0);
-    let x = area.position.x as f64 / scale + (area.size.width as f64 / scale - width) / 2.0;
-    let y = area.position.y as f64 / scale;
-    // Update native position and size together so centered content never paints
-    // between a resize and the matching move.
-    #[cfg(windows)]
-    {
-        use windows_sys::Win32::UI::WindowsAndMessaging::{
-            SWP_NOACTIVATE, SWP_NOZORDER, SetWindowPos,
-        };
-        let hwnd = window.hwnd().map_err(|e| e.to_string())?;
-        let result = unsafe {
-            SetWindowPos(
-                hwnd.0 as _,
-                std::ptr::null_mut(),
-                (x * scale).round() as i32,
-                (y * scale).round() as i32,
-                (width * scale).round() as i32,
-                (height * scale).round() as i32,
-                SWP_NOACTIVATE | SWP_NOZORDER,
-            )
-        };
-        if result == 0 {
-            return Err(std::io::Error::last_os_error().to_string());
-        }
-    }
-    #[cfg(not(windows))]
-    {
-        window
-            .set_size(LogicalSize::new(width, height))
-            .map_err(|e| e.to_string())?;
-        window
-            .set_position(LogicalPosition::new(x, y))
-            .map_err(|e| e.to_string())?;
+    let available_width = area.size.width as f64 / scale;
+    let available_height = area.size.height as f64 / scale;
+    let left = area.position.x as f64 / scale;
+    let top = area.position.y as f64 / scale;
+    let bar_width = 600.0_f64.min(available_width - 32.0);
+    let drawer_width = 920.0_f64.min(available_width - 32.0);
+    bar.set_size(LogicalSize::new(bar_width, 38.0))?;
+    bar.set_position(LogicalPosition::new(
+        left + (available_width - bar_width) / 2.0,
+        top,
+    ))?;
+    drawer.set_size(LogicalSize::new(
+        drawer_width,
+        522.0_f64.min(available_height - 70.0),
+    ))?;
+    drawer.set_position(LogicalPosition::new(
+        left + (available_width - drawer_width) / 2.0,
+        top + 38.0,
+    ))?;
+    Ok(())
+}
+
+#[tauri::command]
+fn set_drawer_open(app: tauri::AppHandle, open: bool) -> Result<(), String> {
+    let drawer = app.get_webview_window("drawer").ok_or("Missing drawer")?;
+    drawer
+        .emit("drawer-visibility", open)
+        .map_err(|e| e.to_string())?;
+    if open {
+        drawer.show().map_err(|e| e.to_string())?;
+    } else {
+        drawer.hide().map_err(|e| e.to_string())?;
     }
     Ok(())
+}
+
+#[tauri::command]
+fn sync_drawer(app: tauri::AppHandle, html: String) -> Result<(), String> {
+    app.emit_to("drawer", "drawer-view", html)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn drawer_message(app: tauri::AppHandle, message: String) -> Result<(), String> {
+    if ![
+        "ready", "enter", "leave", "pin", "collapse", "quit", "read", "reset", "ended", "accepted",
+    ]
+    .contains(&message.as_str())
+    {
+        return Err("Unknown drawer action".into());
+    }
+    app.emit_to("main", "drawer-action", message)
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -62,15 +75,23 @@ fn quit_demo(app: tauri::AppHandle) {
 pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
-            let window = app
-                .get_webview_window("main")
-                .ok_or("Missing panel window")?;
-            window.set_focusable(false)?;
-            resize_panel(window.clone(), 600.0, 38.0)?;
-            window.show()?;
+            for label in ["main", "drawer"] {
+                app.get_webview_window(label)
+                    .ok_or("Missing demo window")?
+                    .set_focusable(false)?;
+            }
+            position_windows(app.handle())?;
+            app.get_webview_window("main")
+                .ok_or("Missing compact bar")?
+                .show()?;
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![resize_panel, quit_demo])
+        .invoke_handler(tauri::generate_handler![
+            set_drawer_open,
+            sync_drawer,
+            drawer_message,
+            quit_demo
+        ])
         .run(tauri::generate_context!())
         .expect("error while running panel demo");
 }

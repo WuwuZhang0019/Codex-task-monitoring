@@ -2,6 +2,6 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Independent panel demo",
-  "windows": ["main"],
+  "windows": ["main", "drawer"],
   "permissions": ["core:default"]
 }

@@ -25,6 +25,21 @@
         "visible": false,
         "decorations": false,
         "alwaysOnTop": true
+      },
+      {
+        "focus": false,
+        "skipTaskbar": true,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "height": 522,
+        "title": "任务航线 · 展开面板",
+        "shadow": false,
+        "url": "index.html?view=drawer",
+        "label": "drawer",
+        "decorations": false,
+        "visible": false,
+        "resizable": false,
+        "width": 920
       }
     ],
     "security": {
