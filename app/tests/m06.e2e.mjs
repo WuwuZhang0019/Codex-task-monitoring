@@ -52,7 +52,7 @@ async function record(id,name,p,expected,actual){const view=await monitor(p);sna
 try{
  await open();browser=await chromium.launch({headless:true});const context=await browser.newContext({permissions:['clipboard-read','clipboard-write'],viewport:{width:1440,height:1100}});page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
  // 01: use all six original route names; UI start/import/review + real clipboard.
- const route=planSteps({source:await readFile(path.join(app,'../docs/01_任务监测工作台_v1.0/01_执行方案/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md'),'utf8')});
+ const route=planSteps({source:await readFile(path.join(app,'../docs/99_归档/2026-11-10_旧路线/01_任务监测工作台_v1.0/01_执行方案/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md'),'utf8')});
  const single=await create('M06-01单线',route.map((s,i)=>({id:s.code,task:'T',title:s.title,deps:i?[route[i-1].code]:[]})));
  for(const s of route.slice(0,-1))await complete(single,s.code);
  await show(single);await lamp('M06','dark','可开始');await selectOutput('M06','B');

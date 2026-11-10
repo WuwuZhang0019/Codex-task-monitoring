@@ -40,7 +40,7 @@ const probePackage = path.join(cache, 'probe-package');
 execFileSync(process.execPath, [path.join(app, 'mcp/package-probe.mjs'), probePackage], { windowsHide: true });
 await copyFile(path.join(probePackage, 'plugins/task-workbench/runtime/probe.mjs'), path.join(root, 'app/mcp/probe-bundled.mjs'));
 await copyFile(path.join(probePackage, 'plugins/task-workbench/THIRD-PARTY-NOTICES.txt'), path.join(root, 'MCP-THIRD-PARTY-NOTICES.txt'));
-const template = 'docs/01_任务监测工作台_v1.0/01_执行方案/02_任务收敛与交接指令_原文_2026-11-08.md';
+const template = 'docs/99_归档/2026-11-10_旧路线/01_任务监测工作台_v1.0/01_执行方案/02_任务收敛与交接指令_原文_2026-11-08.md';
 await mkdir(path.dirname(path.join(root, template)), { recursive: true });
 await copyFile(path.join(app, '..', template), path.join(root, template));
 const sampleDir = path.join(app, '../docs/99_归档');

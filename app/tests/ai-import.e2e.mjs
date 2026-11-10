@@ -7,7 +7,7 @@ import {createServer} from '../server/index.mjs';
 import {planSteps} from '../server/plan-steps.mjs';
 const out=path.resolve('test-results/ai-import');await mkdir(out,{recursive:true});
 const dataDir=await mkdtemp(path.join(out,'isolated-'));
-const source=await readFile('../docs/01_任务监测工作台_v1.0/01_执行方案/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md','utf8');
+const source=await readFile('../docs/99_归档/2026-11-10_旧路线/01_任务监测工作台_v1.0/01_执行方案/01_Codex任务状态监测工作台_可执行方案_2026-11-08.md','utf8');
 const result=process.env.AI_REPLAY_FILE?JSON.parse(await readFile(process.env.AI_REPLAY_FILE,'utf8')):{name:'隔离导入',goal:'验证六步预览',warnings:[],steps:planSteps({source}).map((s,i,a)=>({id:s.code,title:s.title,line:'主线',purpose:s.title,sourceExcerpt:s.title,dependsOn:i?[a[i-1].code]:[],acceptance:['待人工确认：回放仅检查导入'],status:'todo',summary:'',nextAction:'',blocker:'',evidence:''}))};
 let server,browser;
 try{
