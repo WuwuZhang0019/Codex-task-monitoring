@@ -1,0 +1,1943 @@
+{
+  "schemaVersion": "light-1.0",
+  "date": "2026-11-10",
+  "mode": "service",
+  "revision": 66,
+  "generatedAt": "2026-11-10T15:14:40.618Z",
+  "projects": [
+    {
+      "key": "b-fixture/project",
+      "id": "531ccf4d-3d3e-48db-8729-19724a04532d",
+      "name": "B 独立二十步骤六路线",
+      "planKeys": [
+        "b-fixture/plan"
+      ],
+      "revision": 66
+    }
+  ],
+  "plans": [
+    {
+      "key": "b-fixture/plan",
+      "id": "c5b058eb-b965-4459-84dd-c8c991b7cd10",
+      "projectKey": "b-fixture/project",
+      "name": "B 独立二十步骤六路线",
+      "stageCount": 20,
+      "stageKeys": [
+        "b-fixture/plan/steps/A-01",
+        "b-fixture/plan/steps/A-02",
+        "b-fixture/plan/steps/A-03",
+        "b-fixture/plan/steps/A-04",
+        "b-fixture/plan/steps/A-05",
+        "b-fixture/plan/steps/A-06",
+        "b-fixture/plan/steps/A-07",
+        "b-fixture/plan/steps/A-08",
+        "b-fixture/plan/steps/A-09",
+        "b-fixture/plan/steps/A-10",
+        "b-fixture/plan/steps/A-11",
+        "b-fixture/plan/steps/A-12",
+        "b-fixture/plan/steps/A-13",
+        "b-fixture/plan/steps/A-14",
+        "b-fixture/plan/steps/A-15",
+        "b-fixture/plan/steps/A-16",
+        "b-fixture/plan/steps/A-17",
+        "b-fixture/plan/steps/A-18",
+        "b-fixture/plan/steps/A-19",
+        "b-fixture/plan/steps/A-20"
+      ],
+      "source": {
+        "path": "/G:/rust/Codex-task-monitoring/docs/03_%E8%BD%BB%E9%87%8F%E8%B7%AF%E7%BA%BF%E5%B7%A5%E4%BD%9C%E5%8F%B0/03_%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B/01_%E6%A8%A1%E6%8B%9F%E4%BA%8C%E5%8D%81%E6%AD%A5%E9%AA%A4%E4%B8%8E%E5%85%AD%E5%88%86%E6%94%AF%E5%B7%A5%E4%BD%9C%E6%A0%91_%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3_2026-11-10.md",
+        "version": "fixed-20261110",
+        "sha256": "8c69b3e525a46c5ef922d9ea0548e73bbb538255bd644697a2b8244a3270182b",
+        "locator": "完整步骤及依赖表",
+        "trust": "declared"
+      },
+      "endConditions": [
+        {
+          "conditionId": "plan-exit",
+          "text": "全部步骤与最终汇总证据通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-20/proof"
+          ]
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "key": "b-fixture/plan/steps/A-01",
+      "id": "5a650249-b3df-4b06-b04a-fcf891ed9f2b",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "A-01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "建立示例任务数据",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-01/exit",
+          "text": "生成一份含任务标识和标题的示例数据",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-01/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-01/proof",
+          "location": "fixture://A-01",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/61f18d5e-b752-4abf-a878-3f7ac066b4d6",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-02",
+      "id": "be984621-a826-436f-9f7f-a1e596a04e4c",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "A-02",
+      "sourceLocator": "utf16:2762:3028",
+      "title": "补齐步骤编号与顺序",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-02/exit",
+          "text": "二十个步骤编号唯一，六条路线顺序与分组表一致",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-02/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-02/proof",
+          "location": "fixture://A-02",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/9f922cd7-bc1a-479b-bc86-abe75afb3efc",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:38.946Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-03",
+      "id": "1a0d99ca-062d-4208-b99b-2918af44a55e",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "A-03",
+      "sourceLocator": "utf16:3028:3286",
+      "title": "校验模拟数据完整性",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-03/exit",
+          "text": "缺失编号或重复编号能够被标记",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-03/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-03/proof",
+          "location": "fixture://A-03",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/8b286f34-5d73-43eb-b767-5d7df450b800",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.028Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-04",
+      "id": "d5e1b8ca-60ca-4845-b1e1-9e629098de49",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-04",
+      "originalCode": "A-04",
+      "sourceLocator": "utf16:3286:3540",
+      "title": "绘制任务卡片",
+      "order": 4,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-04/exit",
+          "text": "卡片显示步骤编号、标题和当前状态",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-04/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-04/proof",
+          "location": "fixture://A-04",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/4789ee01-399f-499c-a111-034976d73fff",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:38.865Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-05",
+      "id": "74d33a50-3dc4-4d81-81fb-b52be639468f",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-05",
+      "originalCode": "A-05",
+      "sourceLocator": "utf16:3540:3804",
+      "title": "展示三条分支路线",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-04"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-05/exit",
+          "text": "分别展示 3、3、4 个站点及各自工作树信息",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-05/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-05/proof",
+          "location": "fixture://A-05",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/17f241ef-0f12-45a8-a16d-5d51c17d2c00",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.143Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-06",
+      "id": "0195a64f-77bd-485a-a3b8-e6d835c93afa",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-06",
+      "originalCode": "A-06",
+      "sourceLocator": "utf16:3804:4063",
+      "title": "增加状态文字与图标",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-05"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-06/exit",
+          "text": "五种状态均有可辨识的文字和图标",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-06/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-06/proof",
+          "location": "fixture://A-06",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/c806f8de-7b73-441a-b274-8a0b8699e8ac",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.222Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-07",
+      "id": "3ad82853-2352-4824-a663-31b09cfd9845",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-07",
+      "originalCode": "A-07",
+      "sourceLocator": "utf16:4063:4325",
+      "title": "模拟开始与完成事件",
+      "order": 7,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-03",
+        "b-fixture/plan/steps/A-06"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-07/exit",
+          "text": "记录开始和完成各一次，并保存结果摘要",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-07/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-07/proof",
+          "location": "fixture://A-07",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/70754e13-2a41-4f5c-9a7a-8ed0b5815796",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.304Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-08",
+      "id": "92f28897-dbdf-482c-b126-584c6794e86b",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-08",
+      "originalCode": "A-08",
+      "sourceLocator": "utf16:4325:4589",
+      "title": "模拟阻塞与恢复事件",
+      "order": 8,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-07"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-08/exit",
+          "text": "记录阻塞原因及恢复条件，恢复后进入执行中",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-08/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-08/proof",
+          "location": "fixture://A-08",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/00260f80-f22f-465e-abb8-453043535ec2",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.388Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-09",
+      "id": "708faef9-b1a4-4c11-aa94-d27920dae69c",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-09",
+      "originalCode": "A-09",
+      "sourceLocator": "utf16:4589:4851",
+      "title": "模拟取消与返工事件",
+      "order": 9,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-08"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-09/exit",
+          "text": "记录取消原因，并在返工时保留历史状态",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-09/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-09/proof",
+          "location": "fixture://A-09",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/599d43db-2852-4e03-baab-80309524dadf",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.474Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-10",
+      "id": "1f9175c2-be7f-42d1-9212-20654a05f52b",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-10",
+      "originalCode": "A-10",
+      "sourceLocator": "utf16:4851:5131",
+      "title": "汇总三条路线的测试结果",
+      "order": 10,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-09"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-10/exit",
+          "text": "汇总前三条分支的十个步骤最终状态、未完成事项和测试记录位置",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-10/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-10/proof",
+          "location": "fixture://A-10",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/96cd37b1-5ded-4267-ba57-5c1c90ea5f1a",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.563Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-11",
+      "id": "d6eabeee-a9f0-410c-a5f1-7740ca89c19b",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-11",
+      "originalCode": "A-11",
+      "sourceLocator": "utf16:5131:5392",
+      "title": "准备同步事件样例",
+      "order": 11,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-10"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-11/exit",
+          "text": "样例包含事件标识、执行标识及步骤标识",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-11/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-11/proof",
+          "location": "fixture://A-11",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/990ff0ad-053d-40cc-bd26-e2232e43cdb6",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.659Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-12",
+      "id": "8db2a28d-4d7d-40cc-bbfa-0994a327e368",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-12",
+      "originalCode": "A-12",
+      "sourceLocator": "utf16:5392:5653",
+      "title": "模拟重复事件上报",
+      "order": 12,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-11"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-12/exit",
+          "text": "相同事件重复提交后只保留一条逻辑记录",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-12/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-12/proof",
+          "location": "fixture://A-12",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/b0dd6ce9-8d80-438d-b8e8-e8b7f0aa4e65",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.749Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-13",
+      "id": "7bc46eb4-0805-4243-8ec4-466eaf66215c",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-13",
+      "originalCode": "A-13",
+      "sourceLocator": "utf16:5653:5909",
+      "title": "模拟版本冲突",
+      "order": 13,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-12"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-13/exit",
+          "text": "过期版本更新被拒绝，并记录当前版本",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-13/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-13/proof",
+          "location": "fixture://A-13",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/e2a98b01-217c-41c8-aa67-d32acf3a8977",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.844Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-14",
+      "id": "f57a4d81-65e6-40fa-919b-dd6e2738612a",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-14",
+      "originalCode": "A-14",
+      "sourceLocator": "utf16:5909:6172",
+      "title": "准备中断恢复样例",
+      "order": 14,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-10"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-14/exit",
+          "text": "保留中断前状态、最后更新时间及待确认提示",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-14/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-14/proof",
+          "location": "fixture://A-14",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/4e7ec516-6f46-4fb2-8148-103696564f64",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:39.977Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-15",
+      "id": "dc96eb0b-8fec-4754-8b93-cf7c3e1a77e4",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-15",
+      "originalCode": "A-15",
+      "sourceLocator": "utf16:6172:6431",
+      "title": "模拟跨会话接续",
+      "order": 15,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-14"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-15/exit",
+          "text": "读取已有状态后沿用原执行标识继续记录",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-15/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-15/proof",
+          "location": "fixture://A-15",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/47536576-03af-47af-bd53-cae933e03522",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:40.071Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-16",
+      "id": "021652c9-f340-4825-8cc7-e9941341c489",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-16",
+      "originalCode": "A-16",
+      "sourceLocator": "utf16:6431:6696",
+      "title": "模拟结束消息补报",
+      "order": 16,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-15"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-16/exit",
+          "text": "补报结束原因及相关步骤状态，并保留原事件标识",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-16/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-16/proof",
+          "location": "fixture://A-16",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/27aaf8fc-61fb-4249-b894-eae8906316fe",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:40.173Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-17",
+      "id": "1e702b03-d1bf-42ac-8234-61afeceba5ee",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-17",
+      "originalCode": "A-17",
+      "sourceLocator": "utf16:6696:6957",
+      "title": "展示新增三条路线",
+      "order": 17,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-13",
+        "b-fixture/plan/steps/A-16"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-17/exit",
+          "text": "新增路线分别显示 3、3、4 个站点",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-17/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-17/proof",
+          "location": "fixture://A-17",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/a60c340e-c71a-40ab-a745-b0b7d872d53e",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:40.272Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-18",
+      "id": "f648364b-dc5d-40af-bf44-d6ac9116ab84",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-18",
+      "originalCode": "A-18",
+      "sourceLocator": "utf16:6957:7225",
+      "title": "核对六条工作树归属",
+      "order": 18,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-17"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-18/exit",
+          "text": "六条路线均关联到分组表中的分支及拟定工作树路径",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-18/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-18/proof",
+          "location": "fixture://A-18",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/9ddd3e62-e353-4de8-9d34-cf83ee772eb0",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:40.373Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-19",
+      "id": "b6ea86b4-d629-42a5-96fa-4a99b7848727",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-19",
+      "originalCode": "A-19",
+      "sourceLocator": "utf16:7225:7495",
+      "title": "检查二十步骤状态展示",
+      "order": 19,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-18"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-19/exit",
+          "text": "A-01 至 A-20 均能展示和切换五种状态",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-19/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-19/proof",
+          "location": "fixture://A-19",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/886ad6f6-181b-4c2e-b422-651ce16b7ea5",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:40.475Z"
+    },
+    {
+      "key": "b-fixture/plan/steps/A-20",
+      "id": "1a9993da-da7a-495b-ad26-05c931895ed3",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "parentKey": null,
+      "code": "A-20",
+      "originalCode": "A-20",
+      "sourceLocator": "utf16:7495:7792",
+      "title": "汇总全部模拟测试结果",
+      "order": 20,
+      "required": true,
+      "dependsOn": [
+        "b-fixture/plan/steps/A-19"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "b-fixture/plan/steps/A-20/exit",
+          "text": "汇总二十个步骤及六条路线的状态、未完成事项和证据位置，确认全部步骤满足验收要求后将方案 A 标记为已完成",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-20/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-20/proof",
+          "location": "fixture://A-20",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "b-fixture/plan/executions/0076b509-7c5b-4491-b3cb-4d398ca43981",
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "updatedAt": "2026-11-10T15:14:40.577Z"
+    }
+  ],
+  "routes": [
+    {
+      "key": "b-fixture/plan/routes/1",
+      "id": "41413581-96c7-4037-8b03-ad8c706429e4",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "label": "分支一 · 数据准备",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-01",
+        "b-fixture/plan/steps/A-02",
+        "b-fixture/plan/steps/A-03"
+      ],
+      "order": 1,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-data",
+        "branch": "codex/mock-data",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "b-fixture/plan/routes/2",
+      "id": "334dc27c-c418-4785-93bf-c47839749425",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "label": "分支二 · 界面展示",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-04",
+        "b-fixture/plan/steps/A-05",
+        "b-fixture/plan/steps/A-06"
+      ],
+      "order": 2,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 2,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-ui",
+        "branch": "codex/mock-ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "b-fixture/plan/routes/3",
+      "id": "dc632e63-f331-4af8-aa5f-c2b18fc9ae9b",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "label": "分支三 · 交互验证",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-07",
+        "b-fixture/plan/steps/A-08",
+        "b-fixture/plan/steps/A-09",
+        "b-fixture/plan/steps/A-10"
+      ],
+      "order": 3,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 3,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-interaction",
+        "branch": "codex/mock-interaction",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "b-fixture/plan/routes/4",
+      "id": "33fafc49-e0b4-43ec-a640-bef52efb6a8d",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "label": "分支四 · 同步验证",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-11",
+        "b-fixture/plan/steps/A-12",
+        "b-fixture/plan/steps/A-13"
+      ],
+      "order": 4,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 4,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-sync",
+        "branch": "codex/mock-sync",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "b-fixture/plan/routes/5",
+      "id": "6c07e9e0-4e2b-4a23-8dbc-fc44f6a18162",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "label": "分支五 · 恢复验证",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-14",
+        "b-fixture/plan/steps/A-15",
+        "b-fixture/plan/steps/A-16"
+      ],
+      "order": 5,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 5,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-recovery",
+        "branch": "codex/mock-recovery",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "b-fixture/plan/routes/6",
+      "id": "4a56defc-5a12-4316-b647-6670ce03b0f9",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "label": "分支六 · 扩展汇总",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-17",
+        "b-fixture/plan/steps/A-18",
+        "b-fixture/plan/steps/A-19",
+        "b-fixture/plan/steps/A-20"
+      ],
+      "order": 6,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 6,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-summary",
+        "branch": "codex/mock-summary",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    }
+  ],
+  "bindings": [
+    {
+      "key": "b-fixture/plan/bindings/fixture",
+      "id": "0bd2c355-cca8-49e2-b7a3-abe441daab4c",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-01",
+        "b-fixture/plan/steps/A-02",
+        "b-fixture/plan/steps/A-03",
+        "b-fixture/plan/steps/A-04",
+        "b-fixture/plan/steps/A-05",
+        "b-fixture/plan/steps/A-06",
+        "b-fixture/plan/steps/A-07",
+        "b-fixture/plan/steps/A-08",
+        "b-fixture/plan/steps/A-09",
+        "b-fixture/plan/steps/A-10",
+        "b-fixture/plan/steps/A-11",
+        "b-fixture/plan/steps/A-12",
+        "b-fixture/plan/steps/A-13",
+        "b-fixture/plan/steps/A-14",
+        "b-fixture/plan/steps/A-15",
+        "b-fixture/plan/steps/A-16",
+        "b-fixture/plan/steps/A-17",
+        "b-fixture/plan/steps/A-18",
+        "b-fixture/plan/steps/A-19",
+        "b-fixture/plan/steps/A-20"
+      ],
+      "bindingRevision": 1,
+      "state": "confirmed",
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\fixture",
+        "branch": "fixture",
+        "head": null,
+        "trust": "declared"
+      },
+      "confirmationRef": "isolated-confirmed-adapter",
+      "revokedAt": null
+    }
+  ],
+  "executions": [
+    {
+      "key": "b-fixture/plan/executions/61f18d5e-b752-4abf-a878-3f7ac066b4d6",
+      "id": "61f18d5e-b752-4abf-a878-3f7ac066b4d6",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-01"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:38.751Z",
+      "endedAt": "2026-11-10T15:14:38.834Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/4789ee01-399f-499c-a111-034976d73fff",
+      "id": "4789ee01-399f-499c-a111-034976d73fff",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-04"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:38.805Z",
+      "endedAt": "2026-11-10T15:14:38.865Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/9f922cd7-bc1a-479b-bc86-abe75afb3efc",
+      "id": "9f922cd7-bc1a-479b-bc86-abe75afb3efc",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-02"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:38.918Z",
+      "endedAt": "2026-11-10T15:14:38.946Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/8b286f34-5d73-43eb-b767-5d7df450b800",
+      "id": "8b286f34-5d73-43eb-b767-5d7df450b800",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-03"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.002Z",
+      "endedAt": "2026-11-10T15:14:39.028Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/17f241ef-0f12-45a8-a16d-5d51c17d2c00",
+      "id": "17f241ef-0f12-45a8-a16d-5d51c17d2c00",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-05"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.112Z",
+      "endedAt": "2026-11-10T15:14:39.143Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/c806f8de-7b73-441a-b274-8a0b8699e8ac",
+      "id": "c806f8de-7b73-441a-b274-8a0b8699e8ac",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-06"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.195Z",
+      "endedAt": "2026-11-10T15:14:39.222Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/70754e13-2a41-4f5c-9a7a-8ed0b5815796",
+      "id": "70754e13-2a41-4f5c-9a7a-8ed0b5815796",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-07"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.275Z",
+      "endedAt": "2026-11-10T15:14:39.304Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/00260f80-f22f-465e-abb8-453043535ec2",
+      "id": "00260f80-f22f-465e-abb8-453043535ec2",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-08"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.359Z",
+      "endedAt": "2026-11-10T15:14:39.388Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/599d43db-2852-4e03-baab-80309524dadf",
+      "id": "599d43db-2852-4e03-baab-80309524dadf",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-09"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.444Z",
+      "endedAt": "2026-11-10T15:14:39.474Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/96cd37b1-5ded-4267-ba57-5c1c90ea5f1a",
+      "id": "96cd37b1-5ded-4267-ba57-5c1c90ea5f1a",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-10"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.530Z",
+      "endedAt": "2026-11-10T15:14:39.563Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/990ff0ad-053d-40cc-bd26-e2232e43cdb6",
+      "id": "990ff0ad-053d-40cc-bd26-e2232e43cdb6",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-11"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.626Z",
+      "endedAt": "2026-11-10T15:14:39.659Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/b0dd6ce9-8d80-438d-b8e8-e8b7f0aa4e65",
+      "id": "b0dd6ce9-8d80-438d-b8e8-e8b7f0aa4e65",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-12"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.715Z",
+      "endedAt": "2026-11-10T15:14:39.749Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/e2a98b01-217c-41c8-aa67-d32acf3a8977",
+      "id": "e2a98b01-217c-41c8-aa67-d32acf3a8977",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-13"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.810Z",
+      "endedAt": "2026-11-10T15:14:39.844Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/4e7ec516-6f46-4fb2-8148-103696564f64",
+      "id": "4e7ec516-6f46-4fb2-8148-103696564f64",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-14"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:39.943Z",
+      "endedAt": "2026-11-10T15:14:39.977Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/47536576-03af-47af-bd53-cae933e03522",
+      "id": "47536576-03af-47af-bd53-cae933e03522",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-15"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:40.038Z",
+      "endedAt": "2026-11-10T15:14:40.071Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/27aaf8fc-61fb-4249-b894-eae8906316fe",
+      "id": "27aaf8fc-61fb-4249-b894-eae8906316fe",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-16"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:40.136Z",
+      "endedAt": "2026-11-10T15:14:40.173Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/a60c340e-c71a-40ab-a745-b0b7d872d53e",
+      "id": "a60c340e-c71a-40ab-a745-b0b7d872d53e",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-17"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:40.238Z",
+      "endedAt": "2026-11-10T15:14:40.272Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/9ddd3e62-e353-4de8-9d34-cf83ee772eb0",
+      "id": "9ddd3e62-e353-4de8-9d34-cf83ee772eb0",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-18"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:40.337Z",
+      "endedAt": "2026-11-10T15:14:40.373Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/886ad6f6-181b-4c2e-b422-651ce16b7ea5",
+      "id": "886ad6f6-181b-4c2e-b422-651ce16b7ea5",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-19"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:40.439Z",
+      "endedAt": "2026-11-10T15:14:40.475Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "b-fixture/plan/executions/0076b509-7c5b-4491-b3cb-4d398ca43981",
+      "id": "0076b509-7c5b-4491-b3cb-4d398ca43981",
+      "projectKey": "b-fixture/project",
+      "planKey": "b-fixture/plan",
+      "stepKeys": [
+        "b-fixture/plan/steps/A-20"
+      ],
+      "bindingKey": "b-fixture/plan/bindings/fixture",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T15:14:40.542Z",
+      "endedAt": "2026-11-10T15:14:40.577Z",
+      "handoffConclusion": null
+    }
+  ],
+  "supplements": [],
+  "events": [
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/42e65b10-6585-4d9a-aeab-09203bc05457",
+      "stepKey": "b-fixture/plan/steps/A-01",
+      "executionKey": "b-fixture/plan/executions/61f18d5e-b752-4abf-a878-3f7ac066b4d6",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:38.751Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/145132e9-d1f4-46f6-bed4-261898dda8a6",
+      "stepKey": "b-fixture/plan/steps/A-04",
+      "executionKey": "b-fixture/plan/executions/4789ee01-399f-499c-a111-034976d73fff",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:38.805Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/9728f30d-6f13-458d-91ec-3f2499325305",
+      "stepKey": "b-fixture/plan/steps/A-01",
+      "executionKey": "b-fixture/plan/executions/61f18d5e-b752-4abf-a878-3f7ac066b4d6",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:38.834Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-01/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/956ab5cf-54b3-44cf-9222-4587e395f6b4",
+      "stepKey": "b-fixture/plan/steps/A-04",
+      "executionKey": "b-fixture/plan/executions/4789ee01-399f-499c-a111-034976d73fff",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:38.865Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-04/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/866d66cf-3576-4983-83a9-99a56a6fdb28",
+      "stepKey": "b-fixture/plan/steps/A-02",
+      "executionKey": "b-fixture/plan/executions/9f922cd7-bc1a-479b-bc86-abe75afb3efc",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:38.918Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/893c36c1-f7cf-4116-87d8-f60c0a990f87",
+      "stepKey": "b-fixture/plan/steps/A-02",
+      "executionKey": "b-fixture/plan/executions/9f922cd7-bc1a-479b-bc86-abe75afb3efc",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:38.946Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-02/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/410932b5-6895-488f-bdd4-983b361fac45",
+      "stepKey": "b-fixture/plan/steps/A-03",
+      "executionKey": "b-fixture/plan/executions/8b286f34-5d73-43eb-b767-5d7df450b800",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.002Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/1fbb696e-854d-453c-846e-9d48b65769cd",
+      "stepKey": "b-fixture/plan/steps/A-03",
+      "executionKey": "b-fixture/plan/executions/8b286f34-5d73-43eb-b767-5d7df450b800",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.028Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-03/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/f54ea259-c525-4e9e-81e7-11e3f926bd3b",
+      "stepKey": "b-fixture/plan/steps/A-05",
+      "executionKey": "b-fixture/plan/executions/17f241ef-0f12-45a8-a16d-5d51c17d2c00",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.112Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/c3e039c5-1f36-430a-ae83-b1ad22a69b13",
+      "stepKey": "b-fixture/plan/steps/A-05",
+      "executionKey": "b-fixture/plan/executions/17f241ef-0f12-45a8-a16d-5d51c17d2c00",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.143Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-05/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/872c74c2-c967-437a-ba95-950f292ba32e",
+      "stepKey": "b-fixture/plan/steps/A-06",
+      "executionKey": "b-fixture/plan/executions/c806f8de-7b73-441a-b274-8a0b8699e8ac",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.195Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/7bc21962-8e9c-4883-bed6-43b4a3aea26c",
+      "stepKey": "b-fixture/plan/steps/A-06",
+      "executionKey": "b-fixture/plan/executions/c806f8de-7b73-441a-b274-8a0b8699e8ac",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.222Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-06/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/55f40bb5-ebed-4e52-90c3-8dea03b3981a",
+      "stepKey": "b-fixture/plan/steps/A-07",
+      "executionKey": "b-fixture/plan/executions/70754e13-2a41-4f5c-9a7a-8ed0b5815796",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.275Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/bab997ee-c7ff-4433-9204-d1cb9bf62bf6",
+      "stepKey": "b-fixture/plan/steps/A-07",
+      "executionKey": "b-fixture/plan/executions/70754e13-2a41-4f5c-9a7a-8ed0b5815796",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.304Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-07/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/d137bd63-2f3d-4526-a472-5835929bc8e3",
+      "stepKey": "b-fixture/plan/steps/A-08",
+      "executionKey": "b-fixture/plan/executions/00260f80-f22f-465e-abb8-453043535ec2",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.359Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/aa6db0e9-1a95-40a2-aacf-8def1c2bd766",
+      "stepKey": "b-fixture/plan/steps/A-08",
+      "executionKey": "b-fixture/plan/executions/00260f80-f22f-465e-abb8-453043535ec2",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.388Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-08/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/2f56aa22-3e15-4d5c-834e-e3d1ade89384",
+      "stepKey": "b-fixture/plan/steps/A-09",
+      "executionKey": "b-fixture/plan/executions/599d43db-2852-4e03-baab-80309524dadf",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.444Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/63d8e518-a331-4261-b847-eef68602c794",
+      "stepKey": "b-fixture/plan/steps/A-09",
+      "executionKey": "b-fixture/plan/executions/599d43db-2852-4e03-baab-80309524dadf",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.474Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-09/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/64316bf0-8526-41fb-807a-b1e2cd0c7b7e",
+      "stepKey": "b-fixture/plan/steps/A-10",
+      "executionKey": "b-fixture/plan/executions/96cd37b1-5ded-4267-ba57-5c1c90ea5f1a",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.530Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/c998ea25-bcb8-4d20-b8f6-0679459dc2fb",
+      "stepKey": "b-fixture/plan/steps/A-10",
+      "executionKey": "b-fixture/plan/executions/96cd37b1-5ded-4267-ba57-5c1c90ea5f1a",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.563Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-10/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/1b5a5e6c-78c6-4a81-84a7-de0f64a9c12f",
+      "stepKey": "b-fixture/plan/steps/A-11",
+      "executionKey": "b-fixture/plan/executions/990ff0ad-053d-40cc-bd26-e2232e43cdb6",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.626Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/d14e076f-3edf-4da4-b37b-ea2ca35084ab",
+      "stepKey": "b-fixture/plan/steps/A-11",
+      "executionKey": "b-fixture/plan/executions/990ff0ad-053d-40cc-bd26-e2232e43cdb6",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.659Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-11/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/ffaae64a-daa4-4ad5-bc29-066e30949022",
+      "stepKey": "b-fixture/plan/steps/A-12",
+      "executionKey": "b-fixture/plan/executions/b0dd6ce9-8d80-438d-b8e8-e8b7f0aa4e65",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.715Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/48c45882-8561-4c01-b404-9fa167df3a50",
+      "stepKey": "b-fixture/plan/steps/A-12",
+      "executionKey": "b-fixture/plan/executions/b0dd6ce9-8d80-438d-b8e8-e8b7f0aa4e65",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.749Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-12/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/4e7c1aea-3469-4e4f-83c9-3744074ecedf",
+      "stepKey": "b-fixture/plan/steps/A-13",
+      "executionKey": "b-fixture/plan/executions/e2a98b01-217c-41c8-aa67-d32acf3a8977",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.810Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/7ca2a073-2ac2-494e-9168-6a359511c867",
+      "stepKey": "b-fixture/plan/steps/A-13",
+      "executionKey": "b-fixture/plan/executions/e2a98b01-217c-41c8-aa67-d32acf3a8977",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.844Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-13/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/aff872b8-41fa-484e-ac0e-babc2052a185",
+      "stepKey": "b-fixture/plan/steps/A-14",
+      "executionKey": "b-fixture/plan/executions/4e7ec516-6f46-4fb2-8148-103696564f64",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.943Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/b038197c-09c8-4816-a273-b28038fca4d4",
+      "stepKey": "b-fixture/plan/steps/A-14",
+      "executionKey": "b-fixture/plan/executions/4e7ec516-6f46-4fb2-8148-103696564f64",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:39.977Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-14/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/498203bb-07f8-411c-aec3-f03e14b9bcd4",
+      "stepKey": "b-fixture/plan/steps/A-15",
+      "executionKey": "b-fixture/plan/executions/47536576-03af-47af-bd53-cae933e03522",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.038Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/ad4a6f16-fd0e-487d-8d42-0f552b155a23",
+      "stepKey": "b-fixture/plan/steps/A-15",
+      "executionKey": "b-fixture/plan/executions/47536576-03af-47af-bd53-cae933e03522",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.071Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-15/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/da9f5254-97ea-4af7-99ec-ee385fdd9a67",
+      "stepKey": "b-fixture/plan/steps/A-16",
+      "executionKey": "b-fixture/plan/executions/27aaf8fc-61fb-4249-b894-eae8906316fe",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.136Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/c3b3e209-9715-441d-ae34-e764e86995f8",
+      "stepKey": "b-fixture/plan/steps/A-16",
+      "executionKey": "b-fixture/plan/executions/27aaf8fc-61fb-4249-b894-eae8906316fe",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.173Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-16/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/3e1641db-82be-4257-b019-85a29e428081",
+      "stepKey": "b-fixture/plan/steps/A-17",
+      "executionKey": "b-fixture/plan/executions/a60c340e-c71a-40ab-a745-b0b7d872d53e",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.238Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/ee07fa10-d876-49f8-8534-d33e6b627d0a",
+      "stepKey": "b-fixture/plan/steps/A-17",
+      "executionKey": "b-fixture/plan/executions/a60c340e-c71a-40ab-a745-b0b7d872d53e",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.272Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-17/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/9bcf30f1-557c-44c5-967c-13d599132b0e",
+      "stepKey": "b-fixture/plan/steps/A-18",
+      "executionKey": "b-fixture/plan/executions/9ddd3e62-e353-4de8-9d34-cf83ee772eb0",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.337Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/9ca91827-d7ca-4891-955e-643e8f88a427",
+      "stepKey": "b-fixture/plan/steps/A-18",
+      "executionKey": "b-fixture/plan/executions/9ddd3e62-e353-4de8-9d34-cf83ee772eb0",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.373Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-18/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/3e97707c-1021-458e-a08e-1c57ee0bf202",
+      "stepKey": "b-fixture/plan/steps/A-19",
+      "executionKey": "b-fixture/plan/executions/886ad6f6-181b-4c2e-b422-651ce16b7ea5",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.439Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/d739d83e-3c60-4f00-bc45-eeae07370a10",
+      "stepKey": "b-fixture/plan/steps/A-19",
+      "executionKey": "b-fixture/plan/executions/886ad6f6-181b-4c2e-b422-651ce16b7ea5",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.475Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-19/proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/56dcede1-e87a-407a-9356-250a53d3ea24",
+      "stepKey": "b-fixture/plan/steps/A-20",
+      "executionKey": "b-fixture/plan/executions/0076b509-7c5b-4491-b3cb-4d398ca43981",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.542Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/81b7b6670fa3c6c08714f63053986ca5c11b1bfe5d08a491de80af114479efb3/4f0510f3-1421-4cfc-b07d-bcbf1556b52a",
+      "stepKey": "b-fixture/plan/steps/A-20",
+      "executionKey": "b-fixture/plan/executions/0076b509-7c5b-4491-b3cb-4d398ca43981",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T22:00:00+08:00",
+      "receivedAt": "2026-11-10T15:14:40.577Z",
+      "reason": "隔离领域入口验证",
+      "evidenceIds": [
+        "A-20/proof"
+      ],
+      "sync": "synced"
+    }
+  ],
+  "uiPreferences": {
+    "collapsedKeys": [],
+    "selectedStepKey": null,
+    "focusedRouteKey": null,
+    "scrollByProject": {}
+  }
+}

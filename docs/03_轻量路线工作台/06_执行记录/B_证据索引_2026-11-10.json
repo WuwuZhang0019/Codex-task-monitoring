@@ -1,0 +1,342 @@
+{
+  "date": "2026-11-10",
+  "executionKey": "light-workbench-20261110/executions/B-EX01",
+  "initialHead": "c5ed1257b65d41a2f7373bacc628ef6b8df475de",
+  "implementationCommit": "37c2a85133fdedd5162b39c2e431f2665afa08c5",
+  "parallelCommit": "bfdbeab",
+  "branch": "main",
+  "threadId": "01a1c5ee-1fe1-7e43-8473-cc7a4143efd9",
+  "hostProjectId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d",
+  "threadProjectId": null,
+  "serviceIds": {
+    "projectId": null,
+    "planId": null,
+    "stepId": null,
+    "bindingId": null,
+    "bindingRevision": null,
+    "executionId": null,
+    "expectedRevision": null
+  },
+  "businessStatus": "completed",
+  "acceptance": "passed",
+  "sync": "pendingSync",
+  "deliveryVersion": "B-source-cf35a8e1b3123f248a1e266c811d7e87e90a72ccae55b0c89bbf5c19df9e7940",
+  "sourceFiles": [
+    {
+      "path": "app/server/light-import.mjs",
+      "sha256": "e7225aa9bfd3c7dd060adb3f82c53916042ea01bd650fede29400845dd2e50e9",
+      "bytes": 5171
+    },
+    {
+      "path": "app/server/light-model.mjs",
+      "sha256": "8e0d1837f0cd345f36820475ef7ee98ef8427bb78ddf30cad39d702eb982aa46",
+      "bytes": 10037
+    },
+    {
+      "path": "app/server/light-service.mjs",
+      "sha256": "09d1bd7127d946fc13384d59b5d68ac7050807b056dd49c1787b589986c55c2b",
+      "bytes": 30750
+    },
+    {
+      "path": "app/server/light-outbox.mjs",
+      "sha256": "4d1ccb6e5435a28f41dca9bd3d024e1f954f44e3ca51b4079000b04449e9f6b4",
+      "bytes": 4479
+    },
+    {
+      "path": "app/server/light.test.mjs",
+      "sha256": "715a8d150c68ba0ba02ee1ac0e917bba85257bb34887226c80b17f22a71670f8",
+      "bytes": 33485
+    },
+    {
+      "path": "app/server/business-requests.mjs",
+      "sha256": "b870ac723e827c1ee4558f6e86a56da39b103f6f10a8996f488dcfc9dcccf1a9",
+      "bytes": 1830
+    },
+    {
+      "path": "app/server/index.mjs",
+      "sha256": "1059e4bf6e3dba7591be259fb106cf0c62548fa2d3e7e9d492388061de0709c4",
+      "bytes": 15766
+    },
+    {
+      "path": "app/server/persistence.mjs",
+      "sha256": "ae80e6ef9e5c9918cb910aa5b2a163a29e7868beda5d6f8566740a486d0941ba",
+      "bytes": 6058
+    },
+    {
+      "path": "app/server/plan-steps.mjs",
+      "sha256": "1acfb73d7439f6add1eb088a27f23d38c3806fe7bf892a0ef292aaf44534886f",
+      "bytes": 2357
+    },
+    {
+      "path": "app/mcp/light-contract.test.mjs",
+      "sha256": "e61e72be79d21b59574eba5d771dcaf88243bbc761915d8e1d8e2d26a70fb0ed",
+      "bytes": 12115
+    }
+  ],
+  "contract": {
+    "path": "app/mcp/contracts/light-v1.json",
+    "sha256": "3a010b001d45583ab4b916a86e88ffc940e86e8b71e4c53c79e14ceb3a6c3181",
+    "bytes": 42888
+  },
+  "contractChanges": [],
+  "skillFiles": [
+    {
+      "path": "plugins/task-workbench/skills/workbench-handoff/SKILL.md",
+      "sha256": "a7720962bd87fb519ef5050095d38611696691e1ecda0408f9ceef880b5c6a59",
+      "bytes": 7903
+    },
+    {
+      "path": "plugins/task-workbench/skills/workbench-handoff/references/context-supplements.md",
+      "sha256": "9b1b72b2e105781385315f2f4244f3b08d4f6a0f8c990fd7de5d47cb1635202b",
+      "bytes": 3754
+    },
+    {
+      "path": "plugins/task-workbench/skills/workbench-handoff/references/execution-sync.md",
+      "sha256": "074078531adc86f757390340ebca114f37860cfb360b288af0884ff20fb1e2b1",
+      "bytes": 4169
+    },
+    {
+      "path": "plugins/task-workbench/skills/workbench-handoff/references/handoff-template.md",
+      "sha256": "a0603da1a4443a09208213513c4b8c2c06c2b4240d53c816a83ef1ad5c220588",
+      "bytes": 8159
+    },
+    {
+      "path": "plugins/task-workbench/skills/workbench-handoff/references/handoff-workflow.md",
+      "sha256": "51c52f9838dd290f0df20e280fdbf6f2544772653a3ab34c2378f886b26b8f85",
+      "bytes": 7045
+    },
+    {
+      "path": "plugins/task-workbench/skills/workbench-handoff/references/plan-registration.md",
+      "sha256": "4309fc447f1cc0b0b437a0c9ecd899d68ee5318fed6711f843880fc01cfa3704",
+      "bytes": 3158
+    }
+  ],
+  "rawEvidence": [
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-fault-injection.json",
+      "sha256": "d0a6173b4e16b68a2e2159eeec42f993a33691010da9851e4b07d3c188f3a5d8",
+      "bytes": 70173
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-filesystem-outbox-concurrency.json",
+      "sha256": "d736b48794b866157da7429f841f29336dbc2c943ecca8bbdaf248dca6157f60",
+      "bytes": 68891
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-hierarchy.json",
+      "sha256": "5d15c5523047c78cabc29854d17b9fa765faef07e6f5535819b0f256ca8fa9f2",
+      "bytes": 99800
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-idempotency-conflict.json",
+      "sha256": "1ed7091c0cb98e7bf5e75a298515db13fc9c19257df6d0bf0a48981771f00dbc",
+      "bytes": 87660
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-legacy-backup.json",
+      "sha256": "00a6f08bf4911c1ebe5f58e565af2eb20ee7b5a7601ee93d925929084fb26556",
+      "bytes": 69160
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-outbox.json",
+      "sha256": "818b81b9b0f8ecc2380a9276104c5d5f733f4f7369c1e35b15f6089e2e005c85",
+      "bytes": 74227
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-process-crash.json",
+      "sha256": "85424c18ee70ae2ddd686c83b7972189f0efdbb8f9c1e9baff71a2928e643b17",
+      "bytes": 66195
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-revision-replacement.json",
+      "sha256": "63f21519f051f518835000981339ac9784cb759b611576bd3742c3600c739526",
+      "bytes": 174380
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-scale-projects-preferences.json",
+      "sha256": "f9892db61b62606820e4980f573a913c3bfe5bd6441886463f6e130dd5fc3b21",
+      "bytes": 169643
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-status-evidence-reopen.json",
+      "sha256": "b278cbf832fe26fd10c5bbdf120544c5a6b176cc8109fe9dc090c36be6a4b137",
+      "bytes": 98460
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B-supplements.json",
+      "sha256": "322cf71790445c24b8e5bfb106995436dc7bf9c59d717d2abba9ace59eb6d282",
+      "bytes": 133244
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B20-six-routes.json",
+      "sha256": "6b1f74b7d3cfccf23a5ab5663fd5ffff2588534be0be2cd26b214166f6697c77",
+      "bytes": 244248
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/B25-transitions.json",
+      "sha256": "93b18cf08f0deb26f63b7786e01893d472debe3046ee10c6498d5a93c678ffc1",
+      "bytes": 233273
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/build-final.log",
+      "sha256": "95068283540c0b245e3f67128fb2c0092829c79dbbe41f8d158114ef32c5506e",
+      "bytes": 442
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/domain-final.log",
+      "sha256": "3d73b52c2c8970e1145416e7f724d9cf16051fcb987471a4e56fae615b508c0e",
+      "bytes": 796
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/fifth.log",
+      "sha256": "98519c6777160c95719f9a726510e27fae362cfe652e0c19a2279c5cbd92f42f",
+      "bytes": 1508
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/first.log",
+      "sha256": "0f9469e6300b26fab1478959c622c60a3bf2cf9043c4dd8d414ce419186b0c6a",
+      "bytes": 4821
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/fixed-input.md",
+      "sha256": "8c69b3e525a46c5ef922d9ea0548e73bbb538255bd644697a2b8244a3270182b",
+      "bytes": 16160
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/fourth.log",
+      "sha256": "e0f01cdd50f1b64cd9e8cfa5caf2c644f2b02ff9a4f11fc9fa535597f80e5798",
+      "bytes": 1509
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/full-final.log",
+      "sha256": "6e4fba31424a99725fb9f10de6c7a31f3d05d608ca2831f3b49c73417544650c",
+      "bytes": 12150
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/full-first.log",
+      "sha256": "8189c1d62b41e986694ac9f48ecac66700a838aef03f07389d27bed7e76cd510",
+      "bytes": 1559
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/full-random-port.log",
+      "sha256": "b8e15186e237ce8c4f04db41678d4eb0dbcc6b1cf4a38025fbfa8a9b895d0535",
+      "bytes": 13754
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/runtime-final.log",
+      "sha256": "d4e7e35458341d9ef30a6a67edb364d939984580d5d46880bde7917c935f5979",
+      "bytes": 2143
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/second.log",
+      "sha256": "cf87cfeea6424f5e44274af067ef6b43568aed2af2b9c6f9fbfbc6ea098313b1",
+      "bytes": 3000
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/sixth.log",
+      "sha256": "86a8b919c0c0315a5995b3480c6de501a05681bfb8e39c24748a889d273562c2",
+      "bytes": 1732
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/third.log",
+      "sha256": "792bc6e27ef182dbbe72038e58c528fb231f4c7904b255ed5e7fb94bea42d0c3",
+      "bytes": 2434
+    },
+    {
+      "path": "app/test-results/manual-trial/B-EX01/assemble-evidence.mjs",
+      "sha256": "7f17f0e45cc662f8312c8ce6490eb278344fd8348fe9c0c6dbe6d5f52c716782",
+      "bytes": 9350
+    }
+  ],
+  "deliveryFiles": [
+    {
+      "path": "docs/03_轻量路线工作台/00_执行入口/01_当前执行台账_2026-11-10.md",
+      "sha256": "5e05003d3b901563175736c615e14348378ac0c10990bcf6545d0c02f32c604a",
+      "bytes": 18783
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/B_路线与存储回执_2026-11-10.md",
+      "sha256": "c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+      "bytes": 15679
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/B_已提交快照_2026-11-10.json",
+      "sha256": "8881255ac62959002a8b6b5c1d5924325a26d17b27cd62ffc51181ad7d0de496",
+      "bytes": 66219
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/B_本地快照_2026-11-10.json",
+      "sha256": "e9940c634a41f8ba4adda7859226291d6a14c1fe9a25470f7eb3b25edfca7dbe",
+      "bytes": 52379
+    }
+  ],
+  "checks": [
+    {
+      "name": "runtime-and-contract",
+      "command": "node --test server/light.test.mjs mcp/light-contract.test.mjs",
+      "passed": 19,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "app/test-results/manual-trial/B-EX01/runtime-final.log"
+    },
+    {
+      "name": "full",
+      "command": "node --test server/*.test.mjs mcp/*.test.mjs desktop/*.test.mjs",
+      "passed": 118,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "app/test-results/manual-trial/B-EX01/full-final.log"
+    },
+    {
+      "name": "domain",
+      "command": "npm run test:domain",
+      "passed": 6,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "app/test-results/manual-trial/B-EX01/domain-final.log"
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "exitCode": 0,
+      "log": "app/test-results/manual-trial/B-EX01/build-final.log"
+    }
+  ],
+  "limitations": [
+    "真实 MCP 写入由 D 接线，绑定确认及 Skill 安装由 E 接手",
+    "测试服务身份只属于隔离副本，当前项目业务身份为空",
+    "ENOSPC 为注入，另有实际文件目标错误，未耗尽实际磁盘",
+    "首次受限通信运行终止，放行重跑通过",
+    "一次既有 HTTP 测试遇到 fetch bad port，保留日志后原命令重跑通过",
+    "事件及细分时间表示登记时刻，未逐项计时"
+  ],
+  "finalValidation": {
+    "date": "2026-11-10",
+    "utf8": true,
+    "linksChecked": 13,
+    "brokenLinks": [],
+    "contractUnchanged": true,
+    "sourceFingerprintsMatched": 10,
+    "rawFingerprintsMatched": 27,
+    "readback": {
+      "business": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "bSubsteps": 7,
+      "globalCompleted": 2,
+      "globalTotal": 7,
+      "c": "pending",
+      "d": "pending",
+      "next": "D",
+      "handoffConclusion": "D",
+      "serviceIdsRemainNull": true
+    },
+    "status": "passed"
+  },
+  "aPrecheck": {
+    "date": "2026-11-10",
+    "deliveryFilesMatched": 6,
+    "deliveryFilesTotal": 6,
+    "scope": "开始时核对 A 交付。其后 ledger 和 light-contract.test.mjs 由 B 按范围更新"
+  }
+}
