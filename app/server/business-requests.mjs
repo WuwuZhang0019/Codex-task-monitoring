@@ -23,8 +23,8 @@ export function createRequests(persistence) {
         const changed = await change();
         const requestId = changed.receipt?.requestId ?? randomUUID();
         const result = { ...changed, requestId };
-        requests[index] = { state: 'committed', requestId, semanticHash, result };
-        persistence.write('requests', requests);
+        // 同一聚合事务内可能还有受控适配器的嵌套领域请求。
+        persistence.write('requests', { ...persistence.read('requests'), [index]: { state: 'committed', requestId, semanticHash, result } });
         persistence.write('audit', [...persistence.read('audit'), { requestId, principal, projectId, operation, semanticHash, eventId: input.eventId ?? null, time: new Date().toISOString() }]);
         persistence.write('events', [...persistence.read('events'), { id: requestId, eventId: input.eventId ?? null, projectId, operation, revision: result.revision ?? null }]);
         return result;

@@ -77,7 +77,7 @@ function invalidateSuccessors(snapshot, origin, reason, time) {
   }
 }
 
-export function createLightService(persistence, requests, { authorize = () => false } = {}) {
+export function createLightService(persistence, requests, { authorize = () => false, confirmBinding = () => false } = {}) {
   function permitted(principal, projectId, operation) {
     if (!principal || authorize(principal, projectId, operation) !== true) lightError('FORBIDDEN', '适配层未授予当前作用域', 403);
   }
@@ -156,7 +156,10 @@ export function createLightService(persistence, requests, { authorize = () => fa
     },
     query(principal, projectId, operation, eventId) {
       permitted(principal, projectId, 'query');
-      return requests.query(principal, projectId, `light.${operation}`, eventId);
+      // 首次登记以本地 projectKey 去重，成功后调用者持有服务 projectId。
+      const project = load().snapshot.projects.find(item => item.id === projectId);
+      const scopeId = operation === 'register' && project ? project.key : projectId;
+      return requests.query(principal, scopeId, `light.${operation}`, eventId);
     },
     register(principal, input) {
       text(input.eventId, 'eventId');
@@ -226,6 +229,34 @@ export function createLightService(persistence, requests, { authorize = () => fa
         value.snapshot.bindings.push(binding);
         return { bindingId: binding.id };
       });
+    },
+    bind(principal, input) {
+      return commit(principal, 'bind', input, async (value, project, plan, time) => {
+        const steps = input.stepIds.map(id => value.snapshot.steps.find(step => step.id === id && step.planKey === plan.key));
+        if (steps.some(step => !step)) lightError('NOT_FOUND', '绑定步骤归属不匹配', 404);
+        unique(input.stepIds, '绑定步骤重复');
+        let binding = value.snapshot.bindings.find(item => item.id === input.bindingId && item.planKey === plan.key);
+        if (input.action === 'propose') {
+          if (input.bindingId !== null || input.expectedBindingRevision !== null) lightError('INVALID_INPUT', '新提案身份须为空');
+          binding = { key: `${plan.key}/bindings/${randomUUID()}`, id: randomUUID(), projectKey: project.key, planKey: plan.key,
+            stepKeys: steps.map(step => step.key), bindingRevision: 1, state: 'proposed', context: structuredClone(input.context),
+            confirmationRef: null, revokedAt: null };
+          value.snapshot.bindings.push(binding);
+        } else {
+          if (!binding || binding.bindingRevision !== input.expectedBindingRevision) lightError('STALE_BINDING', '绑定版本不匹配', 409);
+          if (digest(binding.stepKeys) !== digest(steps.map(step => step.key)) || digest(binding.context) !== digest(input.context)) lightError('STALE_BINDING', '绑定提案内容已变化', 409);
+          if (input.action === 'confirm') {
+            permitted(principal, input.projectId, 'confirmBinding');
+            if (binding.state !== 'proposed' || await confirmBinding(principal, structuredClone(binding), structuredClone(input)) !== true) lightError('CONFIRMATION_REQUIRED', '需要可信确认及目录分支核验');
+            binding.state = 'confirmed'; binding.confirmationRef = `grant:${digest(input.confirmationGrant)}`;
+          } else {
+            if (binding.state === 'revoked') lightError('STALE_BINDING', '绑定已撤销', 409);
+            binding.state = 'revoked'; binding.revokedAt = time;
+          }
+          binding.bindingRevision += 1;
+        }
+        return { bindingId: binding.id, bindingRevision: binding.bindingRevision, state: binding.state };
+      }, 'bind');
     },
     update(principal, input) {
       return commit(principal, 'update', input, (value, project, plan, time, eventScope) => {
