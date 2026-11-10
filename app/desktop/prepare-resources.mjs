@@ -1,4 +1,4 @@
-import { build } from 'esbuild';
+import { buildBusinessSchema } from '../mcp/build-business-schema.mjs';
 import { cp, mkdir, readFile, writeFile, copyFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -29,13 +29,13 @@ execFileSync('tar.exe', ['-xf', path.join(cache, archiveName), '-C', cache], { w
 const distribution = path.join(cache, `node-v${nodeVersion}-win-x64`);
 await copyFile(path.join(distribution, 'node.exe'), path.join(root, 'node.exe'));
 await copyFile(path.join(distribution, 'LICENSE'), path.join(root, 'NODE-LICENSE'));
+await buildBusinessSchema();
 for (const directory of ['server', 'mcp', 'dist']) {
   await cp(path.join(app, directory), path.join(root, 'app', directory), { recursive: true });
 }
 for (const name of ['owner.mjs', 'migrate.mjs', 'client.mjs']) {
   await copyFile(path.join(app, 'desktop', name), path.join(root, 'app/desktop', name));
 }
-await build({entryPoints:[path.join(app,'server/business-schema.mjs')],outfile:path.join(root,'app/server/business-schema.mjs'),bundle:true,platform:'node',format:'esm',target:'node25',external:['./validation.mjs']});
 const probePackage = path.join(cache, 'probe-package');
 execFileSync(process.execPath, [path.join(app, 'mcp/package-probe.mjs'), probePackage], { windowsHide: true });
 await copyFile(path.join(probePackage, 'plugins/task-workbench/runtime/probe.mjs'), path.join(root, 'app/mcp/probe-bundled.mjs'));

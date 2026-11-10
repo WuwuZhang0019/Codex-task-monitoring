@@ -97,7 +97,8 @@ export function projectFromDraft(draft) {
 
 export function createDrafts(persistence, requests, models) {
   function get(id) {
-    const draft = persistence.read('drafts')[id];
+    const all = persistence.read('drafts');
+    const draft = Object.hasOwn(all, id) ? all[id] : null;
     if (!draft) throw new HttpError(404, '草稿不存在');
     return draft;
   }

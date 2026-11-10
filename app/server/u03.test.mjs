@@ -6,6 +6,8 @@ import os from 'node:os';
 import { once } from 'node:events';
 import {fileURLToPath} from 'node:url';
 import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { contractFingerprint } from './business-schema.mjs';
 import { createServer } from './index.mjs';
 import { createStore } from './store.mjs';
 import { createModelStore } from './model-store.mjs';
@@ -63,7 +65,9 @@ async function executionFixture(t) {
 }
 
 test('U03-K01 原文出处、集中补缺、完整模型、原子发布与全部读取入口', async t => {
+  assert.equal(contractFingerprint, createHash('sha256').update(await readFile(new URL('../mcp/contracts/v1.json', import.meta.url))).digest('hex'));
   const f = await fixture(t), input = draftInput();
+  assert.throws(() => f.core.drafts.get('constructor'), /草稿不存在/);
   const broken = structuredClone(input); broken.candidate.goal = null; broken.candidate.provenance[0].excerpt = '不存在的摘录'; broken.candidate.requirements[0].conditionIds = [];
   const draft = await f.ok('/import-drafts', broken);
   assert.equal(draft.status, 'needs-review'); assert.ok(draft.issues.filter(i => i.blocking).length >= 3);
