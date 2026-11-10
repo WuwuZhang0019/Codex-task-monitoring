@@ -1,3 +1,8 @@
+import {createPersistence} from './persistence.mjs';
+import {createRequests} from './business-requests.mjs';
+import {createDrafts} from './import-drafts.mjs';
+import {createPublisher} from './publish-coordinator.mjs';
+import {createBusiness} from './business.mjs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -124,24 +129,60 @@ export async function createServer(options = {}) {
 async function createOwnedServer(options) {
   if (!options.env) loadEnvironment();
   const env = options.env ?? process.env;
-  const store = await createStore(options.dataDir ?? env.WORKBENCH_DATA_DIR ?? path.join(APP_DIR, 'data'));
-  const models = await createModelStore(path.join(options.dataDir ?? env.WORKBENCH_DATA_DIR ?? path.join(APP_DIR, 'data'), 'models'),store);
+  const directory = options.dataDir ?? env.WORKBENCH_DATA_DIR ?? path.join(APP_DIR, 'data');
+  const persistence = await createPersistence(directory, {fault: options.storageFault});
+  const store = await createStore(directory, persistence);
+  const models = await createModelStore(path.join(directory, 'models'),store,persistence);
+  const requests = createRequests(persistence);
+  const drafts = createDrafts(persistence,requests,models);
+  const publisher = createPublisher(persistence,requests,drafts,store,models);
+  const business = createBusiness(persistence,requests,models);
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const distDir = options.distDir ?? path.join(APP_DIR, 'dist');
   const server = http.createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
     res.setHeader('Referrer-Policy', 'no-referrer');
+    let response;
+    const respond=(status,value)=>{response={status,value};};
     try {
+      await persistence.run(async()=>{
       checkLocalRequest(req);
       const pathname = safePath(req.url);
       if (options.authorize) options.authorize(req, pathname);
       const method = req.method;
-      if (pathname === '/api/health' && method === 'GET') return sendJSON(res, 200, { ok: true, ai: ai.health });
-      if (pathname === '/api/sample' && method === 'GET') return sendJSON(res, 200, { text: await readSample(options.sampleFile) });
+      if (pathname === '/api/import-drafts') {
+        if(method==='GET') return respond(200,{drafts:drafts.list()});
+        if(method==='POST') return respond(201,await drafts.put(await jsonBody(req)));
+        throw new HttpError(405,'不支持的请求方法');
+      }
+      const draftMatch=pathname.match(/^\/api\/import-drafts\/([0-9a-f-]{36})(?:\/(validate|confirm|publish))?$/);
+      if(draftMatch){
+        const [,id,action]=draftMatch;
+        if(!action&&method==='GET')return respond(200,drafts.get(id));
+        if(!action&&method==='PUT')return respond(200,await drafts.put({...await jsonBody(req),draftId:id}));
+        if(action&&method==='POST'){
+          const body=await jsonBody(req);
+          return respond(200,await publisher[action](id,body));
+        }
+        throw new HttpError(405,'不支持的请求方法');
+      }
+      const businessMatch=pathname.match(/^\/api\/projects\/([0-9a-f-]{36})\/business$/);
+      if(businessMatch){
+        if(method==='GET')return respond(200,(await models.monitor(businessMatch[1])).resumeContext);
+        if(method==='POST')return respond(200,await business.command(businessMatch[1],await jsonBody(req)));
+        throw new HttpError(405,'不支持的请求方法');
+      }
+      const requestMatch=pathname.match(/^\/api\/requests$/);
+      if(requestMatch&&method==='POST'){
+        const body=await jsonBody(req);
+        return respond(200,requests.query('local-ui',body.projectId,body.operation,body.idempotencyKey));
+      }
+      if (pathname === '/api/health' && method === 'GET') return respond(200, { ok: true, ai: ai.health });
+      if (pathname === '/api/sample' && method === 'GET') return respond(200, { text: await readSample(options.sampleFile) });
       if (pathname === '/api/projects') {
-        if (method === 'GET') return sendJSON(res, 200, { projects: store.list() });
-        if (method === 'POST') return sendJSON(res, 201, { project: await store.create(await jsonBody(req)) });
+        if (method === 'GET') return respond(200, { projects: store.list() });
+        if (method === 'POST') return respond(201, { project: await store.create(await jsonBody(req)) });
         throw new HttpError(405, '不支持的请求方法');
       }
       const modelMatch = pathname.match(/^\/api\/projects\/([^/]+)\/model$/);
@@ -152,52 +193,56 @@ async function createOwnedServer(options) {
         const body=await jsonBody(req);
         if(!body||typeof body!=='object'||Array.isArray(body)||['stationId','sourceId','successorId','expectedFingerprint'].some(k=>body[k]!==undefined&&typeof body[k]!=='string'))throw new HttpError(400,'输出请求需对象及字符串身份字段');
         const view=await models.monitor(outputMatch[1]);
-        return sendJSON(res,200,generateOutput(store.get(outputMatch[1]),view,{...body,stationId:body.stationId||view.model.stations[0]?.id},await loadOutputTemplate()));
+        return respond(200,generateOutput(store.get(outputMatch[1]),view,{...body,stationId:body.stationId||view.model.stations[0]?.id},await loadOutputTemplate()));
       }
       const monitorMatch=pathname.match(/^\/api\/projects\/([^/]+)\/monitor$/);
       if(monitorMatch){
         if(!UUID.test(monitorMatch[1]))throw new HttpError(400,'项目 ID 必须是 UUID');
-        if(method==='GET')return sendJSON(res,200,await models.monitor(monitorMatch[1]));
-        if(method==='POST'){await models.start(monitorMatch[1],await jsonBody(req));return sendJSON(res,200,await models.monitor(monitorMatch[1]));}
+        if(method==='GET')return respond(200,await models.monitor(monitorMatch[1]));
+        if(method==='POST'){await models.start(monitorMatch[1],await jsonBody(req));return respond(200,await models.monitor(monitorMatch[1]));}
         throw new HttpError(405,'不支持的请求方法');
       }
       const receiptMatch = pathname.match(/^\/api\/projects\/([^/]+)\/receipts$/);
       if(receiptMatch){
         if(!UUID.test(receiptMatch[1]))throw new HttpError(400,'项目 ID 必须是 UUID');
-        if(method==='GET')return sendJSON(res,200,await models.inspect(receiptMatch[1]));
-        if(method==='POST'){await models.command(receiptMatch[1],await jsonBody(req));return sendJSON(res,200,await models.inspect(receiptMatch[1]));}
+        if(method==='GET')return respond(200,await models.inspect(receiptMatch[1]));
+        if(method==='POST'){await models.command(receiptMatch[1],await jsonBody(req));return respond(200,await models.inspect(receiptMatch[1]));}
         throw new HttpError(405,'不支持的请求方法');
       }
       if(modelMatch){
         if(!UUID.test(modelMatch[1]))throw new HttpError(400,'项目 ID 必须是 UUID');
-        if(method==='GET')return sendJSON(res,200,await models.get(modelMatch[1]));
-        if(method==='PUT')return sendJSON(res,200,await models.update(modelMatch[1],await jsonBody(req)));
+        if(method==='GET')return respond(200,await models.get(modelMatch[1]));
+        if(method==='PUT')return respond(200,await models.update(modelMatch[1],await jsonBody(req)));
         throw new HttpError(405,'不支持的请求方法');
       }
       const match = pathname.match(/^\/api\/projects\/([^/]+)$/);
       if (match) {
         if (!UUID.test(match[1])) throw new HttpError(400, '项目 ID 必须是 UUID');
-        if (method === 'GET') return sendJSON(res, 200, { project: store.get(match[1]) });
-        if (method === 'PUT') return sendJSON(res, 200, { project: await store.update(match[1], await jsonBody(req)) });
+        if (method === 'GET') return respond(200, { project: store.get(match[1]) });
+        if (method === 'PUT') return respond(200, { project: await store.update(match[1], await jsonBody(req)) });
         throw new HttpError(405, '不支持的请求方法');
       }
       if (pathname === '/api/ai/extract' || pathname === '/api/ai/summarize') {
         if (method !== 'POST') throw new HttpError(405, '不支持的请求方法');
         const body = await jsonBody(req);
-        return sendJSON(res, 200, await ai[pathname.endsWith('/extract') ? 'extract' : 'summarize'](body));
+        return respond(200, await ai[pathname.endsWith('/extract') ? 'extract' : 'summarize'](body));
       }
       if (pathname === '/api/health' || pathname === '/api/sample') throw new HttpError(405, '不支持的请求方法');
       if (pathname === '/api' || pathname.startsWith('/api/')) throw new HttpError(404, 'API 不存在');
       if (method !== 'GET' && method !== 'HEAD') throw new HttpError(405, '不支持的请求方法');
       await staticFile(res, pathname, distDir, method === 'HEAD');
+      });
+      if (options.afterCommit && await options.afterCommit(req, response) === 'drop') { res.destroy(); return; }
+      if(response)sendJSON(res,response.status,response.value);
     } catch (error) {
       if (res.headersSent || res.destroyed) return;
       const status = error instanceof HttpError ? error.status : 500;
       if (status === 500) console.error('Local workbench request failed:', error.message);
       if (status === 413) { res.setHeader('Connection', 'close'); req.resume(); }
-      sendJSON(res, status, { error: status === 500 ? '本地服务错误，请检查服务日志；数据未被清空' : error.message });
+      sendJSON(res,status, { error: status === 500 ? '本地服务错误，请检查服务日志；数据未被清空' : error.message });
     }
   });
+  server.workbench={persistence,store,models,requests,drafts,publisher,business};
   server.requestTimeout = 30000;
   server.headersTimeout = 10000;
   server.keepAliveTimeout = 5000;

@@ -5,14 +5,17 @@ import { createStore } from '../server/store.mjs';
 import { createModelStore } from '../server/model-store.mjs';
 import { inspectMonitor } from '../server/monitor.mjs';
 import { acquireDataLease } from '../server/data-lease.mjs';
+import { existsSync } from 'node:fs';
+import { createPersistence } from '../server/persistence.mjs';
 
 // U01 read-only facade. The fixture creator and this owner share the existing stores.
 export async function createProbeOwner({ dataDir, projectId, token, audit = () => {} }) {
   if (!path.isAbsolute(dataDir) || !token || token.length < 32) throw new Error('Invalid probe owner configuration');
   const release = acquireDataLease(dataDir);
   try {
-  const projects = await createStore(dataDir);
-  const models = await createModelStore(path.join(dataDir, 'models'), projects);
+  const persistence = ['aggregate.json', 'transaction.committed.json'].some(name => existsSync(path.join(dataDir, name))) ? await createPersistence(dataDir) : undefined;
+  const projects = await createStore(dataDir, persistence);
+  const models = await createModelStore(path.join(dataDir, 'models'), projects, persistence);
   projects.get(projectId);
   const expected = Buffer.from(`Bearer ${token}`);
   const server = http.createServer(async (req, res) => {

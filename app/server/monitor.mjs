@@ -1,3 +1,4 @@
+import {coverageGaps} from './business-view.mjs';
 import {randomUUID} from 'node:crypto';
 import {digest,inspectReceipts} from './receipts.mjs';
 import {HttpError} from './validation.mjs';
@@ -13,17 +14,19 @@ export function inspectMonitor(projectId,m){
  const inspection=inspectReceipts(projectId,m),{results,log}=inspection,life=m.lifecycle??{starts:[],closures:[],events:[]};
  function edgeReady(from,to){const r=results[from];return r?.passed&&r.conclusion!=='G'&&r.handoffs.some(h=>h.stationId===to&&h.match==='matched');}
  const stations=m.stations.map(s=>{
-  const r=results[s.id],task=m.tasks.find(t=>t.id===s.taskId),sourceBound=task?.folderId&&m.chats.some(c=>c.taskId===task.id&&c.folderId===task.folderId);
+  const r=results[s.id],task=m.tasks.find(t=>t.id===s.taskId),sourceBound=task?.folderId&&(m.schemaVersion?(m.bindings??[]).some(b=>!b.revokedAt&&b.planId===m.currentPlanId&&b.taskId===task.id&&(!b.stationId||b.stationId===s.id)&&m.chats.some(c=>c.id===b.sourceId&&c.taskId===task.id&&c.folderId===task.folderId)):m.chats.some(c=>c.taskId===task.id&&c.folderId===task.folderId));
   const waiting=s.dependsOn.filter(id=>!edgeReady(id,s.id));
   const ready=!!sourceBound&&!!s.planId&&s.planId===m.currentPlanId&&!waiting.length;
   const receipt=log.receipts.find(e=>e.id===r.receiptId);
   const start=life.starts.filter(e=>e.stationId===s.id&&e.scopeHash===startScope(s)&&m.chats.some(c=>c.id===e.sourceId&&c.taskId===s.taskId&&c.folderId===task?.folderId)).at(-1);
-  const active=ready&&start&&(!receipt||start.sequence>(life.receiptPositions?.[receipt.id]??-1));
+  const execution=m.business?.executions.filter(e=>e.stationId===s.id).at(-1);
+  const active=(!execution||execution.outcome==='running')&&ready&&start&&(!receipt||start.sequence>(life.receiptPositions?.[receipt.id]??-1));
   let color='dark',state='todo',label=ready?'可开始':'等待依赖';
   if(!sourceBound||!s.planId||s.planId!==m.currentPlanId)label='待绑定来源或当前方案';
   if(receipt||s.report?.status==='done'||s.report?.status==='active'){state='pending';label='待核验';}
   if(r.acceptance.result==='failed'||r.conclusion==='A'){state='blocked';label='验收失败或阻塞';}
   if(active){color='green';state='active';label='进行中';}
+  if(execution&&execution.outcome!=='running'&&!r.localPassed){color='dark';state='pending';label=execution.outcome==='interrupted'?'已中断，待核对':'执行结束，待核验';}
   if(r.localPassed){color='red';state='done';label='已完成';}
   if(waiting.length){if(!r.localPassed)color='dark';label=r.localPassed?'已验收，等待前置':'等待依赖';}
   if(r.conclusion==='G')label=r.localPassed?'已完成，交接偏离':'路线偏离';
@@ -38,8 +41,8 @@ export function inspectMonitor(projectId,m){
   const eligible=originalKnown&&goalChecked&&own.length>0&&own.every(s=>results[s.id].passed)&&terminals.length>0&&terminals.every(s=>['E','F'].includes(results[s.id].conclusion));
   return {id:task.id,name:task.name,eligible,originalGoal:task.initialGoal??null,currentGoal:task.goal??null,actual:own.map(s=>log.receipts.find(e=>e.id===results[s.id].receiptId)?.receipt.actual).filter(Boolean),proofs,handoff:task.handoff||'无',originalExpectation:eligible?'满足':'待核验',deviation:task.initialGoal===task.goal?'无目标文字差异':'原始目标与当前目标有差异，分别保留',reason:!originalKnown?'原始任务目标待确认':!goalChecked?'原始任务目标缺少有效对照证据':eligible?'任务全部必要步骤及终点通过':'站点、交接或终点条件尚未全部通过'};
  });
- const projectEligible=tasks.length>0&&tasks.every(t=>t.eligible)&&nonempty(initial?.goal)&&stations.some(s=>s.conclusion==='F');
- const project={id:projectId,eligible:projectEligible,originalGoal:initial?.goal??null,currentGoal:current?.goal??null,actual:tasks.flatMap(t=>t.actual),proofs:tasks.flatMap(t=>t.proofs),handoff:'无',originalExpectation:projectEligible?'满足':'待核验',deviation:initial?.goal===current?.goal?'无目标文字差异':'初始与当前方案目标有差异，初始目标验收仍须通过',reason:projectEligible?'任务交付与项目级预设验收全部通过':'任务交付或项目级原始目标与验收尚未全部通过'};
+ const projectEligible=!coverageGaps(m).length&&tasks.length>0&&tasks.every(t=>t.eligible)&&nonempty(initial?.initialGoal??initial?.goal)&&stations.some(s=>s.conclusion==='F');
+ const project={id:projectId,eligible:projectEligible,originalGoal:initial?.initialGoal??initial?.goal??null,currentGoal:current?.goal??null,actual:tasks.flatMap(t=>t.actual),proofs:tasks.flatMap(t=>t.proofs),handoff:'无',originalExpectation:projectEligible?'满足':'待核验',deviation:(initial?.initialGoal??initial?.goal)===current?.goal?'无目标文字差异':'初始与当前方案目标有差异，初始目标验收仍须通过',reason:projectEligible?'任务交付与项目级预设验收全部通过':'任务交付或项目级原始目标与验收尚未全部通过'};
  for(const target of [...tasks,project]){
   const kind=target===project?'project':'task',closed=life.closures.filter(c=>c.kind===kind&&c.targetId===target.id).at(-1);
   const proofHash=digest(target);

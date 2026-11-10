@@ -85,7 +85,7 @@ test('explicit exit waits for an already accepted write before releasing the lea
     request.end('退出前已接收的写入"}');
     assert.equal(await response, 201);
     await exited;
-    const database = JSON.parse(await readFile(path.join(root, 'projects.json'), 'utf8'));
+    const database = JSON.parse(await readFile(path.join(root, 'aggregate.json'), 'utf8')).projects;
     assert.equal(database.projects[0].name, '退出前已接收的写入');
   } finally {
     if (runtime.child.exitCode === null) runtime.child.kill();

@@ -1,3 +1,4 @@
+import {resumeContext} from './business-view.mjs';
 import {readFile} from 'node:fs/promises';
 import {digest} from './receipts.mjs';
 import {comparePlans} from './plan-diff.mjs';
@@ -52,6 +53,8 @@ export function generateOutput(project,view,body,template){
   return {t,folder,p,source,text:`开发项目：${known(project.name)}（本地项目 ID：${project.id}）\n所属 Codex 项目文件夹：${known(folder?.name)}；项目标识：${known(folder?.externalId)}；本地文件夹 ID：${known(folder?.id)}\n任务线：${known(t.name)}（${t.id}）；任务最终目标：${known(t.goal)}\n仓库：${known(source?.repository)}\n工作树：${known(source?.worktree)}\nGit 分支快照：${known(source?.branch)}；HEAD 快照：${known(source?.head)}\n来源：${known(source?.externalId)}（${known(source?.id)}）；记录时间：${known(source?.time)}；位置：${known(source?.location)}\n方案文档：${planRef(p)}；站点章节：${known(target.chapter||p?.chapter)}\n以上为登记快照，执行前重新检查适用 AGENTS.md、Git 状态、分支、HEAD、工作树、并行改动、方案原文及当前证据；现场事实优先。身份或出处缺失时先核实，禁止猜测或错误投递。`};
  }
  const ctx=context(s);
+ const resume=resumeContext(project.id,m,view.revision,view,s.id);
+ ctx.text+=`\n当前业务 revision ${view.revision}\n修复轮次 ${resume.repairRounds}；主路线 ${resume.mainStationCount} 站\n原目标、修复与回归上下文\n${JSON.stringify(resume,null,2)}`;
  const evidenceText=JSON.stringify({deliveryVersion:entry?.receipt.deliveryVersion??'待核实',receiptId:r.receiptId??'无',reviewId:r.reviewId??'无',acceptance:r.acceptance,evidence:review?.review.evidence??[],blockers:entry?.receipt.blockers??[],effectiveReason:r.reason,invalidations:view.inspection.log.invalidations.filter(i=>i.reviewId===r.reviewId)},null,2);
  const dependencies=target=>target.dependsOn.length?target.dependsOn.map(id=>{const d=view.inspection.results[id],h=d?.handoffs.find(h=>h.stationId===target.id);return `${name(id)}：有效验收 ${d?.passed?'通过':'未通过或待核验'}，对应交接边 ${h?.match||'待核验'}；回执 ${d?.receiptId||'无'}，核验 ${d?.reviewId||'无'}`;}).join('\n'):'无前置站点（以绑定方案为准）';
  function receipt(target,actual=false,c=conclusion){
@@ -94,6 +97,6 @@ export function generateOutput(project,view,body,template){
  const audit={kind:'audit',text:`日期：${date}\n状态：核对提示词，仅核对和生成，不执行开发\n${ctx.text}\n\n${template.general.replace(/【需填写：([^】]+)】/g,(_,k)=>replacements[k]??'待核实').replace(/^- 本方案一共为：[\s\S]*?(?=^- 本次执行步骤为：)/m,`- 本方案一共为：${stepOverview}\n`)}`};
  const fingerprint=digest({project,model:m,revision:view.revision,stationId:s.id,sourceId:body.sourceId??'',successorId:body.successorId??'',date,template:template.hash});
  if(body.expectedFingerprint&&body.expectedFingerprint!==fingerprint)throw new HttpError(409,'状态或方案已变化，请重新生成并核对预览后复制');
- return {projectId:project.id,stationId:s.id,revision:view.revision,fingerprint,date,conclusion,reason,warnings:[...new Set(warnings)],audit,instructions,report,branches,diff,canSelectEdge,
+ return {resumeContext:resume,basisRevision:view.revision,projectId:project.id,stationId:s.id,revision:view.revision,fingerprint,date,conclusion,reason,warnings:[...new Set(warnings)],audit,instructions,report,branches,diff,canSelectEdge,
   choices:m.stations.map(x=>({id:x.id,label:`${m.tasks.find(t=>t.id===x.taskId)?.name||x.taskId} / ${x.code} ${x.title}`})),sources:m.chats.map(c=>({id:c.id,label:`${c.externalId||c.id} / ${m.tasks.find(t=>t.id===c.taskId)?.name||c.taskId}`}))};
 }

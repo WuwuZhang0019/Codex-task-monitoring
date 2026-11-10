@@ -1,3 +1,4 @@
+import {coverageGaps,repairStates} from './business-view.mjs';
 import {createHash,randomUUID} from 'node:crypto';
 import {HttpError} from './validation.mjs';
 
@@ -54,7 +55,7 @@ export function inspectReceipts(projectId,m){
  const log=m.receiptLog??{receipts:[],reviews:[],invalidations:[],events:[]},results={};
  const latest=s=>log.receipts.filter(e=>e.receipt.stationId===s.id&&!identity(projectId,m,e.receipt)).at(-1);
  const initial=m.plans.find(p=>p.id===m.initialPlanId),current=m.plans.find(p=>p.id===m.currentPlanId);
- const projectCriteria=[...new Set([...(m.acceptance??[]),...(initial?.acceptance??[]),...(current?.acceptance??[]),...(nonempty(initial?.goal)?[`原始目标：${initial.goal}`]:[])])];
+ const projectCriteria=[...new Set([...(m.acceptance??[]),...(initial?.acceptance??[]),...(current?.acceptance??[]),...(nonempty(initial?.initialGoal??initial?.goal)?[`原始目标：${initial.initialGoal??initial.goal}`]:[])])];
  const taskCriteria=task=>[...task.acceptance,...(nonempty(task.initialGoal)?[`原始任务目标：${task.initialGoal}`]:[])];
  function criteria(required,checks,evidence,version){
   if(!Array.isArray(required)||!required.length)return {result:'pending',reason:'缺少既定验收条件'};
@@ -73,6 +74,13 @@ export function inspectReceipts(projectId,m){
   let reason=!e?'尚无归属有效的回执':!v?'尚无独立核验':v.headHash!==headDigest(m,e.receipt)?'方案、站点头或依赖已改变，核验待复核':log.invalidations.some(i=>i.reviewId===v.id)?'核验或证据已失效，待复核':'';
   const check=reason?{result:'pending',reason}:criteria(s.acceptance,v.review.checks,v.review.evidence,e.receipt.deliveryVersion);
   results[s.id]={stationId:s.id,receiptId:e?.id,reviewId:v?.id,acceptance:check,localPassed:check.result==='passed'&&!e.receipt.blockers.length,reason:reason|| (e?.receipt.blockers.length?'有阻塞交付的未决事项':'')};
+ }
+ const repairs=repairStates(m,log);
+ for(const s of m.stations){
+  if(repairs.some(r=>r.stationId===s.id&&r.status!=='resolved')||(m.business?.blockers??[]).some(b=>b.stationId===s.id&&b.status==='blocked')){
+   results[s.id].localPassed=false;
+   results[s.id].reason='原站修复或阻塞尚未有效解决';
+  }
  }
  function edgeValid(from,to){
   const source=m.stations.find(s=>s.id===from),e=source&&latest(source),v=e&&log.reviews.filter(v=>v.receiptId===e.id).at(-1);
@@ -99,6 +107,7 @@ export function inspectReceipts(projectId,m){
  for(const s of m.stations){
   const out=results[s.id],e=log.receipts.find(e=>e.id===out.receiptId),v=log.reviews.find(v=>v.id===out.reviewId),decide=(conclusion,reason)=>Object.assign(out,{conclusion,reason});
   out.passed=passed(s.id);out.waiting=s.dependsOn.filter(d=>!passed(d)||!edgeValid(d,s.id));out.handoffs=[];
+  if(repairs.some(r=>r.stationId===s.id&&['inProgress','recheck','unconfirmed'].includes(r.status))){decide('A','原站修复尚未解决，按原条件继续必要修复');continue;}
   if(out.acceptance.result==='failed'||e?.receipt.blockers.length){decide('A',out.reason||'本站验收未通过，继续本站必要修复');continue;}
   if(!out.localPassed){decide('B',out.reason||'本站必要验收证据不足');continue;}
   if(out.waiting.length){decide('C','本站逐项验收通过，但前置依赖未满足');continue;}
@@ -113,7 +122,7 @@ export function inspectReceipts(projectId,m){
   const owner=m.tasks.find(t=>t.id===s.taskId);
   if(!s.successors.some(id=>m.stations.find(x=>x.id===id)?.taskId===s.taskId)&&criteria(taskCriteria(owner),v.review.taskChecks,v.review.evidence,e.receipt.deliveryVersion).result==='failed'){decide('A','任务终点验收未通过，继续本站必要修复');continue;}
   if(!s.successors.some(id=>m.stations.find(x=>x.id===id)?.taskId===s.taskId)&&taskDone(owner)){
-   const projectPassed=allTasks&&criteria(projectCriteria,v.review.projectChecks,v.review.evidence,e.receipt.deliveryVersion).result==='passed';
+   const projectPassed=allTasks&&!coverageGaps(m).length&&criteria(projectCriteria,v.review.projectChecks,v.review.evidence,e.receipt.deliveryVersion).result==='passed';
    decide(projectPassed?'F':'E',projectPassed?'项目全部预设条件通过':`本任务线交付通过；交接对象：${owner.handoff||'无'}，下游依赖与项目条件另行核对`);continue;
   }
   if(out.handoffs.some(h=>h.waiting.length)){decide('C','后继尚有其他必要依赖未满足');continue;}
@@ -121,7 +130,7 @@ export function inspectReceipts(projectId,m){
   const task=m.tasks.find(t=>t.id===s.taskId);
   if(criteria(taskCriteria(task),v.review.taskChecks,v.review.evidence,e.receipt.deliveryVersion).result==='failed'){decide('A','任务终点验收未通过，继续本站必要修复');continue;}
   if(!taskDone(task)){decide('B','终点还需任务全部站点及终点条件的有效证据');continue;}
-  const projectPassed=allTasks&&criteria(projectCriteria,v.review.projectChecks,v.review.evidence,e.receipt.deliveryVersion).result==='passed';
+  const projectPassed=allTasks&&!coverageGaps(m).length&&criteria(projectCriteria,v.review.projectChecks,v.review.evidence,e.receipt.deliveryVersion).result==='passed';
   decide(projectPassed?'F':'E',projectPassed?'项目全部预设条件通过':`本任务线交付通过；交接对象：${task.handoff||'无'}，项目完成条件另行核对`);
  }
  return {ruleVersion:'m03-v1',results,log,quarantined:log.receipts.filter(e=>identity(projectId,m,e.receipt)).map(e=>({id:e.id,reason:identity(projectId,m,e.receipt)}))};

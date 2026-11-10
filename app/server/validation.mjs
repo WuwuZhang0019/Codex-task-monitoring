@@ -1,7 +1,7 @@
 // Shared wire contract. Lengths are UTF-16 code units; no coercion or silent truncation.
-export const LIMITS = Object.freeze({ name: 200, goal: 10000, source: 500000,
-  steps: 60, id: 120, title: 300, line: 200, purpose: 10000,
-  sourceExcerpt: 20000, acceptance: 30, acceptanceItem: 2000,
+export const LIMITS = Object.freeze({ name: 200, goal: 20000, source: 500000,
+  steps: 60, id: 120, title: 20000, line: 20000, purpose: 20000,
+  sourceExcerpt: 20000, acceptance: 1000, acceptanceItem: 20000,
   summary: 20000, nextAction: 10000, blocker: 10000, evidence: 20000 });
 export class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }

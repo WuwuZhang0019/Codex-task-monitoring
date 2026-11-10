@@ -5,6 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { acquireDataLease } from '../server/data-lease.mjs';
 import { createStore } from '../server/store.mjs';
 import { createModelStore } from '../server/model-store.mjs';
+import { createPersistence } from '../server/persistence.mjs';
 
 const excluded = new Set(['.owner-lock.sqlite', '.owner-lock.sqlite-journal', 'owner.json', 'owner.json.tmp', 'stopped.json', '.migration-pending.json']);
 async function manifest(root, relative = '') {
@@ -19,13 +20,17 @@ async function manifest(root, relative = '') {
   return Object.fromEntries(Object.entries(result).sort(([a], [b]) => a.localeCompare(b)));
 }
 async function validate(root) {
-  const projects = await createStore(root);
-  const models = await createModelStore(path.join(root, 'models'), projects);
+  const names = await readdir(root);
+  if (names.includes('transaction.committed.json')) throw Error('请先由原服务恢复已提交事务，再执行目录迁移');
+  const persistence = names.includes('aggregate.json') ? await createPersistence(root) : undefined;
+  const projects = await createStore(root, persistence);
+  const models = await createModelStore(path.join(root, 'models'), projects, persistence);
   for (const project of projects.list()) await models.get(project.id);
 }
 export async function migrate(source, target, { failAfterCopy = false } = {}) {
   source = await realpath(source);
-  await readFile(path.join(source, 'projects.json'));
+  const primary = (await readdir(source)).includes('aggregate.json') ? 'aggregate.json' : 'projects.json';
+  await readFile(path.join(source, primary));
   await mkdir(target, { recursive: true });
   target = await realpath(target);
   const relative = path.relative(source, target);
@@ -39,7 +44,7 @@ export async function migrate(source, target, { failAfterCopy = false } = {}) {
     releaseTarget = acquireDataLease(target);
     const targetFiles = await manifest(target);
     if (Object.keys(targetFiles).length) throw Error('目标目录已有数据，保留原内容并停止迁移');
-    await readFile(path.join(source, 'projects.json')); // Never create an empty legacy source.
+    await readFile(path.join(source, primary)); // Never create an empty legacy source.
     const before = await manifest(source);
     await mkdir(backup, { recursive: true });
     await mkdir(stage, { recursive: true });

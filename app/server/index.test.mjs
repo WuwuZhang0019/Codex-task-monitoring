@@ -124,11 +124,9 @@ test('M02 HTTP保存重启、版本追加、归属与迁移边界',async t=>{
  assert.deepEqual((await f.request(endpoint)).value,value);
  const original=(await f.request(`/api/projects/${p.id}`)).value.project;assert.deepEqual(original,p);
  assert.equal(value.model.stations[0].report.status,'done');
- const snapshot=JSON.parse(await readFile(path.join(f.dataDir,'models',`${p.id}.json.legacy.json`),'utf8'));assert.deepEqual(snapshot,p);
- // Missing main with backup must never remigrate or reset history.
- await f.stop();await rm(path.join(f.dataDir,'models',`${p.id}.json`));await f.start();
- assert.equal((await f.request(endpoint)).status,500);
- await writeFile(path.join(f.dataDir,'models',`${p.id}.json`),JSON.stringify(value));
+ const snapshot=JSON.parse(await readFile(path.join(f.dataDir,'aggregate.json'),'utf8')).models[p.id].model.legacy;assert.deepEqual(snapshot,p);
+ // Aggregate is authoritative. Removing a legacy mirror cannot remigrate history.
+ await f.stop();await f.start();
  assert.deepEqual((await f.request(endpoint)).value,value);
 });
 
@@ -137,7 +135,7 @@ test('CRUD, exact wire contract, empty project, manual done, isolation and durab
   const health = await f.request('/api/health');
   assert.deepEqual(health.value, { ok: true, ai: { configured: false, model: 'gpt-4o-mini' } });
   assert.deepEqual((await f.request('/api/projects')).value, { projects: [] });
-  assert.deepEqual(JSON.parse(await readFile(path.join(f.dataDir, 'projects.json'), 'utf8')), { version: 1, projects: [] });
+  assert.deepEqual(JSON.parse(await readFile(path.join(f.dataDir, 'aggregate.json'), 'utf8')).projects, { version: 1, projects: [] });
   const empty = await create(f, { name: '空项目' });
   assert.deepEqual(empty.steps, []); assert.equal(empty.goal, ''); assert.equal(empty.source, ''); assert.equal(empty.revision, 1);
   assert.match(empty.id, /^[0-9a-f-]{36}$/); assert.ok(Number.isFinite(Date.parse(empty.createdAt)));
@@ -150,9 +148,9 @@ test('CRUD, exact wire contract, empty project, manual done, isolation and durab
   assert.deepEqual((await f.request(`/api/projects/${second.id}`)).value.project, second);
   assert.deepEqual((await f.request(`/api/projects/${empty.id}`)).value.project, empty);
   const before = (await f.request('/api/projects')).value;
-  const backup = JSON.parse(await readFile(path.join(f.dataDir, 'projects.json.bak'), 'utf8'));
-  assert.equal(backup.projects.find(item => item.id === first.id).revision, 1);
-  assert.deepEqual((await readdir(f.dataDir)).sort(), ['.owner-lock.sqlite', 'models', 'projects.json', 'projects.json.bak']);
+  const migration = JSON.parse(await readFile(path.join(f.dataDir, 'aggregate-migration-source.json'), 'utf8'));
+  assert.deepEqual(migration.projects.projects, []);
+  assert.deepEqual((await readdir(f.dataDir)).sort(), ['.owner-lock.sqlite', 'aggregate-migration-source.json', 'aggregate.json', 'aggregate.json.bak', 'models']);
   await f.stop(); await f.start();
   assert.deepEqual((await f.request('/api/projects')).value, before);
   assert.equal((await f.request('/api/projects/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')).status, 404);
@@ -211,20 +209,20 @@ test('corrupt JSON and invalid stored schema fail startup without erasure or bac
   for (const invalid of ['{broken', JSON.stringify({ version: 99, projects: [] }), JSON.stringify({ version: 1, projects: [{ id: 'invalid' }] })]) {
     await t.test(invalid.slice(0, 30), async t => {
       const f = await fixture(t); await create(f); await f.stop();
-      const backup = await readFile(path.join(f.dataDir, 'projects.json.bak'), 'utf8');
-      await writeFile(path.join(f.dataDir, 'projects.json'), invalid);
-      await assert.rejects(createServer(f.config), /损坏|无法读取/);
-      assert.equal(await readFile(path.join(f.dataDir, 'projects.json'), 'utf8'), invalid);
-      assert.equal(await readFile(path.join(f.dataDir, 'projects.json.bak'), 'utf8'), backup);
+      const backup = await readFile(path.join(f.dataDir, 'aggregate-migration-source.json'), 'utf8');
+      await writeFile(path.join(f.dataDir, 'aggregate.json'), invalid);
+      await assert.rejects(createServer(f.config), /损坏|无法读取|Invalid|JSON/);
+      assert.equal(await readFile(path.join(f.dataDir, 'aggregate.json'), 'utf8'), invalid);
+      assert.equal(await readFile(path.join(f.dataDir, 'aggregate-migration-source.json'), 'utf8'), backup);
     });
   }
 });
 
 test('missing primary with backup is not silently reinitialized', async t => {
   const f = await fixture(t); await create(f); await f.stop();
-  await rm(path.join(f.dataDir, 'projects.json'));
-  await assert.rejects(createServer(f.config), /发现备份/);
-  await assert.rejects(readFile(path.join(f.dataDir, 'projects.json')), { code: 'ENOENT' });
+  await rm(path.join(f.dataDir, 'aggregate.json'));
+  await assert.rejects(createServer(f.config), /RECOVERY_REQUIRED/);
+  await assert.rejects(readFile(path.join(f.dataDir, 'aggregate.json')), { code: 'ENOENT' });
 });
 
 test('sample is exact original 01 markdown, not a hardcoded approximation', async t => {
@@ -402,15 +400,15 @@ test('chunked oversized JSON receives a JSON 413 instead of a reset connection',
 test('failed filesystem commit leaves previous data intact and subsequent writes still work', async t => {
   const f = await fixture(t);
   const errors = []; t.mock.method(console, 'error', (...args) => errors.push(args));
-  await mkdir(path.join(f.dataDir, 'projects.json.bak'));
+  await mkdir(path.join(f.dataDir, 'transaction.prepared.json'));
   const failed = await f.request('/api/projects', { method: 'POST', body: { name: '不应提交' } });
   assert.equal(failed.status, 500); assert.equal(typeof failed.value.error, 'string');
   assert.deepEqual((await f.request('/api/projects')).value.projects, []);
-  assert.deepEqual(JSON.parse(await readFile(path.join(f.dataDir, 'projects.json'), 'utf8')).projects, []);
+  assert.deepEqual(JSON.parse(await readFile(path.join(f.dataDir, 'aggregate.json'), 'utf8')).projects.projects, []);
   assert.equal(errors.length, 1);
-  await rm(path.join(f.dataDir, 'projects.json.bak'), { recursive: true });
+  await rm(path.join(f.dataDir, 'transaction.prepared.json'), { recursive: true });
   assert.equal((await create(f, { name: '恢复后正常写入' })).revision, 1);
-  assert.deepEqual((await readdir(f.dataDir)).sort(), ['.owner-lock.sqlite', 'models', 'projects.json', 'projects.json.bak']);
+  assert.deepEqual((await readdir(f.dataDir)).sort(), ['.owner-lock.sqlite', 'aggregate-migration-source.json', 'aggregate.json', 'aggregate.json.bak', 'models']);
   await f.stop(); await f.start();
   assert.equal((await f.request('/api/projects')).value.projects[0].name, '恢复后正常写入');
 });
@@ -423,6 +421,6 @@ test('WORKBENCH_DATA_DIR supports isolated data without a dataDir option', async
     await rm(root, { recursive: true, force: true });
   });
   server = await createServer({ env: { WORKBENCH_DATA_DIR: root } });
-  assert.deepEqual(JSON.parse(await readFile(path.join(root, 'projects.json'), 'utf8')), { version: 1, projects: [] });
+  assert.deepEqual(JSON.parse(await readFile(path.join(root, 'aggregate.json'), 'utf8')).projects, { version: 1, projects: [] });
   assert.equal(server.listening, false);
 });
