@@ -1,4 +1,5 @@
+# 日期：2026-11-10
 interface:
-  display_name: "工作台路线核对与交接"
-  short_description: "读取方案与台账，核对全局进度、连续修复及证据，生成执行指令或交接回执"
-  default_prompt: "使用 $workbench-handoff 读取我提供的方案和台账，核对当前进度并生成可复制指令或交接回执。"
+  display_name: "工作台方案执行与交接"
+  short_description: "规范方案步骤编号、组织会话与工作树、上报执行状态并生成交接指令"
+  default_prompt: "使用 $workbench-handoff 按我提供的方案和授权范围整理路线、执行上报或核对交接。"

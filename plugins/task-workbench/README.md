@@ -23,3 +23,9 @@ node 'G:\rust\Codex-task-monitoring\app\mcp\run-probe.mjs' 'G:\rust\Codex-task-m
 ```
 
 诊断时分别记录安装、工具发现、Skill 可见和真实调用。hooks 的当前实收数为零，宿主编排位置及事件支持逐项待验。正式核验继续通过授权入口处理。
+
+## 新路线 Skill 源码
+
+更新日期：2026-11-10
+
+本目录 workbench-handoff 已增加方案步骤编号规范化、登记、执行同步、会话关联和接续流程。MCP 桥继续按实际暴露能力提供服务，Skill 中的新写入接口设计待服务实现。package-probe.mjs 会递归携带 Skill 及其参考文件。当前交付为仓库源码，已安装插件在重新打包与加载后核对版本及可见流程。
