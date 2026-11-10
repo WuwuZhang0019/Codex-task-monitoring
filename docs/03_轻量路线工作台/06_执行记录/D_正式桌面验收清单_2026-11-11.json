@@ -1,0 +1,218 @@
+{
+  "date": "2026-11-11",
+  "status": "readyForD06Closure",
+  "implementationCommit": "3663c54dab5fef769c306f17c83a61e590c87bcb",
+  "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+  "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+  "revisionBeforeClosure": 90,
+  "mainDataRoot": "C:/Users/Zyf/AppData/Local/com.codextaskmonitor.workbench/data",
+  "actualDesktopChat": "01a1c656-fe58-7bf1-ae39-1796919fcfcc",
+  "responsibilityBindingThread": "01a1c618-df58-7791-bd89-9f9caf19527d",
+  "toolsFound": [
+    "mcp__task_workbench_u01__workbench_bind_context",
+    "mcp__task_workbench_u01__workbench_complete_plan",
+    "mcp__task_workbench_u01__workbench_get_project",
+    "mcp__task_workbench_u01__workbench_query_event",
+    "mcp__task_workbench_u01__workbench_record_supplement",
+    "mcp__task_workbench_u01__workbench_register_plan",
+    "mcp__task_workbench_u01__workbench_reserve_execution",
+    "mcp__task_workbench_u01__workbench_revise_plan",
+    "mcp__task_workbench_u01__workbench_update_step_status"
+  ],
+  "checks": [
+    {
+      "name": "正式桌面原生构建部署",
+      "result": "passed"
+    },
+    {
+      "name": "主窗口私有授权与配置保存",
+      "result": "passed"
+    },
+    {
+      "name": "0.1.4安装与发布文件一致",
+      "result": "passed",
+      "files": 12
+    },
+    {
+      "name": "正式A—G及细分稳定键登记",
+      "result": "passed",
+      "steps": 33
+    },
+    {
+      "name": "A/B/C历史验收补报",
+      "result": "passed",
+      "note": "按原键登记补报，服务时刻为本轮同步时间，原责任与证据留在历史回执"
+    },
+    {
+      "name": "新桌面聊天九工具直接调用、更新、完成、幂等和查询",
+      "result": "passed",
+      "revision": [
+        88,
+        89,
+        90
+      ]
+    },
+    {
+      "name": "正式原生所有者重启、同一安装桥动态发现与回读",
+      "result": "passed"
+    },
+    {
+      "name": "服务/MCP/桌面组合回归",
+      "result": "passed",
+      "count": 135
+    },
+    {
+      "name": "接入面板正常入口及失败撤销",
+      "result": "passed",
+      "count": 6
+    },
+    {
+      "name": "Rust白名单编译测试",
+      "result": "passed",
+      "count": 2
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\LightConnection.tsx",
+      "sha256": "bc49218c8c82b90533fa94688c530bbb59804fa9cf7c9a5900b114fbfcba10c1",
+      "bytes": 8925
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\light-connection.css",
+      "sha256": "41676fabf87b8be9f407781a28004a10029b7ccde783d0ca50b86ab60337182e",
+      "bytes": 1416
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\DesktopSetup.tsx",
+      "sha256": "f397e78e7dd98ab54b604713e7c8bd9bba5120ebebd94627de0a084fe0e104db",
+      "bytes": 4085
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\main.tsx",
+      "sha256": "230b6c75654bbb9e0caff7ff1cb5161b7450b99e2d0c235bad3a2607d5995c71",
+      "bytes": 34700
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\src\\lib.rs",
+      "sha256": "cd57d226fe47a7d3d092977ffc9c6da4d4df405cf0c1f6f5b292d80c4dcc5540",
+      "bytes": 19857
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\light-connection.mjs",
+      "sha256": "b775bf9f56a3957d2a88b2374746669d40372b6b0d450612c66bb65978968a0d",
+      "bytes": 10091
+    }
+  ],
+  "runtimeFiles": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\route-workbench-desktop.exe",
+      "sha256": "c3eb63ff80fdfc08a851a2ff03e5e2d35ec57c16182f68e9268dc08b5b9e0345",
+      "bytes": 15700992
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\runtime\\manifest.json",
+      "sha256": "2978b62e16601a0d97e87b5ba6252f95ce18efa5e3ea0fafcf98c691098b8bdf",
+      "bytes": 8386
+    }
+  ],
+  "installedFiles": [
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\mcp.json",
+      "sha256": "ef3c96bea190953dfa10bd2a327c788f84125ad50fecd84ea9251a9f309e69da",
+      "bytes": 262
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\plugin.json",
+      "sha256": "be21cd93c8bcc18a6cdc9563da047771dfc1a374c774b14c9ea91cdcb8930204",
+      "bytes": 464
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\README.md",
+      "sha256": "f9e0af14fdf43fd278aa210b92fd01c62543a66a1549f0ecaec6f06280f3daaa",
+      "bytes": 3067
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\THIRD-PARTY-NOTICES.txt",
+      "sha256": "0d5ff334ce3b33c5024738393de4c1235dd92f9006034f800fc0179b8df18eba",
+      "bytes": 9303
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\runtime\\light.mjs",
+      "sha256": "832cea7e58af271d0b8d9147733c21c9de02064e90bab00d847cefb4cc1749cf",
+      "bytes": 683645
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\SKILL.md",
+      "sha256": "fdf87061042b57c8667e086b5ca52d9989e123da44717979e68345ab6ca1dbd2",
+      "bytes": 9186
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\agents\\openai.yaml",
+      "sha256": "ec61bef2a662205266d3358760ae8b432834d8803d88bb498899577407ea81c1",
+      "bytes": 332
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\context-supplements.md",
+      "sha256": "9b1b72b2e105781385315f2f4244f3b08d4f6a0f8c990fd7de5d47cb1635202b",
+      "bytes": 3754
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\execution-sync.md",
+      "sha256": "eac385934240ec0f12213633e1a36c8b5c62c05abf7f5847624b2dbbc7a79ebe",
+      "bytes": 8578
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\handoff-template.md",
+      "sha256": "515404002157c912414cc8fbe4260398c5c2325b7219036d12f0652dec5bf2f4",
+      "bytes": 8908
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\handoff-workflow.md",
+      "sha256": "ea0c237f515d06d7076c11f4158df76a7b1000c61dcfe44791d845a567d6f4c4",
+      "bytes": 9554
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\plan-registration.md",
+      "sha256": "4309fc447f1cc0b0b437a0c9ecd899d68ee5318fed6711f843880fc01cfa3704",
+      "bytes": 3158
+    }
+  ],
+  "evidenceFiles": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\formal-desktop\\desktop-build-final.log",
+      "sha256": "bb12f8508fe7783b3f14ecf06668885487e6fb17ec030426bd5733a5e5980589",
+      "bytes": 1081
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\formal-desktop\\regression.log",
+      "sha256": "267c6963687f652c625de50adddbb647ebe5cbefbe90d095174850a633670a96",
+      "bytes": 13920
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\formal-desktop\\rust-final.log",
+      "sha256": "3df41121a21c072b80d88eb5a4c699a87f765970ad416e83e61cb047e324812d",
+      "bytes": 959
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\formal-desktop\\native-restart.json",
+      "sha256": "af57ed889f0fbc131d74e696a4b6448b0c9922858e77e565a67373656b95e39f",
+      "bytes": 2063
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\formal-desktop\\desktop-chat-evidence.json",
+      "sha256": "7128c97df243318763f1b077bac38bf66774e4f54aab06355c2c4ff69a469089",
+      "bytes": 752416
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\desktop-deployment\\light-connection-ui.json",
+      "sha256": "a74ffa4b96130f390fa9adf8a876c992e9341b776b4a1b111753971e6a9ff774",
+      "bytes": 917
+    }
+  ],
+  "scopeNotes": [
+    "D-06与D父阶段的最终成功回执另存，当前清单只汇总提交前已完成的必要核验",
+    "新桌面验收聊天由用户明确授权创建，原聊天旧工具快照保留实际拒绝证据",
+    "面板消费正式路线和原生观感为F范围，主方案历史时间和原身份不伪造成服务观测"
+  ]
+}

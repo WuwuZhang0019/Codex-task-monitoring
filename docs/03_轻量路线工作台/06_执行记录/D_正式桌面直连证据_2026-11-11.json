@@ -1,0 +1,146 @@
+{
+  "date": "2026-11-11",
+  "status": "passed",
+  "environment": "正式原生桌面、正式用户数据根、已安装0.1.4与新桌面聊天直接MCP调用",
+  "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+  "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+  "revision": 94,
+  "bindingId": "10be896f-4974-4f2e-a0d2-19215d29fc30",
+  "bindingRevision": 2,
+  "actualDesktopThreadId": "01a1c656-fe58-7bf1-ae39-1796919fcfcc",
+  "responsibilityThreadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+  "source": {
+    "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\00_执行入口\\00_新路线实施总纲与接口决定_2026-11-10.md",
+    "version": "364adc0b20c7066c4bb7247707b9ed07223f433a",
+    "sha256": "4da43b79373faa8baeefe393fcfab080df4b5675d5444c3ebdbc6d9c4ebc4c6d",
+    "locator": "完整步骤及依赖表",
+    "trust": "declared"
+  },
+  "phases": [
+    {
+      "code": "A",
+      "key": "light-workbench-20261110/A-01",
+      "stepId": "8b5e87dd-6b00-4efe-8b3b-58a99d881b0e",
+      "executionId": "c2c92926-2f49-4619-801c-bb7ce86595a1",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "B",
+      "key": "light-workbench-20261110/A-02",
+      "stepId": "97c2f703-1f89-4eac-8f4d-ce01630d4225",
+      "executionId": "6b1d0de8-afa8-4fc9-99a4-bf162d4ec99f",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "C",
+      "key": "light-workbench-20261110/A-03",
+      "stepId": "a276ed1e-a4b3-4ab8-a3c1-1c709833005f",
+      "executionId": "a6af252d-d76e-4386-b656-4cd1e3b0f0ad",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "D",
+      "key": "light-workbench-20261110/A-04",
+      "stepId": "3a1d4c35-e184-4479-a06c-2bbe91c4da0b",
+      "executionId": "22902687-2544-4a9c-83ba-cc89f27a6cba",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "E",
+      "key": "light-workbench-20261110/A-05",
+      "stepId": "bfdbf0e2-115c-4322-bd26-e1f8675133e1",
+      "executionId": null,
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync"
+    },
+    {
+      "code": "F",
+      "key": "light-workbench-20261110/A-06",
+      "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+      "executionId": null,
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync"
+    },
+    {
+      "code": "G",
+      "key": "light-workbench-20261110/A-07",
+      "stepId": "f144ff56-6282-4e73-b01a-3459cc92f53f",
+      "executionId": null,
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync"
+    }
+  ],
+  "phaseCompletion": {
+    "completed": 4,
+    "total": 7
+  },
+  "stepEntities": {
+    "completed": 30,
+    "total": 33
+  },
+  "readbackChecks": {
+    "revisionUnchanged": true,
+    "completedStages": true,
+    "pendingStages": true,
+    "eventCommitted": true,
+    "sameRequestId": true,
+    "sameExecutionId": true
+  },
+  "coldReadRequestId": "7710356d-20e1-41af-ab1e-24bbae488aff",
+  "completeQuery": {
+    "schemaVersion": "light-1.0",
+    "requestId": "ec9b5d62-8a9f-4565-acc8-db253d03af67",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "state": "committed",
+      "requestId": "ec9b5d62-8a9f-4565-acc8-db253d03af67",
+      "semanticHash": "c2ec3ae5217e6e21d4577ab9a0960b6aedcb6d0e7374343912d9a57fbbf51471",
+      "result": {
+        "revision": 94,
+        "receipt": {
+          "schemaVersion": "light-1.0",
+          "eventId": "light-workbench-20261110/D-EX01/complete",
+          "requestId": "ec9b5d62-8a9f-4565-acc8-db253d03af67",
+          "status": "committed",
+          "committedRevision": 94,
+          "receivedAt": "2026-11-10T16:54:10.073Z",
+          "resultRef": "light/events/light-workbench-20261110/D-EX01/complete",
+          "errorCode": null,
+          "recovery": "读取已提交快照或查询原事件"
+        },
+        "stepId": "3a1d4c35-e184-4479-a06c-2bbe91c4da0b",
+        "executionId": "22902687-2544-4a9c-83ba-cc89f27a6cba",
+        "requestId": "ec9b5d62-8a9f-4565-acc8-db253d03af67"
+      }
+    }
+  },
+  "rawEvidence": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\formal-desktop\\desktop-cold-readback.json",
+  "notes": [
+    "A/B/C为有来源的历史验收补报，补报服务时间与原执行时间分别保存",
+    "旧capability-read/end/handoff等本地资料作为来源保留，状态与逻辑结束由新复合回执承接",
+    "原控制聊天保留旧工具快照，实际桌面验收由用户授权的新聊天执行",
+    "声明责任绑定与真实验收聊天身份分别保存，宿主自动身份关联继续由E核验"
+  ]
+}

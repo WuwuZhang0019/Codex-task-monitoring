@@ -1,0 +1,2759 @@
+{
+  "schemaVersion": "light-1.0",
+  "date": "2026-11-11",
+  "mode": "service",
+  "revision": 94,
+  "generatedAt": "2026-11-10T16:54:10.073Z",
+  "projects": [
+    {
+      "key": "light-workbench-20261110/project",
+      "id": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+      "name": "轻量路线工作台正式实施方案",
+      "planKeys": [
+        "light-workbench-20261110"
+      ],
+      "revision": 94
+    }
+  ],
+  "plans": [
+    {
+      "key": "light-workbench-20261110",
+      "id": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+      "projectKey": "light-workbench-20261110/project",
+      "name": "轻量路线工作台正式实施方案",
+      "stageCount": 7,
+      "stageKeys": [
+        "light-workbench-20261110/A-01",
+        "light-workbench-20261110/A-02",
+        "light-workbench-20261110/A-03",
+        "light-workbench-20261110/A-04",
+        "light-workbench-20261110/A-05",
+        "light-workbench-20261110/A-06",
+        "light-workbench-20261110/A-07"
+      ],
+      "source": {
+        "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\00_执行入口\\00_新路线实施总纲与接口决定_2026-11-10.md",
+        "version": "364adc0b20c7066c4bb7247707b9ed07223f433a",
+        "sha256": "4da43b79373faa8baeefe393fcfab080df4b5675d5444c3ebdbc6d9c4ebc4c6d",
+        "locator": "完整步骤及依赖表",
+        "trust": "declared"
+      },
+      "endConditions": []
+    }
+  ],
+  "steps": [
+    {
+      "key": "light-workbench-20261110/A-01",
+      "id": "8b5e87dd-6b00-4efe-8b3b-58a99d881b0e",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "A",
+      "originalCode": "A",
+      "sourceLocator": "实施路线与出口/A",
+      "title": "复用核对与契约",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-01/exit",
+          "text": "原文步骤映射、事件、状态、绑定及存储契约可验证，复用清单有实际证据",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/A-01/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/A-01/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/c2c92926-2f49-4619-801c-bb7ce86595a1",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:16.130Z"
+    },
+    {
+      "key": "light-workbench-20261110/A-02",
+      "id": "97c2f703-1f89-4eac-8f4d-ce01630d4225",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "B",
+      "originalCode": "B",
+      "sourceLocator": "实施路线与出口/B",
+      "title": "路线与存储",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-02/exit",
+          "text": "二十步骤六路线可提交、回读和重启恢复，前置门禁正确",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/A-02/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/A-02/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/6b1d0de8-afa8-4fc9-99a4-bf162d4ec99f",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:24.070Z"
+    },
+    {
+      "key": "light-workbench-20261110/A-03",
+      "id": "a276ed1e-a4b3-4ab8-a3c1-1c709833005f",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "C",
+      "originalCode": "C",
+      "sourceLocator": "实施路线与出口/C",
+      "title": "UI 模拟开发",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-03/exit",
+          "text": "原型对照、长路线及多分支交互检查通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/A-03/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/A-03/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/a6af252d-d76e-4386-b656-4cd1e3b0f0ad",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:32.502Z"
+    },
+    {
+      "key": "light-workbench-20261110/A-04",
+      "id": "3a1d4c35-e184-4479-a06c-2bbe91c4da0b",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "D",
+      "originalCode": "D",
+      "sourceLocator": "实施路线与出口/D",
+      "title": "MCP 真实接入",
+      "order": 4,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-04/exit",
+          "text": "真实聊天可开始、更新、结束，重复及冲突有正确结果",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "D-formal-closure-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "D-formal-closure-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\D_正式桌面验收清单_2026-11-11.json",
+          "method": "正式桌面MCP直连、135项回归、6项UI、2项Rust及资源重启回读核验",
+          "deliveryVersion": "D-desktop-3663c54",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/22902687-2544-4a9c-83ba-cc89f27a6cba",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:54:10.073Z"
+    },
+    {
+      "key": "light-workbench-20261110/A-05",
+      "id": "bfdbf0e2-115c-4322-bd26-e1f8675133e1",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "E",
+      "originalCode": "E",
+      "sourceLocator": "实施路线与出口/E",
+      "title": "Skill 与会话关联",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-04"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-05/exit",
+          "text": "单会话细分任务、多工作树及续接流程可运行",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-11T00:00:00+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/A-06",
+      "id": "53a247e5-d289-4fe0-850a-e43890c5a200",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "F",
+      "originalCode": "F",
+      "sourceLocator": "实施路线与出口/F",
+      "title": "真实面板接线",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-03",
+        "light-workbench-20261110/A-05"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-06/exit",
+          "text": "真实上报、回读和面板一致，视觉及焦点检查通过",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-11T00:00:00+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/A-07",
+      "id": "f144ff56-6282-4e73-b01a-3459cc92f53f",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "G",
+      "originalCode": "G",
+      "sourceLocator": "实施路线与出口/G",
+      "title": "恢复与交付验收",
+      "order": 7,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-06"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-07/exit",
+          "text": "七模块必需场景有证据，全部必要步骤和验收满足",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-11T00:00:00+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-01",
+      "id": "3ddf58e7-78b1-4e5c-9476-8e08c2a4bdd0",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-01",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-01",
+      "title": "现场与能力核对",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-01/exit",
+          "text": "版本可定位，仓库与两个安装入口逐文件比较，当前实际工具 schema 和真实封套核对，业务与隔离身份分别登记",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/A/steps/A-01/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/A/steps/A-01/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/f0eb2ee3-4d67-4691-bc39-33a25501b741",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:11.081Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-02",
+      "id": "a726d708-102c-4fa2-b33d-cdd05a034770",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-02",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-02",
+      "title": "旧交付复用核对",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-02/exit",
+          "text": "七模块复用清单关联实际代码和定向检查，每个缺口登记所属后续阶段，历史证据漂移可追溯",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/A/steps/A-02/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/A/steps/A-02/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/40113ed3-1169-4e91-a090-5aad2f4b654d",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:12.111Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-03",
+      "id": "94d1bac2-8e6f-44e7-b48c-bfd86be4906d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-03",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-03",
+      "title": "层级状态与快照契约",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-03/exit",
+          "text": "总阶段与细分身份稳定，引用与聚合依赖无环，五状态、验收和同步分离，B/C 共用快照结构可校验",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/A/steps/A-03/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/A/steps/A-03/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/4dfd030d-4e67-4148-aea5-fa63fdb6510f",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:12.992Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-04",
+      "id": "139c6f22-5258-4794-84e8-22d4c9fd336c",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-04",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-04",
+      "title": "事务授权绑定及回执契约",
+      "order": 4,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-03"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-04/exit",
+          "text": "幂等回放顺序、事务边界、冲突、未知结果、授权撤销、绑定接手和迟到回执规则明确，结构正负例通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/A/steps/A-04/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/A/steps/A-04/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/94d56f98-57f8-46a5-b3e1-e65b3e4afbf3",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:13.883Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-05",
+      "id": "cb0df4ed-a692-40ca-8885-21148a938bf4",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-05",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-05",
+      "title": "原型与验证基线",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-03",
+        "light-workbench-20261110/stages/A/steps/A-04"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-05/exit",
+          "text": "原型四项指纹一致，契约五组和现有适用回归通过，样例范围和后续运行验收边界明确",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/A/steps/A-05/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/A/steps/A-05/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/54b2c0aa-7f57-4d9c-938c-ad65df2b8595",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:14.773Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-06",
+      "id": "49dd3aae-7735-4341-856f-318e327c708a",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-06",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-06",
+      "title": "出口验收及交接",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-01",
+        "light-workbench-20261110/stages/A/steps/A-02",
+        "light-workbench-20261110/stages/A/steps/A-03",
+        "light-workbench-20261110/stages/A/steps/A-04",
+        "light-workbench-20261110/stages/A/steps/A-05"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-06/exit",
+          "text": "八项阶段出口有证据，B/C 前置分别满足，结束与待同步记录保存后回读，变更按范围提交",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/A/steps/A-06/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/A/steps/A-06/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/ac51d732-033a-4f3e-abbb-ac7d19222c4d",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:15.723Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/B/steps/B-01",
+      "id": "ddd100e8-f34a-4436-b862-6b7879fa56e3",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-02",
+      "code": "B-01",
+      "originalCode": "执行要求/1—2",
+      "sourceLocator": "总纲/步骤与模块交付矩阵/B；用户执行要求/1—2；台账/B-01",
+      "title": "来源与解析",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/B/steps/B-01/exit",
+          "text": "来源与解析达到总纲和台账验收",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/B/steps/B-01/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/B/steps/B-01/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/a7b0adc3-de7e-4676-9209-42ffe6510835",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:17.774Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/B/steps/B-02",
+      "id": "58e6c2ef-097a-4b5e-b648-319273505bfb",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-02",
+      "code": "B-02",
+      "originalCode": "执行要求/3",
+      "sourceLocator": "总纲/步骤与模块交付矩阵/B；用户执行要求/3；台账/B-02",
+      "title": "层级与依赖",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/B/steps/B-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/B/steps/B-02/exit",
+          "text": "层级与依赖达到总纲和台账验收",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/B/steps/B-02/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/B/steps/B-02/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/6f021b5d-ea54-4412-b6c3-d4626c86675d",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:18.730Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/B/steps/B-03",
+      "id": "59222366-732e-4a4a-bb9a-739e92b16c9c",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-02",
+      "code": "B-03",
+      "originalCode": "执行要求/4",
+      "sourceLocator": "总纲/步骤与模块交付矩阵/B；用户执行要求/4；台账/B-03",
+      "title": "五状态与后继影响",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/B/steps/B-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/B/steps/B-03/exit",
+          "text": "五状态与后继影响达到总纲和台账验收",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/B/steps/B-03/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/B/steps/B-03/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/d2c44117-2d09-4c61-b31e-ac40595ba2ca",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:19.679Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/B/steps/B-04",
+      "id": "ec7af2c1-5af2-466b-9266-61c579f3cb5c",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-02",
+      "code": "B-04",
+      "originalCode": "执行要求/5",
+      "sourceLocator": "总纲/步骤与模块交付矩阵/B；用户执行要求/5；台账/B-04",
+      "title": "补充事项及旧关联",
+      "order": 4,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/B/steps/B-03"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/B/steps/B-04/exit",
+          "text": "补充事项及旧关联达到总纲和台账验收",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/B/steps/B-04/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/B/steps/B-04/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/a5744dc6-533c-47d4-970b-6f524defd9cb",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:20.639Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/B/steps/B-05",
+      "id": "f63d86c9-099d-4793-85a1-73767e3e3446",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-02",
+      "code": "B-05",
+      "originalCode": "执行要求/6—8",
+      "sourceLocator": "总纲/步骤与模块交付矩阵/B；用户执行要求/6—8；台账/B-05",
+      "title": "事务、幂等及发送侧恢复",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/B/steps/B-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/B/steps/B-05/exit",
+          "text": "事务、幂等及发送侧恢复达到总纲和台账验收",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/B/steps/B-05/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/B/steps/B-05/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/feb8acb0-e643-471a-89c9-f71d6e6ac732",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:21.612Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/B/steps/B-06",
+      "id": "5a8c4fcb-3793-4f0e-a684-256ec93ae821",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-02",
+      "code": "B-06",
+      "originalCode": "执行要求/9—10",
+      "sourceLocator": "总纲/步骤与模块交付矩阵/B；用户执行要求/9—10；台账/B-06",
+      "title": "六路线、故障与旧库验证",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/B/steps/B-03",
+        "light-workbench-20261110/stages/B/steps/B-04",
+        "light-workbench-20261110/stages/B/steps/B-05"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/B/steps/B-06/exit",
+          "text": "六路线、故障与旧库验证达到总纲和台账验收",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/B/steps/B-06/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/B/steps/B-06/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/cf837408-16c5-4250-bf11-9678de619f04",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:22.588Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/B/steps/B-07",
+      "id": "2509edbb-4db2-4b5b-820d-85099922313d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-02",
+      "code": "B-07",
+      "originalCode": "执行要求/11—13",
+      "sourceLocator": "总纲/步骤与模块交付矩阵/B；用户执行要求/11—13；台账/B-07",
+      "title": "出口复核与交接",
+      "order": 7,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/B/steps/B-01",
+        "light-workbench-20261110/stages/B/steps/B-02",
+        "light-workbench-20261110/stages/B/steps/B-03",
+        "light-workbench-20261110/stages/B/steps/B-04",
+        "light-workbench-20261110/stages/B/steps/B-05",
+        "light-workbench-20261110/stages/B/steps/B-06"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/B/steps/B-07/exit",
+          "text": "出口复核与交接达到总纲和台账验收",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/B/steps/B-07/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/B/steps/B-07/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/d702f24b-4698-4a1b-b403-17708da38932",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:23.641Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/C/steps/C-01",
+      "id": "ba1da90e-7ec9-498e-b979-b1b8b948d0d7",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-03",
+      "code": "C-01",
+      "originalCode": "C-01",
+      "sourceLocator": "当前执行台账/C-01",
+      "title": "原型复用与契约样例适配",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/C/steps/C-01/exit",
+          "text": "原型复用与契约样例适配的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/C/steps/C-01/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/C/steps/C-01/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/b90d4479-b183-4794-8d89-f1fbaebb30e0",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:25.697Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/C/steps/C-02",
+      "id": "e28c6b74-7226-415a-a953-1f0b34edea53",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-03",
+      "code": "C-02",
+      "originalCode": "C-02",
+      "sourceLocator": "当前执行台账/C-02",
+      "title": "紧凑条、展开区和五状态布局",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/C/steps/C-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/C/steps/C-02/exit",
+          "text": "紧凑条、展开区和五状态布局的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/C/steps/C-02/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/C/steps/C-02/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/c9361fcf-35da-404c-87f9-8634cf434d45",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:26.704Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/C/steps/C-03",
+      "id": "30431534-0396-4034-90b5-bb7cc63093f8",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-03",
+      "code": "C-03",
+      "originalCode": "C-03",
+      "sourceLocator": "当前执行台账/C-03",
+      "title": "折叠、分支、深层聚焦及定位",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/C/steps/C-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/C/steps/C-03/exit",
+          "text": "折叠、分支、深层聚焦及定位的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/C/steps/C-03/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/C/steps/C-03/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/a1ed824c-a299-4863-bdc2-c858df5ee2b9",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:27.657Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/C/steps/C-04",
+      "id": "71ce01f3-c6aa-405c-93d0-db88e5575432",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-03",
+      "code": "C-04",
+      "originalCode": "C-04",
+      "sourceLocator": "当前执行台账/C-04",
+      "title": "滚动、阅读保持、详情和键盘",
+      "order": 4,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/C/steps/C-03"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/C/steps/C-04/exit",
+          "text": "滚动、阅读保持、详情和键盘的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/C/steps/C-04/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/C/steps/C-04/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/a197319c-fe92-4b21-b8f1-25a122bddb63",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:28.741Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/C/steps/C-05",
+      "id": "06103710-8d19-4016-892a-63788e4f2a9d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-03",
+      "code": "C-05",
+      "originalCode": "C-05",
+      "sourceLocator": "当前执行台账/C-05",
+      "title": "多项目及长路线模拟",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/C/steps/C-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/C/steps/C-05/exit",
+          "text": "多项目及长路线模拟的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/C/steps/C-05/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/C/steps/C-05/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/cdb508d4-1731-4d26-b8aa-6e5618ba83b8",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:29.811Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/C/steps/C-06",
+      "id": "d37e2fba-1b30-4e92-8df1-8b2fa1b31f6d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-03",
+      "code": "C-06",
+      "originalCode": "C-06",
+      "sourceLocator": "当前执行台账/C-06",
+      "title": "UI正常入口、原型对照及构建",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/C/steps/C-02",
+        "light-workbench-20261110/stages/C/steps/C-03",
+        "light-workbench-20261110/stages/C/steps/C-04",
+        "light-workbench-20261110/stages/C/steps/C-05"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/C/steps/C-06/exit",
+          "text": "UI正常入口、原型对照及构建的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/C/steps/C-06/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/C/steps/C-06/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/cf7e2d1a-5f2c-44a0-a58d-ff4193b855f3",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:30.936Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/C/steps/C-07",
+      "id": "67bb9cf6-b0af-48a4-a9e5-34a5d8cffd19",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-03",
+      "code": "C-07",
+      "originalCode": "C-07",
+      "sourceLocator": "当前执行台账/C-07",
+      "title": "证据台账与交接",
+      "order": 7,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/C/steps/C-06"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/C/steps/C-07/exit",
+          "text": "证据台账与交接的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/C/steps/C-07/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/C/steps/C-07/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/405dafe5-5201-4a2b-b706-e04c08f09b54",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:32.015Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/D/steps/D-01",
+      "id": "f952644f-1e22-4146-98a5-d0bc12cf4163",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-04",
+      "code": "D-01",
+      "originalCode": "D-01",
+      "sourceLocator": "当前执行台账/D-01",
+      "title": "现场来源与工具映射",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/D/steps/D-01/exit",
+          "text": "现场来源与工具映射的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/D/steps/D-01/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/D/steps/D-01/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\D_MCP接入续接回执_2026-11-11.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c62cbb21dbff44ee1da9c8b5c21c4bb26c036abbfc2e640bfd89f6372480860a",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/6a3fc5f0-6be3-4342-bb5e-36e431615778",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:34.122Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/D/steps/D-02",
+      "id": "a3e2599e-d848-4406-982e-7518dc72839d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-04",
+      "code": "D-02",
+      "originalCode": "D-02",
+      "sourceLocator": "当前执行台账/D-02",
+      "title": "MCP schema及身份适配",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/D/steps/D-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/D/steps/D-02/exit",
+          "text": "MCP schema及身份适配的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/D/steps/D-02/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/D/steps/D-02/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\D_MCP接入续接回执_2026-11-11.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c62cbb21dbff44ee1da9c8b5c21c4bb26c036abbfc2e640bfd89f6372480860a",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/0bf71416-5c6b-4624-a76f-9e8ae99af70d",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:35.122Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/D/steps/D-03",
+      "id": "157579b1-7f33-4b02-a02f-0e46f12ddf17",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-04",
+      "code": "D-03",
+      "originalCode": "D-03",
+      "sourceLocator": "当前执行台账/D-03",
+      "title": "正式所有者、可信发布与绑定",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/D/steps/D-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/D/steps/D-03/exit",
+          "text": "正式所有者、可信发布与绑定的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/D/steps/D-03/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/D/steps/D-03/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\D_MCP接入续接回执_2026-11-11.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c62cbb21dbff44ee1da9c8b5c21c4bb26c036abbfc2e640bfd89f6372480860a",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/d15790ed-3414-4e49-b56d-4a81153943cb",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:36.220Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/D/steps/D-04",
+      "id": "b99d3b0a-4018-4a02-b49c-1436f85e9811",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-04",
+      "code": "D-04",
+      "originalCode": "D-04",
+      "sourceLocator": "当前执行台账/D-04",
+      "title": "协议、幂等冲突和恢复检查",
+      "order": 4,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/D/steps/D-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/D/steps/D-04/exit",
+          "text": "协议、幂等冲突和恢复检查的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "light-workbench-20261110/stages/D/steps/D-04/formal-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "light-workbench-20261110/stages/D/steps/D-04/formal-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\D_MCP接入续接回执_2026-11-11.md",
+          "method": "核对原阶段回执及适用回归后同步，SHA256 c62cbb21dbff44ee1da9c8b5c21c4bb26c036abbfc2e640bfd89f6372480860a",
+          "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/046fc6e7-b364-48eb-ae9f-152d3c1de9fc",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:35:37.333Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/D/steps/D-05",
+      "id": "ece9619e-2aec-4205-84fc-e0045b568365",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-04",
+      "code": "D-05",
+      "originalCode": "D-05",
+      "sourceLocator": "当前执行台账/D-05",
+      "title": "正式桌面聊天真实往返",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/D/steps/D-03",
+        "light-workbench-20261110/stages/D/steps/D-04"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/D/steps/D-05/exit",
+          "text": "正式桌面聊天真实往返的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "D-desktop-direct-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "D-desktop-direct-proof",
+          "location": "desktop-chat://01a1c656-fe58-7bf1-ae39-1796919fcfcc",
+          "method": "真实桌面聊天直接MCP调用与回放",
+          "deliveryVersion": "D-formal-desktop-20261111",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/21c91e3f-a670-4b6d-9c67-8591de4047b9",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:43:38.528Z"
+    },
+    {
+      "key": "light-workbench-20261110/stages/D/steps/D-06",
+      "id": "47411c40-0106-476f-a7d2-1c6252a79a33",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-04",
+      "code": "D-06",
+      "originalCode": "D-06",
+      "sourceLocator": "当前执行台账/D-06",
+      "title": "出口证据与交接",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/D/steps/D-01",
+        "light-workbench-20261110/stages/D/steps/D-02",
+        "light-workbench-20261110/stages/D/steps/D-03",
+        "light-workbench-20261110/stages/D/steps/D-04",
+        "light-workbench-20261110/stages/D/steps/D-05"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/D/steps/D-06/exit",
+          "text": "出口证据与交接的必要交付及验收通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "D-formal-closure-proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "D-formal-closure-proof",
+          "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\D_正式桌面验收清单_2026-11-11.json",
+          "method": "正式桌面MCP直连、135项回归、6项UI、2项Rust及资源重启回读核验",
+          "deliveryVersion": "D-desktop-3663c54",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/1e1ff723-aad4-4a89-970a-10a170d70cad",
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "updatedAt": "2026-11-10T16:53:57.560Z"
+    }
+  ],
+  "routes": [
+    {
+      "key": "light-workbench-20261110/routes/1",
+      "id": "e36c4f6b-0a98-4a05-81aa-5eaba6c77e95",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "label": "轻量路线工作台正式实施方案",
+      "stepKeys": [
+        "light-workbench-20261110/A-01",
+        "light-workbench-20261110/A-02",
+        "light-workbench-20261110/A-03",
+        "light-workbench-20261110/A-04",
+        "light-workbench-20261110/A-05",
+        "light-workbench-20261110/A-06",
+        "light-workbench-20261110/A-07"
+      ],
+      "order": 1,
+      "context": {
+        "sessionGroup": "D",
+        "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+        "hostId": "local",
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring",
+        "branch": "main",
+        "head": "364adc0b20c7066c4bb7247707b9ed07223f433a",
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    }
+  ],
+  "bindings": [
+    {
+      "key": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "id": "10be896f-4974-4f2e-a0d2-19215d29fc30",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/A-01",
+        "light-workbench-20261110/A-02",
+        "light-workbench-20261110/A-03",
+        "light-workbench-20261110/A-04",
+        "light-workbench-20261110/A-05",
+        "light-workbench-20261110/A-06",
+        "light-workbench-20261110/A-07",
+        "light-workbench-20261110/stages/A/steps/A-01",
+        "light-workbench-20261110/stages/A/steps/A-02",
+        "light-workbench-20261110/stages/A/steps/A-03",
+        "light-workbench-20261110/stages/A/steps/A-04",
+        "light-workbench-20261110/stages/A/steps/A-05",
+        "light-workbench-20261110/stages/A/steps/A-06",
+        "light-workbench-20261110/stages/B/steps/B-01",
+        "light-workbench-20261110/stages/B/steps/B-02",
+        "light-workbench-20261110/stages/B/steps/B-03",
+        "light-workbench-20261110/stages/B/steps/B-04",
+        "light-workbench-20261110/stages/B/steps/B-05",
+        "light-workbench-20261110/stages/B/steps/B-06",
+        "light-workbench-20261110/stages/B/steps/B-07",
+        "light-workbench-20261110/stages/C/steps/C-01",
+        "light-workbench-20261110/stages/C/steps/C-02",
+        "light-workbench-20261110/stages/C/steps/C-03",
+        "light-workbench-20261110/stages/C/steps/C-04",
+        "light-workbench-20261110/stages/C/steps/C-05",
+        "light-workbench-20261110/stages/C/steps/C-06",
+        "light-workbench-20261110/stages/C/steps/C-07",
+        "light-workbench-20261110/stages/D/steps/D-01",
+        "light-workbench-20261110/stages/D/steps/D-02",
+        "light-workbench-20261110/stages/D/steps/D-03",
+        "light-workbench-20261110/stages/D/steps/D-04",
+        "light-workbench-20261110/stages/D/steps/D-05",
+        "light-workbench-20261110/stages/D/steps/D-06"
+      ],
+      "bindingRevision": 2,
+      "state": "confirmed",
+      "context": {
+        "sessionGroup": "D",
+        "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+        "hostId": "local",
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring",
+        "branch": "main",
+        "head": "364adc0b20c7066c4bb7247707b9ed07223f433a",
+        "trust": "declared"
+      },
+      "confirmationRef": "[REDACTED]",
+      "revokedAt": null
+    }
+  ],
+  "executions": [
+    {
+      "key": "light-workbench-20261110/executions/c2c92926-2f49-4619-801c-bb7ce86595a1",
+      "id": "c2c92926-2f49-4619-801c-bb7ce86595a1",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/A-01"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:10.123Z",
+      "endedAt": "2026-11-10T16:35:16.130Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/f0eb2ee3-4d67-4691-bc39-33a25501b741",
+      "id": "f0eb2ee3-4d67-4691-bc39-33a25501b741",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/A/steps/A-01"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:10.569Z",
+      "endedAt": "2026-11-10T16:35:11.081Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/40113ed3-1169-4e91-a090-5aad2f4b654d",
+      "id": "40113ed3-1169-4e91-a090-5aad2f4b654d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/A/steps/A-02"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:11.580Z",
+      "endedAt": "2026-11-10T16:35:12.111Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/4dfd030d-4e67-4148-aea5-fa63fdb6510f",
+      "id": "4dfd030d-4e67-4148-aea5-fa63fdb6510f",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/A/steps/A-03"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:12.598Z",
+      "endedAt": "2026-11-10T16:35:12.992Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/94d56f98-57f8-46a5-b3e1-e65b3e4afbf3",
+      "id": "94d56f98-57f8-46a5-b3e1-e65b3e4afbf3",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/A/steps/A-04"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:13.475Z",
+      "endedAt": "2026-11-10T16:35:13.883Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/54b2c0aa-7f57-4d9c-938c-ad65df2b8595",
+      "id": "54b2c0aa-7f57-4d9c-938c-ad65df2b8595",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/A/steps/A-05"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:14.340Z",
+      "endedAt": "2026-11-10T16:35:14.773Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/ac51d732-033a-4f3e-abbb-ac7d19222c4d",
+      "id": "ac51d732-033a-4f3e-abbb-ac7d19222c4d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/A/steps/A-06"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:15.285Z",
+      "endedAt": "2026-11-10T16:35:15.723Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/6b1d0de8-afa8-4fc9-99a4-bf162d4ec99f",
+      "id": "6b1d0de8-afa8-4fc9-99a4-bf162d4ec99f",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/A-02"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:16.715Z",
+      "endedAt": "2026-11-10T16:35:24.070Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/a7b0adc3-de7e-4676-9209-42ffe6510835",
+      "id": "a7b0adc3-de7e-4676-9209-42ffe6510835",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/B/steps/B-01"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:17.291Z",
+      "endedAt": "2026-11-10T16:35:17.774Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/6f021b5d-ea54-4412-b6c3-d4626c86675d",
+      "id": "6f021b5d-ea54-4412-b6c3-d4626c86675d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/B/steps/B-02"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:18.278Z",
+      "endedAt": "2026-11-10T16:35:18.730Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/d2c44117-2d09-4c61-b31e-ac40595ba2ca",
+      "id": "d2c44117-2d09-4c61-b31e-ac40595ba2ca",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/B/steps/B-03"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:19.251Z",
+      "endedAt": "2026-11-10T16:35:19.679Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/a5744dc6-533c-47d4-970b-6f524defd9cb",
+      "id": "a5744dc6-533c-47d4-970b-6f524defd9cb",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/B/steps/B-04"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:20.178Z",
+      "endedAt": "2026-11-10T16:35:20.639Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/feb8acb0-e643-471a-89c9-f71d6e6ac732",
+      "id": "feb8acb0-e643-471a-89c9-f71d6e6ac732",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/B/steps/B-05"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:21.151Z",
+      "endedAt": "2026-11-10T16:35:21.612Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/cf837408-16c5-4250-bf11-9678de619f04",
+      "id": "cf837408-16c5-4250-bf11-9678de619f04",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/B/steps/B-06"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:22.153Z",
+      "endedAt": "2026-11-10T16:35:22.588Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/d702f24b-4698-4a1b-b403-17708da38932",
+      "id": "d702f24b-4698-4a1b-b403-17708da38932",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/B/steps/B-07"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:23.144Z",
+      "endedAt": "2026-11-10T16:35:23.641Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/a6af252d-d76e-4386-b656-4cd1e3b0f0ad",
+      "id": "a6af252d-d76e-4386-b656-4cd1e3b0f0ad",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/A-03"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:24.652Z",
+      "endedAt": "2026-11-10T16:35:32.502Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/b90d4479-b183-4794-8d89-f1fbaebb30e0",
+      "id": "b90d4479-b183-4794-8d89-f1fbaebb30e0",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/C/steps/C-01"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:25.205Z",
+      "endedAt": "2026-11-10T16:35:25.697Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/c9361fcf-35da-404c-87f9-8634cf434d45",
+      "id": "c9361fcf-35da-404c-87f9-8634cf434d45",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/C/steps/C-02"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:26.233Z",
+      "endedAt": "2026-11-10T16:35:26.704Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/a1ed824c-a299-4863-bdc2-c858df5ee2b9",
+      "id": "a1ed824c-a299-4863-bdc2-c858df5ee2b9",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/C/steps/C-03"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:27.252Z",
+      "endedAt": "2026-11-10T16:35:27.657Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/a197319c-fe92-4b21-b8f1-25a122bddb63",
+      "id": "a197319c-fe92-4b21-b8f1-25a122bddb63",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/C/steps/C-04"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:28.260Z",
+      "endedAt": "2026-11-10T16:35:28.741Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/cdb508d4-1731-4d26-b8aa-6e5618ba83b8",
+      "id": "cdb508d4-1731-4d26-b8aa-6e5618ba83b8",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/C/steps/C-05"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:29.299Z",
+      "endedAt": "2026-11-10T16:35:29.811Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/cf7e2d1a-5f2c-44a0-a58d-ff4193b855f3",
+      "id": "cf7e2d1a-5f2c-44a0-a58d-ff4193b855f3",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/C/steps/C-06"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:30.406Z",
+      "endedAt": "2026-11-10T16:35:30.936Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/405dafe5-5201-4a2b-b706-e04c08f09b54",
+      "id": "405dafe5-5201-4a2b-b706-e04c08f09b54",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/C/steps/C-07"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:31.503Z",
+      "endedAt": "2026-11-10T16:35:32.015Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/22902687-2544-4a9c-83ba-cc89f27a6cba",
+      "id": "22902687-2544-4a9c-83ba-cc89f27a6cba",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/A-04"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:33.099Z",
+      "endedAt": "2026-11-10T16:54:10.073Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/6a3fc5f0-6be3-4342-bb5e-36e431615778",
+      "id": "6a3fc5f0-6be3-4342-bb5e-36e431615778",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/D/steps/D-01"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:33.626Z",
+      "endedAt": "2026-11-10T16:35:34.122Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/0bf71416-5c6b-4624-a76f-9e8ae99af70d",
+      "id": "0bf71416-5c6b-4624-a76f-9e8ae99af70d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/D/steps/D-02"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:34.659Z",
+      "endedAt": "2026-11-10T16:35:35.122Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/d15790ed-3414-4e49-b56d-4a81153943cb",
+      "id": "d15790ed-3414-4e49-b56d-4a81153943cb",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/D/steps/D-03"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:35.749Z",
+      "endedAt": "2026-11-10T16:35:36.220Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/046fc6e7-b364-48eb-ae9f-152d3c1de9fc",
+      "id": "046fc6e7-b364-48eb-ae9f-152d3c1de9fc",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/D/steps/D-04"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:36.861Z",
+      "endedAt": "2026-11-10T16:35:37.333Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/21c91e3f-a670-4b6d-9c67-8591de4047b9",
+      "id": "21c91e3f-a670-4b6d-9c67-8591de4047b9",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/D/steps/D-05"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:35:37.916Z",
+      "endedAt": "2026-11-10T16:43:38.528Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "light-workbench-20261110/executions/1e1ff723-aad4-4a89-970a-10a170d70cad",
+      "id": "1e1ff723-aad4-4a89-970a-10a170d70cad",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/stages/D/steps/D-06"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T16:53:43.741Z",
+      "endedAt": "2026-11-10T16:53:57.560Z",
+      "handoffConclusion": null
+    }
+  ],
+  "supplements": [],
+  "events": [
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/start",
+      "stepKey": "light-workbench-20261110/A-01",
+      "executionKey": "light-workbench-20261110/executions/c2c92926-2f49-4619-801c-bb7ce86595a1",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:10.067Z",
+      "receivedAt": "2026-11-10T16:35:10.123Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-01-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-01",
+      "executionKey": "light-workbench-20261110/executions/f0eb2ee3-4d67-4691-bc39-33a25501b741",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:10.558Z",
+      "receivedAt": "2026-11-10T16:35:10.569Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-01-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-01",
+      "executionKey": "light-workbench-20261110/executions/f0eb2ee3-4d67-4691-bc39-33a25501b741",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:11.070Z",
+      "receivedAt": "2026-11-10T16:35:11.081Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/A/steps/A-01/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-02-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-02",
+      "executionKey": "light-workbench-20261110/executions/40113ed3-1169-4e91-a090-5aad2f4b654d",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:11.564Z",
+      "receivedAt": "2026-11-10T16:35:11.580Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-02-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-02",
+      "executionKey": "light-workbench-20261110/executions/40113ed3-1169-4e91-a090-5aad2f4b654d",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:12.090Z",
+      "receivedAt": "2026-11-10T16:35:12.111Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/A/steps/A-02/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-03-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-03",
+      "executionKey": "light-workbench-20261110/executions/4dfd030d-4e67-4148-aea5-fa63fdb6510f",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:12.589Z",
+      "receivedAt": "2026-11-10T16:35:12.598Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-03-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-03",
+      "executionKey": "light-workbench-20261110/executions/4dfd030d-4e67-4148-aea5-fa63fdb6510f",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:12.985Z",
+      "receivedAt": "2026-11-10T16:35:12.992Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/A/steps/A-03/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-04-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-04",
+      "executionKey": "light-workbench-20261110/executions/94d56f98-57f8-46a5-b3e1-e65b3e4afbf3",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:13.466Z",
+      "receivedAt": "2026-11-10T16:35:13.475Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-04-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-04",
+      "executionKey": "light-workbench-20261110/executions/94d56f98-57f8-46a5-b3e1-e65b3e4afbf3",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:13.875Z",
+      "receivedAt": "2026-11-10T16:35:13.883Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/A/steps/A-04/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-05-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-05",
+      "executionKey": "light-workbench-20261110/executions/54b2c0aa-7f57-4d9c-938c-ad65df2b8595",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:14.327Z",
+      "receivedAt": "2026-11-10T16:35:14.340Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-05-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-05",
+      "executionKey": "light-workbench-20261110/executions/54b2c0aa-7f57-4d9c-938c-ad65df2b8595",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:14.760Z",
+      "receivedAt": "2026-11-10T16:35:14.773Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/A/steps/A-05/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-06-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-06",
+      "executionKey": "light-workbench-20261110/executions/ac51d732-033a-4f3e-abbb-ac7d19222c4d",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:15.270Z",
+      "receivedAt": "2026-11-10T16:35:15.285Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/A-06-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-06",
+      "executionKey": "light-workbench-20261110/executions/ac51d732-033a-4f3e-abbb-ac7d19222c4d",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:15.712Z",
+      "receivedAt": "2026-11-10T16:35:15.723Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/A/steps/A-06/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/A-EX01/complete",
+      "stepKey": "light-workbench-20261110/A-01",
+      "executionKey": "light-workbench-20261110/executions/c2c92926-2f49-4619-801c-bb7ce86595a1",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:16.121Z",
+      "receivedAt": "2026-11-10T16:35:16.130Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/A-01/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/start",
+      "stepKey": "light-workbench-20261110/A-02",
+      "executionKey": "light-workbench-20261110/executions/6b1d0de8-afa8-4fc9-99a4-bf162d4ec99f",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:16.696Z",
+      "receivedAt": "2026-11-10T16:35:16.715Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-01-start",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-01",
+      "executionKey": "light-workbench-20261110/executions/a7b0adc3-de7e-4676-9209-42ffe6510835",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:17.281Z",
+      "receivedAt": "2026-11-10T16:35:17.291Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-01-complete",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-01",
+      "executionKey": "light-workbench-20261110/executions/a7b0adc3-de7e-4676-9209-42ffe6510835",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:17.763Z",
+      "receivedAt": "2026-11-10T16:35:17.774Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/B/steps/B-01/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-02-start",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-02",
+      "executionKey": "light-workbench-20261110/executions/6f021b5d-ea54-4412-b6c3-d4626c86675d",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:18.264Z",
+      "receivedAt": "2026-11-10T16:35:18.278Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-02-complete",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-02",
+      "executionKey": "light-workbench-20261110/executions/6f021b5d-ea54-4412-b6c3-d4626c86675d",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:18.721Z",
+      "receivedAt": "2026-11-10T16:35:18.730Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/B/steps/B-02/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-03-start",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-03",
+      "executionKey": "light-workbench-20261110/executions/d2c44117-2d09-4c61-b31e-ac40595ba2ca",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:19.237Z",
+      "receivedAt": "2026-11-10T16:35:19.251Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-03-complete",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-03",
+      "executionKey": "light-workbench-20261110/executions/d2c44117-2d09-4c61-b31e-ac40595ba2ca",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:19.662Z",
+      "receivedAt": "2026-11-10T16:35:19.679Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/B/steps/B-03/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-04-start",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-04",
+      "executionKey": "light-workbench-20261110/executions/a5744dc6-533c-47d4-970b-6f524defd9cb",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:20.170Z",
+      "receivedAt": "2026-11-10T16:35:20.178Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-04-complete",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-04",
+      "executionKey": "light-workbench-20261110/executions/a5744dc6-533c-47d4-970b-6f524defd9cb",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:20.623Z",
+      "receivedAt": "2026-11-10T16:35:20.639Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/B/steps/B-04/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-05-start",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-05",
+      "executionKey": "light-workbench-20261110/executions/feb8acb0-e643-471a-89c9-f71d6e6ac732",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:21.136Z",
+      "receivedAt": "2026-11-10T16:35:21.151Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-05-complete",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-05",
+      "executionKey": "light-workbench-20261110/executions/feb8acb0-e643-471a-89c9-f71d6e6ac732",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:21.602Z",
+      "receivedAt": "2026-11-10T16:35:21.612Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/B/steps/B-05/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-06-start",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-06",
+      "executionKey": "light-workbench-20261110/executions/cf837408-16c5-4250-bf11-9678de619f04",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:22.135Z",
+      "receivedAt": "2026-11-10T16:35:22.153Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-06-complete",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-06",
+      "executionKey": "light-workbench-20261110/executions/cf837408-16c5-4250-bf11-9678de619f04",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:22.576Z",
+      "receivedAt": "2026-11-10T16:35:22.588Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/B/steps/B-06/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-07-start",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-07",
+      "executionKey": "light-workbench-20261110/executions/d702f24b-4698-4a1b-b403-17708da38932",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:23.130Z",
+      "receivedAt": "2026-11-10T16:35:23.144Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/B-07-complete",
+      "stepKey": "light-workbench-20261110/stages/B/steps/B-07",
+      "executionKey": "light-workbench-20261110/executions/d702f24b-4698-4a1b-b403-17708da38932",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:23.616Z",
+      "receivedAt": "2026-11-10T16:35:23.641Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/B/steps/B-07/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/B-EX01/complete",
+      "stepKey": "light-workbench-20261110/A-02",
+      "executionKey": "light-workbench-20261110/executions/6b1d0de8-afa8-4fc9-99a4-bf162d4ec99f",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:24.046Z",
+      "receivedAt": "2026-11-10T16:35:24.070Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/A-02/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/start",
+      "stepKey": "light-workbench-20261110/A-03",
+      "executionKey": "light-workbench-20261110/executions/a6af252d-d76e-4386-b656-4cd1e3b0f0ad",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:24.639Z",
+      "receivedAt": "2026-11-10T16:35:24.652Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-01-start",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-01",
+      "executionKey": "light-workbench-20261110/executions/b90d4479-b183-4794-8d89-f1fbaebb30e0",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:25.187Z",
+      "receivedAt": "2026-11-10T16:35:25.205Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-01-complete",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-01",
+      "executionKey": "light-workbench-20261110/executions/b90d4479-b183-4794-8d89-f1fbaebb30e0",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:25.676Z",
+      "receivedAt": "2026-11-10T16:35:25.697Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/C/steps/C-01/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-02-start",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-02",
+      "executionKey": "light-workbench-20261110/executions/c9361fcf-35da-404c-87f9-8634cf434d45",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:26.212Z",
+      "receivedAt": "2026-11-10T16:35:26.233Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-02-complete",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-02",
+      "executionKey": "light-workbench-20261110/executions/c9361fcf-35da-404c-87f9-8634cf434d45",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:26.685Z",
+      "receivedAt": "2026-11-10T16:35:26.704Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/C/steps/C-02/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-03-start",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-03",
+      "executionKey": "light-workbench-20261110/executions/a1ed824c-a299-4863-bdc2-c858df5ee2b9",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:27.238Z",
+      "receivedAt": "2026-11-10T16:35:27.252Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-03-complete",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-03",
+      "executionKey": "light-workbench-20261110/executions/a1ed824c-a299-4863-bdc2-c858df5ee2b9",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:27.647Z",
+      "receivedAt": "2026-11-10T16:35:27.657Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/C/steps/C-03/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-04-start",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-04",
+      "executionKey": "light-workbench-20261110/executions/a197319c-fe92-4b21-b8f1-25a122bddb63",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:28.245Z",
+      "receivedAt": "2026-11-10T16:35:28.260Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-04-complete",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-04",
+      "executionKey": "light-workbench-20261110/executions/a197319c-fe92-4b21-b8f1-25a122bddb63",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:28.727Z",
+      "receivedAt": "2026-11-10T16:35:28.741Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/C/steps/C-04/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-05-start",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-05",
+      "executionKey": "light-workbench-20261110/executions/cdb508d4-1731-4d26-b8aa-6e5618ba83b8",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:29.276Z",
+      "receivedAt": "2026-11-10T16:35:29.299Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-05-complete",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-05",
+      "executionKey": "light-workbench-20261110/executions/cdb508d4-1731-4d26-b8aa-6e5618ba83b8",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:29.802Z",
+      "receivedAt": "2026-11-10T16:35:29.811Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/C/steps/C-05/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-06-start",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-06",
+      "executionKey": "light-workbench-20261110/executions/cf7e2d1a-5f2c-44a0-a58d-ff4193b855f3",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:30.385Z",
+      "receivedAt": "2026-11-10T16:35:30.406Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-06-complete",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-06",
+      "executionKey": "light-workbench-20261110/executions/cf7e2d1a-5f2c-44a0-a58d-ff4193b855f3",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:30.916Z",
+      "receivedAt": "2026-11-10T16:35:30.936Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/C/steps/C-06/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-07-start",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-07",
+      "executionKey": "light-workbench-20261110/executions/405dafe5-5201-4a2b-b706-e04c08f09b54",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:31.483Z",
+      "receivedAt": "2026-11-10T16:35:31.503Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/C-07-complete",
+      "stepKey": "light-workbench-20261110/stages/C/steps/C-07",
+      "executionKey": "light-workbench-20261110/executions/405dafe5-5201-4a2b-b706-e04c08f09b54",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:32.001Z",
+      "receivedAt": "2026-11-10T16:35:32.015Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/C/steps/C-07/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/C-EX01/complete",
+      "stepKey": "light-workbench-20261110/A-03",
+      "executionKey": "light-workbench-20261110/executions/a6af252d-d76e-4386-b656-4cd1e3b0f0ad",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:32.484Z",
+      "receivedAt": "2026-11-10T16:35:32.502Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/A-03/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/start",
+      "stepKey": "light-workbench-20261110/A-04",
+      "executionKey": "light-workbench-20261110/executions/22902687-2544-4a9c-83ba-cc89f27a6cba",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:33.073Z",
+      "receivedAt": "2026-11-10T16:35:33.099Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-01-start",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-01",
+      "executionKey": "light-workbench-20261110/executions/6a3fc5f0-6be3-4342-bb5e-36e431615778",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:33.608Z",
+      "receivedAt": "2026-11-10T16:35:33.626Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-01-complete",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-01",
+      "executionKey": "light-workbench-20261110/executions/6a3fc5f0-6be3-4342-bb5e-36e431615778",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:34.093Z",
+      "receivedAt": "2026-11-10T16:35:34.122Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/D/steps/D-01/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-02-start",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-02",
+      "executionKey": "light-workbench-20261110/executions/0bf71416-5c6b-4624-a76f-9e8ae99af70d",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:34.638Z",
+      "receivedAt": "2026-11-10T16:35:34.659Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-02-complete",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-02",
+      "executionKey": "light-workbench-20261110/executions/0bf71416-5c6b-4624-a76f-9e8ae99af70d",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:35.095Z",
+      "receivedAt": "2026-11-10T16:35:35.122Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/D/steps/D-02/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-03-start",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-03",
+      "executionKey": "light-workbench-20261110/executions/d15790ed-3414-4e49-b56d-4a81153943cb",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:35.726Z",
+      "receivedAt": "2026-11-10T16:35:35.749Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-03-complete",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-03",
+      "executionKey": "light-workbench-20261110/executions/d15790ed-3414-4e49-b56d-4a81153943cb",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:36.208Z",
+      "receivedAt": "2026-11-10T16:35:36.220Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/D/steps/D-03/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-04-start",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-04",
+      "executionKey": "light-workbench-20261110/executions/046fc6e7-b364-48eb-ae9f-152d3c1de9fc",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:36.833Z",
+      "receivedAt": "2026-11-10T16:35:36.861Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-04-complete",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-04",
+      "executionKey": "light-workbench-20261110/executions/046fc6e7-b364-48eb-ae9f-152d3c1de9fc",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:35:37.305Z",
+      "receivedAt": "2026-11-10T16:35:37.333Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [
+        "light-workbench-20261110/stages/D/steps/D-04/formal-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-05-start",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-05",
+      "executionKey": "light-workbench-20261110/executions/21c91e3f-a670-4b6d-9c67-8591de4047b9",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:35:37.897Z",
+      "receivedAt": "2026-11-10T16:35:37.916Z",
+      "reason": "用户授权D正式接入与历史验收同步，补报时刻单独记录",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/desktop-chat-progress",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-05",
+      "executionKey": "light-workbench-20261110/executions/21c91e3f-a670-4b6d-9c67-8591de4047b9",
+      "fromStatus": "running",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:43:08.851Z",
+      "receivedAt": "2026-11-10T16:43:15.467Z",
+      "reason": "本次真实桌面聊天调用验收",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-05-complete",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-05",
+      "executionKey": "light-workbench-20261110/executions/21c91e3f-a670-4b6d-9c67-8591de4047b9",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:43:34.689Z",
+      "receivedAt": "2026-11-10T16:43:38.528Z",
+      "reason": "本次真实桌面聊天调用验收",
+      "evidenceIds": [
+        "D-desktop-direct-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-06-start",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-06",
+      "executionKey": "light-workbench-20261110/executions/1e1ff723-aad4-4a89-970a-10a170d70cad",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T16:53:39.012Z",
+      "receivedAt": "2026-11-10T16:53:43.741Z",
+      "reason": "D正式桌面出口收尾",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/D-06-complete",
+      "stepKey": "light-workbench-20261110/stages/D/steps/D-06",
+      "executionKey": "light-workbench-20261110/executions/1e1ff723-aad4-4a89-970a-10a170d70cad",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:53:53.446Z",
+      "receivedAt": "2026-11-10T16:53:57.560Z",
+      "reason": "D正式桌面出口收尾",
+      "evidenceIds": [
+        "D-formal-closure-proof"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/1d3944d0a42a0d0cd7eaa65793134af5c95a7cf46104200121a6041accba9f62/light-workbench-20261110/D-EX01/complete",
+      "stepKey": "light-workbench-20261110/A-04",
+      "executionKey": "light-workbench-20261110/executions/22902687-2544-4a9c-83ba-cc89f27a6cba",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T16:54:07.376Z",
+      "receivedAt": "2026-11-10T16:54:10.073Z",
+      "reason": "D正式桌面出口收尾",
+      "evidenceIds": [
+        "D-formal-closure-proof"
+      ],
+      "sync": "synced"
+    }
+  ],
+  "uiPreferences": {
+    "collapsedKeys": [],
+    "selectedStepKey": null,
+    "focusedRouteKey": null,
+    "scrollByProject": {}
+  }
+}
