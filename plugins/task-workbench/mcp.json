@@ -4,7 +4,7 @@
     "task-workbench-u01": {
       "type": "stdio",
       "command": "node",
-      "args": ["${PLUGIN_ROOT}/runtime/probe.mjs"],
+      "args": ["${PLUGIN_ROOT}/runtime/light.mjs"],
       "cwd": "${PLUGIN_ROOT}"
     }
   }

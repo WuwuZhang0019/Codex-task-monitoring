@@ -77,9 +77,11 @@ function invalidateSuccessors(snapshot, origin, reason, time) {
   }
 }
 
-export function createLightService(persistence, requests, { authorize = () => false, confirmBinding = () => false } = {}) {
-  function permitted(principal, projectId, operation) {
-    if (!principal || authorize(principal, projectId, operation) !== true) lightError('FORBIDDEN', '适配层未授予当前作用域', 403);
+export function createLightService(persistence, requests, {
+  authorize = () => false, confirmBinding = () => false, verifyExecutionContext = () => true,
+} = {}) {
+  function permitted(principal, projectId, operation, details = {}) {
+    if (!principal || authorize(principal, projectId, operation, details) !== true) lightError('FORBIDDEN', '适配层未授予当前作用域', 403);
   }
   function load() { return persistence.read('light') ?? empty(); }
   function scope(snapshot, input) {
@@ -107,7 +109,7 @@ export function createLightService(persistence, requests, { authorize = () => fa
   function commit(principal, operation, input, transform, shape) {
     if (shape) requireLightShape(shape, input);
     text(input.eventId, 'eventId');
-    permitted(principal, input.projectId, operation);
+    permitted(principal, input.projectId, operation, { input });
     scope(load().snapshot, input);
     return requests.execute(principal, input.projectId, `light.${operation}`, { ...input, idempotencyKey: input.eventId }, async () => {
       const value = load(), { project, plan } = scope(value.snapshot, input);
@@ -116,7 +118,7 @@ export function createLightService(persistence, requests, { authorize = () => fa
       const receivedAt = now();
       const result = await transform(value, project, plan, receivedAt, digest([principal, input.projectId, operation]));
       return { ...save(value, project, input.eventId, receivedAt), ...result };
-    }, () => { permitted(principal, input.projectId, operation); scope(load().snapshot, input); });
+    }, () => { permitted(principal, input.projectId, operation, { input }); scope(load().snapshot, input); });
   }
   return {
     read(principal, projectId) {
@@ -159,6 +161,10 @@ export function createLightService(persistence, requests, { authorize = () => fa
       // 首次登记以本地 projectKey 去重，成功后调用者持有服务 projectId。
       const project = load().snapshot.projects.find(item => item.id === projectId);
       const scopeId = operation === 'register' && project ? project.key : projectId;
+      if (['register', 'revise'].includes(operation)) {
+        const publication = requests.query(principal, scopeId, `light.publish.${operation}`, eventId);
+        if (publication.state === 'committed') return publication;
+      }
       return requests.query(principal, scopeId, `light.${operation}`, eventId);
     },
     register(principal, input) {
@@ -167,7 +173,7 @@ export function createLightService(persistence, requests, { authorize = () => fa
       if (candidate.projects.length !== 1 || candidate.bindings.length || candidate.executions.length || candidate.events.length || candidate.supplements.length
         || candidate.steps.some(step => step.status !== 'pending' || step.evidence.length || step.blockers.length)) lightError('INVALID_INPUT', '登记只接受未执行的单项目方案');
       const projectKey = candidate.projects[0].key;
-      permitted(principal, projectKey, 'register');
+      permitted(principal, projectKey, 'register', { input });
       return requests.execute(principal, projectKey, 'light.register', { ...input, idempotencyKey: input.eventId }, async () => {
         const value = load();
         if (input.expectedRevision !== 0 || value.snapshot.projects.some(item => item.key === projectKey)) lightError('REVISION_CONFLICT', '项目已登记，使用修订入口', 409);
@@ -177,7 +183,7 @@ export function createLightService(persistence, requests, { authorize = () => fa
         const project = candidate.projects[0]; project.revision = 0;
         value.metadata[digest(project.key)] = { source: candidate.plans.map(item => item.source), importedAt: now(), legacy: null, replacements: [] };
         return { ...save(value, project, input.eventId, now()), projectId: project.id, planIds: candidate.plans.map(item => item.id) };
-      }, () => permitted(principal, projectKey, 'register'));
+      }, () => permitted(principal, projectKey, 'register', { input }));
     },
     // 由 D 的已确认发布入口调用。保留存在实体的状态、身份、历史及来源映射。
     revise(principal, input) {
@@ -222,8 +228,8 @@ export function createLightService(persistence, requests, { authorize = () => fa
     // 绑定确认与真实目录核验由 E 的可信适配器执行。此入口只接受已经确认的结构。
     acceptBinding(principal, input) {
       return commit(principal, 'acceptBinding', input, (value, project, plan) => {
-        permitted(principal, input.projectId, 'confirmBinding');
         const binding = requireLightShape('binding', structuredClone(input.binding));
+        permitted(principal, input.projectId, 'confirmBinding', { input, binding });
         if (binding.planKey !== plan.key || binding.projectKey !== project.key || binding.state !== 'confirmed') lightError('STALE_BINDING', '绑定未确认');
         if (value.snapshot.bindings.some(item => item.key === binding.key || item.id === binding.id)) lightError('DUPLICATE_ID', '绑定已存在');
         value.snapshot.bindings.push(binding);
@@ -237,6 +243,7 @@ export function createLightService(persistence, requests, { authorize = () => fa
         unique(input.stepIds, '绑定步骤重复');
         let binding = value.snapshot.bindings.find(item => item.id === input.bindingId && item.planKey === plan.key);
         if (input.action === 'propose') {
+          permitted(principal, input.projectId, 'proposeBinding', { input, steps });
           if (input.bindingId !== null || input.expectedBindingRevision !== null) lightError('INVALID_INPUT', '新提案身份须为空');
           binding = { key: `${plan.key}/bindings/${randomUUID()}`, id: randomUUID(), projectKey: project.key, planKey: plan.key,
             stepKeys: steps.map(step => step.key), bindingRevision: 1, state: 'proposed', context: structuredClone(input.context),
@@ -246,10 +253,11 @@ export function createLightService(persistence, requests, { authorize = () => fa
           if (!binding || binding.bindingRevision !== input.expectedBindingRevision) lightError('STALE_BINDING', '绑定版本不匹配', 409);
           if (digest(binding.stepKeys) !== digest(steps.map(step => step.key)) || digest(binding.context) !== digest(input.context)) lightError('STALE_BINDING', '绑定提案内容已变化', 409);
           if (input.action === 'confirm') {
-            permitted(principal, input.projectId, 'confirmBinding');
+            permitted(principal, input.projectId, 'confirmBinding', { input, binding, steps });
             if (binding.state !== 'proposed' || await confirmBinding(principal, structuredClone(binding), structuredClone(input)) !== true) lightError('CONFIRMATION_REQUIRED', '需要可信确认及目录分支核验');
             binding.state = 'confirmed'; binding.confirmationRef = `grant:${digest(input.confirmationGrant)}`;
           } else {
+            permitted(principal, input.projectId, 'revokeBinding', { input, binding, steps });
             if (binding.state === 'revoked') lightError('STALE_BINDING', '绑定已撤销', 409);
             binding.state = 'revoked'; binding.revokedAt = time;
           }
@@ -259,11 +267,17 @@ export function createLightService(persistence, requests, { authorize = () => fa
       }, 'bind');
     },
     update(principal, input) {
-      return commit(principal, 'update', input, (value, project, plan, time, eventScope) => {
+      return commit(principal, 'update', input, async (value, project, plan, time, eventScope) => {
         const snapshot = value.snapshot;
         const step = snapshot.steps.find(item => item.id === input.stepId && item.planKey === plan.key);
         if (!step) lightError('NOT_FOUND', '步骤不属于当前方案', 404);
         const binding = activeBinding(snapshot, step, input);
+        // 新写入须匹配认证会话，已提交请求在进入本变更函数前完成幂等回放。
+        permitted(principal, input.projectId, 'update', { input, binding, step });
+        if (await verifyExecutionContext(principal, structuredClone(binding), structuredClone(step), structuredClone(input)) !== true) {
+          lightError('STALE_BINDING', '执行目录或分支已变化，需要重新核对绑定', 409);
+        }
+        permitted(principal, input.projectId, 'update', { input, binding, step });
         const from = step.status, target = input.targetStatus;
         if (from !== target && !transitions[from].includes(target)) lightError('INVALID_TRANSITION', `${from} -> ${target}`);
         if (['completed', 'cancelled'].includes(from) && ['pending', 'running'].includes(target) && !input.reopen) lightError('REOPEN_REQUIRED', '返工需原因及后继影响');
@@ -273,7 +287,10 @@ export function createLightService(persistence, requests, { authorize = () => fa
           canRun(snapshot, step);
           if (!execution) {
             // executionId 是适配层取得或本服务 reserveExecutionId 生成的身份。
-            if (!value.metadata.reservedExecutions?.includes(input.executionId)) lightError('STALE_EXECUTION', '执行身份未登记');
+            const reservation = value.metadata.reservedExecutions?.find(item => item.executionId === input.executionId);
+            if (!reservation || reservation.principal !== principal || reservation.projectId !== project.id || reservation.planId !== plan.id) {
+              lightError('STALE_EXECUTION', '执行身份未登记到当前主体、项目及方案');
+            }
             execution = { key: `${plan.key}/executions/${input.executionId}`, id: input.executionId, projectKey: project.key, planKey: plan.key,
               stepKeys: [step.key], bindingKey: binding.key, outcome: 'running', startedAt: time, endedAt: null, handoffConclusion: null };
             snapshot.executions.push(execution);
@@ -317,9 +334,10 @@ export function createLightService(persistence, requests, { authorize = () => fa
       }, 'update');
     },
     reserveExecutionId(principal, input) {
-      return commit(principal, 'reserveExecution', input, value => {
+      return commit(principal, 'reserveExecution', input, (value, project, plan) => {
         const executionId = randomUUID();
-        value.metadata.reservedExecutions ??= []; value.metadata.reservedExecutions.push(executionId);
+        value.metadata.reservedExecutions ??= [];
+        value.metadata.reservedExecutions.push({ executionId, principal, projectId: project.id, planId: plan.id });
         return { executionId };
       });
     },

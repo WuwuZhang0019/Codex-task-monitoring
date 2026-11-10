@@ -4,8 +4,8 @@ import { digest } from './receipts.mjs';
 import { lightError, validateLightSnapshot } from './light-model.mjs';
 
 export function createLightPublication(persistence, requests, service, { authorize = () => false } = {}) {
-  function permitted(principal, scope, operation) {
-    if (!principal || authorize(principal, scope, operation) !== true) lightError('FORBIDDEN', '发布授权不足', 403);
+  function permitted(principal, scope, operation, details = {}) {
+    if (!principal || authorize(principal, scope, operation, details) !== true) lightError('FORBIDDEN', '发布授权不足', 403);
   }
   function scopeOf(operation, input) {
     if (!['register', 'revise'].includes(operation)) lightError('INVALID_INPUT', '发布操作无效');
@@ -19,7 +19,7 @@ export function createLightPublication(persistence, requests, service, { authori
     confirm(principal, operation, input) {
       return persistence.run(() => {
         const scope = scopeOf(operation, input);
-        permitted(principal, scope, 'confirmPublication');
+        permitted(principal, scope, 'confirmPublication', { input, operation });
         const snapshot = validateLightSnapshot(structuredClone(input.snapshot));
         if (snapshot.plans.length !== 1 || ['path', 'version', 'sha256'].some(key => input.source?.[key] !== snapshot.plans[0].source[key])) lightError('STALE_PLAN', '确认来源与快照不一致');
         if (operation === 'revise') {
@@ -35,14 +35,14 @@ export function createLightPublication(persistence, requests, service, { authori
     },
     publish(principal, operation, input) {
       const scope = scopeOf(operation, input);
-      permitted(principal, scope, operation);
+      permitted(principal, scope, operation, { input });
       return requests.execute(principal, scope, `light.publish.${operation}`, { ...input, idempotencyKey: input.eventId }, async () => {
         const grant = persistence.read('grants')[input.confirmationGrant];
         if (!grant || grant.kind !== 'lightPublication' || grant.principal !== principal || grant.operation !== operation
           || grant.scope !== scope || grant.expiresAt < Date.now() || grant.contentHash !== digest(content(input))) lightError('CONFIRMATION_REQUIRED', '确认过期或内容发生变化', 409);
         const result = await service[operation](principal, content(input));
         return result;
-      }, () => permitted(principal, scope, operation));
+      }, () => permitted(principal, scope, operation, { input }));
     },
   };
 }

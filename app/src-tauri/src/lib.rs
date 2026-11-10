@@ -195,6 +195,7 @@ fn allowed_request(path: &str, method: &str) -> bool {
         ["", "health" | "sample"] => method == "GET",
         ["", "import-drafts"] => matches!(method, "GET" | "POST"),
         ["", "requests"] => method == "POST",
+        ["", "light-access", "grants" | "revoke" | "confirm-publication" | "confirm-binding"] => method == "POST",
         ["", "import-drafts", id] => valid_id(id) && matches!(method, "GET" | "PUT"),
         ["", "import-drafts", id, "validate" | "confirm" | "publish"] => valid_id(id) && method == "POST",
         ["", "projects"] => matches!(method, "GET" | "POST"),
@@ -457,6 +458,11 @@ mod tests {
         ));
         assert!(!allowed_request("/import-drafts/other/publish", "POST"));
         assert!(!allowed_request("/requests", "GET"));
+        assert!(allowed_request("/light-access/confirm-binding", "POST"));
+        assert!(allowed_request("/light-access/confirm-publication", "POST"));
+        assert!(!allowed_request("/light-access/grants", "GET"));
+        assert!(!allowed_request("/light-access/other", "POST"));
+        assert!(!allowed_request("/light-mcp", "POST"));
         assert!(allowed_request(
             "/projects/12345678-1234-1234-1234-123456789abc/model",
             "PUT"

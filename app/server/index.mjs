@@ -6,7 +6,8 @@ import {createBusiness} from './business.mjs';
 import {createLightService} from './light-service.mjs';
 import {createLightOutbox} from './light-outbox.mjs';
 import {createLightPublication} from './light-publication.mjs';
-import {createLightMcp} from '../mcp/light.mjs';
+import {createLightMcp,createLightHandler} from '../mcp/light.mjs';
+import {createLightAccess} from './light-access.mjs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -15,6 +16,7 @@ import { createStore } from './store.mjs';
 import { createModelStore } from './model-store.mjs';
 import { createAI } from './ai.mjs';
 import { HttpError, UUID } from './validation.mjs';
+export { HttpError };
 import {generateOutput,loadOutputTemplate} from './outputs.mjs';
 import { acquireDataLease } from './data-lease.mjs';
 import { existsSync } from 'node:fs';
@@ -141,9 +143,16 @@ async function createOwnedServer(options) {
   const drafts = createDrafts(persistence,requests,models);
   const publisher = createPublisher(persistence,requests,drafts,store,models);
   const business = createBusiness(persistence,requests,models);
-  const light = createLightService(persistence,requests,{authorize:options.lightAuthorize,confirmBinding:options.lightConfirmBinding});
+  if (options.lightAccessEnabled && typeof options.authorize !== 'function') throw new Error('LIGHT_PRIVATE_AUTH_REQUIRED');
+  const lightAccess = options.lightAccessEnabled ? createLightAccess(persistence) : null;
+  const lightAuthorize = options.lightAuthorize ?? lightAccess?.authorize;
+  const light = createLightService(persistence, requests, {
+    authorize: lightAuthorize,
+    confirmBinding: options.lightConfirmBinding ?? lightAccess?.verifyBinding,
+    verifyExecutionContext: options.lightVerifyExecutionContext ?? lightAccess?.verifyExecutionContext,
+  });
   const lightOutbox = createLightOutbox(persistence);
-  const lightPublication = createLightPublication(persistence,requests,light,{authorize:options.lightAuthorize});
+  const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const distDir = options.distDir ?? path.join(APP_DIR, 'dist');
   const server = http.createServer(async (req, res) => {
@@ -153,11 +162,39 @@ async function createOwnedServer(options) {
     let response;
     const respond=(status,value)=>{response={status,value};};
     try {
-      await persistence.run(async()=>{
       checkLocalRequest(req);
       const pathname = safePath(req.url);
-      if (options.authorize) options.authorize(req, pathname);
+      if (options.authorize) await options.authorize(req, pathname);
       const method = req.method;
+      // MCP 的业务失败由协议层包装，必须在领域事务提交/回滚之后包装。
+      if (pathname === '/api/light-mcp' && lightAccess) {
+        if (!lightAccess.authenticate(req)) throw new HttpError(403, 'FORBIDDEN');
+        const handler = createLightHandler({
+          service: light,
+          authenticate: () => lightAccess.authenticate(req),
+          publish: lightPublication.publish,
+          bind: (principal, _operation, input) => light.bind(principal, input),
+        });
+        if (method === 'GET') respond(200, await handler.listTools());
+        else if (method === 'POST') {
+          const body = await jsonBody(req);
+          if (!body || Object.keys(body).some(key => !['name', 'arguments'].includes(key))) throw new HttpError(400, 'INVALID_INPUT');
+          try { respond(200, await handler.callTool({ params: body })); }
+          catch (error) {
+            if (error.code === -32602) throw new HttpError(400, 'INVALID_INPUT');
+            throw error;
+          }
+        } else throw new HttpError(405, '不支持的请求方法');
+      } else await persistence.run(async () => {
+      if (pathname.startsWith('/api/light-access/') && lightAccess) {
+        if (method !== 'POST') throw new HttpError(405, '不支持的请求方法');
+        const body = await jsonBody(req);
+        if (pathname === '/api/light-access/grants') return respond(200, await lightAccess.issue(body));
+        if (pathname === '/api/light-access/revoke') return respond(200, await lightAccess.revoke(body));
+        if (pathname === '/api/light-access/confirm-publication') return respond(200, await lightAccess.confirmPublication(lightPublication, body));
+        if (pathname === '/api/light-access/confirm-binding') return respond(200, await lightAccess.confirmBinding(body));
+        throw new HttpError(404, 'API 不存在');
+      }
       if (pathname === '/api/import-drafts') {
         if(method==='GET') return respond(200,{drafts:drafts.list()});
         if(method==='POST') return respond(201,await drafts.put(await jsonBody(req)));
@@ -249,7 +286,7 @@ async function createOwnedServer(options) {
       sendJSON(res,status, { error: status === 500 ? '本地服务错误，请检查服务日志；数据未被清空' : error.message });
     }
   });
-  server.workbench={persistence,store,models,requests,drafts,publisher,business,light,lightOutbox,lightPublication,
+  server.workbench={persistence,store,models,requests,drafts,publisher,business,light,lightOutbox,lightPublication,lightAccess,
     createLightMcp: (authenticate) => createLightMcp({service:light,authenticate,publish:lightPublication.publish,
       bind:(principal,_operation,input)=>light.bind(principal,input)})};
   server.requestTimeout = 30000;

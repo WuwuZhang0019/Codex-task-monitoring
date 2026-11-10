@@ -1,12 +1,16 @@
 import { buildBusinessSchema } from '../mcp/build-business-schema.mjs';
-import { cp, mkdir, readFile, writeFile, copyFile, readdir } from 'node:fs/promises';
+import { bundledLicenses } from '../mcp/licenses.mjs';
+import { build } from 'esbuild';
+import { cp, mkdir, readFile, writeFile, copyFile, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { builtinModules } from 'node:module';
 
 const app = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const root = path.join(app, 'desktop/resources');
+const generatedDate = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date());
 await mkdir(path.join(root, 'app/desktop'), { recursive: true });
 const nodeVersion = '25.5.0';
 const archiveName = `node-v${nodeVersion}-win-x64.zip`;
@@ -31,14 +35,31 @@ await copyFile(path.join(distribution, 'node.exe'), path.join(root, 'node.exe'))
 await copyFile(path.join(distribution, 'LICENSE'), path.join(root, 'NODE-LICENSE'));
 await buildBusinessSchema();
 for (const directory of ['server', 'mcp', 'dist']) {
-  await cp(path.join(app, directory), path.join(root, 'app', directory), { recursive: true });
+  const destination = path.resolve(root, 'app', directory);
+  const relative = path.relative(root, destination);
+  if (relative.startsWith('..') || path.isAbsolute(relative)) throw Error('Resource destination escapes generated root');
+  await rm(destination, { recursive: true, force: true });
+  await cp(path.join(app, directory), destination, { recursive: true });
 }
 for (const name of ['owner.mjs', 'migrate.mjs', 'client.mjs']) {
   await copyFile(path.join(app, 'desktop', name), path.join(root, 'app/desktop', name));
 }
+// 日期 2026-11-11。保持 server/index 的相对位置，随发行物携带运行依赖。
+const serverBuild = await build({
+  absWorkingDir: app, entryPoints: ['server/index.mjs'], outfile: path.join(root, 'app/server/index.mjs'),
+  bundle: true, format: 'esm', platform: 'node', target: 'node22', metafile: true,
+  banner: { js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" },
+});
+const serverLicenses = await bundledLicenses(serverBuild.metafile, app);
+const serverExternalImports = [...new Set(Object.values(serverBuild.metafile.outputs)
+  .flatMap(output => output.imports).filter(input => input.external).map(input => input.path))];
+const builtins = new Set(builtinModules.flatMap(name => [name, `node:${name}`]));
+if (serverExternalImports.some(name => !builtins.has(name))) throw Error('Server bundle has unresolved runtime dependencies');
+await writeFile(path.join(root, 'SERVER-THIRD-PARTY-NOTICES.txt'),
+  `日期：${generatedDate}\n\n${serverLicenses.licenses.join('\n\n---\n\n')}\n`, 'utf8');
 const probePackage = path.join(cache, 'probe-package');
 execFileSync(process.execPath, [path.join(app, 'mcp/package-probe.mjs'), probePackage], { windowsHide: true });
-await copyFile(path.join(probePackage, 'plugins/task-workbench/runtime/probe.mjs'), path.join(root, 'app/mcp/probe-bundled.mjs'));
+await copyFile(path.join(probePackage, 'plugins/task-workbench/runtime/light.mjs'), path.join(root, 'app/mcp/light-bundled.mjs'));
 await copyFile(path.join(probePackage, 'plugins/task-workbench/THIRD-PARTY-NOTICES.txt'), path.join(root, 'MCP-THIRD-PARTY-NOTICES.txt'));
 const template = 'docs/03_轻量路线工作台/05_使用与指令模板/02_任务收敛与交接指令_原文_2026-11-08.md';
 await mkdir(path.dirname(path.join(root, template)), { recursive: true });
@@ -49,7 +70,8 @@ await mkdir(path.join(root, 'docs/99_归档'), { recursive: true });
 await copyFile(path.join(sampleDir, sample), path.join(root, 'docs/99_归档', sample));
 // Node's license includes the notices for its bundled third-party components.
 await writeFile(path.join(root, 'NODE-SHASUMS256.txt'), sums);
-const manifest = { date: '2026-11-10', nodeVersion, nodeExeSha256: createHash('sha256').update(await readFile(path.join(root,'node.exe'))).digest('hex'), distribution: archiveName, distributionSha256: expected, resources: {} };
+const manifest = { date: generatedDate, nodeVersion, nodeExeSha256: createHash('sha256').update(await readFile(path.join(root,'node.exe'))).digest('hex'), distribution: archiveName, distributionSha256: expected,
+  serverEntrypoint: 'app/server/index.mjs', serverBundledPackages: serverLicenses.count, serverExternalImports, resources: {} };
 async function inventory(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const file = path.join(directory, entry.name);

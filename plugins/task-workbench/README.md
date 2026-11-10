@@ -1,31 +1,36 @@
-# U01 本地插件探测包
+# 轻量路线工作台本地插件
 
-日期：2026-11-09
+日期：2026-11-11
 
-状态：开发期最小只读切片，真实聊天调用和发行矩阵待核验
+状态：0.1.4 轻量 MCP 桥源码，宿主安装与真实调用以执行证据为准
 
-源码包含 portable 清单和现有单一 Skill。先在仓库安装 app 的锁定依赖，再构建自包含协议脚本。打包结果包含第三方许可，凭据单独保存在本机私有目录。
+## 运行与授权
+
+插件身份沿用 `task-workbench@task-workbench-u01-local`，MCP 连接键保留 `task-workbench-u01`。0.1.4 的实际入口为 `runtime/light.mjs`，连接已经启动的领域所有者。桥通过所有者返回的工具清单提供路线读取、登记或修订、执行身份预留、步骤状态、补充事项、会话绑定、事件查询及方案验收能力。
+
+领域所有者持有数据根租约。桥读取受控本机配置，所有者由桌面入口启动。配置文件由 `WORKBENCH_LIGHT_CONFIG` 指定，缺省为用户目录 `.codex/task-workbench-light/config.json`。常规配置包含 `dataDir` 和 `token`，`dataDir` 为所有者数据根的绝对路径。桥在每次请求前读取 `owner.json`，跟随端口及 generation 变化，并遵守 `stopped.json`。固定端点试跑也可采用互斥的 `endpoint` 和 `token` 配置，端点仅允许 `http://127.0.0.1:<port>` 根地址。令牌为独立于桌面会话的至少 64 个十六进制字符。凭据由所有者授权入口生成并受控保存，插件包只携带运行代码与 Skill。
+
+认证和项目范围由所有者逐次校验。发布需要可信入口签发的内容确认，绑定确认需要目录、分支及限范围凭据核验。具体开放能力以服务回执中的 `supportedCapabilities` 为准。写请求超时或连接中断返回 `UNKNOWN_RESULT`，调用者保持原 `eventId` 查询提交结果，桥不自动重发写入。
+
+## 打包
+
+先安装 app 的锁定依赖，再在仓库中运行以下命令。脚本沿用历史文件名，构建对象已经切换为轻量桥。
 
 ```powershell
-node 'G:\rust\Codex-task-monitoring\app\mcp\package-probe.mjs' 'G:\rust\Codex-task-monitoring\app\test-results\manual-trial\U01-EX01\local-package'
-codex plugin marketplace add 'G:\rust\Codex-task-monitoring\app\test-results\manual-trial\U01-EX01\local-package' --json
+node 'G:\rust\Codex-task-monitoring\app\mcp\package-probe.mjs' 'G:\rust\Codex-task-monitoring\app\test-results\manual-trial\D-EX01\release'
+```
+
+输出包括自包含运行脚本、第三方许可、插件清单、现有 Skill 及其参考文件、构建元数据和原 marketplace 身份。打包产物保存在独立发布目录，安装结果和独立 Skill 更新分别记录。
+
+## 安装与核验
+
+所有者、独立令牌及本机配置就绪后，沿用已验证的本地发布流程。
+
+```powershell
+codex plugin marketplace add 'G:\rust\Codex-task-monitoring\app\test-results\manual-trial\D-EX01\release' --json
 codex plugin add 'task-workbench@task-workbench-u01-local' --json
 ```
 
-runtime/probe.mjs 在打包阶段生成，安装对象为生成后的目录。最小包仍使用本机 Node，正式运行组件由 U02/U07 交付。当前工具仅为 workbench_get_project，参数仅接受隔离项目 projectId。九工具完整 schema 在 app/mcp/contracts/v1.json，正式写入能力交接 U03/U04。
+安装后分别核对版本缓存、清单、运行脚本和 Skill 文件指纹，保存真实工具发现、无害读取及业务写入回读证据。当前 CLI 帮助没有插件热重载命令，现有聊天刷新能力需实际验证，新聊天的发现结果单独记录。文件一致、Skill 可见及实际流程通过分别验收，Skill 安装和新会话流程按 E 阶段推进。
 
-桥读取 WORKBENCH_PROBE_CONFIG 指定的私有配置文件，缺省位置为用户目录下 `.codex/task-workbench-u01/probe-config.json`。文件包含隔离 owner 端点、授权项目和凭据，由本地运行步骤生成，单独受控保存。缺配置或服务不可达会明确报错。
-
-隔离服务的首次运行和重开入口如下。已有服务运行时继续复用。重开会产生新端点及凭据，随后更新本机私有配置并刷新桥。
-
-```powershell
-node 'G:\rust\Codex-task-monitoring\app\mcp\run-probe.mjs' 'G:\rust\Codex-task-monitoring\app\test-results\manual-trial\U01-EX01\host-probe'
-```
-
-诊断时分别记录安装、工具发现、Skill 可见和真实调用。hooks 的当前实收数为零，宿主编排位置及事件支持逐项待验。正式核验继续通过授权入口处理。
-
-## 新路线 Skill 源码
-
-更新日期：2026-11-10
-
-本目录 workbench-handoff 已增加方案步骤编号规范化、登记、执行同步、会话关联和接续流程。MCP 桥继续按实际暴露能力提供服务，Skill 中的新写入接口设计待服务实现。package-probe.mjs 会递归携带 Skill 及其参考文件。当前交付为仓库源码，已安装插件在重新打包与加载后核对版本及可见流程。
+历史 U01 只读探测源码与证据继续保存在 `app/mcp/probe*.mjs` 及历史目录，0.1.3 已安装缓存按原安装结果保留。真实面板接线与原生观感验收按 F 阶段执行。

@@ -39,6 +39,17 @@ export const lightTools = Object.entries(definitions).map(([name, definition]) =
     Object.assign(inputSchema, inputSchema.$defs[inputSchema.$ref.split('/').at(-1)]);
     delete inputSchema.$ref;
   }
+  const needed = new Set();
+  function collect(value) {
+    if (!value || typeof value !== 'object') return;
+    if (typeof value.$ref === 'string' && value.$ref.startsWith('#/$defs/')) {
+      const key = value.$ref.slice('#/$defs/'.length);
+      if (!needed.has(key)) { needed.add(key); collect(inputSchema.$defs[key]); }
+    }
+    for (const [key, child] of Object.entries(value)) if (key !== '$defs') collect(child);
+  }
+  collect(inputSchema);
+  inputSchema.$defs = Object.fromEntries([...needed].map(key => [key, inputSchema.$defs[key]]));
   return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.`, inputSchema,
     annotations: { readOnlyHint: !!definition.read, destructiveHint: !definition.read, idempotentHint: true, openWorldHint: false } };
 });
@@ -47,17 +58,15 @@ const validators = new Map(lightTools.map(tool => [tool.name, ajv.compile(tool.i
 const publicCodes = new Set(['FORBIDDEN', 'NOT_FOUND', 'REVISION_CONFLICT', 'IDEMPOTENCY_CONFLICT', 'INVALID_INPUT',
   'STALE_PLAN', 'STALE_BINDING', 'STALE_EXECUTION', 'INVALID_TRANSITION', 'REOPEN_REQUIRED', 'DEPENDENCY_NOT_READY',
   'BLOCKER_NOT_RESOLVED', 'EVIDENCE_MISMATCH', 'CONFIRMATION_REQUIRED', 'UNSUPPORTED_CAPABILITY', 'RECOVERY_REQUIRED',
-  'HISTORY_REQUIRED', 'DUPLICATE_ID', 'MISSING_REFERENCE', 'COVERAGE_MISMATCH', 'DEPENDENCY_CYCLE', 'INVALID_IDENTITY']);
+  'HISTORY_REQUIRED', 'DUPLICATE_ID', 'DUPLICATE_OWNER', 'MISSING_REFERENCE', 'COVERAGE_MISMATCH', 'DEPENDENCY_CYCLE', 'INVALID_IDENTITY']);
 
 // authenticate 在每次调用时重检撤销，不能从 arguments 读取 principal。
 // publish/bind 必须由所有者提供，完成确认及事务内门禁后调用领域服务。
 // 缺少可信适配器时保留 schema 发现并返回明确的能力缺失。
-export function createLightMcp({ service, authenticate = () => null, publish, bind }) {
-  const server = new Server({ name: 'task-workbench-light', version: '0.1.0' }, { capabilities: { tools: {} } });
+export function createLightHandler({ service, authenticate = () => null, publish, bind }) {
   const supportedCapabilities = lightTools.filter(tool => !definitions[tool.name].gate
     || typeof ({ publish, bind })[definitions[tool.name].gate] === 'function').map(tool => tool.name);
-  server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: structuredClone(lightTools) }));
-  server.setRequestHandler(CallToolRequestSchema, async request => {
+  async function callTool(request) {
     const { name, arguments: args } = request.params;
     const definition = definitions[name];
     if (!definition || !Object.hasOwn(definitions, name)) throw new McpError(ErrorCode.InvalidParams, 'Unsupported workbench tool');
@@ -89,11 +98,20 @@ export function createLightMcp({ service, authenticate = () => null, publish, bi
         try { currentRevision = service.read(principal, args.projectId).projects.find(project => project.id === args.projectId)?.revision ?? null; }
         catch { /* 当前授权不足时不泄露版本。 */ }
       }
-      const value = { schemaVersion: 'light-1.0', requestId: randomUUID(), status: 'rejected', supportedCapabilities,
+      const unknown = !definition.read && (code === 'INTERNAL_ERROR' || code === 'RECOVERY_REQUIRED');
+      const value = { schemaVersion: 'light-1.0', requestId: randomUUID(), status: unknown ? 'unknown' : 'rejected', supportedCapabilities,
         error: { code, message: code, currentRevision, retryable: false,
           recovery: code === 'INTERNAL_ERROR' || code === 'RECOVERY_REQUIRED' ? 'queryOriginalEventBeforeRetry' : 'readAndResolve' } };
       return { isError: true, content: [{ type: 'text', text: JSON.stringify(value) }], structuredContent: value };
     }
-  });
+  }
+  return { callTool, listTools: async () => ({ tools: structuredClone(lightTools) }) };
+}
+
+export function createLightMcp(options) {
+  const handler = createLightHandler(options);
+  const server = new Server({ name: 'task-workbench-light', version: '0.1.0' }, { capabilities: { tools: {} } });
+  server.setRequestHandler(ListToolsRequestSchema, handler.listTools);
+  server.setRequestHandler(CallToolRequestSchema, handler.callTool);
   return server;
 }

@@ -1,8 +1,7 @@
 import path from 'node:path';
 import { readFile, writeFile, rename, unlink, mkdir } from 'node:fs/promises';
 import { randomUUID, timingSafeEqual } from 'node:crypto';
-import { createServer } from '../server/index.mjs';
-import { HttpError } from '../server/validation.mjs';
+import { createServer, HttpError } from '../server/index.mjs';
 
 const root = process.env.WORKBENCH_DATA_DIR;
 const token = process.env.WORKBENCH_SESSION_TOKEN;
@@ -12,7 +11,10 @@ const discovery = path.join(root, 'owner.json');
 const stopped = path.join(root, 'stopped.json');
 const expected = Buffer.from(`Bearer ${token}`);
 let shuttingDown = false;
-function authorize(req) {
+function authorize(req, pathname) {
+  if (shuttingDown) throw new HttpError(503, 'STOPPED');
+  // 插件凭据由轻量授权表校验，桌面会话令牌仍只开放私有 UI。
+  if (pathname === '/api/light-mcp') return;
   const actual = Buffer.from(req.headers.authorization ?? '');
   const duplicates = req.rawHeaders.filter((v, i) => i % 2 === 0 && v.toLowerCase() === 'authorization').length;
   if (duplicates !== 1 || actual.length !== expected.length || !timingSafeEqual(actual, expected) || req.headers.origin !== undefined) {
@@ -22,7 +24,7 @@ function authorize(req) {
 }
 await mkdir(root, { recursive: true });
 // Only explicit desktop startup invokes this entry. A bridge never launches it.
-const server = await createServer({ dataDir: root, env: {}, authorize });
+const server = await createServer({ dataDir: root, env: {}, authorize, lightAccessEnabled: true });
 await unlink(stopped).catch(e => { if (e.code !== 'ENOENT') throw e; });
 await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
 const record = { version: 1, ownerGeneration: generation, pid: process.pid, endpoint: `http://127.0.0.1:${server.address().port}`, nodeVersion: process.versions.node };
