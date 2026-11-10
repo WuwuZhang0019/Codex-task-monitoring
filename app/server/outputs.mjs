@@ -5,7 +5,7 @@ import {comparePlans} from './plan-diff.mjs';
 import {HttpError} from './validation.mjs';
 import {stepSummary,stepCircle} from './plan-steps.mjs';
 
-const TEMPLATE_URL=new URL('../../docs/99_归档/2026-11-10_旧路线/01_任务监测工作台_v1.0/01_执行方案/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url);
+const TEMPLATE_URL=new URL('../../docs/03_轻量路线工作台/05_使用与指令模板/02_任务收敛与交接指令_原文_2026-11-08.md',import.meta.url);
 const known=v=>typeof v==='string'&&v.trim()?v:'待核实';
 const lines=v=>v?.length?v.join('；'):'待核实：方案未登记';
 const dateInShanghai=()=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai'}).format(new Date());
