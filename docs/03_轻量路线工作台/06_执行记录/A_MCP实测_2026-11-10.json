@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-10",
+  "scope": "U01 隔离连接探测",
+  "tool": "workbench_get_project",
+  "input": {
+    "projectId": "eef3ce1e-97e0-407e-aebd-664d45cf2581"
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"schemaVersion\":\"1.0.0\",\"ruleVersion\":\"u01-probe-v1\",\"requestId\":\"5a0ebe7e-6995-4c92-9389-71ed6f7e8332\",\"status\":\"rejected\",\"basisRevision\":null,\"supportedCapabilities\":[\"project.read.probe\"],\"disposition\":\"wait_verification\",\"sourceTrust\":\"declared\",\"sourceTrustReason\":\"No authenticated chat binding\",\"error\":{\"code\":\"OWNER_UNAVAILABLE\",\"message\":\"OWNER_UNAVAILABLE\",\"retryable\":true,\"recovery\":\"Check owner and grant, then repeat this read\"}}"
+      }
+    ],
+    "structuredContent": {
+      "schemaVersion": "1.0.0",
+      "ruleVersion": "u01-probe-v1",
+      "requestId": "5a0ebe7e-6995-4c92-9389-71ed6f7e8332",
+      "status": "rejected",
+      "basisRevision": null,
+      "supportedCapabilities": [
+        "project.read.probe"
+      ],
+      "disposition": "wait_verification",
+      "sourceTrust": "declared",
+      "sourceTrustReason": "No authenticated chat binding",
+      "error": {
+        "code": "OWNER_UNAVAILABLE",
+        "message": "OWNER_UNAVAILABLE",
+        "retryable": true,
+        "recovery": "Check owner and grant, then repeat this read"
+      }
+    },
+    "isError": true
+  }
+}

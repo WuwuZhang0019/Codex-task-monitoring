@@ -1,0 +1,2009 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://task-workbench.local/contracts/light-1.0",
+  "title": "轻量路线 A 阶段结构契约",
+  "description": "日期 2026-11-10。设计冻结，B/D/E 实现及运行验收。旧 1.0.0 契约独立保留。",
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trust": {
+          "enum": [
+            "declared",
+            "userConfirmed",
+            "hostObserved"
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "version",
+        "sha256",
+        "locator",
+        "trust"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evidenceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deliveryVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "enum": [
+            "passed",
+            "failed",
+            "pending"
+          ]
+        }
+      },
+      "required": [
+        "evidenceId",
+        "location",
+        "method",
+        "deliveryVersion",
+        "result"
+      ]
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "conditionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "result": {
+          "enum": [
+            "passed",
+            "failed",
+            "pending"
+          ]
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "conditionId",
+        "text",
+        "required",
+        "result",
+        "evidenceIds"
+      ]
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "blockerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "waitingFor": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "releaseConditions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "resolved": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blockerId",
+        "reason",
+        "waitingFor",
+        "releaseConditions",
+        "resolved"
+      ]
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sessionGroup": {
+          "type": "string",
+          "minLength": 1
+        },
+        "threadId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hostId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "folderId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "worktreeOrdinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "worktreePath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "head": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "trust": {
+          "enum": [
+            "declared",
+            "userConfirmed",
+            "hostObserved"
+          ]
+        }
+      },
+      "required": [
+        "sessionGroup",
+        "threadId",
+        "hostId",
+        "folderId",
+        "worktreeOrdinal",
+        "worktreePath",
+        "branch",
+        "head",
+        "trust"
+      ]
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "planKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parentKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "originalCode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceLocator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "running",
+            "blocked",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "acceptance": {
+          "enum": [
+            "pending",
+            "passed",
+            "failed",
+            "recheck"
+          ]
+        },
+        "sync": {
+          "enum": [
+            "pendingSync",
+            "synced",
+            "unknown",
+            "rejected"
+          ]
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/blocker"
+          }
+        },
+        "executionKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bindingKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "updatedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        }
+      },
+      "required": [
+        "key",
+        "id",
+        "projectKey",
+        "planKey",
+        "parentKey",
+        "code",
+        "originalCode",
+        "sourceLocator",
+        "title",
+        "order",
+        "required",
+        "dependsOn",
+        "status",
+        "acceptance",
+        "sync",
+        "conditions",
+        "evidence",
+        "blockers",
+        "executionKey",
+        "bindingKey",
+        "updatedAt"
+      ]
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "planKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stepKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "sourceStepKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "returnStepKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "key",
+        "id",
+        "projectKey",
+        "planKey",
+        "label",
+        "stepKeys",
+        "context",
+        "sourceStepKey",
+        "returnStepKey",
+        "order"
+      ]
+    },
+    "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stageCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stageKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "endConditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "id",
+        "projectKey",
+        "name",
+        "stageCount",
+        "stageKeys",
+        "source",
+        "endConditions"
+      ]
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "planKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "revision": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "key",
+        "id",
+        "name",
+        "planKeys",
+        "revision"
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "planKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stepKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "bindingRevision": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "state": {
+          "enum": [
+            "proposed",
+            "confirmed",
+            "revoked"
+          ]
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "confirmationRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "revokedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "id",
+        "projectKey",
+        "planKey",
+        "stepKeys",
+        "bindingRevision",
+        "state",
+        "context",
+        "confirmationRef",
+        "revokedAt"
+      ]
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "planKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stepKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "bindingKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "running",
+            "completedScope",
+            "waitingUser",
+            "blocked",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "endedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "handoffConclusion": {
+          "enum": [
+            null,
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G"
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "id",
+        "projectKey",
+        "planKey",
+        "stepKeys",
+        "bindingKey",
+        "outcome",
+        "startedAt",
+        "endedAt",
+        "handoffConclusion"
+      ]
+    },
+    "supplement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceStepKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blocksSource": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "unconfirmed",
+            "unplanned",
+            "running",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "linkedPlanKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "repairId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "id",
+        "sourceStepKey",
+        "title",
+        "goal",
+        "blocksSource",
+        "status",
+        "linkedPlanKey",
+        "repairId"
+      ]
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "light-1.0"
+        },
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "mode": {
+          "enum": [
+            "local",
+            "service",
+            "simulation"
+          ]
+        },
+        "revision": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "generatedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "projects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project"
+          }
+        },
+        "plans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plan"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/route"
+          }
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/binding"
+          }
+        },
+        "executions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/execution"
+          }
+        },
+        "supplements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/supplement"
+          }
+        },
+        "uiPreferences": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "collapsedKeys": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "selectedStepKey": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "focusedRouteKey": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "scrollByProject": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "x": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "x",
+                  "y"
+                ]
+              }
+            }
+          },
+          "required": [
+            "collapsedKeys",
+            "selectedStepKey",
+            "focusedRouteKey",
+            "scrollByProject"
+          ]
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/historyEvent"
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "date",
+        "mode",
+        "revision",
+        "generatedAt",
+        "projects",
+        "plans",
+        "steps",
+        "routes",
+        "bindings",
+        "executions",
+        "supplements",
+        "uiPreferences",
+        "events"
+      ]
+    },
+    "reopen": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "successorImpact": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "reason",
+        "successorImpact"
+      ]
+    },
+    "update": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "light-1.0"
+        },
+        "projectId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "planId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/sourceDeclaration"
+        },
+        "occurredAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "stepId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bindingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bindingRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "targetStatus": {
+          "enum": [
+            "pending",
+            "running",
+            "blocked",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        },
+        "blocker": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/blocker"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reopen": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/reopen"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "successorImpact": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "projectId",
+        "planId",
+        "expectedRevision",
+        "eventId",
+        "source",
+        "occurredAt",
+        "stepId",
+        "executionId",
+        "bindingId",
+        "bindingRevision",
+        "targetStatus",
+        "reason",
+        "evidence",
+        "checks",
+        "blocker",
+        "reopen",
+        "successorImpact"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "targetStatus": {
+                "const": "blocked"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "blocker": {
+                "type": "object",
+                "properties": {
+                  "resolved": {
+                    "const": false
+                  },
+                  "waitingFor": {
+                    "minItems": 1
+                  },
+                  "releaseConditions": {
+                    "minItems": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "targetStatus": {
+                "const": "completed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence": {
+                "minItems": 1
+              },
+              "checks": {
+                "minItems": 1,
+                "contains": {
+                  "properties": {
+                    "required": {
+                      "const": true
+                    },
+                    "result": {
+                      "const": "passed"
+                    },
+                    "evidenceIds": {
+                      "minItems": 1
+                    }
+                  }
+                },
+                "items": {
+                  "if": {
+                    "properties": {
+                      "required": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "result": {
+                        "const": "passed"
+                      },
+                      "evidenceIds": {
+                        "minItems": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "targetStatus": {
+                "const": "cancelled"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "successorImpact": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "bind": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "light-1.0"
+        },
+        "projectId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "planId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/sourceDeclaration"
+        },
+        "occurredAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "action": {
+          "enum": [
+            "propose",
+            "confirm",
+            "revoke"
+          ]
+        },
+        "stepIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "context": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/context"
+            },
+            {
+              "properties": {
+                "trust": {
+                  "const": "declared"
+                }
+              }
+            }
+          ]
+        },
+        "bindingId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expectedBindingRevision": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "confirmationGrant": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "projectId",
+        "planId",
+        "expectedRevision",
+        "eventId",
+        "source",
+        "occurredAt",
+        "action",
+        "stepIds",
+        "context",
+        "bindingId",
+        "expectedBindingRevision",
+        "confirmationGrant",
+        "reason"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "propose"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "stepIds": {
+                "minItems": 1
+              },
+              "confirmationGrant": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "confirm"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "bindingId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "expectedBindingRevision": {
+                "type": "integer"
+              },
+              "confirmationGrant": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "revoke"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "bindingId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "expectedBindingRevision": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "supplementWrite": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "light-1.0"
+        },
+        "projectId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "planId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/sourceDeclaration"
+        },
+        "occurredAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "action": {
+          "enum": [
+            "create",
+            "update",
+            "linkPlan",
+            "resolve",
+            "cancel"
+          ]
+        },
+        "supplementId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceStepId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blocksSource": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "unconfirmed",
+            "unplanned",
+            "running",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "linkedPlanId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "repairId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "projectId",
+        "planId",
+        "expectedRevision",
+        "eventId",
+        "source",
+        "occurredAt",
+        "action",
+        "supplementId",
+        "sourceStepId",
+        "title",
+        "goal",
+        "blocksSource",
+        "status",
+        "linkedPlanId",
+        "repairId",
+        "reason",
+        "evidence"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "create"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "supplementId": {
+                "type": "null"
+              },
+              "status": {
+                "const": "unconfirmed"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "linkPlan"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "supplementId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "linkedPlanId": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "resolve"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "supplementId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "const": "completed"
+              },
+              "linkedPlanId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "cancel"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "supplementId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "const": "cancelled"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "update"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "supplementId": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "light-1.0"
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "committed",
+            "rejected",
+            "pending",
+            "unknown"
+          ]
+        },
+        "committedRevision": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "receivedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "resultRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "errorCode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recovery": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "eventId",
+        "requestId",
+        "status",
+        "committedRevision",
+        "receivedAt",
+        "resultRef",
+        "errorCode",
+        "recovery"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "committed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "committedRevision": {
+                "type": "integer"
+              },
+              "resultRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "errorCode": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "rejected"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "committedRevision": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "pending"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "committedRevision": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unknown"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "committedRevision": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "rejected"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "errorCode": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sourceDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "path",
+        "version",
+        "sha256",
+        "locator"
+      ]
+    },
+    "historyEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stepKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "executionKey": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fromStatus": {
+          "enum": [
+            null,
+            "pending",
+            "running",
+            "blocked",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "toStatus": {
+          "enum": [
+            null,
+            "pending",
+            "running",
+            "blocked",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "occurredAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "receivedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "sync": {
+          "enum": [
+            "pendingSync",
+            "synced",
+            "unknown",
+            "rejected"
+          ]
+        }
+      },
+      "required": [
+        "eventId",
+        "stepKey",
+        "executionKey",
+        "fromStatus",
+        "toStatus",
+        "occurredAt",
+        "receivedAt",
+        "reason",
+        "evidenceIds",
+        "sync"
+      ]
+    }
+  },
+  "x-transitions": {
+    "pending": [
+      "running",
+      "cancelled"
+    ],
+    "running": [
+      "blocked",
+      "completed",
+      "cancelled"
+    ],
+    "blocked": [
+      "running",
+      "cancelled"
+    ],
+    "completed": [
+      "pending",
+      "running"
+    ],
+    "cancelled": [
+      "pending",
+      "running"
+    ]
+  },
+  "x-transaction": [
+    "authenticate-current-grant",
+    "check-entity-scope",
+    "lookup-event-replay",
+    "check-revision-and-binding",
+    "validate-transition-and-evidence",
+    "commit-business-event-result-audit",
+    "return-receipt"
+  ],
+  "x-persistence": {
+    "owner": "U02 data-root lease",
+    "store": "U03 aggregate.json",
+    "atomicMembers": [
+      "business",
+      "revision",
+      "event",
+      "idempotencyResult",
+      "audit"
+    ],
+    "replayScope": [
+      "authenticatedPrincipal",
+      "projectId",
+      "tool",
+      "eventId"
+    ],
+    "replayHash": "SHA256 of canonical exact request including expectedRevision",
+    "unknown": "query or replay exact original request before new operation"
+  },
+  "x-followupOwners": {
+    "snapshot": "B",
+    "update": "B/D",
+    "bind": "D/E",
+    "supplementWrite": "B/D/E",
+    "receipt": "D",
+    "uiPreferences": "C/F"
+  }
+}

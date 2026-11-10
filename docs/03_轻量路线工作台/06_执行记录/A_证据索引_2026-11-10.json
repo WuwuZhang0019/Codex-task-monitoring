@@ -1,0 +1,714 @@
+{
+  "date": "2026-11-10",
+  "executionKey": "light-workbench-20261110/executions/A-EX01",
+  "initialHead": "cd567137bfb9489b1a4699bfc2296d53c19118bd",
+  "branch": "main",
+  "initialDirty": false,
+  "threadId": "01a1c5a8-ec10-7e43-b394-f194fcdbc2b9",
+  "hostId": "local",
+  "hostProjectId": null,
+  "serviceIds": {
+    "projectId": null,
+    "planId": null,
+    "stepId": null,
+    "bindingId": null,
+    "bindingRevision": null,
+    "executionId": null,
+    "expectedRevision": null
+  },
+  "skillLoading": {
+    "catalogSources": [
+      "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff\\SKILL.md",
+      "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.3\\skills\\workbench-handoff\\SKILL.md"
+    ],
+    "selectedInstalledSource": null,
+    "limitation": "宿主同时发现两个旧版同名入口，未返回唯一自动选中来源。本次显式按用户指定仓库源读取执行。",
+    "pluginVersion": "0.1.3",
+    "behavior": "本次按仓库规则执行 A 的本地降级流程，新聊天安装行为归 E"
+  },
+  "skillFiles": [
+    {
+      "file": "SKILL.md",
+      "sourceSha256": "fd02a9c30e82c9a5a2d6406b08106fff2b3a36673bfec4fe889655df1907b3d4",
+      "installations": [
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff\\SKILL.md",
+          "sha256": "32c8f6fa5817619e17784b6ec630b7e652afae7f44838c63be2bedbffea3a014",
+          "equal": false
+        },
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.3\\skills\\workbench-handoff\\SKILL.md",
+          "sha256": "32c8f6fa5817619e17784b6ec630b7e652afae7f44838c63be2bedbffea3a014",
+          "equal": false
+        }
+      ]
+    },
+    {
+      "file": "references/context-supplements.md",
+      "sourceSha256": "9b1b72b2e105781385315f2f4244f3b08d4f6a0f8c990fd7de5d47cb1635202b",
+      "installations": [
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff\\references\\context-supplements.md",
+          "sha256": null,
+          "equal": false
+        },
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.3\\skills\\workbench-handoff\\references\\context-supplements.md",
+          "sha256": null,
+          "equal": false
+        }
+      ]
+    },
+    {
+      "file": "references/execution-sync.md",
+      "sourceSha256": "074078531adc86f757390340ebca114f37860cfb360b288af0884ff20fb1e2b1",
+      "installations": [
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff\\references\\execution-sync.md",
+          "sha256": null,
+          "equal": false
+        },
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.3\\skills\\workbench-handoff\\references\\execution-sync.md",
+          "sha256": null,
+          "equal": false
+        }
+      ]
+    },
+    {
+      "file": "references/handoff-template.md",
+      "sourceSha256": "a0603da1a4443a09208213513c4b8c2c06c2b4240d53c816a83ef1ad5c220588",
+      "installations": [
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff\\references\\handoff-template.md",
+          "sha256": "a0603da1a4443a09208213513c4b8c2c06c2b4240d53c816a83ef1ad5c220588",
+          "equal": true
+        },
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.3\\skills\\workbench-handoff\\references\\handoff-template.md",
+          "sha256": "a0603da1a4443a09208213513c4b8c2c06c2b4240d53c816a83ef1ad5c220588",
+          "equal": true
+        }
+      ]
+    },
+    {
+      "file": "references/handoff-workflow.md",
+      "sourceSha256": "324cbfee4bc86d994365ad75231b2e4f89686af5f74720e76d6050ccfc6ed6fc",
+      "installations": [
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff\\references\\handoff-workflow.md",
+          "sha256": null,
+          "equal": false
+        },
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.3\\skills\\workbench-handoff\\references\\handoff-workflow.md",
+          "sha256": null,
+          "equal": false
+        }
+      ]
+    },
+    {
+      "file": "references/plan-registration.md",
+      "sourceSha256": "4309fc447f1cc0b0b437a0c9ecd899d68ee5318fed6711f843880fc01cfa3704",
+      "installations": [
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff\\references\\plan-registration.md",
+          "sha256": null,
+          "equal": false
+        },
+        {
+          "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.3\\skills\\workbench-handoff\\references\\plan-registration.md",
+          "sha256": null,
+          "equal": false
+        }
+      ]
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "docs\\03_轻量路线工作台\\00_执行入口\\00_新路线实施总纲与接口决定_2026-11-10.md",
+      "sha256": "4da43b79373faa8baeefe393fcfab080df4b5675d5444c3ebdbc6d9c4ebc4c6d"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\01_模块方案\\01_面板UI与桌面交互_细化方案_2026-11-10.md",
+      "sha256": "d9c3b737ff87511e0ba6a4f986fbfec989cfa8201f4e2aeaf7c9da2ebeb7bb4e"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\01_模块方案\\02_MCP接口_细化方案_2026-11-10.md",
+      "sha256": "fc957cc6cd024bd683bfc411953bb95fefdbd39ce2ea9381e4bdeffa9d71e995"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\01_模块方案\\03_路线与状态管理_细化方案_2026-11-10.md",
+      "sha256": "d7412bbcd819e951e278d6851b173b0017f230b8d1140132e8085a8744cbddeb"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\01_模块方案\\04_数据存储与恢复_细化方案_2026-11-10.md",
+      "sha256": "ecda95e255c907e9acd5111af16877e3c618d79139db378972ab3dd4383592f5"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\01_模块方案\\05_会话与工作树关联_细化方案_2026-11-10.md",
+      "sha256": "474efed03979f75f1def48715f6adfbaef16b75f1d52c5fb517f3fa07108a295"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\01_模块方案\\06_Skill执行流程_细化方案_2026-11-10.md",
+      "sha256": "f07d8b4a6ed95cfab17e98de006655529183b6ebc9d8a3b9490efc5a6e97ac89"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\01_模块方案\\07_集成与验收_细化方案_2026-11-10.md",
+      "sha256": "592deb25f1bed8b90ad0da873b36a8ccba7099fffd026d2ba3e5451be5a55118"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\02_需求与视觉基线\\01_会话到面板的轻量路线管理_指导方案_2026-11-10.md",
+      "sha256": "8c9bf0eebb00ead0a00f39633ae10c6d92be4054217fafa4b2f237edc03a429e"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\02_需求与视觉基线\\02_展开面板UI与多项目分支路线_设计方案_2026-11-10.md",
+      "sha256": "64f068ebce345dbb1ccaad27a085d21ff286b61f50af946207f518a06509b6ad"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\02_需求与视觉基线\\原始UI样式保留清单_2026-11-10.md",
+      "sha256": "fa18d2ab4cb02a5eefffd0b5714d9abac5980bf35777becb8ea677554197076e"
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\03_测试样例\\01_模拟二十步骤与六分支工作树_测试文档_2026-11-10.md",
+      "sha256": "8c69b3e525a46c5ef922d9ea0548e73bbb538255bd644697a2b8244a3270182b"
+    },
+    {
+      "path": "plugins\\task-workbench\\skills\\workbench-handoff\\SKILL.md",
+      "sha256": "fd02a9c30e82c9a5a2d6406b08106fff2b3a36673bfec4fe889655df1907b3d4"
+    },
+    {
+      "path": "plugins\\task-workbench\\skills\\workbench-handoff\\references\\context-supplements.md",
+      "sha256": "9b1b72b2e105781385315f2f4244f3b08d4f6a0f8c990fd7de5d47cb1635202b"
+    },
+    {
+      "path": "plugins\\task-workbench\\skills\\workbench-handoff\\references\\execution-sync.md",
+      "sha256": "074078531adc86f757390340ebca114f37860cfb360b288af0884ff20fb1e2b1"
+    },
+    {
+      "path": "plugins\\task-workbench\\skills\\workbench-handoff\\references\\handoff-template.md",
+      "sha256": "a0603da1a4443a09208213513c4b8c2c06c2b4240d53c816a83ef1ad5c220588"
+    },
+    {
+      "path": "plugins\\task-workbench\\skills\\workbench-handoff\\references\\handoff-workflow.md",
+      "sha256": "324cbfee4bc86d994365ad75231b2e4f89686af5f74720e76d6050ccfc6ed6fc"
+    },
+    {
+      "path": "plugins\\task-workbench\\skills\\workbench-handoff\\references\\plan-registration.md",
+      "sha256": "4309fc447f1cc0b0b437a0c9ecd899d68ee5318fed6711f843880fc01cfa3704"
+    },
+    {
+      "path": "plugins\\task-workbench\\plugin.json",
+      "sha256": "f109b4a7f7f97fcfa72c3b69b0fe9537bd7d7003e77ceaf98871addb35e78434"
+    },
+    {
+      "path": "prototypes\\top-panel\\src\\drawer.ts",
+      "sha256": "65fc94f8d488995ce0489703a26660756dedbac8c619f37d72a11f78a51fff19"
+    },
+    {
+      "path": "prototypes\\top-panel\\src\\main.ts",
+      "sha256": "28efe23ee3ac848895a05718c02e64f493703e3c1009095d1280dfa40a2040b9"
+    },
+    {
+      "path": "prototypes\\top-panel\\src\\styles.css",
+      "sha256": "bc3ec6e01d740d6b0915b59d859fba6fe6a0b710aa3a9f1bf3d71853b60e12de"
+    },
+    {
+      "path": "prototypes\\top-panel\\src\\vite-env.d.ts",
+      "sha256": "424faf9241dd699dda995b367ed36665732da1e6ec1f33b2fd40394488ecac92"
+    },
+    {
+      "path": "app\\server\\plan-steps.mjs",
+      "sha256": "f9ce1c732af131bf867fa1cd984ee3362b2ee83eedbdbf1b9b8d3ec4926513d8"
+    },
+    {
+      "path": "app\\server\\import-drafts.mjs",
+      "sha256": "4c582cf2448d48d97bab262792daf9308ef28f8a3b71bc218a47195466b3b283"
+    },
+    {
+      "path": "app\\server\\publish-coordinator.mjs",
+      "sha256": "b37a1774f426342c71fb3a9679950bd5964071c91bdffef68666e162c2659d3b"
+    },
+    {
+      "path": "app\\server\\business.mjs",
+      "sha256": "96e1600e0c8482afafe9d09c5bfdcde4ca89a16209a1da48e5b00926aff115e7"
+    },
+    {
+      "path": "app\\server\\business-requests.mjs",
+      "sha256": "9c95e6b2982507865956e1caa2074ce270b4b91b8861c180c8ba91029d822b0b"
+    },
+    {
+      "path": "app\\server\\persistence.mjs",
+      "sha256": "22415c9dbc25f2aad3ddd0bc56eb05f9e1c5eecfc636fa9ab6d7deb8ab0a0a8a"
+    },
+    {
+      "path": "app\\server\\monitor.mjs",
+      "sha256": "6293d44609b24f35b637801568805f1ada02a560aa8a9d0dea2d04bbf7afd6de"
+    },
+    {
+      "path": "app\\server\\receipts.mjs",
+      "sha256": "90d1fd5e7d1c43f44ed6b4dab4c596ae2478cb541ef87601d7ea2a7d7bdaab53"
+    },
+    {
+      "path": "app\\server\\model-store.mjs",
+      "sha256": "1b9c6d4742314bc744980ff00ee7e56fbc79fe884b1727b25d4a3e93fdfe94a5"
+    },
+    {
+      "path": "app\\server\\relationships.mjs",
+      "sha256": "f8d68537d85e9e97b5a22ffd54925b3bab44984bc7e94d988137d0d498e7afe2"
+    },
+    {
+      "path": "app\\server\\index.mjs",
+      "sha256": "fe6d8b6361f41dac19d284ee3afe6011f6f9faaa7fa4041d96f9f66ea10b7a4b"
+    },
+    {
+      "path": "app\\desktop\\owner.mjs",
+      "sha256": "69fab240509df4842110d0d9347823d20272f02774c73dec6679d5659ea680ae"
+    },
+    {
+      "path": "app\\desktop\\migrate.mjs",
+      "sha256": "ef42f31c7a0e95d60c241d8e2925421c389b97a2226d6c105e9129777ec46ffd"
+    },
+    {
+      "path": "app\\src-tauri\\src\\lib.rs",
+      "sha256": "2829ca615a7fc7faf478eee034165d0a0956cd6e8104127da7b822b372b1856b"
+    },
+    {
+      "path": "app\\mcp\\contracts\\v1.json",
+      "sha256": "2c2cb3736557640e5b63806ccd1c31369401604dfb94b23f208f5cf544ed1e71"
+    },
+    {
+      "path": "app\\src\\domain.ts",
+      "sha256": "c5b4bf845083be0b500b1d0b594b4b50216edf19e6f8c77e142c85745f45f8b0"
+    }
+  ],
+  "historicalFingerprints": [
+    {
+      "stage": "U01",
+      "group": "artifacts",
+      "total": 65,
+      "matched": 65,
+      "deviations": []
+    },
+    {
+      "stage": "U02",
+      "group": "files",
+      "total": 20,
+      "matched": 19,
+      "deviations": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\bundle\\nsis\\任务航线工作台_0.2.0_x64-setup.exe",
+          "expected": "efcc1ce9f5f9e4f15ed89898eff667b3530911358d5d3ff173a44b7e2fa5c189",
+          "actual": "a4a5fa215d2b42414f26484071ea79530b074d1bb1c331bb6a5d5482ec2828c3",
+          "kind": "changed"
+        }
+      ]
+    },
+    {
+      "stage": "U03",
+      "group": "sourceFingerprints",
+      "total": 74,
+      "matched": 71,
+      "deviations": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\desktop\\prepare-resources.mjs",
+          "expected": "ef76dfb412fc8bbdc5923a7e47a7019ff3fb13c278cd06c440d92b744e2ca92a",
+          "actual": "ac6a2e6565a57185e18de2159889b5aa218483439060acb5c5ad21aa8bb80a61",
+          "kind": "changed"
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\outputs.mjs",
+          "expected": "5d7f1beec81abb40297282d9ad903d2d06ce0daa997e12d8bbff9dce4b0b14f1",
+          "actual": "7edfcf9037d023a9060e39fca0936c245369b30db334f74e68e5a3ef42234696",
+          "kind": "changed"
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\outputs.test.mjs",
+          "expected": "d8b4169d307a93cb8354b718a29dbe95d1bb4e0638ddb02051be06cace850147",
+          "actual": "07034f22c6c155e1fd8467fd91473b0fe9a5c003b0def3fc935bfae559de73b0",
+          "kind": "changed"
+        }
+      ]
+    },
+    {
+      "stage": "U03",
+      "group": "authorities",
+      "total": 12,
+      "matched": 0,
+      "deviations": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\00_统一执行总纲与手动试跑_2026-11-09.md",
+          "expected": "506bd6a7113b3e2127a897d50ee273b52738a977682cf202a68bf5243393d7b9",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\03_桌面工作台与Codex连接\\01_执行方案\\00_统一执行总纲与手动试跑_2026-11-09.md",
+              "sha256": "506bd6a7113b3e2127a897d50ee273b52738a977682cf202a68bf5243393d7b9",
+              "equal": true
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\01_需求总结与技术选型_2026-11-09.md",
+          "expected": "0a81380b39cbb53827ed40031009f4339265b9749ecf1c1e0a5a49e19913ca2d",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\03_桌面工作台与Codex连接\\01_执行方案\\01_需求总结与技术选型_2026-11-09.md",
+              "sha256": "0a81380b39cbb53827ed40031009f4339265b9749ecf1c1e0a5a49e19913ca2d",
+              "equal": true
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\02_桌面工作台与顶部常驻面板_可执行开发方案_2026-11-09.md",
+          "expected": "c2dc3240a386b66bbe73c93b02c91f512a6ec9f3ac09e7003f3bfa6d79c230b4",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\03_桌面工作台与Codex连接\\01_执行方案\\02_桌面工作台与顶部常驻面板_可执行开发方案_2026-11-09.md",
+              "sha256": "515bc882cd4098dca63c62b3a1305cf8deaaefbb4ee5f4388dd60bfab153c617",
+              "equal": false
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\03_灵动岛式连续展开与收起动画_独立实现可执行方案_2026-11-09.md",
+          "expected": "17110e42569ddad680c874198d13a67beb1c563c66ab9c9f422eb10bfbf98bf9",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\03_桌面工作台与Codex连接\\01_执行方案\\03_灵动岛式连续展开与收起动画_独立实现可执行方案_2026-11-09.md",
+              "sha256": "17110e42569ddad680c874198d13a67beb1c563c66ab9c9f422eb10bfbf98bf9",
+              "equal": true
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\04_任务工作台MCP与Skill插件组合_可执行开发方案_2026-11-09.md",
+          "expected": "7cdae37f5f29647ccc26bb4129bf87f99ef5c2370a9e0d405a8664dd02e4ea1c",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\03_桌面工作台与Codex连接\\01_执行方案\\04_任务工作台MCP与Skill插件组合_可执行开发方案_2026-11-09.md",
+              "sha256": "3cbd03fc6e4c57faf4f345ad7bc1629ffb58dc48b12132d3b27534c1d1db3e9f",
+              "equal": false
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\05_Codex接入与会话进度监测_可执行方案_2026-11-09.md",
+          "expected": "38bf8609c4e39f14fcf2f8d222d47fc9b7a4506ea8e025522cbac10d76f3456e",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\03_桌面工作台与Codex连接\\01_执行方案\\05_Codex接入与会话进度监测_可执行方案_2026-11-09.md",
+              "sha256": "38bf8609c4e39f14fcf2f8d222d47fc9b7a4506ea8e025522cbac10d76f3456e",
+              "equal": true
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\06_本地工作台插件_可执行开发方案_2026-11-09.md",
+          "expected": "1f911021a77e19a563fa5e60846c489019030ca6250a8ceefe12c57542780620",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\03_桌面工作台与Codex连接\\01_执行方案\\06_本地工作台插件_可执行开发方案_2026-11-09.md",
+              "sha256": "54add8936fb4f6b372604c1d277f4db343cba4f1d1c16a915bba05f8e911cdae",
+              "equal": false
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\README.md",
+          "expected": "d97a47fbb9ecfc7aa98abb0fa972d46cc526db98ea1865e94f559b9342edcda6",
+          "actual": "7dfc1539ba6367f4a5b8ebe8d0dd011140b2ef63d7aee8ea03cc6ac5288285b9",
+          "kind": "changed",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\README.md",
+              "sha256": "e4e32b0592749e1c09d6161182018e9b6dca15c5c57477859f1daeb73068cb6e",
+              "equal": false
+            },
+            {
+              "path": "docs\\03_轻量路线工作台\\README.md",
+              "sha256": "204e3f8e6ff1762b9e17f9d3b15370189327bf336f0e1ccd562f3dcefcfc849b",
+              "equal": false
+            },
+            {
+              "path": "docs\\03_轻量路线工作台\\04_已有交付证据\\README.md",
+              "sha256": "b22c8916c34fcf8720a0710509f9d97baa10da9c66e1f815634dd5003f3959e9",
+              "equal": false
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\02_方案导入与配置草稿\\01_执行方案\\01_一次导入自动生成配置草稿与集中确认_可执行方案_2026-11-08.md",
+          "expected": "363f1234c2aa17328e32c818a5fd0bfe61f1d641c8ea00f979d7898cdc61fabd",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\02_方案导入与配置草稿\\01_执行方案\\01_一次导入自动生成配置草稿与集中确认_可执行方案_2026-11-08.md",
+              "sha256": "1d277952363010894e8065eee6879c2ad465473524af343909c7e4738079ba13",
+              "equal": false
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\01_任务监测工作台_v1.0\\01_执行方案\\01_Codex任务状态监测工作台_可执行方案_2026-11-08.md",
+          "expected": "4da11a6d5bb6b6e74d21f276ba8760460f5415835e36298065968562c1910181",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\99_归档\\2026-11-10_旧路线\\01_任务监测工作台_v1.0\\01_执行方案\\01_Codex任务状态监测工作台_可执行方案_2026-11-08.md",
+              "sha256": "6f18ab0d81838bd7f0c54dc649f15563cf6628f62141f0e4a11170e313c89a00",
+              "equal": false
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_执行过程\\U01_统一接入与权限契约_2026-11-09.md",
+          "expected": "00255861098697c12b1d8cc81e0bbcc33fdfa5fc0275c7157ce272993aff6d92",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\03_轻量路线工作台\\04_已有交付证据\\02_执行过程\\U01_统一接入与权限契约_2026-11-09.md",
+              "sha256": "12d0615ff47a55e28156e7f7809d72cf2c73c05efd0098c3a06edf01f34403cc",
+              "equal": false
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_执行过程\\U02_桌面运行与数据基础_2026-11-10.md",
+          "expected": "ee97ac47f6cff25dbf475d03c6009df89078036e4d57dc37eed69e8de82e01ff",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\03_轻量路线工作台\\04_已有交付证据\\02_执行过程\\U02_桌面运行与数据基础_2026-11-10.md",
+              "sha256": "ee97ac47f6cff25dbf475d03c6009df89078036e4d57dc37eed69e8de82e01ff",
+              "equal": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "U03",
+      "group": "evidence",
+      "total": 61,
+      "matched": 61,
+      "deviations": []
+    },
+    {
+      "stage": "U03",
+      "group": "artifacts",
+      "total": 6,
+      "matched": 6,
+      "deviations": []
+    },
+    {
+      "stage": "U03",
+      "group": "documentation",
+      "total": 4,
+      "matched": 0,
+      "deviations": [
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_执行过程\\U03_来源绑定与业务存储契约_2026-11-10.md",
+          "expected": "7499bae644d55e78dcf38ce37aa6e4911fd33b24c5f570b82a9f6f36ae58cc65",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\03_轻量路线工作台\\04_已有交付证据\\02_执行过程\\U03_来源绑定与业务存储契约_2026-11-10.md",
+              "sha256": "7499bae644d55e78dcf38ce37aa6e4911fd33b24c5f570b82a9f6f36ae58cc65",
+              "equal": true
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_执行过程\\U03_业务模型与方案发布_2026-11-10.md",
+          "expected": "207934fa0c45ab03c98d341b2f288cab16fc61dcf56d3a75464b939951fc1e92",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\03_轻量路线工作台\\04_已有交付证据\\02_执行过程\\U03_业务模型与方案发布_2026-11-10.md",
+              "sha256": "207934fa0c45ab03c98d341b2f288cab16fc61dcf56d3a75464b939951fc1e92",
+              "equal": true
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_台账\\01_手动试跑主台账_2026-11-09.md",
+          "expected": "5dbe6bf0682b42a40ef2ca3a44f5c4c497dcd14f1724765c2c4ac26a8db1ebde",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\03_轻量路线工作台\\04_已有交付证据\\02_台账\\01_手动试跑主台账_2026-11-09.md",
+              "sha256": "b49b6ac9da24a319997a78d39fa8d6155d7c4e945f61a941a65ee9f893c3738d",
+              "equal": false
+            }
+          ]
+        },
+        {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_台账\\02_站点任务卡与手动操作准备包_2026-11-09.md",
+          "expected": "feaaf16e9b05778e5c2be9c514e963356fe862f1d3a51560eafff110ab3749c2",
+          "actual": null,
+          "kind": "missing",
+          "relocatedCandidates": [
+            {
+              "path": "docs\\03_轻量路线工作台\\04_已有交付证据\\02_台账\\02_站点任务卡与手动操作准备包_2026-11-09.md",
+              "sha256": "8bfd44da5bc8b872e08d88f7fdf7294e04a96dda9d6e971ad29a3fd116ce81db",
+              "equal": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-final",
+      "command": "node --test mcp/light-contract.test.mjs",
+      "exitCode": 0,
+      "passed": 5,
+      "failed": 0,
+      "log": "app/test-results/manual-trial/A-EX01/contract-final.log",
+      "sha256": "8c7ad4c79afcf51bc49d32b39b3e7742a8d74a93246dc5e9820cb2e1f5b6ac38",
+      "bytes": 527,
+      "workingDirectory": "G:/rust/Codex-task-monitoring/app",
+      "nodeVersion": "v25.5.0",
+      "environment": "隔离 TEMP/TMP 位于 app/test-results/manual-trial/A-EX01/temp，回环测试经自动审批放行"
+    },
+    {
+      "name": "reuse",
+      "command": "node --test server/u03.test.mjs desktop/runtime.test.mjs mcp/contracts.test.mjs server/outputs.test.mjs",
+      "exitCode": 0,
+      "passed": 36,
+      "failed": 0,
+      "log": "app/test-results/manual-trial/A-EX01/reuse-verified.log",
+      "sha256": "f1fd25ee26ca6992233494bf59cdbb259ed5832c1f11ce3397af4973a36bc912",
+      "bytes": 4486,
+      "workingDirectory": "G:/rust/Codex-task-monitoring/app",
+      "nodeVersion": "v25.5.0",
+      "environment": "隔离 TEMP/TMP 位于 app/test-results/manual-trial/A-EX01/temp，回环测试经自动审批放行"
+    },
+    {
+      "name": "full",
+      "command": "node --test server/*.test.mjs mcp/*.test.mjs desktop/*.test.mjs",
+      "exitCode": 0,
+      "passed": 104,
+      "failed": 0,
+      "log": "app/test-results/manual-trial/A-EX01/full-checks.log",
+      "sha256": "0f3bd98e147f781cd9a8fa80d6f28964cc7f682ee844af3488e021614350a61e",
+      "bytes": 10543,
+      "workingDirectory": "G:/rust/Codex-task-monitoring/app",
+      "nodeVersion": "v25.5.0",
+      "environment": "隔离 TEMP/TMP 位于 app/test-results/manual-trial/A-EX01/temp，回环测试经自动审批放行"
+    },
+    {
+      "name": "domain",
+      "command": "npm run test:domain",
+      "exitCode": 0,
+      "passed": 6,
+      "failed": 0,
+      "log": "app/test-results/manual-trial/A-EX01/domain-checks.log",
+      "sha256": "7bcc0a3772ef4c989ad20ac120a930888436d052cedb8deb7464cf3a61405769",
+      "bytes": 798,
+      "workingDirectory": "G:/rust/Codex-task-monitoring/app",
+      "nodeVersion": "v25.5.0",
+      "environment": "隔离 TEMP/TMP 位于 app/test-results/manual-trial/A-EX01/temp，回环测试经自动审批放行"
+    }
+  ],
+  "prototypeBaseline": [
+    {
+      "path": "prototypes/top-panel/src/drawer.ts",
+      "expected": "65fc94f8d488995ce0489703a26660756dedbac8c619f37d72a11f78a51fff19",
+      "actual": "65fc94f8d488995ce0489703a26660756dedbac8c619f37d72a11f78a51fff19",
+      "equal": true
+    },
+    {
+      "path": "prototypes/top-panel/src/main.ts",
+      "expected": "28efe23ee3ac848895a05718c02e64f493703e3c1009095d1280dfa40a2040b9",
+      "actual": "28efe23ee3ac848895a05718c02e64f493703e3c1009095d1280dfa40a2040b9",
+      "equal": true
+    },
+    {
+      "path": "prototypes/top-panel/src/styles.css",
+      "expected": "bc3ec6e01d740d6b0915b59d859fba6fe6a0b710aa3a9f1bf3d71853b60e12de",
+      "actual": "bc3ec6e01d740d6b0915b59d859fba6fe6a0b710aa3a9f1bf3d71853b60e12de",
+      "equal": true
+    },
+    {
+      "path": "prototypes/top-panel/src/vite-env.d.ts",
+      "expected": "424faf9241dd699dda995b367ed36665732da1e6ec1f33b2fd40394488ecac92",
+      "actual": "424faf9241dd699dda995b367ed36665732da1e6ec1f33b2fd40394488ecac92",
+      "equal": true
+    }
+  ],
+  "finalValidation": {
+    "date": "2026-11-10",
+    "utf8": true,
+    "linksChecked": 12,
+    "brokenLinks": [],
+    "sourceChanges": [],
+    "readback": {
+      "stageStatus": "completed",
+      "substepsCompleted": 6,
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "successors": [
+        "B",
+        "C"
+      ],
+      "successorStatus": "pending",
+      "handoffConclusion": "D"
+    },
+    "limitation": "A 执行聊天核对，新接口运行和用户原生体验按后续阶段验收"
+  },
+  "deliveryFiles": [
+    {
+      "path": "app\\mcp\\contracts\\light-v1.json",
+      "sha256": "3a010b001d45583ab4b916a86e88ffc940e86e8b71e4c53c79e14ceb3a6c3181",
+      "bytes": 42888
+    },
+    {
+      "path": "app\\mcp\\light-contract.test.mjs",
+      "sha256": "cb1ec7fa5c986dfd3941beacf12dc279c6b1279914dcedb1fcd3e0a5448c938c",
+      "bytes": 12075
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+      "sha256": "2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+      "bytes": 26786
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\00_执行入口\\01_当前执行台账_2026-11-10.md",
+      "sha256": "f200f20e767fa8b53d3b4774d1bff1330e88d54521e92a88462e5f466a14459c",
+      "bytes": 11337
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\06_执行记录\\A_本地快照_2026-11-10.json",
+      "sha256": "3922ed9f576b959d8ae3ed0dc1342863e85df14132bd054f4a481318967a859f",
+      "bytes": 30651
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\06_执行记录\\A_MCP实测_2026-11-10.json",
+      "sha256": "4601956ae000b5da14758ae0987de03e87284fd9ff46e4adec564760fd954dac",
+      "bytes": 1414
+    }
+  ]
+}

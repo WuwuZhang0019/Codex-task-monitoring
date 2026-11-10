@@ -1,0 +1,851 @@
+{
+  "schemaVersion": "light-1.0",
+  "date": "2026-11-10",
+  "mode": "local",
+  "revision": null,
+  "generatedAt": "2026-11-10T21:50:03+08:00",
+  "projects": [
+    {
+      "key": "light-workbench-20261110/project",
+      "id": null,
+      "name": "Codex-task-monitoring",
+      "planKeys": [
+        "light-workbench-20261110"
+      ],
+      "revision": null
+    }
+  ],
+  "plans": [
+    {
+      "key": "light-workbench-20261110",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "name": "轻量路线工作台",
+      "stageCount": 7,
+      "stageKeys": [
+        "light-workbench-20261110/A-01",
+        "light-workbench-20261110/A-02",
+        "light-workbench-20261110/A-03",
+        "light-workbench-20261110/A-04",
+        "light-workbench-20261110/A-05",
+        "light-workbench-20261110/A-06",
+        "light-workbench-20261110/A-07"
+      ],
+      "source": {
+        "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\00_执行入口\\00_新路线实施总纲与接口决定_2026-11-10.md",
+        "version": "cd567137bfb9489b1a4699bfc2296d53c19118bd",
+        "sha256": "4da43b79373faa8baeefe393fcfab080df4b5675d5444c3ebdbc6d9c4ebc4c6d",
+        "locator": "实施路线与出口、步骤与模块交付矩阵",
+        "trust": "declared"
+      },
+      "endConditions": [
+        {
+          "conditionId": "light-workbench-20261110/exit",
+          "text": "七阶段全部必要步骤及验收满足",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "key": "light-workbench-20261110/A-01",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "A",
+      "originalCode": "N01",
+      "sourceLocator": "总纲/实施路线与出口/A",
+      "title": "复用核对与契约",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-01/exit",
+          "text": "原文映射、事件、状态、绑定与存储契约可验证，复用有证据，原型基线固定，开始进展结束和保存回读完整",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-proof-A"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-proof-A",
+          "location": "docs/03_轻量路线工作台/06_执行记录/A_复用核对与契约回执_2026-11-10.md",
+          "method": "结构检查、源码核对与持久文件回读，详见回执及证据索引",
+          "deliveryVersion": "A-EX01",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "bindingKey": "light-workbench-20261110/bindings/A-local",
+      "updatedAt": "2026-11-10T21:50:03+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/A-02",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "B",
+      "originalCode": "N02",
+      "sourceLocator": "总纲/实施路线与出口/B",
+      "title": "路线与存储",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-01"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-02/exit",
+          "text": "路线与存储达到总纲及本次台账约定出口",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T21:39:30+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/A-03",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "C",
+      "originalCode": "N03",
+      "sourceLocator": "总纲/实施路线与出口/C",
+      "title": "UI 模拟开发",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-01"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-03/exit",
+          "text": "UI 模拟开发达到总纲及本次台账约定出口",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T21:39:30+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/A-04",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "D",
+      "originalCode": "N04",
+      "sourceLocator": "总纲/实施路线与出口/D",
+      "title": "MCP 真实接入",
+      "order": 4,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-02"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-04/exit",
+          "text": "MCP 真实接入达到总纲及本次台账约定出口",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T21:39:30+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/A-05",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "E",
+      "originalCode": "N05",
+      "sourceLocator": "总纲/实施路线与出口/E",
+      "title": "Skill 与会话关联",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-04"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-05/exit",
+          "text": "Skill 与会话关联达到总纲及本次台账约定出口",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T21:39:30+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/A-06",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "F",
+      "originalCode": "N06",
+      "sourceLocator": "总纲/实施路线与出口/F",
+      "title": "真实面板接线",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-03",
+        "light-workbench-20261110/A-05"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-06/exit",
+          "text": "真实面板接线达到总纲及本次台账约定出口",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T21:39:30+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/A-07",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "G",
+      "originalCode": "N07",
+      "sourceLocator": "总纲/实施路线与出口/G",
+      "title": "恢复与交付验收",
+      "order": 7,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-06"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-07/exit",
+          "text": "恢复与交付验收达到总纲及本次台账约定出口",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T21:39:30+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-01",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-01",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-01",
+      "title": "现场与能力核对",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-01/exit",
+          "text": "版本可定位，仓库与两个安装入口逐文件比较，当前实际工具 schema 和真实封套核对，业务与隔离身份分别登记",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-proof-A-01"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-proof-A-01",
+          "location": "docs/03_轻量路线工作台/06_执行记录/A_复用核对与契约回执_2026-11-10.md",
+          "method": "结构检查、源码核对与持久文件回读，详见回执及证据索引",
+          "deliveryVersion": "A-EX01",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "bindingKey": "light-workbench-20261110/bindings/A-local",
+      "updatedAt": "2026-11-10T21:50:03+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-02",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-02",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-02",
+      "title": "旧交付复用核对",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-02/exit",
+          "text": "七模块复用清单关联实际代码和定向检查，每个缺口登记所属后续阶段，历史证据漂移可追溯",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-proof-A-02"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-proof-A-02",
+          "location": "docs/03_轻量路线工作台/06_执行记录/A_复用核对与契约回执_2026-11-10.md",
+          "method": "结构检查、源码核对与持久文件回读，详见回执及证据索引",
+          "deliveryVersion": "A-EX01",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "bindingKey": "light-workbench-20261110/bindings/A-local",
+      "updatedAt": "2026-11-10T21:50:03+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-03",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-03",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-03",
+      "title": "层级状态与快照契约",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-03/exit",
+          "text": "总阶段与细分身份稳定，引用与聚合依赖无环，五状态、验收和同步分离，B/C 共用快照结构可校验",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-proof-A-03"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-proof-A-03",
+          "location": "docs/03_轻量路线工作台/06_执行记录/A_复用核对与契约回执_2026-11-10.md",
+          "method": "结构检查、源码核对与持久文件回读，详见回执及证据索引",
+          "deliveryVersion": "A-EX01",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "bindingKey": "light-workbench-20261110/bindings/A-local",
+      "updatedAt": "2026-11-10T21:50:03+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-04",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-04",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-04",
+      "title": "事务授权绑定及回执契约",
+      "order": 4,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-03"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-04/exit",
+          "text": "幂等回放顺序、事务边界、冲突、未知结果、授权撤销、绑定接手和迟到回执规则明确，结构正负例通过",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-proof-A-04"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-proof-A-04",
+          "location": "docs/03_轻量路线工作台/06_执行记录/A_复用核对与契约回执_2026-11-10.md",
+          "method": "结构检查、源码核对与持久文件回读，详见回执及证据索引",
+          "deliveryVersion": "A-EX01",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "bindingKey": "light-workbench-20261110/bindings/A-local",
+      "updatedAt": "2026-11-10T21:50:03+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-05",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-05",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-05",
+      "title": "原型与验证基线",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-03",
+        "light-workbench-20261110/stages/A/steps/A-04"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-05/exit",
+          "text": "原型四项指纹一致，契约五组和现有适用回归通过，样例范围和后续运行验收边界明确",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-proof-A-05"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-proof-A-05",
+          "location": "docs/03_轻量路线工作台/06_执行记录/A_复用核对与契约回执_2026-11-10.md",
+          "method": "结构检查、源码核对与持久文件回读，详见回执及证据索引",
+          "deliveryVersion": "A-EX01",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "bindingKey": "light-workbench-20261110/bindings/A-local",
+      "updatedAt": "2026-11-10T21:50:03+08:00"
+    },
+    {
+      "key": "light-workbench-20261110/stages/A/steps/A-06",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": "light-workbench-20261110/A-01",
+      "code": "A-06",
+      "originalCode": null,
+      "sourceLocator": "当前执行台账/A 阶段执行登记/A-06",
+      "title": "出口验收及交接",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/stages/A/steps/A-01",
+        "light-workbench-20261110/stages/A/steps/A-02",
+        "light-workbench-20261110/stages/A/steps/A-03",
+        "light-workbench-20261110/stages/A/steps/A-04",
+        "light-workbench-20261110/stages/A/steps/A-05"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/stages/A/steps/A-06/exit",
+          "text": "八项阶段出口有证据，B/C 前置分别满足，结束与待同步记录保存后回读，变更按范围提交",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-proof-A-06"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-proof-A-06",
+          "location": "docs/03_轻量路线工作台/06_执行记录/A_复用核对与契约回执_2026-11-10.md",
+          "method": "结构检查、源码核对与持久文件回读，详见回执及证据索引",
+          "deliveryVersion": "A-EX01",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "bindingKey": "light-workbench-20261110/bindings/A-local",
+      "updatedAt": "2026-11-10T21:50:03+08:00"
+    }
+  ],
+  "routes": [
+    {
+      "key": "light-workbench-20261110/routes/1",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "label": "1 轻量路线工作台 · main",
+      "stepKeys": [
+        "light-workbench-20261110/A-01",
+        "light-workbench-20261110/A-02",
+        "light-workbench-20261110/A-03",
+        "light-workbench-20261110/A-04",
+        "light-workbench-20261110/A-05",
+        "light-workbench-20261110/A-06",
+        "light-workbench-20261110/A-07"
+      ],
+      "context": {
+        "sessionGroup": "A",
+        "threadId": "01a1c5a8-ec10-7e43-b394-f194fcdbc2b9",
+        "hostId": "local",
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring",
+        "branch": "main",
+        "head": "cd567137bfb9489b1a4699bfc2296d53c19118bd",
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null,
+      "order": 1
+    }
+  ],
+  "bindings": [
+    {
+      "key": "light-workbench-20261110/bindings/A-local",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/A-01",
+        "light-workbench-20261110/stages/A/steps/A-01",
+        "light-workbench-20261110/stages/A/steps/A-02",
+        "light-workbench-20261110/stages/A/steps/A-03",
+        "light-workbench-20261110/stages/A/steps/A-04",
+        "light-workbench-20261110/stages/A/steps/A-05",
+        "light-workbench-20261110/stages/A/steps/A-06"
+      ],
+      "bindingRevision": null,
+      "state": "proposed",
+      "context": {
+        "sessionGroup": "A",
+        "threadId": "01a1c5a8-ec10-7e43-b394-f194fcdbc2b9",
+        "hostId": "local",
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring",
+        "branch": "main",
+        "head": "cd567137bfb9489b1a4699bfc2296d53c19118bd",
+        "trust": "declared"
+      },
+      "confirmationRef": null,
+      "revokedAt": null
+    }
+  ],
+  "executions": [
+    {
+      "key": "light-workbench-20261110/executions/A-EX01",
+      "id": null,
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/A-01",
+        "light-workbench-20261110/stages/A/steps/A-01",
+        "light-workbench-20261110/stages/A/steps/A-02",
+        "light-workbench-20261110/stages/A/steps/A-03",
+        "light-workbench-20261110/stages/A/steps/A-04",
+        "light-workbench-20261110/stages/A/steps/A-05",
+        "light-workbench-20261110/stages/A/steps/A-06"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/A-local",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-10T21:39:30+08:00",
+      "endedAt": "2026-11-10T21:50:03+08:00",
+      "handoffConclusion": "D"
+    }
+  ],
+  "supplements": [],
+  "uiPreferences": {
+    "collapsedKeys": [],
+    "selectedStepKey": "light-workbench-20261110/A-01",
+    "focusedRouteKey": null,
+    "scrollByProject": {
+      "light-workbench-20261110/project": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "events": [
+    {
+      "eventId": "light-workbench-20261110/A-EX01/start",
+      "stepKey": "light-workbench-20261110/A-01",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T21:39:30+08:00",
+      "receivedAt": null,
+      "reason": "用户授权执行 A，本地前置已核对",
+      "evidenceIds": [],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-01-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-01",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "本次细分执行结果汇总登记，实际细分起止未逐项计时",
+      "evidenceIds": [],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-01-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-01",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "版本可定位，仓库与两个安装入口逐文件比较，当前实际工具 schema 和真实封套核对，业务与隔离身份分别登记",
+      "evidenceIds": [
+        "A-proof-A-01"
+      ],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-02-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-02",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "本次细分执行结果汇总登记，实际细分起止未逐项计时",
+      "evidenceIds": [],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-02-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-02",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "七模块复用清单关联实际代码和定向检查，每个缺口登记所属后续阶段，历史证据漂移可追溯",
+      "evidenceIds": [
+        "A-proof-A-02"
+      ],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-03-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-03",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "本次细分执行结果汇总登记，实际细分起止未逐项计时",
+      "evidenceIds": [],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-03-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-03",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "总阶段与细分身份稳定，引用与聚合依赖无环，五状态、验收和同步分离，B/C 共用快照结构可校验",
+      "evidenceIds": [
+        "A-proof-A-03"
+      ],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-04-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-04",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "本次细分执行结果汇总登记，实际细分起止未逐项计时",
+      "evidenceIds": [],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-04-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-04",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "幂等回放顺序、事务边界、冲突、未知结果、授权撤销、绑定接手和迟到回执规则明确，结构正负例通过",
+      "evidenceIds": [
+        "A-proof-A-04"
+      ],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-05-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-05",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "本次细分执行结果汇总登记，实际细分起止未逐项计时",
+      "evidenceIds": [],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-05-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-05",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "原型四项指纹一致，契约五组和现有适用回归通过，样例范围和后续运行验收边界明确",
+      "evidenceIds": [
+        "A-proof-A-05"
+      ],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-06-start",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-06",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "本次细分执行结果汇总登记，实际细分起止未逐项计时",
+      "evidenceIds": [],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/A-06-complete",
+      "stepKey": "light-workbench-20261110/stages/A/steps/A-06",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "八项阶段出口有证据，B/C 前置分别满足，结束与待同步记录保存后回读，变更按范围提交",
+      "evidenceIds": [
+        "A-proof-A-06"
+      ],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/complete",
+      "stepKey": "light-workbench-20261110/A-01",
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "六细分与八项出口通过，B/C 可开始",
+      "evidenceIds": [
+        "A-proof-A"
+      ],
+      "sync": "pendingSync"
+    },
+    {
+      "eventId": "light-workbench-20261110/A-EX01/end",
+      "stepKey": null,
+      "executionKey": "light-workbench-20261110/executions/A-EX01",
+      "fromStatus": null,
+      "toStatus": null,
+      "occurredAt": "2026-11-10T21:50:03+08:00",
+      "receivedAt": null,
+      "reason": "本次范围完成，completedScope，交接结论 D，业务待同步",
+      "evidenceIds": [
+        "A-proof-A"
+      ],
+      "sync": "pendingSync"
+    }
+  ]
+}
