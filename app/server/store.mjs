@@ -22,7 +22,7 @@ async function atomicWrite(file, content) {
 // One store/queue per running server; the data directory is owned by that process.
 export async function createStore(directory, persistence) {
   await mkdir(directory, { recursive: true });
-  if (!persistence && (existsSync(path.join(directory, 'aggregate.json')) || existsSync(path.join(directory, 'transaction.committed.json')))) throw Error('AGGREGATE_REQUIRED: 请使用当前领域所有者，禁止回写旧文件');
+  if (!persistence && ['aggregate.json', 'aggregate.json.bak', 'aggregate-migration-source.json', 'transaction.committed.json'].some(name => existsSync(path.join(directory, name)))) throw Error('AGGREGATE_REQUIRED: 请使用当前领域所有者，禁止回写旧文件');
   const file = path.join(directory, 'projects.json');
   let data;
   try {

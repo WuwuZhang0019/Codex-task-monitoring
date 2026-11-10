@@ -1,5 +1,19 @@
 import { HttpError } from './validation.mjs';
 
+export function assertModelHistory(previous, model) {
+  if (previous.initialPlanId !== null && model.initialPlanId !== previous.initialPlanId) throw new HttpError(400, '初始方案引用不可覆盖');
+  for (const plan of previous.plans) if (JSON.stringify(model.plans.find(p => p.id === plan.id)) !== JSON.stringify(plan)) throw new HttpError(400, '已有方案版本不可覆盖或删除');
+  for (const task of previous.tasks) {
+    const next = model.tasks.find(t => t.id === task.id);
+    if (!next || task.folderId !== null && next.folderId !== task.folderId) throw new HttpError(400, '已有任务不可删除或迁移文件夹');
+    if (task.initialGoal && next.initialGoal !== task.initialGoal) throw new HttpError(400, '原始任务目标不可覆盖');
+  }
+  for (const station of previous.stations) {
+    const next = model.stations.find(s => s.id === station.id);
+    if (!next || next.taskId !== station.taskId || next.code !== station.code) throw new HttpError(400, '已有站点身份不可删除或改写');
+  }
+}
+
 // M02 relationship contract. No report or manual status grants acceptance.
 export function validateRelationships(model) {
   const fail = message => { throw new HttpError(400, message); };

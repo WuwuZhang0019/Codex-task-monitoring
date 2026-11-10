@@ -82,6 +82,24 @@ try {
     await page.reload(); await page.getByTestId(`monitor-${station.id}`).click();
     await page.getByText('固定原条件缺口 · 处理中', { exact: true }).waitFor();
   });
+  await check('桌面 transport 固定适配通过正常导入入口打开集中确认', async () => {
+    const desktopPage = await browser.newPage();
+    await desktopPage.addInitScript(() => {
+      window.__TAURI__ = { core: { invoke: async (command, args) => {
+        if (command === 'runtime_status') return { needsSetup: false, running: true, migrationPending: false, dataPath: 'U03 固定桌面 transport 样例' };
+        if (command === 'api_request') {
+          const response = await fetch('/api' + args.path, { method: args.method, headers: { 'content-type': 'application/json' }, body: args.body === null ? undefined : JSON.stringify(args.body) });
+          return { status: response.status, data: await response.json() };
+        }
+        throw Error('Unsupported fixture command');
+      } } };
+    });
+    await desktopPage.goto(base);
+    await desktopPage.getByRole('button', { name: '导入方案', exact: true }).first().click();
+    await desktopPage.getByRole('dialog').getByRole('heading', { name: '方案草稿与集中确认', exact: true }).first().waitFor();
+    await desktopPage.screenshot({ path: path.join(output, 'ui-desktop-transport.png') });
+    await desktopPage.close();
+  });
   assert.deepEqual(errors, []);
   await writeFile(path.join(output, 'ui-summary.json'), JSON.stringify({ date: '2026-11-10', dataDir, projectId, browserVersion: browser.version(), checks, errors }, null, 2));
 } finally {

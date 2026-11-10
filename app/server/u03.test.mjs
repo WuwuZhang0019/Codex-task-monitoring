@@ -215,6 +215,11 @@ test('U03-K04 真实文件写入失败、旧数据迁移、全目录备份恢复
   await f.stop(); const backup = path.join(root, 'backup'); await cp(f.root, backup, { recursive: true });
   const recovered = await createServer({ dataDir: backup, env: {} });
   assert.equal((await recovered.workbench.models.get(publication.projectId)).model.stations.length, 8); recovered.emit('close');
+  await assert.rejects(readFile(path.join(f.root, 'projects.json')), { code: 'ENOENT' });
+  const aggregateTarget = path.join(root, 'aggregate-only-migrated');
+  await migrate(f.root, aggregateTarget);
+  const aggregateRestored = await createServer({ dataDir: aggregateTarget, env: {} });
+  assert.equal((await aggregateRestored.workbench.models.get(publication.projectId)).model.stations.length, 8); aggregateRestored.emit('close');
   await f.evidence('K04-migration-disk-backup');
 });
 
@@ -259,6 +264,8 @@ test('U03-K01 追加方案版本保护初始目标，旧确认和旧绑定失效
   input.candidate.requirements.forEach(r => { r.stationIds = r.stationIds.map(id => remap[id]); });
   input.candidate.goal = '当前目标经过明确差异确认';
   input.candidate.provenance = input.candidate.provenance.map(p => p.fieldPath === '/goal' || p.fieldPath === '/version' ? { ...p, origin: 'user', locator: '固定用户修订', excerpt: null, startUtf16: null, endUtf16: null } : p);
+  const overwrite = structuredClone(input); overwrite.idempotencyKey = 'protected-task-goal'; overwrite.candidate.tasks[0].initialGoal = '覆盖原任务目标';
+  const rejectedDraft = await f.ok('/import-drafts', overwrite); assert.equal(rejectedDraft.status, 'needs-review'); assert.ok(rejectedDraft.issues.some(i => i.message.includes('原始任务目标不可覆盖')));
   const { publication } = await f.publish(input);
   const current = await f.ok(f.endpoint + '/model');
   assert.equal(current.model.initialPlanId, old.model.initialPlanId); assert.equal(current.model.plans.length, 2); assert.equal(current.model.plans[0].source, old.model.plans[0].source);
@@ -266,6 +273,16 @@ test('U03-K01 追加方案版本保护初始目标，旧确认和旧绑定失效
   assert.equal(current.model.business.executions.length, 1); assert.equal((await f.ok(f.endpoint + '/monitor')).stations[0].ready, false);
   assert.equal((await f.request(f.endpoint + '/business', { operation: 'claim', expectedRevision: current.revision, idempotencyKey: 'old-binding', scope: f.scope(f.bindings[0]), workContext, allowedPaths: [], reason: '旧绑定负例' })).status, 409);
   await f.evidence('K01-plan-version');
+});
+
+test('U03-K01 初始与当前项目目标分别保留，结束条件进入必需验收', async t => {
+  const f = await fixture(t), input = draftInput();
+  input.candidate.initialGoal = '用户确认的初始目标';
+  input.candidate.provenance = input.candidate.provenance.map(p => p.fieldPath === '/initialGoal' ? { ...p, origin: 'user', locator: '固定用户确认的初始目标', excerpt: null, startUtf16: null, endUtf16: null } : p);
+  const { publication } = await f.publish(input), model = await f.ok(`/projects/${publication.projectId}/model`), view = await f.ok(`/projects/${publication.projectId}/monitor`);
+  assert.equal(view.project.originalGoal, '用户确认的初始目标'); assert.equal(view.project.currentGoal, '完成固定业务路线');
+  assert.ok(model.model.acceptance.includes(input.candidate.endCondition)); assert.ok(model.model.tasks[0].acceptance.includes(input.candidate.tasks[0].endCondition));
+  await f.evidence('K01-original-goal-endpoint');
 });
 
 test('U03-K04 发布响应真实丢失后，查询原键并发重放返回原结果', async t => {

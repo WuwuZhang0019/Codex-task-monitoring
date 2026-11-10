@@ -59,8 +59,8 @@ export async function migrate(source, target, { failAfterCopy = false } = {}) {
     await writeFile(`${backup}.manifest.json`, JSON.stringify({ date: new Date().toISOString(), source, files: before }, null, 2));
     await writeFile(path.join(target, '.migration-pending.json'), JSON.stringify({ stage, backup, files: Object.keys(before) }));
     if (failAfterCopy) throw Error('Injected migration interruption');
-    // Publish the project index last; the pending marker denies runtime startup throughout.
-    const names = Object.keys(before).filter(n => n !== 'projects.json').concat('projects.json');
+    // Publish the authoritative primary last. The marker denies startup throughout.
+    const names = Object.keys(before).filter(n => n !== primary).concat(primary);
     for (const name of names) {
       await mkdir(path.dirname(path.join(target, name)), { recursive: true });
       await rename(path.join(stage, name), path.join(target, name));

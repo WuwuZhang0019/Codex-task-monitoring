@@ -1,7 +1,7 @@
 import { randomUUID, createHash } from 'node:crypto';
 import { requireShape } from './business-schema.mjs';
 import { digest } from './receipts.mjs';
-import { validateRelationships } from './relationships.mjs';
+import { validateRelationships, assertModelHistory } from './relationships.mjs';
 import { HttpError, projectInput, exactKeys } from './validation.mjs';
 import { planSteps } from './plan-steps.mjs';
 
@@ -9,7 +9,7 @@ export const sourceHash = text => createHash('sha256').update(text, 'utf8').dige
 const present = value => typeof value === 'string' && !!value.trim();
 const requiredText = (conditions, endCondition) => [...new Set([...conditions.filter(c => c.required).map(c => c.originalText), ...(endCondition ? [endCondition] : [])])];
 
-export function draftIssues(draft, previous) {
+export function draftIssues(draft, previous, previousRevision = 0) {
   const { candidate: c, source } = draft;
   const issues = [];
   function issue(path, message, blocking = true) { issues.push({ code: digest([path, message]).slice(0, 16), path, message, blocking }); }
@@ -65,7 +65,7 @@ export function draftIssues(draft, previous) {
     required(`/requirements/${i}/originalText`, requirement.originalText);
     if (!requirement.stationIds.length || !requirement.conditionIds.length || requirement.stationIds.some(id => !c.stations.some(s => s.stationId === id)) || requirement.conditionIds.some(id => !c.stations.filter(s => requirement.stationIds.includes(s.stationId)).some(s => s.acceptance.some(a => a.conditionId === id)))) issue(`/requirements/${i}`, '需求未覆盖或站点与条件映射不一致');
   }
-  try { validateRelationships(materialize(draft, previous)); } catch (error) { issue('/candidate', error.message); }
+  try { const model = validateRelationships(materialize(draft, previous)); if (previousRevision > 0) assertModelHistory(previous, model); } catch (error) { issue('/candidate', error.message); }
   try { projectInput(projectFromDraft(draft)); } catch (error) { issue('/project', error.message); }
   issue('/bindings', '聊天来源待绑定，发布后按 U04 确认真实来源', false);
   return issues;
@@ -119,7 +119,7 @@ export function createDrafts(persistence, requests, models) {
       const draft = { draftId: old?.draftId ?? randomUUID(), planId: old?.planId ?? randomUUID(), projectId: old?.projectId ?? input.targetProjectId ?? randomUUID(),
         targetProjectId: input.targetProjectId ?? null, principal, name: input.name, schemaVersion: '1.0.0', revision: (old?.revision ?? 0) + 1,
         source: input.source, candidate: input.candidate, entityIds, status: 'draft', issues: [], history: [...(old?.history ?? []), ...(old ? [{ revision: old.revision, source: old.source, candidate: old.candidate }] : [])], updatedAt: new Date().toISOString() };
-      draft.issues = draftIssues(draft, current?.model);
+      draft.issues = draftIssues(draft, current?.model, current?.revision);
       draft.status = draft.issues.some(x => x.blocking) ? 'needs-review' : 'ready';
       persistence.write('drafts', { ...persistence.read('drafts'), [draft.draftId]: draft });
       return draft;

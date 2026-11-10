@@ -15,18 +15,18 @@ export function createPublisher(persistence, requests, drafts, projects, models)
       previousPlanId: old.model?.currentPlanId ?? null, nextPlanId: draft.planId,
       before: old.model && { tasks: old.model.tasks, stations: old.model.stations, acceptance: old.model.acceptance, requirements: old.model.requirements },
       after: { tasks: draft.candidate.tasks, stations: draft.candidate.stations, acceptance: draft.candidate.acceptance, requirements: draft.candidate.requirements },
-      uncovered: draftIssues(draft, old.model).filter(x => x.path.startsWith('/requirements')) };
+      uncovered: draftIssues(draft, old.model, old.revision).filter(x => x.path.startsWith('/requirements')) };
   }
   return {
     validate: id => persistence.run(async () => {
       const draft = drafts.get(id), old = await basis(draft);
-      return { draftId: id, revision: draft.revision, basisRevision: old.revision, issues: draftIssues(draft, old.model), diff: diff(draft, old) };
+      return { draftId: id, revision: draft.revision, basisRevision: old.revision, issues: draftIssues(draft, old.model, old.revision), diff: diff(draft, old) };
     }),
     confirm: (id, input, principal = 'local-ui') => persistence.run(async () => {
       const draft = drafts.get(id), old = await basis(draft);
       if (draft.principal !== principal || input.revision !== draft.revision || input.expectedRevision !== old.revision) throw new HttpError(409, '确认版本冲突');
       if (input.acknowledged !== true) throw new HttpError(400, '必须确认完整步骤、需求覆盖和方案差异');
-      if (draftIssues(draft, old.model).some(x => x.blocking)) throw new HttpError(400, '草稿仍有阻塞问题');
+      if (draftIssues(draft, old.model, old.revision).some(x => x.blocking)) throw new HttpError(400, '草稿仍有阻塞问题');
       if ((old.model?.currentPlanId ?? null) !== draft.candidate.previousPlanId) throw new HttpError(409, '前版方案不匹配');
       const confirmationGrantId = randomUUID();
       const grant = { confirmationGrantId, principal, draftId: id, draftRevision: draft.revision, sourceHash: draft.source.sourceHash,
@@ -44,7 +44,7 @@ export function createPublisher(persistence, requests, drafts, projects, models)
       }
       const old = await basis(draft), grant = persistence.read('grants')[input.confirmationGrantId];
       if (!grant || grant.principal !== principal || grant.draftId !== id || grant.confirmationDigest !== input.confirmationDigest || grant.sourceHash !== input.sourceHash || grant.draftRevision !== draft.revision || grant.basisRevision !== old.revision || grant.projectRevision !== old.projectRevision || grant.expiresAt < Date.now() || digest(grant.diff) !== digest(diff(draft, old))) throw new HttpError(409, 'CONFIRMATION_REQUIRED: 确认已过期或内容改变');
-      if (draftIssues(draft, old.model).some(x => x.blocking)) throw new HttpError(400, '发布校验失败');
+      if (draftIssues(draft, old.model, old.revision).some(x => x.blocking)) throw new HttpError(400, '发布校验失败');
       if (old.model) {
         const initial = old.model.plans.find(p => p.id === old.model.initialPlanId);
         if ((initial?.initialGoal ?? initial?.goal) !== draft.candidate.initialGoal) throw new HttpError(400, '初始目标不可覆盖');

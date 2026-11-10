@@ -24,6 +24,19 @@ struct Runtime {
     _lock: File,
 }
 
+fn workspace_initialized(root: &std::path::Path) -> bool {
+    [
+        "aggregate.json",
+        "aggregate.json.bak",
+        "aggregate-migration-source.json",
+        "transaction.committed.json",
+        "projects.json",
+        "projects.json.bak",
+    ]
+    .iter()
+    .any(|name| root.join("data").join(name).exists())
+}
+
 fn private_command(executable: &std::path::Path) -> Command {
     let mut command = Command::new(executable);
     #[cfg(windows)]
@@ -118,7 +131,7 @@ fn start_owner(runtime: &Runtime) -> Result<(), String> {
 
 #[tauri::command]
 fn runtime_status(state: tauri::State<Runtime>) -> Value {
-    json!({"dataPath":state.root.join("data").display().to_string(),"needsSetup": !state.root.join("data/projects.json").exists() || state.root.join("data/.migration-pending.json").exists(),"migrationPending":state.root.join("data/.migration-pending.json").exists(),"running": state.endpoint.lock().unwrap().is_some()})
+    json!({"dataPath":state.root.join("data").display().to_string(),"needsSetup": !workspace_initialized(&state.root) || state.root.join("data/.migration-pending.json").exists(),"migrationPending":state.root.join("data/.migration-pending.json").exists(),"running": state.endpoint.lock().unwrap().is_some()})
 }
 
 #[tauri::command]
@@ -156,7 +169,7 @@ async fn initialize_workspace(
         if !source_stopped || !PathBuf::from(&source).is_absolute() {
             return Err("请提供旧数据绝对路径并确认旧服务已停写".into());
         }
-        if state.root.join("data/projects.json").exists() {
+        if workspace_initialized(&state.root) {
             return Err("当前工作区已初始化".into());
         }
         let output = private_command(&state.resources.join("node.exe"))
@@ -351,7 +364,7 @@ pub fn run() {
                 token,
                 _lock: lock,
             };
-            if root.join("data/projects.json").exists()
+            if workspace_initialized(&root)
                 && !root.join("data/.migration-pending.json").exists()
             {
                 // Keep the recovery UI available if existing data or the child fails.
@@ -415,7 +428,21 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
-    use super::allowed_request;
+    use super::{allowed_request, workspace_initialized};
+    #[test]
+    fn aggregate_and_recovery_records_are_initialized_workspaces() {
+        let root = std::env::temp_dir().join(format!("u03-workspace-{}", std::process::id()));
+        std::fs::create_dir_all(root.join("data")).unwrap();
+        assert!(!workspace_initialized(&root));
+        for name in ["aggregate.json", "aggregate.json.bak", "aggregate-migration-source.json", "transaction.committed.json", "projects.json"] {
+            let file = root.join("data").join(name);
+            std::fs::write(&file, "{}").unwrap();
+            assert!(workspace_initialized(&root));
+            std::fs::remove_file(file).unwrap();
+        }
+        std::fs::remove_dir(root.join("data")).unwrap();
+        std::fs::remove_dir(root).unwrap();
+    }
     #[test]
     fn desktop_transport_rejects_arbitrary_targets_and_methods() {
         assert!(allowed_request("/projects", "POST"));

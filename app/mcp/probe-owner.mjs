@@ -13,7 +13,7 @@ export async function createProbeOwner({ dataDir, projectId, token, audit = () =
   if (!path.isAbsolute(dataDir) || !token || token.length < 32) throw new Error('Invalid probe owner configuration');
   const release = acquireDataLease(dataDir);
   try {
-  const persistence = ['aggregate.json', 'transaction.committed.json'].some(name => existsSync(path.join(dataDir, name))) ? await createPersistence(dataDir) : undefined;
+  const persistence = ['aggregate.json', 'aggregate.json.bak', 'aggregate-migration-source.json', 'transaction.committed.json'].some(name => existsSync(path.join(dataDir, name))) ? await createPersistence(dataDir) : undefined;
   const projects = await createStore(dataDir, persistence);
   const models = await createModelStore(path.join(dataDir, 'models'), projects, persistence);
   projects.get(projectId);

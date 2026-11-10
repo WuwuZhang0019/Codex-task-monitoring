@@ -2,7 +2,7 @@ import {resumeContext,repairStates} from './business-view.mjs';
 import { readFile, mkdir, writeFile, rename, stat, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
-import { validateRelationships } from './relationships.mjs';
+import { validateRelationships, assertModelHistory } from './relationships.mjs';
 import { HttpError } from './validation.mjs';
 import {applyReceiptCommand,inspectReceipts} from './receipts.mjs';
 import {applyStart,inspectMonitor,reconcileLifecycle} from './monitor.mjs';
@@ -25,7 +25,7 @@ export function legacyModel(project) {
 }
 
 export async function createModelStore(directory, projects, persistence) {
-  if (!persistence && existsSync(path.join(directory, '..', 'aggregate.json'))) throw Error('AGGREGATE_REQUIRED: 禁止使用旧模型存储覆盖当前数据');
+  if (!persistence && ['aggregate.json', 'aggregate.json.bak', 'aggregate-migration-source.json', 'transaction.committed.json'].some(name => existsSync(path.join(directory, '..', name)))) throw Error('AGGREGATE_REQUIRED: 禁止使用旧模型存储覆盖当前数据');
   await mkdir(directory,{recursive:true});
   let queue=Promise.resolve();
   const fileFor=id=>path.join(directory,`${id}.json`);
@@ -50,13 +50,7 @@ export async function createModelStore(directory, projects, persistence) {
       if(!receiptCommand){if(old.model.receiptLog)model.receiptLog=old.model.receiptLog;else delete model.receiptLog;}
       if(!['start','business'].includes(receiptCommand)){if(old.model.lifecycle)model.lifecycle=old.model.lifecycle;else delete model.lifecycle;}
       for(const key of ['initialPlanId','currentPlanId'])if(model[key]!==null&&!model.plans.some(p=>p.id===model[key]))throw new HttpError(400,'项目方案引用不存在');
-      if(old.revision>0){
-        if(old.model.initialPlanId!==null&&model.initialPlanId!==old.model.initialPlanId)throw new HttpError(400,'初始方案引用不可覆盖');
-        for(const plan of old.model.plans)if(JSON.stringify(model.plans.find(p=>p.id===plan.id))!==JSON.stringify(plan))throw new HttpError(400,'已有方案版本不可覆盖或删除');
-        for(const task of old.model.tasks){const next=model.tasks.find(t=>t.id===task.id);if(!next||(task.folderId!==null&&next.folderId!==task.folderId))throw new HttpError(400,'已有任务不可删除或迁移文件夹');}
-        for(const task of old.model.tasks)if(task.initialGoal&&model.tasks.find(t=>t.id===task.id)?.initialGoal!==task.initialGoal)throw new HttpError(400,'原始任务目标不可覆盖');
-        for(const station of old.model.stations){const next=model.stations.find(s=>s.id===station.id);if(!next||next.taskId!==station.taskId||next.code!==station.code)throw new HttpError(400,'已有站点身份不可删除或改写');}
-      }
+      if(old.revision>0)assertModelHistory(old.model,model);
       for(const station of model.stations){
         const previous=old.model.stations.find(s=>s.id===station.id);
         if(previous?.report)station.report=structuredClone(previous.report);
