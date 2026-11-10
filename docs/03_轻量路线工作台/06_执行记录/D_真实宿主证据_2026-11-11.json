@@ -1,0 +1,1583 @@
+{
+  "date": "2026-11-11",
+  "environment": "真实Codex CLI ephemeral聊天，通过STDIO及独立desktop/owner子进程私有HTTP访问独立持久数据",
+  "host": "Codex CLI 临时聊天，使用自动审批审核",
+  "dispatchThreads": [
+    "01a1c634-8e30-7120-87f9-64c8c2b99cd5",
+    "01a1c635-741d-7730-8cda-522caf77f07c"
+  ],
+  "declaredResponsibleContext": {
+    "sessionGroup": "D",
+    "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+    "hostId": "local",
+    "folderId": null,
+    "worktreeOrdinal": 1,
+    "worktreePath": "G:\\rust\\Codex-task-monitoring",
+    "branch": "main",
+    "head": "391702167e33d15d6132290e32a9f702b073624f",
+    "trust": "declared"
+  },
+  "source": {
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\host-trial\\attempt-03\\plan.md",
+    "version": "2026-11-11",
+    "sha256": "0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852",
+    "locator": "完整步骤及依赖表"
+  },
+  "exitCode": 0,
+  "calls": [
+    {
+      "tool": "workbench_register_plan",
+      "status": "completed",
+      "eventId": "D-host-register",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"8a9ddba7-8e7a-4fc6-9968-a1c882e7977f\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"revision\":1,\"receipt\":{\"schemaVersion\":\"light-1.0\",\"eventId\":\"D-host-register\",\"requestId\":\"8a9ddba7-8e7a-4fc6-9968-a1c882e7977f\",\"status\":\"committed\",\"committedRevision\":1,\"receivedAt\":\"2026-11-10T16:05:28.054Z\",\"resultRef\":\"light/events/D-host-register\",\"errorCode\":null,\"recovery\":\"读取已提交快照或查询原事件\"},\"projectId\":\"5c5c531f-98bd-4d0a-bb30-d0be4266d42e\",\"planIds\":[\"f0e55f83-2755-407a-92b2-27caaa276e8e\"],\"requestId\":\"8a9ddba7-8e7a-4fc6-9968-a1c882e7977f\"}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "8a9ddba7-8e7a-4fc6-9968-a1c882e7977f",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "revision": 1,
+            "receipt": {
+              "schemaVersion": "light-1.0",
+              "eventId": "D-host-register",
+              "requestId": "8a9ddba7-8e7a-4fc6-9968-a1c882e7977f",
+              "status": "committed",
+              "committedRevision": 1,
+              "receivedAt": "2026-11-10T16:05:28.054Z",
+              "resultRef": "light/events/D-host-register",
+              "errorCode": null,
+              "recovery": "读取已提交快照或查询原事件"
+            },
+            "projectId": "5c5c531f-98bd-4d0a-bb30-d0be4266d42e",
+            "planIds": [
+              "f0e55f83-2755-407a-92b2-27caaa276e8e"
+            ],
+            "requestId": "8a9ddba7-8e7a-4fc6-9968-a1c882e7977f"
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_get_project",
+      "status": "completed",
+      "eventId": null,
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"d2ea47dd-c8cc-4503-8739-2a813d4dd861\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"schemaVersion\":\"light-1.0\",\"date\":\"2026-11-11\",\"mode\":\"service\",\"revision\":1,\"generatedAt\":\"2026-11-10T16:05:28.054Z\",\"projects\":[{\"key\":\"D-host-20261111/project\",\"id\":\"5c5c531f-98bd-4d0a-bb30-d0be4266d42e\",\"name\":\"D独立宿主验收\",\"planKeys\":[\"D-host-20261111/plan\"],\"revision\":1}],\"plans\":[{\"key\":\"D-host-20261111/plan\",\"id\":\"f0e55f83-2755-407a-92b2-27caaa276e8e\",\"projectKey\":\"D-host-20261111/project\",\"name\":\"D独立宿主验收\",\"stageCount\":1,\"stageKeys\":[\"D-host-20261111/plan/steps/A\"],\"source\":{\"path\":\"G:\\\\rust\\\\Codex-task-monitoring\\\\app\\\\test-results\\\\manual-trial\\\\D-EX01\\\\host-trial\\\\attempt-03\\\\plan.md\",\"version\":\"2026-11-11\",\"sha256\":\"0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852\",\"locator\":\"完整步骤及依赖表\",\"trust\":\"declared\"},\"endConditions\":[]}],\"steps\":[{\"key\":\"D-host-20261111/plan/steps/A\",\"id\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"parentKey\":null,\"code\":\"A\",\"originalCode\":\"A\",\"sourceLocator\":\"实施路线与出口/A\",\"title\":\"协议验收\",\"order\":1,\"required\":true,\"dependsOn\":[],\"status\":\"pending\",\"acceptance\":\"pending\",\"sync\":\"pendingSync\",\"conditions\":[{\"conditionId\":\"D-host-20261111/plan/steps/A/exit\",\"text\":\"真实聊天开始并完成，保存原键回执\",\"required\":true,\"result\":\"pending\",\"evidenceIds\":[]}],\"evidence\":[],\"blockers\":[],\"executionKey\":null,\"bindingKey\":null,\"updatedAt\":\"2026-11-11T00:00:00+08:00\"}],\"routes\":[{\"key\":\"D-host-20261111/plan/routes/1\",\"id\":\"6924e91b-ee81-4a64-9b6b-da67872c0610\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"label\":\"D独立宿主验收\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"order\":1,\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"sourceStepKey\":null,\"returnStepKey\":null}],\"bindings\":[],\"executions\":[],\"supplements\":[],\"events\":[],\"uiPreferences\":{\"collapsedKeys\":[],\"selectedStepKey\":null,\"focusedRouteKey\":null,\"scrollByProject\":{}}}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "d2ea47dd-c8cc-4503-8739-2a813d4dd861",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "schemaVersion": "light-1.0",
+            "date": "2026-11-11",
+            "mode": "service",
+            "revision": 1,
+            "generatedAt": "2026-11-10T16:05:28.054Z",
+            "projects": [
+              {
+                "key": "D-host-20261111/project",
+                "id": "5c5c531f-98bd-4d0a-bb30-d0be4266d42e",
+                "name": "D独立宿主验收",
+                "planKeys": [
+                  "D-host-20261111/plan"
+                ],
+                "revision": 1
+              }
+            ],
+            "plans": [
+              {
+                "key": "D-host-20261111/plan",
+                "id": "f0e55f83-2755-407a-92b2-27caaa276e8e",
+                "projectKey": "D-host-20261111/project",
+                "name": "D独立宿主验收",
+                "stageCount": 1,
+                "stageKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "source": {
+                  "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\host-trial\\attempt-03\\plan.md",
+                  "version": "2026-11-11",
+                  "sha256": "0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852",
+                  "locator": "完整步骤及依赖表",
+                  "trust": "declared"
+                },
+                "endConditions": []
+              }
+            ],
+            "steps": [
+              {
+                "key": "D-host-20261111/plan/steps/A",
+                "id": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "parentKey": null,
+                "code": "A",
+                "originalCode": "A",
+                "sourceLocator": "实施路线与出口/A",
+                "title": "协议验收",
+                "order": 1,
+                "required": true,
+                "dependsOn": [],
+                "status": "pending",
+                "acceptance": "pending",
+                "sync": "pendingSync",
+                "conditions": [
+                  {
+                    "conditionId": "D-host-20261111/plan/steps/A/exit",
+                    "text": "真实聊天开始并完成，保存原键回执",
+                    "required": true,
+                    "result": "pending",
+                    "evidenceIds": []
+                  }
+                ],
+                "evidence": [],
+                "blockers": [],
+                "executionKey": null,
+                "bindingKey": null,
+                "updatedAt": "2026-11-11T00:00:00+08:00"
+              }
+            ],
+            "routes": [
+              {
+                "key": "D-host-20261111/plan/routes/1",
+                "id": "6924e91b-ee81-4a64-9b6b-da67872c0610",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "label": "D独立宿主验收",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "order": 1,
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "sourceStepKey": null,
+                "returnStepKey": null
+              }
+            ],
+            "bindings": [],
+            "executions": [],
+            "supplements": [],
+            "events": [],
+            "uiPreferences": {
+              "collapsedKeys": [],
+              "selectedStepKey": null,
+              "focusedRouteKey": null,
+              "scrollByProject": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_bind_context",
+      "status": "completed",
+      "eventId": "D-host-propose",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"531cd3c3-a045-4d4b-9fbd-7447c4fd1909\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"revision\":2,\"receipt\":{\"schemaVersion\":\"light-1.0\",\"eventId\":\"D-host-propose\",\"requestId\":\"531cd3c3-a045-4d4b-9fbd-7447c4fd1909\",\"status\":\"committed\",\"committedRevision\":2,\"receivedAt\":\"2026-11-10T16:05:47.174Z\",\"resultRef\":\"light/events/D-host-propose\",\"errorCode\":null,\"recovery\":\"读取已提交快照或查询原事件\"},\"bindingId\":\"432c1f91-246a-48fd-98a9-30d6916ca56f\",\"bindingRevision\":1,\"state\":\"proposed\",\"requestId\":\"531cd3c3-a045-4d4b-9fbd-7447c4fd1909\"}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "531cd3c3-a045-4d4b-9fbd-7447c4fd1909",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "revision": 2,
+            "receipt": {
+              "schemaVersion": "light-1.0",
+              "eventId": "D-host-propose",
+              "requestId": "531cd3c3-a045-4d4b-9fbd-7447c4fd1909",
+              "status": "committed",
+              "committedRevision": 2,
+              "receivedAt": "2026-11-10T16:05:47.174Z",
+              "resultRef": "light/events/D-host-propose",
+              "errorCode": null,
+              "recovery": "读取已提交快照或查询原事件"
+            },
+            "bindingId": "432c1f91-246a-48fd-98a9-30d6916ca56f",
+            "bindingRevision": 1,
+            "state": "proposed",
+            "requestId": "531cd3c3-a045-4d4b-9fbd-7447c4fd1909"
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_get_project",
+      "status": "completed",
+      "eventId": null,
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"9427e373-91f1-44f8-9eb0-d0c0311583ba\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"schemaVersion\":\"light-1.0\",\"date\":\"2026-11-11\",\"mode\":\"service\",\"revision\":2,\"generatedAt\":\"2026-11-10T16:05:47.174Z\",\"projects\":[{\"key\":\"D-host-20261111/project\",\"id\":\"5c5c531f-98bd-4d0a-bb30-d0be4266d42e\",\"name\":\"D独立宿主验收\",\"planKeys\":[\"D-host-20261111/plan\"],\"revision\":2}],\"plans\":[{\"key\":\"D-host-20261111/plan\",\"id\":\"f0e55f83-2755-407a-92b2-27caaa276e8e\",\"projectKey\":\"D-host-20261111/project\",\"name\":\"D独立宿主验收\",\"stageCount\":1,\"stageKeys\":[\"D-host-20261111/plan/steps/A\"],\"source\":{\"path\":\"G:\\\\rust\\\\Codex-task-monitoring\\\\app\\\\test-results\\\\manual-trial\\\\D-EX01\\\\host-trial\\\\attempt-03\\\\plan.md\",\"version\":\"2026-11-11\",\"sha256\":\"0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852\",\"locator\":\"完整步骤及依赖表\",\"trust\":\"declared\"},\"endConditions\":[]}],\"steps\":[{\"key\":\"D-host-20261111/plan/steps/A\",\"id\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"parentKey\":null,\"code\":\"A\",\"originalCode\":\"A\",\"sourceLocator\":\"实施路线与出口/A\",\"title\":\"协议验收\",\"order\":1,\"required\":true,\"dependsOn\":[],\"status\":\"pending\",\"acceptance\":\"pending\",\"sync\":\"pendingSync\",\"conditions\":[{\"conditionId\":\"D-host-20261111/plan/steps/A/exit\",\"text\":\"真实聊天开始并完成，保存原键回执\",\"required\":true,\"result\":\"pending\",\"evidenceIds\":[]}],\"evidence\":[],\"blockers\":[],\"executionKey\":null,\"bindingKey\":null,\"updatedAt\":\"2026-11-11T00:00:00+08:00\"}],\"routes\":[{\"key\":\"D-host-20261111/plan/routes/1\",\"id\":\"6924e91b-ee81-4a64-9b6b-da67872c0610\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"label\":\"D独立宿主验收\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"order\":1,\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"sourceStepKey\":null,\"returnStepKey\":null}],\"bindings\":[{\"key\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"id\":\"432c1f91-246a-48fd-98a9-30d6916ca56f\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"bindingRevision\":1,\"state\":\"proposed\",\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"confirmationRef\":null,\"revokedAt\":null}],\"executions\":[],\"supplements\":[],\"events\":[],\"uiPreferences\":{\"collapsedKeys\":[],\"selectedStepKey\":null,\"focusedRouteKey\":null,\"scrollByProject\":{}}}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "9427e373-91f1-44f8-9eb0-d0c0311583ba",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "schemaVersion": "light-1.0",
+            "date": "2026-11-11",
+            "mode": "service",
+            "revision": 2,
+            "generatedAt": "2026-11-10T16:05:47.174Z",
+            "projects": [
+              {
+                "key": "D-host-20261111/project",
+                "id": "5c5c531f-98bd-4d0a-bb30-d0be4266d42e",
+                "name": "D独立宿主验收",
+                "planKeys": [
+                  "D-host-20261111/plan"
+                ],
+                "revision": 2
+              }
+            ],
+            "plans": [
+              {
+                "key": "D-host-20261111/plan",
+                "id": "f0e55f83-2755-407a-92b2-27caaa276e8e",
+                "projectKey": "D-host-20261111/project",
+                "name": "D独立宿主验收",
+                "stageCount": 1,
+                "stageKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "source": {
+                  "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\host-trial\\attempt-03\\plan.md",
+                  "version": "2026-11-11",
+                  "sha256": "0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852",
+                  "locator": "完整步骤及依赖表",
+                  "trust": "declared"
+                },
+                "endConditions": []
+              }
+            ],
+            "steps": [
+              {
+                "key": "D-host-20261111/plan/steps/A",
+                "id": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "parentKey": null,
+                "code": "A",
+                "originalCode": "A",
+                "sourceLocator": "实施路线与出口/A",
+                "title": "协议验收",
+                "order": 1,
+                "required": true,
+                "dependsOn": [],
+                "status": "pending",
+                "acceptance": "pending",
+                "sync": "pendingSync",
+                "conditions": [
+                  {
+                    "conditionId": "D-host-20261111/plan/steps/A/exit",
+                    "text": "真实聊天开始并完成，保存原键回执",
+                    "required": true,
+                    "result": "pending",
+                    "evidenceIds": []
+                  }
+                ],
+                "evidence": [],
+                "blockers": [],
+                "executionKey": null,
+                "bindingKey": null,
+                "updatedAt": "2026-11-11T00:00:00+08:00"
+              }
+            ],
+            "routes": [
+              {
+                "key": "D-host-20261111/plan/routes/1",
+                "id": "6924e91b-ee81-4a64-9b6b-da67872c0610",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "label": "D独立宿主验收",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "order": 1,
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "sourceStepKey": null,
+                "returnStepKey": null
+              }
+            ],
+            "bindings": [
+              {
+                "key": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "id": "432c1f91-246a-48fd-98a9-30d6916ca56f",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "bindingRevision": 1,
+                "state": "proposed",
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "confirmationRef": null,
+                "revokedAt": null
+              }
+            ],
+            "executions": [],
+            "supplements": [],
+            "events": [],
+            "uiPreferences": {
+              "collapsedKeys": [],
+              "selectedStepKey": null,
+              "focusedRouteKey": null,
+              "scrollByProject": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_bind_context",
+      "status": "completed",
+      "eventId": "D-host-confirm",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"6402a737-be39-41fc-9433-e2e66f3a9947\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"revision\":3,\"receipt\":{\"schemaVersion\":\"light-1.0\",\"eventId\":\"D-host-confirm\",\"requestId\":\"6402a737-be39-41fc-9433-e2e66f3a9947\",\"status\":\"committed\",\"committedRevision\":3,\"receivedAt\":\"2026-11-10T16:06:17.171Z\",\"resultRef\":\"light/events/D-host-confirm\",\"errorCode\":null,\"recovery\":\"读取已提交快照或查询原事件\"},\"bindingId\":\"432c1f91-246a-48fd-98a9-30d6916ca56f\",\"bindingRevision\":2,\"state\":\"confirmed\",\"requestId\":\"6402a737-be39-41fc-9433-e2e66f3a9947\"}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "6402a737-be39-41fc-9433-e2e66f3a9947",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "revision": 3,
+            "receipt": {
+              "schemaVersion": "light-1.0",
+              "eventId": "D-host-confirm",
+              "requestId": "6402a737-be39-41fc-9433-e2e66f3a9947",
+              "status": "committed",
+              "committedRevision": 3,
+              "receivedAt": "2026-11-10T16:06:17.171Z",
+              "resultRef": "light/events/D-host-confirm",
+              "errorCode": null,
+              "recovery": "读取已提交快照或查询原事件"
+            },
+            "bindingId": "432c1f91-246a-48fd-98a9-30d6916ca56f",
+            "bindingRevision": 2,
+            "state": "confirmed",
+            "requestId": "6402a737-be39-41fc-9433-e2e66f3a9947"
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_get_project",
+      "status": "completed",
+      "eventId": null,
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"7e6b501d-30f2-46e0-8a4a-526bb3f49967\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"schemaVersion\":\"light-1.0\",\"date\":\"2026-11-11\",\"mode\":\"service\",\"revision\":3,\"generatedAt\":\"2026-11-10T16:06:17.171Z\",\"projects\":[{\"key\":\"D-host-20261111/project\",\"id\":\"5c5c531f-98bd-4d0a-bb30-d0be4266d42e\",\"name\":\"D独立宿主验收\",\"planKeys\":[\"D-host-20261111/plan\"],\"revision\":3}],\"plans\":[{\"key\":\"D-host-20261111/plan\",\"id\":\"f0e55f83-2755-407a-92b2-27caaa276e8e\",\"projectKey\":\"D-host-20261111/project\",\"name\":\"D独立宿主验收\",\"stageCount\":1,\"stageKeys\":[\"D-host-20261111/plan/steps/A\"],\"source\":{\"path\":\"G:\\\\rust\\\\Codex-task-monitoring\\\\app\\\\test-results\\\\manual-trial\\\\D-EX01\\\\host-trial\\\\attempt-03\\\\plan.md\",\"version\":\"2026-11-11\",\"sha256\":\"0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852\",\"locator\":\"完整步骤及依赖表\",\"trust\":\"declared\"},\"endConditions\":[]}],\"steps\":[{\"key\":\"D-host-20261111/plan/steps/A\",\"id\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"parentKey\":null,\"code\":\"A\",\"originalCode\":\"A\",\"sourceLocator\":\"实施路线与出口/A\",\"title\":\"协议验收\",\"order\":1,\"required\":true,\"dependsOn\":[],\"status\":\"pending\",\"acceptance\":\"pending\",\"sync\":\"pendingSync\",\"conditions\":[{\"conditionId\":\"D-host-20261111/plan/steps/A/exit\",\"text\":\"真实聊天开始并完成，保存原键回执\",\"required\":true,\"result\":\"pending\",\"evidenceIds\":[]}],\"evidence\":[],\"blockers\":[],\"executionKey\":null,\"bindingKey\":null,\"updatedAt\":\"2026-11-11T00:00:00+08:00\"}],\"routes\":[{\"key\":\"D-host-20261111/plan/routes/1\",\"id\":\"6924e91b-ee81-4a64-9b6b-da67872c0610\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"label\":\"D独立宿主验收\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"order\":1,\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"sourceStepKey\":null,\"returnStepKey\":null}],\"bindings\":[{\"key\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"id\":\"432c1f91-246a-48fd-98a9-30d6916ca56f\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"bindingRevision\":2,\"state\":\"confirmed\",\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"confirmationRef\":\"grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f\",\"revokedAt\":null}],\"executions\":[],\"supplements\":[],\"events\":[],\"uiPreferences\":{\"collapsedKeys\":[],\"selectedStepKey\":null,\"focusedRouteKey\":null,\"scrollByProject\":{}}}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "7e6b501d-30f2-46e0-8a4a-526bb3f49967",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "schemaVersion": "light-1.0",
+            "date": "2026-11-11",
+            "mode": "service",
+            "revision": 3,
+            "generatedAt": "2026-11-10T16:06:17.171Z",
+            "projects": [
+              {
+                "key": "D-host-20261111/project",
+                "id": "5c5c531f-98bd-4d0a-bb30-d0be4266d42e",
+                "name": "D独立宿主验收",
+                "planKeys": [
+                  "D-host-20261111/plan"
+                ],
+                "revision": 3
+              }
+            ],
+            "plans": [
+              {
+                "key": "D-host-20261111/plan",
+                "id": "f0e55f83-2755-407a-92b2-27caaa276e8e",
+                "projectKey": "D-host-20261111/project",
+                "name": "D独立宿主验收",
+                "stageCount": 1,
+                "stageKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "source": {
+                  "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\host-trial\\attempt-03\\plan.md",
+                  "version": "2026-11-11",
+                  "sha256": "0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852",
+                  "locator": "完整步骤及依赖表",
+                  "trust": "declared"
+                },
+                "endConditions": []
+              }
+            ],
+            "steps": [
+              {
+                "key": "D-host-20261111/plan/steps/A",
+                "id": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "parentKey": null,
+                "code": "A",
+                "originalCode": "A",
+                "sourceLocator": "实施路线与出口/A",
+                "title": "协议验收",
+                "order": 1,
+                "required": true,
+                "dependsOn": [],
+                "status": "pending",
+                "acceptance": "pending",
+                "sync": "pendingSync",
+                "conditions": [
+                  {
+                    "conditionId": "D-host-20261111/plan/steps/A/exit",
+                    "text": "真实聊天开始并完成，保存原键回执",
+                    "required": true,
+                    "result": "pending",
+                    "evidenceIds": []
+                  }
+                ],
+                "evidence": [],
+                "blockers": [],
+                "executionKey": null,
+                "bindingKey": null,
+                "updatedAt": "2026-11-11T00:00:00+08:00"
+              }
+            ],
+            "routes": [
+              {
+                "key": "D-host-20261111/plan/routes/1",
+                "id": "6924e91b-ee81-4a64-9b6b-da67872c0610",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "label": "D独立宿主验收",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "order": 1,
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "sourceStepKey": null,
+                "returnStepKey": null
+              }
+            ],
+            "bindings": [
+              {
+                "key": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "id": "432c1f91-246a-48fd-98a9-30d6916ca56f",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "bindingRevision": 2,
+                "state": "confirmed",
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "confirmationRef": "grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f",
+                "revokedAt": null
+              }
+            ],
+            "executions": [],
+            "supplements": [],
+            "events": [],
+            "uiPreferences": {
+              "collapsedKeys": [],
+              "selectedStepKey": null,
+              "focusedRouteKey": null,
+              "scrollByProject": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_reserve_execution",
+      "status": "completed",
+      "eventId": "D-host-reserve",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"b90f1134-ff75-493c-acde-21b8d3426eea\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"revision\":4,\"receipt\":{\"schemaVersion\":\"light-1.0\",\"eventId\":\"D-host-reserve\",\"requestId\":\"b90f1134-ff75-493c-acde-21b8d3426eea\",\"status\":\"committed\",\"committedRevision\":4,\"receivedAt\":\"2026-11-10T16:06:29.123Z\",\"resultRef\":\"light/events/D-host-reserve\",\"errorCode\":null,\"recovery\":\"读取已提交快照或查询原事件\"},\"executionId\":\"dadba223-7efc-4984-b39d-111f1282a53e\",\"requestId\":\"b90f1134-ff75-493c-acde-21b8d3426eea\"}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "b90f1134-ff75-493c-acde-21b8d3426eea",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "revision": 4,
+            "receipt": {
+              "schemaVersion": "light-1.0",
+              "eventId": "D-host-reserve",
+              "requestId": "b90f1134-ff75-493c-acde-21b8d3426eea",
+              "status": "committed",
+              "committedRevision": 4,
+              "receivedAt": "2026-11-10T16:06:29.123Z",
+              "resultRef": "light/events/D-host-reserve",
+              "errorCode": null,
+              "recovery": "读取已提交快照或查询原事件"
+            },
+            "executionId": "dadba223-7efc-4984-b39d-111f1282a53e",
+            "requestId": "b90f1134-ff75-493c-acde-21b8d3426eea"
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_get_project",
+      "status": "completed",
+      "eventId": null,
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"3ce44359-8a77-4300-a98f-5595fc91ce4e\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"schemaVersion\":\"light-1.0\",\"date\":\"2026-11-11\",\"mode\":\"service\",\"revision\":4,\"generatedAt\":\"2026-11-10T16:06:29.123Z\",\"projects\":[{\"key\":\"D-host-20261111/project\",\"id\":\"5c5c531f-98bd-4d0a-bb30-d0be4266d42e\",\"name\":\"D独立宿主验收\",\"planKeys\":[\"D-host-20261111/plan\"],\"revision\":4}],\"plans\":[{\"key\":\"D-host-20261111/plan\",\"id\":\"f0e55f83-2755-407a-92b2-27caaa276e8e\",\"projectKey\":\"D-host-20261111/project\",\"name\":\"D独立宿主验收\",\"stageCount\":1,\"stageKeys\":[\"D-host-20261111/plan/steps/A\"],\"source\":{\"path\":\"G:\\\\rust\\\\Codex-task-monitoring\\\\app\\\\test-results\\\\manual-trial\\\\D-EX01\\\\host-trial\\\\attempt-03\\\\plan.md\",\"version\":\"2026-11-11\",\"sha256\":\"0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852\",\"locator\":\"完整步骤及依赖表\",\"trust\":\"declared\"},\"endConditions\":[]}],\"steps\":[{\"key\":\"D-host-20261111/plan/steps/A\",\"id\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"parentKey\":null,\"code\":\"A\",\"originalCode\":\"A\",\"sourceLocator\":\"实施路线与出口/A\",\"title\":\"协议验收\",\"order\":1,\"required\":true,\"dependsOn\":[],\"status\":\"pending\",\"acceptance\":\"pending\",\"sync\":\"pendingSync\",\"conditions\":[{\"conditionId\":\"D-host-20261111/plan/steps/A/exit\",\"text\":\"真实聊天开始并完成，保存原键回执\",\"required\":true,\"result\":\"pending\",\"evidenceIds\":[]}],\"evidence\":[],\"blockers\":[],\"executionKey\":null,\"bindingKey\":null,\"updatedAt\":\"2026-11-11T00:00:00+08:00\"}],\"routes\":[{\"key\":\"D-host-20261111/plan/routes/1\",\"id\":\"6924e91b-ee81-4a64-9b6b-da67872c0610\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"label\":\"D独立宿主验收\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"order\":1,\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"sourceStepKey\":null,\"returnStepKey\":null}],\"bindings\":[{\"key\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"id\":\"432c1f91-246a-48fd-98a9-30d6916ca56f\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"bindingRevision\":2,\"state\":\"confirmed\",\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"confirmationRef\":\"grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f\",\"revokedAt\":null}],\"executions\":[],\"supplements\":[],\"events\":[],\"uiPreferences\":{\"collapsedKeys\":[],\"selectedStepKey\":null,\"focusedRouteKey\":null,\"scrollByProject\":{}}}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "3ce44359-8a77-4300-a98f-5595fc91ce4e",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "schemaVersion": "light-1.0",
+            "date": "2026-11-11",
+            "mode": "service",
+            "revision": 4,
+            "generatedAt": "2026-11-10T16:06:29.123Z",
+            "projects": [
+              {
+                "key": "D-host-20261111/project",
+                "id": "5c5c531f-98bd-4d0a-bb30-d0be4266d42e",
+                "name": "D独立宿主验收",
+                "planKeys": [
+                  "D-host-20261111/plan"
+                ],
+                "revision": 4
+              }
+            ],
+            "plans": [
+              {
+                "key": "D-host-20261111/plan",
+                "id": "f0e55f83-2755-407a-92b2-27caaa276e8e",
+                "projectKey": "D-host-20261111/project",
+                "name": "D独立宿主验收",
+                "stageCount": 1,
+                "stageKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "source": {
+                  "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\host-trial\\attempt-03\\plan.md",
+                  "version": "2026-11-11",
+                  "sha256": "0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852",
+                  "locator": "完整步骤及依赖表",
+                  "trust": "declared"
+                },
+                "endConditions": []
+              }
+            ],
+            "steps": [
+              {
+                "key": "D-host-20261111/plan/steps/A",
+                "id": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "parentKey": null,
+                "code": "A",
+                "originalCode": "A",
+                "sourceLocator": "实施路线与出口/A",
+                "title": "协议验收",
+                "order": 1,
+                "required": true,
+                "dependsOn": [],
+                "status": "pending",
+                "acceptance": "pending",
+                "sync": "pendingSync",
+                "conditions": [
+                  {
+                    "conditionId": "D-host-20261111/plan/steps/A/exit",
+                    "text": "真实聊天开始并完成，保存原键回执",
+                    "required": true,
+                    "result": "pending",
+                    "evidenceIds": []
+                  }
+                ],
+                "evidence": [],
+                "blockers": [],
+                "executionKey": null,
+                "bindingKey": null,
+                "updatedAt": "2026-11-11T00:00:00+08:00"
+              }
+            ],
+            "routes": [
+              {
+                "key": "D-host-20261111/plan/routes/1",
+                "id": "6924e91b-ee81-4a64-9b6b-da67872c0610",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "label": "D独立宿主验收",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "order": 1,
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "sourceStepKey": null,
+                "returnStepKey": null
+              }
+            ],
+            "bindings": [
+              {
+                "key": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "id": "432c1f91-246a-48fd-98a9-30d6916ca56f",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "bindingRevision": 2,
+                "state": "confirmed",
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "confirmationRef": "grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f",
+                "revokedAt": null
+              }
+            ],
+            "executions": [],
+            "supplements": [],
+            "events": [],
+            "uiPreferences": {
+              "collapsedKeys": [],
+              "selectedStepKey": null,
+              "focusedRouteKey": null,
+              "scrollByProject": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_update_step_status",
+      "status": "completed",
+      "eventId": "D-host-start",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"baca70e1-552a-475a-ab50-858e59eed8e6\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"revision\":5,\"receipt\":{\"schemaVersion\":\"light-1.0\",\"eventId\":\"D-host-start\",\"requestId\":\"baca70e1-552a-475a-ab50-858e59eed8e6\",\"status\":\"committed\",\"committedRevision\":5,\"receivedAt\":\"2026-11-10T16:06:39.113Z\",\"resultRef\":\"light/events/D-host-start\",\"errorCode\":null,\"recovery\":\"读取已提交快照或查询原事件\"},\"stepId\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"executionId\":\"dadba223-7efc-4984-b39d-111f1282a53e\",\"requestId\":\"baca70e1-552a-475a-ab50-858e59eed8e6\"}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "baca70e1-552a-475a-ab50-858e59eed8e6",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "revision": 5,
+            "receipt": {
+              "schemaVersion": "light-1.0",
+              "eventId": "D-host-start",
+              "requestId": "baca70e1-552a-475a-ab50-858e59eed8e6",
+              "status": "committed",
+              "committedRevision": 5,
+              "receivedAt": "2026-11-10T16:06:39.113Z",
+              "resultRef": "light/events/D-host-start",
+              "errorCode": null,
+              "recovery": "读取已提交快照或查询原事件"
+            },
+            "stepId": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+            "executionId": "dadba223-7efc-4984-b39d-111f1282a53e",
+            "requestId": "baca70e1-552a-475a-ab50-858e59eed8e6"
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_get_project",
+      "status": "completed",
+      "eventId": null,
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"e46fbd96-adba-4f32-a3f5-bf4d1e7df10d\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"schemaVersion\":\"light-1.0\",\"date\":\"2026-11-11\",\"mode\":\"service\",\"revision\":5,\"generatedAt\":\"2026-11-10T16:06:39.113Z\",\"projects\":[{\"key\":\"D-host-20261111/project\",\"id\":\"5c5c531f-98bd-4d0a-bb30-d0be4266d42e\",\"name\":\"D独立宿主验收\",\"planKeys\":[\"D-host-20261111/plan\"],\"revision\":5}],\"plans\":[{\"key\":\"D-host-20261111/plan\",\"id\":\"f0e55f83-2755-407a-92b2-27caaa276e8e\",\"projectKey\":\"D-host-20261111/project\",\"name\":\"D独立宿主验收\",\"stageCount\":1,\"stageKeys\":[\"D-host-20261111/plan/steps/A\"],\"source\":{\"path\":\"G:\\\\rust\\\\Codex-task-monitoring\\\\app\\\\test-results\\\\manual-trial\\\\D-EX01\\\\host-trial\\\\attempt-03\\\\plan.md\",\"version\":\"2026-11-11\",\"sha256\":\"0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852\",\"locator\":\"完整步骤及依赖表\",\"trust\":\"declared\"},\"endConditions\":[]}],\"steps\":[{\"key\":\"D-host-20261111/plan/steps/A\",\"id\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"parentKey\":null,\"code\":\"A\",\"originalCode\":\"A\",\"sourceLocator\":\"实施路线与出口/A\",\"title\":\"协议验收\",\"order\":1,\"required\":true,\"dependsOn\":[],\"status\":\"running\",\"acceptance\":\"pending\",\"sync\":\"synced\",\"conditions\":[{\"conditionId\":\"D-host-20261111/plan/steps/A/exit\",\"text\":\"真实聊天开始并完成，保存原键回执\",\"required\":true,\"result\":\"pending\",\"evidenceIds\":[]}],\"evidence\":[],\"blockers\":[],\"executionKey\":\"D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e\",\"bindingKey\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"updatedAt\":\"2026-11-10T16:06:39.113Z\"}],\"routes\":[{\"key\":\"D-host-20261111/plan/routes/1\",\"id\":\"6924e91b-ee81-4a64-9b6b-da67872c0610\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"label\":\"D独立宿主验收\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"order\":1,\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"sourceStepKey\":null,\"returnStepKey\":null}],\"bindings\":[{\"key\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"id\":\"432c1f91-246a-48fd-98a9-30d6916ca56f\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"bindingRevision\":2,\"state\":\"confirmed\",\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"confirmationRef\":\"grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f\",\"revokedAt\":null}],\"executions\":[{\"key\":\"D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e\",\"id\":\"dadba223-7efc-4984-b39d-111f1282a53e\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"bindingKey\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"outcome\":\"running\",\"startedAt\":\"2026-11-10T16:06:39.113Z\",\"endedAt\":null,\"handoffConclusion\":null}],\"supplements\":[],\"events\":[{\"eventId\":\"light/8de6237e355bd612109d73a40d9a7eb44f099a049778094b17f2912b16f94db3/D-host-start\",\"stepKey\":\"D-host-20261111/plan/steps/A\",\"executionKey\":\"D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e\",\"fromStatus\":\"pending\",\"toStatus\":\"running\",\"occurredAt\":\"2026-11-11T00:00:00+08:00\",\"receivedAt\":\"2026-11-10T16:06:39.113Z\",\"reason\":\"已授权D隔离验收\",\"evidenceIds\":[],\"sync\":\"synced\"}],\"uiPreferences\":{\"collapsedKeys\":[],\"selectedStepKey\":null,\"focusedRouteKey\":null,\"scrollByProject\":{}}}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "e46fbd96-adba-4f32-a3f5-bf4d1e7df10d",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "schemaVersion": "light-1.0",
+            "date": "2026-11-11",
+            "mode": "service",
+            "revision": 5,
+            "generatedAt": "2026-11-10T16:06:39.113Z",
+            "projects": [
+              {
+                "key": "D-host-20261111/project",
+                "id": "5c5c531f-98bd-4d0a-bb30-d0be4266d42e",
+                "name": "D独立宿主验收",
+                "planKeys": [
+                  "D-host-20261111/plan"
+                ],
+                "revision": 5
+              }
+            ],
+            "plans": [
+              {
+                "key": "D-host-20261111/plan",
+                "id": "f0e55f83-2755-407a-92b2-27caaa276e8e",
+                "projectKey": "D-host-20261111/project",
+                "name": "D独立宿主验收",
+                "stageCount": 1,
+                "stageKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "source": {
+                  "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\host-trial\\attempt-03\\plan.md",
+                  "version": "2026-11-11",
+                  "sha256": "0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852",
+                  "locator": "完整步骤及依赖表",
+                  "trust": "declared"
+                },
+                "endConditions": []
+              }
+            ],
+            "steps": [
+              {
+                "key": "D-host-20261111/plan/steps/A",
+                "id": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "parentKey": null,
+                "code": "A",
+                "originalCode": "A",
+                "sourceLocator": "实施路线与出口/A",
+                "title": "协议验收",
+                "order": 1,
+                "required": true,
+                "dependsOn": [],
+                "status": "running",
+                "acceptance": "pending",
+                "sync": "synced",
+                "conditions": [
+                  {
+                    "conditionId": "D-host-20261111/plan/steps/A/exit",
+                    "text": "真实聊天开始并完成，保存原键回执",
+                    "required": true,
+                    "result": "pending",
+                    "evidenceIds": []
+                  }
+                ],
+                "evidence": [],
+                "blockers": [],
+                "executionKey": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+                "bindingKey": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "updatedAt": "2026-11-10T16:06:39.113Z"
+              }
+            ],
+            "routes": [
+              {
+                "key": "D-host-20261111/plan/routes/1",
+                "id": "6924e91b-ee81-4a64-9b6b-da67872c0610",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "label": "D独立宿主验收",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "order": 1,
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "sourceStepKey": null,
+                "returnStepKey": null
+              }
+            ],
+            "bindings": [
+              {
+                "key": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "id": "432c1f91-246a-48fd-98a9-30d6916ca56f",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "bindingRevision": 2,
+                "state": "confirmed",
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "confirmationRef": "grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f",
+                "revokedAt": null
+              }
+            ],
+            "executions": [
+              {
+                "key": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+                "id": "dadba223-7efc-4984-b39d-111f1282a53e",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "bindingKey": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "outcome": "running",
+                "startedAt": "2026-11-10T16:06:39.113Z",
+                "endedAt": null,
+                "handoffConclusion": null
+              }
+            ],
+            "supplements": [],
+            "events": [
+              {
+                "eventId": "light/8de6237e355bd612109d73a40d9a7eb44f099a049778094b17f2912b16f94db3/D-host-start",
+                "stepKey": "D-host-20261111/plan/steps/A",
+                "executionKey": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+                "fromStatus": "pending",
+                "toStatus": "running",
+                "occurredAt": "2026-11-11T00:00:00+08:00",
+                "receivedAt": "2026-11-10T16:06:39.113Z",
+                "reason": "已授权D隔离验收",
+                "evidenceIds": [],
+                "sync": "synced"
+              }
+            ],
+            "uiPreferences": {
+              "collapsedKeys": [],
+              "selectedStepKey": null,
+              "focusedRouteKey": null,
+              "scrollByProject": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_update_step_status",
+      "status": "completed",
+      "eventId": "D-host-complete",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"428ae1c3-b63a-48b3-ac16-303f27e2b250\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"revision\":6,\"receipt\":{\"schemaVersion\":\"light-1.0\",\"eventId\":\"D-host-complete\",\"requestId\":\"428ae1c3-b63a-48b3-ac16-303f27e2b250\",\"status\":\"committed\",\"committedRevision\":6,\"receivedAt\":\"2026-11-10T16:06:51.374Z\",\"resultRef\":\"light/events/D-host-complete\",\"errorCode\":null,\"recovery\":\"读取已提交快照或查询原事件\"},\"stepId\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"executionId\":\"dadba223-7efc-4984-b39d-111f1282a53e\",\"requestId\":\"428ae1c3-b63a-48b3-ac16-303f27e2b250\"}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "428ae1c3-b63a-48b3-ac16-303f27e2b250",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "revision": 6,
+            "receipt": {
+              "schemaVersion": "light-1.0",
+              "eventId": "D-host-complete",
+              "requestId": "428ae1c3-b63a-48b3-ac16-303f27e2b250",
+              "status": "committed",
+              "committedRevision": 6,
+              "receivedAt": "2026-11-10T16:06:51.374Z",
+              "resultRef": "light/events/D-host-complete",
+              "errorCode": null,
+              "recovery": "读取已提交快照或查询原事件"
+            },
+            "stepId": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+            "executionId": "dadba223-7efc-4984-b39d-111f1282a53e",
+            "requestId": "428ae1c3-b63a-48b3-ac16-303f27e2b250"
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_query_event",
+      "status": "completed",
+      "eventId": "D-host-complete",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"428ae1c3-b63a-48b3-ac16-303f27e2b250\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"state\":\"committed\",\"requestId\":\"428ae1c3-b63a-48b3-ac16-303f27e2b250\",\"semanticHash\":\"79ec428a5ad7f7ce39df985ef9404a396637d1548313bbda39b0cbca776bc809\",\"result\":{\"revision\":6,\"receipt\":{\"schemaVersion\":\"light-1.0\",\"eventId\":\"D-host-complete\",\"requestId\":\"428ae1c3-b63a-48b3-ac16-303f27e2b250\",\"status\":\"committed\",\"committedRevision\":6,\"receivedAt\":\"2026-11-10T16:06:51.374Z\",\"resultRef\":\"light/events/D-host-complete\",\"errorCode\":null,\"recovery\":\"读取已提交快照或查询原事件\"},\"stepId\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"executionId\":\"dadba223-7efc-4984-b39d-111f1282a53e\",\"requestId\":\"428ae1c3-b63a-48b3-ac16-303f27e2b250\"}}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "428ae1c3-b63a-48b3-ac16-303f27e2b250",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "state": "committed",
+            "requestId": "428ae1c3-b63a-48b3-ac16-303f27e2b250",
+            "semanticHash": "79ec428a5ad7f7ce39df985ef9404a396637d1548313bbda39b0cbca776bc809",
+            "result": {
+              "revision": 6,
+              "receipt": {
+                "schemaVersion": "light-1.0",
+                "eventId": "D-host-complete",
+                "requestId": "428ae1c3-b63a-48b3-ac16-303f27e2b250",
+                "status": "committed",
+                "committedRevision": 6,
+                "receivedAt": "2026-11-10T16:06:51.374Z",
+                "resultRef": "light/events/D-host-complete",
+                "errorCode": null,
+                "recovery": "读取已提交快照或查询原事件"
+              },
+              "stepId": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+              "executionId": "dadba223-7efc-4984-b39d-111f1282a53e",
+              "requestId": "428ae1c3-b63a-48b3-ac16-303f27e2b250"
+            }
+          }
+        }
+      }
+    },
+    {
+      "tool": "workbench_get_project",
+      "status": "completed",
+      "eventId": null,
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"schemaVersion\":\"light-1.0\",\"requestId\":\"d7c6645e-e200-49b5-9fe9-a862ab4ef178\",\"status\":\"accepted\",\"supportedCapabilities\":[\"workbench_get_project\",\"workbench_register_plan\",\"workbench_revise_plan\",\"workbench_reserve_execution\",\"workbench_update_step_status\",\"workbench_record_supplement\",\"workbench_bind_context\",\"workbench_query_event\",\"workbench_complete_plan\"],\"result\":{\"schemaVersion\":\"light-1.0\",\"date\":\"2026-11-11\",\"mode\":\"service\",\"revision\":6,\"generatedAt\":\"2026-11-10T16:06:51.374Z\",\"projects\":[{\"key\":\"D-host-20261111/project\",\"id\":\"5c5c531f-98bd-4d0a-bb30-d0be4266d42e\",\"name\":\"D独立宿主验收\",\"planKeys\":[\"D-host-20261111/plan\"],\"revision\":6}],\"plans\":[{\"key\":\"D-host-20261111/plan\",\"id\":\"f0e55f83-2755-407a-92b2-27caaa276e8e\",\"projectKey\":\"D-host-20261111/project\",\"name\":\"D独立宿主验收\",\"stageCount\":1,\"stageKeys\":[\"D-host-20261111/plan/steps/A\"],\"source\":{\"path\":\"G:\\\\rust\\\\Codex-task-monitoring\\\\app\\\\test-results\\\\manual-trial\\\\D-EX01\\\\host-trial\\\\attempt-03\\\\plan.md\",\"version\":\"2026-11-11\",\"sha256\":\"0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852\",\"locator\":\"完整步骤及依赖表\",\"trust\":\"declared\"},\"endConditions\":[]}],\"steps\":[{\"key\":\"D-host-20261111/plan/steps/A\",\"id\":\"c10d9778-5f35-4b7b-908e-e07eb343af7d\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"parentKey\":null,\"code\":\"A\",\"originalCode\":\"A\",\"sourceLocator\":\"实施路线与出口/A\",\"title\":\"协议验收\",\"order\":1,\"required\":true,\"dependsOn\":[],\"status\":\"completed\",\"acceptance\":\"passed\",\"sync\":\"synced\",\"conditions\":[{\"conditionId\":\"D-host-20261111/plan/steps/A/exit\",\"text\":\"真实聊天开始并完成，保存原键回执\",\"required\":true,\"result\":\"passed\",\"evidenceIds\":[\"D-host-proof\"]}],\"evidence\":[{\"evidenceId\":\"D-host-proof\",\"location\":\"host://codex-cli/D\",\"method\":\"真实Codex聊天MCP往返\",\"deliveryVersion\":\"D-host-20261111\",\"result\":\"passed\"}],\"blockers\":[],\"executionKey\":\"D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e\",\"bindingKey\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"updatedAt\":\"2026-11-10T16:06:51.374Z\"}],\"routes\":[{\"key\":\"D-host-20261111/plan/routes/1\",\"id\":\"6924e91b-ee81-4a64-9b6b-da67872c0610\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"label\":\"D独立宿主验收\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"order\":1,\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"sourceStepKey\":null,\"returnStepKey\":null}],\"bindings\":[{\"key\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"id\":\"432c1f91-246a-48fd-98a9-30d6916ca56f\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"bindingRevision\":2,\"state\":\"confirmed\",\"context\":{\"sessionGroup\":\"D\",\"threadId\":\"01a1c618-df58-7791-bd89-9f9caf19527d\",\"hostId\":\"local\",\"folderId\":null,\"worktreeOrdinal\":1,\"worktreePath\":\"G:\\\\rust\\\\Codex-task-monitoring\",\"branch\":\"main\",\"head\":\"391702167e33d15d6132290e32a9f702b073624f\",\"trust\":\"declared\"},\"confirmationRef\":\"grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f\",\"revokedAt\":null}],\"executions\":[{\"key\":\"D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e\",\"id\":\"dadba223-7efc-4984-b39d-111f1282a53e\",\"projectKey\":\"D-host-20261111/project\",\"planKey\":\"D-host-20261111/plan\",\"stepKeys\":[\"D-host-20261111/plan/steps/A\"],\"bindingKey\":\"D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f\",\"outcome\":\"completedScope\",\"startedAt\":\"2026-11-10T16:06:39.113Z\",\"endedAt\":\"2026-11-10T16:06:51.374Z\",\"handoffConclusion\":null}],\"supplements\":[],\"events\":[{\"eventId\":\"light/8de6237e355bd612109d73a40d9a7eb44f099a049778094b17f2912b16f94db3/D-host-start\",\"stepKey\":\"D-host-20261111/plan/steps/A\",\"executionKey\":\"D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e\",\"fromStatus\":\"pending\",\"toStatus\":\"running\",\"occurredAt\":\"2026-11-11T00:00:00+08:00\",\"receivedAt\":\"2026-11-10T16:06:39.113Z\",\"reason\":\"已授权D隔离验收\",\"evidenceIds\":[],\"sync\":\"synced\"},{\"eventId\":\"light/8de6237e355bd612109d73a40d9a7eb44f099a049778094b17f2912b16f94db3/D-host-complete\",\"stepKey\":\"D-host-20261111/plan/steps/A\",\"executionKey\":\"D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e\",\"fromStatus\":\"running\",\"toStatus\":\"completed\",\"occurredAt\":\"2026-11-11T00:00:00+08:00\",\"receivedAt\":\"2026-11-10T16:06:51.374Z\",\"reason\":\"已授权D隔离验收\",\"evidenceIds\":[\"D-host-proof\"],\"sync\":\"synced\"}],\"uiPreferences\":{\"collapsedKeys\":[],\"selectedStepKey\":null,\"focusedRouteKey\":null,\"scrollByProject\":{}}}}"
+          }
+        ],
+        "structured_content": {
+          "schemaVersion": "light-1.0",
+          "requestId": "d7c6645e-e200-49b5-9fe9-a862ab4ef178",
+          "status": "accepted",
+          "supportedCapabilities": [
+            "workbench_get_project",
+            "workbench_register_plan",
+            "workbench_revise_plan",
+            "workbench_reserve_execution",
+            "workbench_update_step_status",
+            "workbench_record_supplement",
+            "workbench_bind_context",
+            "workbench_query_event",
+            "workbench_complete_plan"
+          ],
+          "result": {
+            "schemaVersion": "light-1.0",
+            "date": "2026-11-11",
+            "mode": "service",
+            "revision": 6,
+            "generatedAt": "2026-11-10T16:06:51.374Z",
+            "projects": [
+              {
+                "key": "D-host-20261111/project",
+                "id": "5c5c531f-98bd-4d0a-bb30-d0be4266d42e",
+                "name": "D独立宿主验收",
+                "planKeys": [
+                  "D-host-20261111/plan"
+                ],
+                "revision": 6
+              }
+            ],
+            "plans": [
+              {
+                "key": "D-host-20261111/plan",
+                "id": "f0e55f83-2755-407a-92b2-27caaa276e8e",
+                "projectKey": "D-host-20261111/project",
+                "name": "D独立宿主验收",
+                "stageCount": 1,
+                "stageKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "source": {
+                  "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\host-trial\\attempt-03\\plan.md",
+                  "version": "2026-11-11",
+                  "sha256": "0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852",
+                  "locator": "完整步骤及依赖表",
+                  "trust": "declared"
+                },
+                "endConditions": []
+              }
+            ],
+            "steps": [
+              {
+                "key": "D-host-20261111/plan/steps/A",
+                "id": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "parentKey": null,
+                "code": "A",
+                "originalCode": "A",
+                "sourceLocator": "实施路线与出口/A",
+                "title": "协议验收",
+                "order": 1,
+                "required": true,
+                "dependsOn": [],
+                "status": "completed",
+                "acceptance": "passed",
+                "sync": "synced",
+                "conditions": [
+                  {
+                    "conditionId": "D-host-20261111/plan/steps/A/exit",
+                    "text": "真实聊天开始并完成，保存原键回执",
+                    "required": true,
+                    "result": "passed",
+                    "evidenceIds": [
+                      "D-host-proof"
+                    ]
+                  }
+                ],
+                "evidence": [
+                  {
+                    "evidenceId": "D-host-proof",
+                    "location": "host://codex-cli/D",
+                    "method": "真实Codex聊天MCP往返",
+                    "deliveryVersion": "D-host-20261111",
+                    "result": "passed"
+                  }
+                ],
+                "blockers": [],
+                "executionKey": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+                "bindingKey": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "updatedAt": "2026-11-10T16:06:51.374Z"
+              }
+            ],
+            "routes": [
+              {
+                "key": "D-host-20261111/plan/routes/1",
+                "id": "6924e91b-ee81-4a64-9b6b-da67872c0610",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "label": "D独立宿主验收",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "order": 1,
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "sourceStepKey": null,
+                "returnStepKey": null
+              }
+            ],
+            "bindings": [
+              {
+                "key": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "id": "432c1f91-246a-48fd-98a9-30d6916ca56f",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "bindingRevision": 2,
+                "state": "confirmed",
+                "context": {
+                  "sessionGroup": "D",
+                  "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+                  "hostId": "local",
+                  "folderId": null,
+                  "worktreeOrdinal": 1,
+                  "worktreePath": "G:\\rust\\Codex-task-monitoring",
+                  "branch": "main",
+                  "head": "391702167e33d15d6132290e32a9f702b073624f",
+                  "trust": "declared"
+                },
+                "confirmationRef": "grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f",
+                "revokedAt": null
+              }
+            ],
+            "executions": [
+              {
+                "key": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+                "id": "dadba223-7efc-4984-b39d-111f1282a53e",
+                "projectKey": "D-host-20261111/project",
+                "planKey": "D-host-20261111/plan",
+                "stepKeys": [
+                  "D-host-20261111/plan/steps/A"
+                ],
+                "bindingKey": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+                "outcome": "completedScope",
+                "startedAt": "2026-11-10T16:06:39.113Z",
+                "endedAt": "2026-11-10T16:06:51.374Z",
+                "handoffConclusion": null
+              }
+            ],
+            "supplements": [],
+            "events": [
+              {
+                "eventId": "light/8de6237e355bd612109d73a40d9a7eb44f099a049778094b17f2912b16f94db3/D-host-start",
+                "stepKey": "D-host-20261111/plan/steps/A",
+                "executionKey": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+                "fromStatus": "pending",
+                "toStatus": "running",
+                "occurredAt": "2026-11-11T00:00:00+08:00",
+                "receivedAt": "2026-11-10T16:06:39.113Z",
+                "reason": "已授权D隔离验收",
+                "evidenceIds": [],
+                "sync": "synced"
+              },
+              {
+                "eventId": "light/8de6237e355bd612109d73a40d9a7eb44f099a049778094b17f2912b16f94db3/D-host-complete",
+                "stepKey": "D-host-20261111/plan/steps/A",
+                "executionKey": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+                "fromStatus": "running",
+                "toStatus": "completed",
+                "occurredAt": "2026-11-11T00:00:00+08:00",
+                "receivedAt": "2026-11-10T16:06:51.374Z",
+                "reason": "已授权D隔离验收",
+                "evidenceIds": [
+                  "D-host-proof"
+                ],
+                "sync": "synced"
+              }
+            ],
+            "uiPreferences": {
+              "collapsedKeys": [],
+              "selectedStepKey": null,
+              "focusedRouteKey": null,
+              "scrollByProject": {}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "snapshot": {
+    "schemaVersion": "light-1.0",
+    "date": "2026-11-11",
+    "mode": "service",
+    "revision": 6,
+    "generatedAt": "2026-11-10T16:06:51.374Z",
+    "projects": [
+      {
+        "key": "D-host-20261111/project",
+        "id": "5c5c531f-98bd-4d0a-bb30-d0be4266d42e",
+        "name": "D独立宿主验收",
+        "planKeys": [
+          "D-host-20261111/plan"
+        ],
+        "revision": 6
+      }
+    ],
+    "plans": [
+      {
+        "key": "D-host-20261111/plan",
+        "id": "f0e55f83-2755-407a-92b2-27caaa276e8e",
+        "projectKey": "D-host-20261111/project",
+        "name": "D独立宿主验收",
+        "stageCount": 1,
+        "stageKeys": [
+          "D-host-20261111/plan/steps/A"
+        ],
+        "source": {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\D-EX01\\host-trial\\attempt-03\\plan.md",
+          "version": "2026-11-11",
+          "sha256": "0382b4bb61c76b5dbd5b02dca2ca68f34b41266feacce0d58954923eaed53852",
+          "locator": "完整步骤及依赖表",
+          "trust": "declared"
+        },
+        "endConditions": []
+      }
+    ],
+    "steps": [
+      {
+        "key": "D-host-20261111/plan/steps/A",
+        "id": "c10d9778-5f35-4b7b-908e-e07eb343af7d",
+        "projectKey": "D-host-20261111/project",
+        "planKey": "D-host-20261111/plan",
+        "parentKey": null,
+        "code": "A",
+        "originalCode": "A",
+        "sourceLocator": "实施路线与出口/A",
+        "title": "协议验收",
+        "order": 1,
+        "required": true,
+        "dependsOn": [],
+        "status": "completed",
+        "acceptance": "passed",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "D-host-20261111/plan/steps/A/exit",
+            "text": "真实聊天开始并完成，保存原键回执",
+            "required": true,
+            "result": "passed",
+            "evidenceIds": [
+              "D-host-proof"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "evidenceId": "D-host-proof",
+            "location": "host://codex-cli/D",
+            "method": "真实Codex聊天MCP往返",
+            "deliveryVersion": "D-host-20261111",
+            "result": "passed"
+          }
+        ],
+        "blockers": [],
+        "executionKey": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+        "bindingKey": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+        "updatedAt": "2026-11-10T16:06:51.374Z"
+      }
+    ],
+    "routes": [
+      {
+        "key": "D-host-20261111/plan/routes/1",
+        "id": "6924e91b-ee81-4a64-9b6b-da67872c0610",
+        "projectKey": "D-host-20261111/project",
+        "planKey": "D-host-20261111/plan",
+        "label": "D独立宿主验收",
+        "stepKeys": [
+          "D-host-20261111/plan/steps/A"
+        ],
+        "order": 1,
+        "context": {
+          "sessionGroup": "D",
+          "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+          "hostId": "local",
+          "folderId": null,
+          "worktreeOrdinal": 1,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring",
+          "branch": "main",
+          "head": "391702167e33d15d6132290e32a9f702b073624f",
+          "trust": "declared"
+        },
+        "sourceStepKey": null,
+        "returnStepKey": null
+      }
+    ],
+    "bindings": [
+      {
+        "key": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+        "id": "432c1f91-246a-48fd-98a9-30d6916ca56f",
+        "projectKey": "D-host-20261111/project",
+        "planKey": "D-host-20261111/plan",
+        "stepKeys": [
+          "D-host-20261111/plan/steps/A"
+        ],
+        "bindingRevision": 2,
+        "state": "confirmed",
+        "context": {
+          "sessionGroup": "D",
+          "threadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+          "hostId": "local",
+          "folderId": null,
+          "worktreeOrdinal": 1,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring",
+          "branch": "main",
+          "head": "391702167e33d15d6132290e32a9f702b073624f",
+          "trust": "declared"
+        },
+        "confirmationRef": "grant:c07231f47e3036446ffae509f6265fe825d3f509fd81222f6a00239dae12501f",
+        "revokedAt": null
+      }
+    ],
+    "executions": [
+      {
+        "key": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+        "id": "dadba223-7efc-4984-b39d-111f1282a53e",
+        "projectKey": "D-host-20261111/project",
+        "planKey": "D-host-20261111/plan",
+        "stepKeys": [
+          "D-host-20261111/plan/steps/A"
+        ],
+        "bindingKey": "D-host-20261111/plan/bindings/3080b832-7eed-41f6-bd8e-0d8139bc986f",
+        "outcome": "completedScope",
+        "startedAt": "2026-11-10T16:06:39.113Z",
+        "endedAt": "2026-11-10T16:06:51.374Z",
+        "handoffConclusion": null
+      }
+    ],
+    "supplements": [],
+    "events": [
+      {
+        "eventId": "light/8de6237e355bd612109d73a40d9a7eb44f099a049778094b17f2912b16f94db3/D-host-start",
+        "stepKey": "D-host-20261111/plan/steps/A",
+        "executionKey": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+        "fromStatus": "pending",
+        "toStatus": "running",
+        "occurredAt": "2026-11-11T00:00:00+08:00",
+        "receivedAt": "2026-11-10T16:06:39.113Z",
+        "reason": "已授权D隔离验收",
+        "evidenceIds": [],
+        "sync": "synced"
+      },
+      {
+        "eventId": "light/8de6237e355bd612109d73a40d9a7eb44f099a049778094b17f2912b16f94db3/D-host-complete",
+        "stepKey": "D-host-20261111/plan/steps/A",
+        "executionKey": "D-host-20261111/plan/executions/dadba223-7efc-4984-b39d-111f1282a53e",
+        "fromStatus": "running",
+        "toStatus": "completed",
+        "occurredAt": "2026-11-11T00:00:00+08:00",
+        "receivedAt": "2026-11-10T16:06:51.374Z",
+        "reason": "已授权D隔离验收",
+        "evidenceIds": [
+          "D-host-proof"
+        ],
+        "sync": "synced"
+      }
+    ],
+    "uiPreferences": {
+      "collapsedKeys": [],
+      "selectedStepKey": null,
+      "focusedRouteKey": null,
+      "scrollByProject": {}
+    }
+  },
+  "limitations": [
+    "独立一阶段验收项目，不是主方案业务服务身份",
+    "MCP责任上下文声明为控制验收的D聊天，CLI临时聊天ID另存，未冒充自动宿主身份绑定",
+    "当前桌面旧聊天热重载和插件安装尚未执行，交由E发布接入准备",
+    "独立owner已显式停止，持久数据和脱敏日志保留"
+  ]
+}
