@@ -10,6 +10,7 @@ import { OutputPanel } from './OutputPanel';
 import { ImportWizard } from './ImportWizard';
 import { isDesktop } from './desktop';
 import { DesktopSetup } from './DesktopSetup';
+import { LightPanel } from './LightPanel';
 
 function errorText(error:unknown){return error instanceof Error?error.message:'操作失败，请检查本地服务。';}
 function stamp(value:string){return new Date(value).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
@@ -119,4 +120,4 @@ function App(){
     </div><footer className="modal-footer">{extraction?<><button className="button" onClick={()=>{setExtraction(null);setModalError('');}} disabled={!!busy}>返回方案</button><button className="button primary" onClick={()=>void confirmRoute()} disabled={!!busy||!ack}>{busy==='confirm'&&<LoaderCircle className="spin" size={16}/>}确认并生成路线</button></>:<><button className="button" onClick={manual} disabled={!!busy}>手动录入</button><button className="button primary" onClick={()=>void extract()} disabled={!!busy||!source.trim()}>{busy==='extract'?<LoaderCircle className="spin" size={16}/>:<Sparkles size={16}/>}发送并提取路线</button></>}</footer></Modal>}
   </div>;
 }
-createRoot(document.getElementById('root')!).render(<React.StrictMode><DesktopSetup><App/></DesktopSetup></React.StrictMode>);
+createRoot(document.getElementById('root')!).render(<React.StrictMode>{new URLSearchParams(location.search).get('view') === 'light-simulation' ? <LightPanel/> : <DesktopSetup><App/></DesktopSetup>}</React.StrictMode>);

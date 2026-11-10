@@ -1,0 +1,179 @@
+{
+  "date": "2026-11-10",
+  "executionKey": "light-workbench-20261110/executions/C-EX01",
+  "threadId": "01a1c612-bd76-7220-9493-5460845b9cfd",
+  "initialHead": "7bd8bab289a07020c1e17e1943cc2d476f2c4512",
+  "businessStatus": "completed",
+  "acceptance": "passed",
+  "sync": "pendingSync",
+  "serviceIds": {
+    "projectId": null,
+    "planId": null,
+    "stepId": null,
+    "executionId": null,
+    "bindingId": null,
+    "bindingRevision": null,
+    "expectedRevision": null,
+    "receivedAt": null,
+    "committedRevision": null
+  },
+  "deliveryFiles": [
+    {
+      "path": "app/src/LightPanel.tsx",
+      "sha256": "a2af6d5ec9a80cceb1e4416f87784212439db6876e41dd5bb7b777211b44a57e",
+      "bytes": 17443
+    },
+    {
+      "path": "app/src/light-panel.css",
+      "sha256": "ca3814e7c2ed5ee93d6bb4d1cdc4215c52e09a77ce2ec108b7d3f035a46f9998",
+      "bytes": 5914
+    },
+    {
+      "path": "app/src/light-simulation.json",
+      "sha256": "f955ccd543053133735bc02cb4889103ed8bf3edd2f972aa71b9c9f68199f0aa",
+      "bytes": 111198
+    },
+    {
+      "path": "app/src/light-source.json",
+      "sha256": "5abf2686a60fc8874abb3ea502e1f95d6b6748daae9d00638a845f368eaa8a22",
+      "bytes": 13282
+    },
+    {
+      "path": "app/src/main.tsx",
+      "sha256": "e78e87d08f27adb9a35f47aa82929443a735a465fb14c142be731fbb5288c94f",
+      "bytes": 34653
+    },
+    {
+      "path": "app/tests/light-ui.mjs",
+      "sha256": "0b47278eea798cf6458454dee35ec47d4f041862772df653bbcfaf35915ac03e",
+      "bytes": 9511
+    },
+    {
+      "path": "app/mcp/contracts/light-v1.json",
+      "sha256": "3a010b001d45583ab4b916a86e88ffc940e86e8b71e4c53c79e14ceb3a6c3181",
+      "bytes": 42888
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/C_查看模拟面板.cmd",
+      "sha256": "fc5292263764aed679bc5c0aacbffbaa944450ff834ece801617108e21c98ccd",
+      "bytes": 171
+    }
+  ],
+  "rawEvidence": [
+    {
+      "path": "app/test-results/manual-trial/C-EX01/01-expanded.png",
+      "sha256": "ce045be6c896320f6060c46ea04c2c608c0fb47078dfb401fc04d5197531794d",
+      "bytes": 55624
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/02-deep-focus.png",
+      "sha256": "005c3bbb370a770bfdda57a21be5584206d651c5ed437e90e43bba353b5d8e0a",
+      "bytes": 51642
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/03-small-screen.png",
+      "sha256": "295685842b54eb0abdcad98e7bb27912f66797dd9f3cc054e39c3247fec293bf",
+      "bytes": 38666
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/04-compact.png",
+      "sha256": "3c7de92c6666b387ebcc2e7e5de27ad4db79e90494370668aa7170f8bd9b278d",
+      "bytes": 7850
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/05-original-compact.png",
+      "sha256": "0d8a4fb7bcd38e4783b9f8a0019a0fdfcc5d72a755176f20bacd16243522edd7",
+      "bytes": 10133
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/06-original-expanded.png",
+      "sha256": "f3a97407e5180112b9a371daf1114a6b7890ea4e3f32bebdc1ab8e82b13e0a29",
+      "bytes": 87483
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/build.log",
+      "sha256": "93d4f41dcbb6ef2e095ee116032684a2d4485fba598fd08691bb9afe62f018c1",
+      "bytes": 445
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/contract-domain.log",
+      "sha256": "8880417f31f873b27b4ac99a88d10fb51206859afdd5938cbc0e7294fab0ca9e",
+      "bytes": 2141
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/domain.log",
+      "sha256": "11841f7f7aa61d21958554b434197d749e32738d8b8c102e95d5528c71fa6bfc",
+      "bytes": 796
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/legacy-e2e.log",
+      "sha256": "2fd66312dea45f870f7610220754cabf42518401ce1706f83f1edc6df1bac183",
+      "bytes": 1392
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/ui.log",
+      "sha256": "c510de54128ad7d7169bc1e6ec1909a772a12a168ec9fcf6e77c18cedfb15ef8",
+      "bytes": 977
+    },
+    {
+      "path": "app/test-results/manual-trial/C-EX01/checks.json",
+      "sha256": "45afae88f91bd70a8946b766fc0684b14d91f224f58500da20ce4d0f693864ec",
+      "bytes": 1503
+    }
+  ],
+  "validation": {
+    "ui": 13,
+    "legacyE2E": 17,
+    "contractDomain": 19,
+    "domain": 6,
+    "build": 0
+  },
+  "sourceMapping": {
+    "bSnapshot": {
+      "path": "docs/03_轻量路线工作台/06_执行记录/B_已提交快照_2026-11-10.json",
+      "sha256": "8881255ac62959002a8b6b5c1d5924325a26d17b27cd62ffc51181ad7d0de496",
+      "bytes": 66219
+    },
+    "simulationPrefix": "simulation/c",
+    "originalSteps": 20,
+    "originalRoutes": 6,
+    "additionalLongRoute": 30,
+    "directBranches": 8,
+    "sourceText": "UTF-16 offsets from original fixed test document"
+  },
+  "environment": {
+    "browser": "Microsoft Edge headless",
+    "viewports": [
+      "1280x800",
+      "390x740"
+    ],
+    "TEMP": "app/test-results/manual-trial/C-EX01/temp",
+    "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
+  },
+  "localEvents": [
+    "light-workbench-20261110/C-EX01/start",
+    "light-workbench-20261110/C-EX01/C-01-start",
+    "light-workbench-20261110/C-EX01/C-01-complete",
+    "light-workbench-20261110/C-EX01/C-02-start",
+    "light-workbench-20261110/C-EX01/C-02-complete",
+    "light-workbench-20261110/C-EX01/C-03-start",
+    "light-workbench-20261110/C-EX01/C-03-complete",
+    "light-workbench-20261110/C-EX01/C-04-start",
+    "light-workbench-20261110/C-EX01/C-04-complete",
+    "light-workbench-20261110/C-EX01/C-05-start",
+    "light-workbench-20261110/C-EX01/C-05-complete",
+    "light-workbench-20261110/C-EX01/C-06-start",
+    "light-workbench-20261110/C-EX01/C-06-complete",
+    "light-workbench-20261110/C-EX01/C-07-start",
+    "light-workbench-20261110/C-EX01/C-07-complete",
+    "light-workbench-20261110/C-EX01/complete",
+    "light-workbench-20261110/C-EX01/end"
+  ],
+  "limitations": [
+    "真实持久状态及原生联验归 F",
+    "用户实际观感尚待 F 确认",
+    "D 并行开发最终验收归其责任聊天",
+    "业务写入工具未暴露，未发送事件"
+  ],
+  "parallelCommit": "07afbb8"
+}

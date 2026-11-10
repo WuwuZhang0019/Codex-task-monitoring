@@ -1,0 +1,3774 @@
+{
+  "schemaVersion": "light-1.0",
+  "date": "2026-11-10",
+  "mode": "simulation",
+  "revision": null,
+  "generatedAt": "2026-11-10T16:00:00Z",
+  "projects": [
+    {
+      "key": "simulation/c/project",
+      "id": null,
+      "name": "Codex 任务工作台",
+      "planKeys": [
+        "simulation/c/plan",
+        "simulation/c/branch/1",
+        "simulation/c/branch/2",
+        "simulation/c/branch/3",
+        "simulation/c/branch/4",
+        "simulation/c/branch/5",
+        "simulation/c/branch/6",
+        "simulation/c/branch/7",
+        "simulation/c/branch/8",
+        "simulation/c/deep"
+      ],
+      "revision": null
+    },
+    {
+      "key": "simulation/c/knowledge",
+      "id": null,
+      "name": "建筑规范知识库",
+      "planKeys": [
+        "simulation/c/long",
+        "simulation/c/independent"
+      ],
+      "revision": null
+    },
+    {
+      "key": "simulation/c/cad",
+      "id": null,
+      "name": "CADTools",
+      "planKeys": [
+        "simulation/c/cad-plan"
+      ],
+      "revision": null
+    }
+  ],
+  "plans": [
+    {
+      "key": "simulation/c/plan",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "二十步骤 · 六路线验证",
+      "stageCount": 20,
+      "stageKeys": [
+        "simulation/c/plan/steps/A-01",
+        "simulation/c/plan/steps/A-02",
+        "simulation/c/plan/steps/A-03",
+        "simulation/c/plan/steps/A-04",
+        "simulation/c/plan/steps/A-05",
+        "simulation/c/plan/steps/A-06",
+        "simulation/c/plan/steps/A-07",
+        "simulation/c/plan/steps/A-08",
+        "simulation/c/plan/steps/A-09",
+        "simulation/c/plan/steps/A-10",
+        "simulation/c/plan/steps/A-11",
+        "simulation/c/plan/steps/A-12",
+        "simulation/c/plan/steps/A-13",
+        "simulation/c/plan/steps/A-14",
+        "simulation/c/plan/steps/A-15",
+        "simulation/c/plan/steps/A-16",
+        "simulation/c/plan/steps/A-17",
+        "simulation/c/plan/steps/A-18",
+        "simulation/c/plan/steps/A-19",
+        "simulation/c/plan/steps/A-20"
+      ],
+      "source": {
+        "path": "/G:/rust/Codex-task-monitoring/docs/03_%E8%BD%BB%E9%87%8F%E8%B7%AF%E7%BA%BF%E5%B7%A5%E4%BD%9C%E5%8F%B0/03_%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B/01_%E6%A8%A1%E6%8B%9F%E4%BA%8C%E5%8D%81%E6%AD%A5%E9%AA%A4%E4%B8%8E%E5%85%AD%E5%88%86%E6%94%AF%E5%B7%A5%E4%BD%9C%E6%A0%91_%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3_2026-11-10.md",
+        "version": "fixed-20261110",
+        "sha256": "8c69b3e525a46c5ef922d9ea0548e73bbb538255bd644697a2b8244a3270182b",
+        "locator": "完整步骤及依赖表",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/branch/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "分支 1 · 异常恢复",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/branch/1/step/1",
+        "simulation/c/branch/1/step/2",
+        "simulation/c/branch/1/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "dd6c939cabdd3bcebcfcc697bcd755adac421c37357c9c731cf23e2e88270826",
+        "locator": "分支 1 · 异常恢复",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/branch/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "分支 2 · 证据整理",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/branch/2/step/1",
+        "simulation/c/branch/2/step/2",
+        "simulation/c/branch/2/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "3dbeef0fd6b77227955c2816da57787f4d099288fcee18d6c60ed3a98f195c3c",
+        "locator": "分支 2 · 证据整理",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/branch/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "分支 3 · 证据整理",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/branch/3/step/1",
+        "simulation/c/branch/3/step/2",
+        "simulation/c/branch/3/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "54c63c0dea4a63f73d3dcf3ed90f61b3f62bcd3936e023f4e2d13b6c476e315b",
+        "locator": "分支 3 · 证据整理",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/branch/4",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "分支 4 · 证据整理",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/branch/4/step/1",
+        "simulation/c/branch/4/step/2",
+        "simulation/c/branch/4/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "98dae7f1fc20bad7f860e2dbf5087ee1cf1f441474bc42c581abb3b62b36d0c5",
+        "locator": "分支 4 · 证据整理",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/branch/5",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "分支 5 · 证据整理",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/branch/5/step/1",
+        "simulation/c/branch/5/step/2",
+        "simulation/c/branch/5/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "03b1b4804aa3856b87df3e3d5c5057053d3068c83bcfbbff2edb5b56f8c59084",
+        "locator": "分支 5 · 证据整理",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/branch/6",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "分支 6 · 证据整理",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/branch/6/step/1",
+        "simulation/c/branch/6/step/2",
+        "simulation/c/branch/6/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "4c7de6d62a3503f23a5a0af01935170ba4ebdf951634b35aa160e089da7cba72",
+        "locator": "分支 6 · 证据整理",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/branch/7",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "分支 7 · 证据整理",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/branch/7/step/1",
+        "simulation/c/branch/7/step/2",
+        "simulation/c/branch/7/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "23327a5491e15b7a2519155edc337f93b35580a381c79823252f1e4206a2ee20",
+        "locator": "分支 7 · 证据整理",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/branch/8",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "分支 8 · 证据整理",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/branch/8/step/1",
+        "simulation/c/branch/8/step/2",
+        "simulation/c/branch/8/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "1889f9e1cc892b2f2dba72a305b06ede9a99dc822bddd9c89baa85b325571eb6",
+        "locator": "分支 8 · 证据整理",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/deep",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "name": "深层分支 · 焦点恢复",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/deep/step/1",
+        "simulation/c/deep/step/2",
+        "simulation/c/deep/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "bb404f76162ee0b13aa98ba0137498d4741deb53de9004eb807c0415f7e2b617",
+        "locator": "深层分支 · 焦点恢复",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/long",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "name": "长路线 · 规范条文与专业校核的完整处理流程",
+      "stageCount": 30,
+      "stageKeys": [
+        "simulation/c/long/step/1",
+        "simulation/c/long/step/2",
+        "simulation/c/long/step/3",
+        "simulation/c/long/step/4",
+        "simulation/c/long/step/5",
+        "simulation/c/long/step/6",
+        "simulation/c/long/step/7",
+        "simulation/c/long/step/8",
+        "simulation/c/long/step/9",
+        "simulation/c/long/step/10",
+        "simulation/c/long/step/11",
+        "simulation/c/long/step/12",
+        "simulation/c/long/step/13",
+        "simulation/c/long/step/14",
+        "simulation/c/long/step/15",
+        "simulation/c/long/step/16",
+        "simulation/c/long/step/17",
+        "simulation/c/long/step/18",
+        "simulation/c/long/step/19",
+        "simulation/c/long/step/20",
+        "simulation/c/long/step/21",
+        "simulation/c/long/step/22",
+        "simulation/c/long/step/23",
+        "simulation/c/long/step/24",
+        "simulation/c/long/step/25",
+        "simulation/c/long/step/26",
+        "simulation/c/long/step/27",
+        "simulation/c/long/step/28",
+        "simulation/c/long/step/29",
+        "simulation/c/long/step/30"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "038e65717fa89ef7fc21b5d06e979cb94b9a53da41131dabe5a65fc218486e60",
+        "locator": "长路线 · 规范条文与专业校核的完整处理流程",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/independent",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "name": "独立方案 · 检索评估",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/independent/step/1",
+        "simulation/c/independent/step/2",
+        "simulation/c/independent/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "bbd880310594f93ee095e6bdccf27db05b691ac6a30624164df969bcaa5070f7",
+        "locator": "独立方案 · 检索评估",
+        "trust": "declared"
+      },
+      "endConditions": []
+    },
+    {
+      "key": "simulation/c/cad-plan",
+      "id": null,
+      "projectKey": "simulation/c/cad",
+      "name": "插件发布验证",
+      "stageCount": 3,
+      "stageKeys": [
+        "simulation/c/cad-plan/step/1",
+        "simulation/c/cad-plan/step/2",
+        "simulation/c/cad-plan/step/3"
+      ],
+      "source": {
+        "path": "simulation://C-EX01",
+        "version": "fixed-20261110",
+        "sha256": "a4930cc691ccf7295409a61ac604a3a2f38db0a96c0bd19becb79777bd57b299",
+        "locator": "插件发布验证",
+        "trust": "declared"
+      },
+      "endConditions": []
+    }
+  ],
+  "steps": [
+    {
+      "key": "simulation/c/plan/steps/A-01",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "A-01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "建立示例任务数据",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-01/exit",
+          "text": "生成一份含任务标识和标题的示例数据",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-01/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-01/proof",
+          "location": "fixture://A-01",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-02",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "A-02",
+      "sourceLocator": "utf16:2762:3028",
+      "title": "补齐步骤编号与顺序",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-01"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-02/exit",
+          "text": "二十个步骤编号唯一，六条路线顺序与分组表一致",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-02/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-02/proof",
+          "location": "fixture://A-02",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.946Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-03",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "A-03",
+      "sourceLocator": "utf16:3028:3286",
+      "title": "校验模拟数据完整性",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-02"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-03/exit",
+          "text": "缺失编号或重复编号能够被标记",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-03/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-03/proof",
+          "location": "fixture://A-03",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.028Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-04",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-04",
+      "originalCode": "A-04",
+      "sourceLocator": "utf16:3286:3540",
+      "title": "绘制任务卡片",
+      "order": 4,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-04/exit",
+          "text": "卡片显示步骤编号、标题和当前状态",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-04/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-04/proof",
+          "location": "fixture://A-04",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.865Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-05",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-05",
+      "originalCode": "A-05",
+      "sourceLocator": "utf16:3540:3804",
+      "title": "展示三条分支路线",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-04"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-05/exit",
+          "text": "分别展示 3、3、4 个站点及各自工作树信息",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-05/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-05/proof",
+          "location": "fixture://A-05",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.143Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-06",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-06",
+      "originalCode": "A-06",
+      "sourceLocator": "utf16:3804:4063",
+      "title": "增加状态文字与图标",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-05"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-06/exit",
+          "text": "五种状态均有可辨识的文字和图标",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "A-06/proof"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "A-06/proof",
+          "location": "fixture://A-06",
+          "method": "持久领域入口断言",
+          "deliveryVersion": "fixture-v1",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.222Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-07",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-07",
+      "originalCode": "A-07",
+      "sourceLocator": "utf16:4063:4325",
+      "title": "模拟开始与完成事件",
+      "order": 7,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-03",
+        "simulation/c/plan/steps/A-06"
+      ],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-07/exit",
+          "text": "记录开始和完成各一次，并保存结果摘要",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.304Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-08",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-08",
+      "originalCode": "A-08",
+      "sourceLocator": "utf16:4325:4589",
+      "title": "模拟阻塞与恢复事件",
+      "order": 8,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-07"
+      ],
+      "status": "blocked",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-08/exit",
+          "text": "记录阻塞原因及恢复条件，恢复后进入执行中",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [
+        {
+          "blockerId": "simulation/wait",
+          "reason": "模拟等待复核证据",
+          "waitingFor": [
+            "专业复核"
+          ],
+          "releaseConditions": [
+            "确认复核结果"
+          ],
+          "resolved": false
+        }
+      ],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.388Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-09",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-09",
+      "originalCode": "A-09",
+      "sourceLocator": "utf16:4589:4851",
+      "title": "模拟取消与返工事件",
+      "order": 9,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-08"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-09/exit",
+          "text": "记录取消原因，并在返工时保留历史状态",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.474Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-10",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-10",
+      "originalCode": "A-10",
+      "sourceLocator": "utf16:4851:5131",
+      "title": "汇总三条路线的测试结果",
+      "order": 10,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-09"
+      ],
+      "status": "cancelled",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-10/exit",
+          "text": "汇总前三条分支的十个步骤最终状态、未完成事项和测试记录位置",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.563Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-11",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-11",
+      "originalCode": "A-11",
+      "sourceLocator": "utf16:5131:5392",
+      "title": "准备同步事件样例",
+      "order": 11,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-10"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-11/exit",
+          "text": "样例包含事件标识、执行标识及步骤标识",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.659Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-12",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-12",
+      "originalCode": "A-12",
+      "sourceLocator": "utf16:5392:5653",
+      "title": "模拟重复事件上报",
+      "order": 12,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-11"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-12/exit",
+          "text": "相同事件重复提交后只保留一条逻辑记录",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.749Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-13",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-13",
+      "originalCode": "A-13",
+      "sourceLocator": "utf16:5653:5909",
+      "title": "模拟版本冲突",
+      "order": 13,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-12"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-13/exit",
+          "text": "过期版本更新被拒绝，并记录当前版本",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.844Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-14",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-14",
+      "originalCode": "A-14",
+      "sourceLocator": "utf16:5909:6172",
+      "title": "准备中断恢复样例",
+      "order": 14,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-10"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-14/exit",
+          "text": "保留中断前状态、最后更新时间及待确认提示",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:39.977Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-15",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-15",
+      "originalCode": "A-15",
+      "sourceLocator": "utf16:6172:6431",
+      "title": "模拟跨会话接续",
+      "order": 15,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-14"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-15/exit",
+          "text": "读取已有状态后沿用原执行标识继续记录",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:40.071Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-16",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-16",
+      "originalCode": "A-16",
+      "sourceLocator": "utf16:6431:6696",
+      "title": "模拟结束消息补报",
+      "order": 16,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-15"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-16/exit",
+          "text": "补报结束原因及相关步骤状态，并保留原事件标识",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:40.173Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-17",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-17",
+      "originalCode": "A-17",
+      "sourceLocator": "utf16:6696:6957",
+      "title": "展示新增三条路线",
+      "order": 17,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-13",
+        "simulation/c/plan/steps/A-16"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-17/exit",
+          "text": "新增路线分别显示 3、3、4 个站点",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:40.272Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-18",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-18",
+      "originalCode": "A-18",
+      "sourceLocator": "utf16:6957:7225",
+      "title": "核对六条工作树归属",
+      "order": 18,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-17"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-18/exit",
+          "text": "六条路线均关联到分组表中的分支及拟定工作树路径",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:40.373Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-19",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-19",
+      "originalCode": "A-19",
+      "sourceLocator": "utf16:7225:7495",
+      "title": "检查二十步骤状态展示",
+      "order": 19,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-18"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-19/exit",
+          "text": "A-01 至 A-20 均能展示和切换五种状态",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:40.475Z"
+    },
+    {
+      "key": "simulation/c/plan/steps/A-20",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "parentKey": null,
+      "code": "A-20",
+      "originalCode": "A-20",
+      "sourceLocator": "utf16:7495:7792",
+      "title": "汇总全部模拟测试结果",
+      "order": 20,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/plan/steps/A-19"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "simulation/c/plan/steps/A-20/exit",
+          "text": "汇总二十个步骤及六条路线的状态、未完成事项和证据位置，确认全部步骤满足验收要求后将方案 A 标记为已完成",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:40.577Z"
+    },
+    {
+      "key": "simulation/c/branch/1/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/1",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 1 · 异常恢复 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "blocked",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [
+        {
+          "blockerId": "simulation/branch-wait",
+          "reason": "等待原型对照",
+          "waitingFor": [
+            "UI复核"
+          ],
+          "releaseConditions": [
+            "原型检查通过"
+          ],
+          "resolved": false
+        }
+      ],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/1/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/1",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 1 · 异常恢复 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/1/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/1/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/1",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 1 · 异常恢复 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/1/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/2/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/2",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 2 · 证据整理 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/2/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/2",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 2 · 证据整理 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/2/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/2/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/2",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 2 · 证据整理 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/2/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/3/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/3",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 3 · 证据整理 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/3/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/3",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 3 · 证据整理 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/3/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/3/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/3",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 3 · 证据整理 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/3/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/4/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/4",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 4 · 证据整理 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/4/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/4",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 4 · 证据整理 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/4/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/4/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/4",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 4 · 证据整理 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/4/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/5/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/5",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 5 · 证据整理 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/5/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/5",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 5 · 证据整理 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/5/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/5/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/5",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 5 · 证据整理 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/5/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/6/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/6",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 6 · 证据整理 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/6/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/6",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 6 · 证据整理 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/6/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/6/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/6",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 6 · 证据整理 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/6/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/7/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/7",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 7 · 证据整理 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/7/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/7",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 7 · 证据整理 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/7/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/7/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/7",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 7 · 证据整理 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/7/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/8/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/8",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 8 · 证据整理 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "cancelled",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/8/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/8",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 8 · 证据整理 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/8/step/1"
+      ],
+      "status": "cancelled",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/branch/8/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/8",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "分支 8 · 证据整理 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/branch/8/step/2"
+      ],
+      "status": "cancelled",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/deep/step/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/deep",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "深层分支 · 焦点恢复 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/deep/step/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/deep",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "深层分支 · 焦点恢复 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/deep/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/deep/step/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/deep",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "深层分支 · 焦点恢复 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/deep/step/2"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "pendingSync",
+      "conditions": [],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/1",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/2",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/3",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/4",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-04",
+      "originalCode": "S04",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第4站",
+      "order": 4,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/3"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/5",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-05",
+      "originalCode": "S05",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第5站",
+      "order": 5,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/4"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/6",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-06",
+      "originalCode": "S06",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第6站",
+      "order": 6,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/5"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/7",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-07",
+      "originalCode": "S07",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第7站",
+      "order": 7,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/6"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/8",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-08",
+      "originalCode": "S08",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第8站",
+      "order": 8,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/7"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/9",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-09",
+      "originalCode": "S09",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第9站",
+      "order": 9,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/8"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/10",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-10",
+      "originalCode": "S10",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第10站",
+      "order": 10,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/9"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/11",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-11",
+      "originalCode": "S11",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第11站",
+      "order": 11,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/10"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/12",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-12",
+      "originalCode": "S12",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第12站",
+      "order": 12,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/11"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/13",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-13",
+      "originalCode": "S13",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第13站",
+      "order": 13,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/12"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/14",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-14",
+      "originalCode": "S14",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第14站",
+      "order": 14,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/13"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/15",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-15",
+      "originalCode": "S15",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第15站",
+      "order": 15,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/14"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/16",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-16",
+      "originalCode": "S16",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第16站",
+      "order": 16,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/15"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/17",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-17",
+      "originalCode": "S17",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第17站",
+      "order": 17,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/16"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/18",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-18",
+      "originalCode": "S18",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第18站",
+      "order": 18,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/17"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/19",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-19",
+      "originalCode": "S19",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第19站",
+      "order": 19,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/18"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/20",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-20",
+      "originalCode": "S20",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第20站",
+      "order": 20,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/19"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/21",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-21",
+      "originalCode": "S21",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第21站",
+      "order": 21,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/20"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/22",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-22",
+      "originalCode": "S22",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第22站",
+      "order": 22,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/21"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/23",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-23",
+      "originalCode": "S23",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第23站",
+      "order": 23,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/22"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/24",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-24",
+      "originalCode": "S24",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第24站",
+      "order": 24,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/23"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/25",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-25",
+      "originalCode": "S25",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第25站",
+      "order": 25,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/24"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/26",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-26",
+      "originalCode": "S26",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第26站",
+      "order": 26,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/25"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/27",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-27",
+      "originalCode": "S27",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第27站",
+      "order": 27,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/26"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/28",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-28",
+      "originalCode": "S28",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第28站",
+      "order": 28,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/27"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/29",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-29",
+      "originalCode": "S29",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第29站",
+      "order": 29,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/28"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/long/step/30",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "parentKey": null,
+      "code": "A-30",
+      "originalCode": "S30",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "长路线 · 规范条文与专业校核的完整处理流程 · 第30站",
+      "order": 30,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/long/step/29"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/independent/step/1",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/independent",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "独立方案 · 检索评估 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/independent/step/2",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/independent",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "独立方案 · 检索评估 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/independent/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/independent/step/3",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/independent",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "独立方案 · 检索评估 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/independent/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/cad-plan/step/1",
+      "id": null,
+      "projectKey": "simulation/c/cad",
+      "planKey": "simulation/c/cad-plan",
+      "parentKey": null,
+      "code": "A-01",
+      "originalCode": "S01",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "插件发布验证 · 第1站",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/cad-plan/step/2",
+      "id": null,
+      "projectKey": "simulation/c/cad",
+      "planKey": "simulation/c/cad-plan",
+      "parentKey": null,
+      "code": "A-02",
+      "originalCode": "S02",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "插件发布验证 · 第2站",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/cad-plan/step/1"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    },
+    {
+      "key": "simulation/c/cad-plan/step/3",
+      "id": null,
+      "projectKey": "simulation/c/cad",
+      "planKey": "simulation/c/cad-plan",
+      "parentKey": null,
+      "code": "A-03",
+      "originalCode": "S03",
+      "sourceLocator": "utf16:2503:2762",
+      "title": "插件发布验证 · 第3站",
+      "order": 3,
+      "required": true,
+      "dependsOn": [
+        "simulation/c/cad-plan/step/2"
+      ],
+      "status": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "conditions": [
+        {
+          "conditionId": "check",
+          "text": "模拟检查通过且证据可回读",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": null,
+      "bindingKey": null,
+      "updatedAt": "2026-11-10T15:14:38.834Z"
+    }
+  ],
+  "routes": [
+    {
+      "key": "simulation/c/plan/routes/1",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "label": "分支一 · 数据准备",
+      "stepKeys": [
+        "simulation/c/plan/steps/A-01",
+        "simulation/c/plan/steps/A-02",
+        "simulation/c/plan/steps/A-03"
+      ],
+      "order": 1,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-data",
+        "branch": "codex/mock-data",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/plan/routes/2",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "label": "分支二 · 界面展示",
+      "stepKeys": [
+        "simulation/c/plan/steps/A-04",
+        "simulation/c/plan/steps/A-05",
+        "simulation/c/plan/steps/A-06"
+      ],
+      "order": 2,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 2,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-ui",
+        "branch": "codex/mock-ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/plan/routes/3",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "label": "分支三 · 交互验证",
+      "stepKeys": [
+        "simulation/c/plan/steps/A-07",
+        "simulation/c/plan/steps/A-08",
+        "simulation/c/plan/steps/A-09",
+        "simulation/c/plan/steps/A-10"
+      ],
+      "order": 3,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 3,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-interaction",
+        "branch": "codex/mock-interaction",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/plan/routes/4",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "label": "分支四 · 同步验证",
+      "stepKeys": [
+        "simulation/c/plan/steps/A-11",
+        "simulation/c/plan/steps/A-12",
+        "simulation/c/plan/steps/A-13"
+      ],
+      "order": 4,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 4,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-sync",
+        "branch": "codex/mock-sync",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/plan/routes/5",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "label": "分支五 · 恢复验证",
+      "stepKeys": [
+        "simulation/c/plan/steps/A-14",
+        "simulation/c/plan/steps/A-15",
+        "simulation/c/plan/steps/A-16"
+      ],
+      "order": 5,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 5,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-recovery",
+        "branch": "codex/mock-recovery",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/plan/routes/6",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/plan",
+      "label": "分支六 · 扩展汇总",
+      "stepKeys": [
+        "simulation/c/plan/steps/A-17",
+        "simulation/c/plan/steps/A-18",
+        "simulation/c/plan/steps/A-19",
+        "simulation/c/plan/steps/A-20"
+      ],
+      "order": 6,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 6,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-summary",
+        "branch": "codex/mock-summary",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/branch/1/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/1",
+      "label": "分支 1 · 异常恢复",
+      "stepKeys": [
+        "simulation/c/branch/1/step/1",
+        "simulation/c/branch/1/step/2",
+        "simulation/c/branch/1/step/3"
+      ],
+      "order": 7,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/branch/2/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/2",
+      "label": "分支 2 · 证据整理",
+      "stepKeys": [
+        "simulation/c/branch/2/step/1",
+        "simulation/c/branch/2/step/2",
+        "simulation/c/branch/2/step/3"
+      ],
+      "order": 8,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/branch/3/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/3",
+      "label": "分支 3 · 证据整理",
+      "stepKeys": [
+        "simulation/c/branch/3/step/1",
+        "simulation/c/branch/3/step/2",
+        "simulation/c/branch/3/step/3"
+      ],
+      "order": 9,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/branch/4/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/4",
+      "label": "分支 4 · 证据整理",
+      "stepKeys": [
+        "simulation/c/branch/4/step/1",
+        "simulation/c/branch/4/step/2",
+        "simulation/c/branch/4/step/3"
+      ],
+      "order": 10,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/branch/5/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/5",
+      "label": "分支 5 · 证据整理",
+      "stepKeys": [
+        "simulation/c/branch/5/step/1",
+        "simulation/c/branch/5/step/2",
+        "simulation/c/branch/5/step/3"
+      ],
+      "order": 11,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/branch/6/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/6",
+      "label": "分支 6 · 证据整理",
+      "stepKeys": [
+        "simulation/c/branch/6/step/1",
+        "simulation/c/branch/6/step/2",
+        "simulation/c/branch/6/step/3"
+      ],
+      "order": 12,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/branch/7/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/7",
+      "label": "分支 7 · 证据整理",
+      "stepKeys": [
+        "simulation/c/branch/7/step/1",
+        "simulation/c/branch/7/step/2",
+        "simulation/c/branch/7/step/3"
+      ],
+      "order": 13,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/branch/8/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/branch/8",
+      "label": "分支 8 · 证据整理",
+      "stepKeys": [
+        "simulation/c/branch/8/step/1",
+        "simulation/c/branch/8/step/2",
+        "simulation/c/branch/8/step/3"
+      ],
+      "order": 14,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/deep/route",
+      "id": null,
+      "projectKey": "simulation/c/project",
+      "planKey": "simulation/c/deep",
+      "label": "深层分支 · 焦点恢复",
+      "stepKeys": [
+        "simulation/c/deep/step/1",
+        "simulation/c/deep/step/2",
+        "simulation/c/deep/step/3"
+      ],
+      "order": 15,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/long/route",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/long",
+      "label": "长路线 · 规范条文与专业校核的完整处理流程",
+      "stepKeys": [
+        "simulation/c/long/step/1",
+        "simulation/c/long/step/2",
+        "simulation/c/long/step/3",
+        "simulation/c/long/step/4",
+        "simulation/c/long/step/5",
+        "simulation/c/long/step/6",
+        "simulation/c/long/step/7",
+        "simulation/c/long/step/8",
+        "simulation/c/long/step/9",
+        "simulation/c/long/step/10",
+        "simulation/c/long/step/11",
+        "simulation/c/long/step/12",
+        "simulation/c/long/step/13",
+        "simulation/c/long/step/14",
+        "simulation/c/long/step/15",
+        "simulation/c/long/step/16",
+        "simulation/c/long/step/17",
+        "simulation/c/long/step/18",
+        "simulation/c/long/step/19",
+        "simulation/c/long/step/20",
+        "simulation/c/long/step/21",
+        "simulation/c/long/step/22",
+        "simulation/c/long/step/23",
+        "simulation/c/long/step/24",
+        "simulation/c/long/step/25",
+        "simulation/c/long/step/26",
+        "simulation/c/long/step/27",
+        "simulation/c/long/step/28",
+        "simulation/c/long/step/29",
+        "simulation/c/long/step/30"
+      ],
+      "order": 16,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/independent/route",
+      "id": null,
+      "projectKey": "simulation/c/knowledge",
+      "planKey": "simulation/c/independent",
+      "label": "独立方案 · 检索评估",
+      "stepKeys": [
+        "simulation/c/independent/step/1",
+        "simulation/c/independent/step/2",
+        "simulation/c/independent/step/3"
+      ],
+      "order": 17,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    },
+    {
+      "key": "simulation/c/cad-plan/route",
+      "id": null,
+      "projectKey": "simulation/c/cad",
+      "planKey": "simulation/c/cad-plan",
+      "label": "插件发布验证",
+      "stepKeys": [
+        "simulation/c/cad-plan/step/1",
+        "simulation/c/cad-plan/step/2",
+        "simulation/c/cad-plan/step/3"
+      ],
+      "order": 18,
+      "context": {
+        "sessionGroup": "A",
+        "threadId": null,
+        "hostId": null,
+        "folderId": null,
+        "worktreeOrdinal": 1,
+        "worktreePath": "simulation://worktree",
+        "branch": "simulation/ui",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    }
+  ],
+  "bindings": [],
+  "executions": [],
+  "supplements": [
+    {
+      "key": "simulation/c/supplement/0",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "补充事项 1",
+      "goal": "独立模拟验收",
+      "blocksSource": true,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/branch/1",
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/supplement/1",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "补充事项 2",
+      "goal": "独立模拟验收",
+      "blocksSource": false,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/branch/2",
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/supplement/2",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "补充事项 3",
+      "goal": "独立模拟验收",
+      "blocksSource": false,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/branch/3",
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/supplement/3",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "补充事项 4",
+      "goal": "独立模拟验收",
+      "blocksSource": false,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/branch/4",
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/supplement/4",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "补充事项 5",
+      "goal": "独立模拟验收",
+      "blocksSource": false,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/branch/5",
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/supplement/5",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "补充事项 6",
+      "goal": "独立模拟验收",
+      "blocksSource": false,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/branch/6",
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/supplement/6",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "补充事项 7",
+      "goal": "独立模拟验收",
+      "blocksSource": false,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/branch/7",
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/supplement/7",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "补充事项 8",
+      "goal": "独立模拟验收",
+      "blocksSource": false,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/branch/8",
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/unconfirmed",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "性能检查",
+      "goal": "等待用户规划决定",
+      "blocksSource": false,
+      "status": "unconfirmed",
+      "linkedPlanKey": null,
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/unplanned",
+      "id": null,
+      "sourceStepKey": "simulation/c/plan/steps/A-01",
+      "title": "导出整理",
+      "goal": "等待用户规划决定",
+      "blocksSource": false,
+      "status": "unplanned",
+      "linkedPlanKey": null,
+      "repairId": null
+    },
+    {
+      "key": "simulation/c/deep-link",
+      "id": null,
+      "sourceStepKey": "simulation/c/branch/1/step/2",
+      "title": "深层焦点恢复",
+      "goal": "局部阅读",
+      "blocksSource": false,
+      "status": "running",
+      "linkedPlanKey": "simulation/c/deep",
+      "repairId": null
+    }
+  ],
+  "events": [],
+  "uiPreferences": {
+    "collapsedKeys": [],
+    "selectedStepKey": null,
+    "focusedRouteKey": null,
+    "scrollByProject": {}
+  }
+}
