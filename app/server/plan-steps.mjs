@@ -1,7 +1,12 @@
 // Read only an explicitly declared complete route from the saved plan source.
 // Never infer plan order or completeness from the registered station array.
+import { extractLightSteps } from './light-import.mjs';
 export function planSteps(plan) {
  const source=plan?.source?.replace(/\r\n/g,'\n')??'';
+ let light;
+ try { light=extractLightSteps(source); }
+ catch { return null; }
+ if(light)return light.map(({code,title})=>({code,title}));
  const blocks=[...source.matchAll(/^## (?:完整方案步骤|10\. 有限实施路线与交付门槛)\s*\n([\s\S]*?)(?=^## |$(?![\s\S]))/gm)];
  if(blocks.length!==1)return null;
  const body=blocks[0][1],steps=[];

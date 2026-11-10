@@ -3,6 +3,8 @@ import {createRequests} from './business-requests.mjs';
 import {createDrafts} from './import-drafts.mjs';
 import {createPublisher} from './publish-coordinator.mjs';
 import {createBusiness} from './business.mjs';
+import {createLightService} from './light-service.mjs';
+import {createLightOutbox} from './light-outbox.mjs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -137,6 +139,8 @@ async function createOwnedServer(options) {
   const drafts = createDrafts(persistence,requests,models);
   const publisher = createPublisher(persistence,requests,drafts,store,models);
   const business = createBusiness(persistence,requests,models);
+  const light = createLightService(persistence,requests,{authorize:options.lightAuthorize});
+  const lightOutbox = createLightOutbox(persistence);
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const distDir = options.distDir ?? path.join(APP_DIR, 'dist');
   const server = http.createServer(async (req, res) => {
@@ -242,7 +246,7 @@ async function createOwnedServer(options) {
       sendJSON(res,status, { error: status === 500 ? '本地服务错误，请检查服务日志；数据未被清空' : error.message });
     }
   });
-  server.workbench={persistence,store,models,requests,drafts,publisher,business};
+  server.workbench={persistence,store,models,requests,drafts,publisher,business,light,lightOutbox};
   server.requestTimeout = 30000;
   server.headersTimeout = 10000;
   server.keepAliveTimeout = 5000;

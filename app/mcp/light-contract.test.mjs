@@ -184,7 +184,7 @@ test('A-04 绑定、补充事项与保存回执结构', () => {
   assert.ok(validate('receipt')({ ...receipt, status: 'unknown', committedRevision: null, resultRef: null, recovery: '查询原 eventId' }));
 });
 
-test('A-02 旧解析器不能直接读取新总纲，适配缺口保持可见', async () => {
+test('B-01 明确路线表可读取新总纲，旧完整步骤格式继续兼容', async () => {
   const text = await readFile(new URL('../../docs/03_轻量路线工作台/00_执行入口/00_新路线实施总纲与接口决定_2026-11-10.md', import.meta.url), 'utf8');
-  assert.equal(planSteps({ source: text }), null);
+  assert.deepEqual(planSteps({ source: text }).map(step => step.code), [...'ABCDEFG']);
 });

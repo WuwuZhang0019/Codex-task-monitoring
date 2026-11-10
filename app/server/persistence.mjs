@@ -5,6 +5,8 @@ import { randomUUID } from 'node:crypto';
 import { digest } from './receipts.mjs';
 import { validateDatabase, HttpError } from './validation.mjs';
 import { validateRelationships } from './relationships.mjs';
+import { validateLightStorage } from './light-model.mjs';
+import { validateLightOutbox } from './light-outbox.mjs';
 
 async function readJSON(file) {
   try { return JSON.parse(await readFile(file, 'utf8')); }
@@ -30,6 +32,8 @@ async function durableWrite(file, value) {
 function validate(state) {
   if (state?.version !== 1 || !state.models || !state.drafts || !state.requests || !Array.isArray(state.audit)) throw Error('Invalid aggregate');
   validateDatabase(state.projects);
+  validateLightStorage(state.light);
+  validateLightOutbox(state.lightOutbox);
   for (const [id, entry] of Object.entries(state.models)) {
     if (!state.projects.projects.some(p => p.id === id) || !Number.isSafeInteger(entry.revision) || entry.revision < 1) throw Error('Invalid aggregate model');
     validateRelationships(entry.model);
