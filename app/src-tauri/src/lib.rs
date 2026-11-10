@@ -134,6 +134,41 @@ fn runtime_status(state: tauri::State<Runtime>) -> Value {
     json!({"dataPath":state.root.join("data").display().to_string(),"needsSetup": !workspace_initialized(&state.root) || state.root.join("data/.migration-pending.json").exists(),"migrationPending":state.root.join("data/.migration-pending.json").exists(),"running": state.endpoint.lock().unwrap().is_some()})
 }
 
+// 日期 2026-11-11。仅主窗口将独立插件令牌写入固定的私有连接配置。
+#[tauri::command]
+fn save_light_connection(
+    window: tauri::WebviewWindow,
+    state: tauri::State<Runtime>,
+    token: String,
+) -> Result<Value, String> {
+    if window.label() != "main" || token.len() != 64 || !token.chars().all(|c| c.is_ascii_hexdigit()) {
+        return Err("连接凭据或调用窗口无效".into());
+    }
+    let home = std::env::var_os("USERPROFILE").ok_or("用户目录不可用")?;
+    let directory = PathBuf::from(home).join(".codex/task-workbench-light");
+    fs::create_dir_all(&directory).map_err(|_| "无法创建私有连接目录")?;
+    #[cfg(windows)]
+    {
+        let account = std::env::var("USERNAME").map_err(|_| "用户身份不可用")?;
+        let result = private_command(std::path::Path::new("icacls.exe"))
+            .arg(&directory)
+            .args(["/inheritance:r", "/grant:r", &format!("{account}:(OI)(CI)F"), "SYSTEM:(OI)(CI)F", "/Q"])
+            .output().map_err(|_| "无法保护私有连接目录")?;
+        if !result.status.success() { return Err("无法保护私有连接目录".into()); }
+    }
+    let config = directory.join("config.json");
+    let temporary = directory.join(format!("config-{:032x}.tmp", rand::random::<u128>()));
+    let bytes = serde_json::to_vec_pretty(&json!({"dataDir":state.root.join("data"),"token":token}))
+        .map_err(|_| "连接配置编码失败")?;
+    let mut file = OpenOptions::new().write(true).create_new(true).open(&temporary)
+        .map_err(|_| "连接配置写入失败")?;
+    file.write_all(&bytes).map_err(|_| "连接配置写入失败")?;
+    file.sync_all().map_err(|_| "连接配置保存失败")?;
+    drop(file);
+    fs::rename(&temporary, &config).map_err(|_| "连接配置保存失败")?;
+    Ok(json!({"configPath":config}))
+}
+
 #[tauri::command]
 fn recover_workspace(
     window: tauri::WebviewWindow,
@@ -419,6 +454,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             runtime_action,
             runtime_status,
+            save_light_connection,
             initialize_workspace,
             recover_workspace,
             api_request

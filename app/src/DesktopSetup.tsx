@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { desktopInvoke, isDesktop } from './desktop';
+import { LightConnection } from './LightConnection';
 import './desktop-setup.css';
 
 type RuntimeStatus = {
@@ -103,6 +104,7 @@ export function DesktopSetup({ children }: { children: ReactNode }) {
       <button onClick={() => void action('exit')}>退出工作台</button>
       {error && <span role="alert">{error}</span>}
     </div>
+    <LightConnection dataPath={status.dataPath} />
     {children}
   </>;
 }

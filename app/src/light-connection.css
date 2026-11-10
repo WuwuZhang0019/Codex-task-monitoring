@@ -1,0 +1,15 @@
+/* 日期 2026-11-11。桌面接入确认区域。 */
+.light-connection { padding: 8px 14px; background: #f4f7f8; border-bottom: 1px solid #d9e2e8; font-size: 12px; }
+.light-connection summary { cursor: pointer; font-weight: 600; }
+.light-connection-content { max-width: 1000px; margin: 12px auto; color: #243746; }
+.light-connection-content p { line-height: 1.6; overflow-wrap: anywhere; margin: 8px 0; }
+.light-connection-content section { margin: 16px 0; padding: 12px; border: 1px solid #d9e2e8; border-radius: 8px; background: white; }
+.light-connection-content h2 { font-size: 14px; margin: 0 0 10px; }
+.light-connection-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.light-connection-fields label, .light-connection-principal { display: grid; gap: 5px; }
+.light-connection-content input, .light-connection-content textarea { width: 100%; min-width: 0; padding: 8px; border: 1px solid #bdccd6; border-radius: 5px; background: #fff; color: #243746; }
+.light-connection-content textarea { resize: vertical; font-family: Consolas, monospace; font-size: 12px; }
+.light-connection-content .light-connection-check { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
+.light-connection-check input[type="checkbox"] { width: auto; }
+.light-connection-error { color: #a52323; }
+@media (max-width: 700px) { .light-connection-fields { grid-template-columns: 1fr; } }
