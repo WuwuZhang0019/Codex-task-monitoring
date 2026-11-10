@@ -1,0 +1,954 @@
+{
+  "date": "2026-11-10",
+  "createdAt": "2026-11-10T12:18:29.814361+08:00",
+  "executionId": "U03-EX01",
+  "stationId": "U03",
+  "routeStationCount": 8,
+  "acceptedStations": 2,
+  "developmentRepairRounds": 0,
+  "classification": "originalDelivery",
+  "conclusion": "B",
+  "sourceCommit": "4d5d2dad77c0711b2f145f58dee622464e68be7a",
+  "initialCommit": "367b35bb9b5ea758686b2f8147c5ece4b8af0d01",
+  "worktree": "G:\\rust\\Codex-task-monitoring",
+  "branch": "main",
+  "responsibleThreadId": "01a1c373-b453-79c2-8e8d-d9721b7e6219",
+  "registrationSource": "manual",
+  "selfCheck": "passed",
+  "independentReview": "pending",
+  "userConfirmation": "pending",
+  "conditions": {
+    "U03-K01": {
+      "selfCheck": "passed",
+      "independentReview": "pending"
+    },
+    "U03-K02": {
+      "selfCheck": "passed",
+      "independentReview": "pending"
+    },
+    "U03-K03": {
+      "selfCheck": "passed",
+      "independentReview": "pending"
+    },
+    "U03-K04": {
+      "selfCheck": "passed",
+      "independentReview": "pending"
+    }
+  },
+  "validation": {
+    "date": "2026-11-10",
+    "executionId": "U03-EX01",
+    "sourceCommit": "4d5d2dad77c0711b2f145f58dee622464e68be7a",
+    "sourceTrust": "manual",
+    "startedAt": "2026-11-10T12:14:22.1961082+08:00",
+    "nodeVersion": "v25.5.0",
+    "commands": [
+      {
+        "label": "backend-99",
+        "command": "node --test --test-timeout=30000 server/*.test.mjs mcp/*.test.mjs desktop/*.test.mjs",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:14:22.2722161+08:00",
+        "endedAt": "2026-11-10T12:14:28.6121177+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\backend-delivery.log"
+      },
+      {
+        "label": "domain-6",
+        "command": "npm run test:domain",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:14:28.6307138+08:00",
+        "endedAt": "2026-11-10T12:14:30.2724398+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\domain-delivery.log"
+      },
+      {
+        "label": "build",
+        "command": "npm run build",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:14:30.2771401+08:00",
+        "endedAt": "2026-11-10T12:14:35.8012770+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\build-delivery.log"
+      },
+      {
+        "label": "u03-ui-6",
+        "command": "node tests/u03.e2e.mjs",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:14:35.8040714+08:00",
+        "endedAt": "2026-11-10T12:14:39.6373070+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-delivery.log"
+      },
+      {
+        "label": "legacy-ui-17",
+        "command": "node tests/e2e.mjs",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:14:39.6398512+08:00",
+        "endedAt": "2026-11-10T12:14:48.9773701+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\browser-regression.log"
+      },
+      {
+        "label": "m06-combination",
+        "command": "node tests/m06.e2e.mjs",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:14:48.9797556+08:00",
+        "endedAt": "2026-11-10T12:14:58.8684108+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\m06-regression.log"
+      },
+      {
+        "label": "fresh-startup",
+        "command": "node tests/m06-start.e2e.mjs",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:14:58.8710702+08:00",
+        "endedAt": "2026-11-10T12:14:59.4001331+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\start-regression.log"
+      },
+      {
+        "label": "desktop-debug-package",
+        "command": "npm run tauri -- build --debug --bundles nsis",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:14:59.4024983+08:00",
+        "endedAt": "2026-11-10T12:16:11.7012397+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\desktop-build.log"
+      },
+      {
+        "label": "bundled-owner",
+        "command": "node tests/u03-packaged.mjs",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app",
+        "startedAt": "2026-11-10T12:16:11.7039966+08:00",
+        "endedAt": "2026-11-10T12:16:12.3364359+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\packaged-delivery.log"
+      },
+      {
+        "label": "rust-2",
+        "command": "cargo test --locked",
+        "cwd": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri",
+        "startedAt": "2026-11-10T12:16:12.3410258+08:00",
+        "endedAt": "2026-11-10T12:16:20.7519415+08:00",
+        "exitCode": 0,
+        "log": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\rust-delivery.log"
+      }
+    ],
+    "endedAt": "2026-11-10T12:16:20.7548751+08:00"
+  },
+  "environment": {
+    "node": "v25.5.0",
+    "browser": "158.0.8127.18",
+    "tauri": "2.11.6",
+    "schemaVersion": "1.0.0",
+    "runtimeNode": "25.5.0",
+    "operatingSystem": "Windows x64",
+    "fixtureOnly": true,
+    "desktopTransportUI": "fixed adapter",
+    "nativeExperience": "pending user confirmation"
+  },
+  "sourceFingerprints": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\desktop\\client.mjs",
+      "bytes": 607,
+      "sha256": "48eba0c43167177ba8025ac0e390a5d812b6988ffb794552f0c839b74e490461"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\desktop\\migrate.mjs",
+      "bytes": 5685,
+      "sha256": "ef42f31c7a0e95d60c241d8e2925421c389b97a2226d6c105e9129777ec46ffd"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\desktop\\owner.mjs",
+      "bytes": 2740,
+      "sha256": "69fab240509df4842110d0d9347823d20272f02774c73dec6679d5659ea680ae"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\desktop\\prepare-resources.mjs",
+      "bytes": 4220,
+      "sha256": "ef76dfb412fc8bbdc5923a7e47a7019ff3fb13c278cd06c440d92b744e2ca92a"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\desktop\\runtime.test.mjs",
+      "bytes": 7316,
+      "sha256": "14013bfb069b18b22cf9e7ff3de394b92d89842e4a6f7bc04eaae0d31eabd4d6"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\dist\\assets\\index-B8wBeQI4.js",
+      "bytes": 315806,
+      "sha256": "3179b393b8001efbb4957974a8ce7df47fa92e6baf9076853771ffaad3bafd70"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\dist\\assets\\index-EiLmP5J2.css",
+      "bytes": 23856,
+      "sha256": "1c81f14de9b4c23986730af5a1bc3517f16e1a0dfc2bb655464e843839d619f3"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\dist\\index.html",
+      "bytes": 422,
+      "sha256": "c6141fe5f17ae633fa13158457c81ceae7b7a69dbad890097b93088d384cf8af"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\dist\\panel.html",
+      "bytes": 288,
+      "sha256": "f1917aa80fd975a57849242e6a0bf046ee61b952a6604436775ee9fabe4a72e8"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\build-business-schema.mjs",
+      "bytes": 1584,
+      "sha256": "4ffd36d4f29dfb30bceae656b7be36c59e1c37cee8aef6b58e28c32c460fdb4f"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\business-schema-source.mjs",
+      "bytes": 524,
+      "sha256": "a54e60e9622749b8198f9335895c0b9a6d1498f913815c9482726a4194ef1038"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\contracts\\v1.json",
+      "bytes": 120758,
+      "sha256": "2c2cb3736557640e5b63806ccd1c31369401604dfb94b23f208f5cf544ed1e71"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\contracts.mjs",
+      "bytes": 711,
+      "sha256": "66b7e75900964e7e2341444636fc10b59bd6b5e62e477fadf8e87606e4b3bc2b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\contracts.test.mjs",
+      "bytes": 3169,
+      "sha256": "0d7e5d3e52ecb5178d7a8c9ef154a1a9878107631aef016c9ba7ecd45ffaa42d"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\licenses.mjs",
+      "bytes": 1376,
+      "sha256": "3e791232e1b16880eb39a0cc524859bb990d41cfc321dca2fd4e87477cb4e088"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\package-probe.mjs",
+      "bytes": 2137,
+      "sha256": "5d1bc28360e761fda9a8eadc08b3042fd53d13bfe5a427a770e5c36bc0399ec7"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\plugin-entry.mjs",
+      "bytes": 580,
+      "sha256": "811f3b6ad25374546496171823bad13243bd1cabf2159733a0e52f68bb7f9ee4"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\probe-fixture.mjs",
+      "bytes": 1017,
+      "sha256": "8f8fb844cc979d4b114efbf6eafa411ff6cbe1b034fb281bad7b71048c7e3b04"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\probe-owner.mjs",
+      "bytes": 3321,
+      "sha256": "c8376c6e1fe41004283f0edc3c3e9b8fbbcdaaae1dadbc63d036a7b36c2b9cd0"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\probe.mjs",
+      "bytes": 3719,
+      "sha256": "64faf9c45f19f7212e74596eca309cddc7bdbab6779f183058e118822ade5e57"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\probe.test.mjs",
+      "bytes": 5881,
+      "sha256": "cf9a6965e4ee6a669032095fa8cffdb68fc7f9191b3dca35cceaba9a83bb649f"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\run-probe.mjs",
+      "bytes": 1774,
+      "sha256": "6cc3e77e18c01141239d63f09a557c2b3d0ddd77450051921919148fa9d279f0"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\stdio.mjs",
+      "bytes": 410,
+      "sha256": "7b23a4747aca48d6e7893fb54dfb4b3a0611f9bf207d96d748be3256e3877474"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\package-lock.json",
+      "bytes": 127192,
+      "sha256": "72a3620b38165d0a847599bf7df117c8f702898a2b96da27741174a03044f545"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\package.json",
+      "bytes": 1354,
+      "sha256": "ebd02d23d62b04f94bb95f351bb7fba02d1e1150d2ee42a88830f641fa37a6df"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\ai-timeout.test.mjs",
+      "bytes": 1676,
+      "sha256": "ec582c0364f89004162472b09f7f30be7e77bf0d5f339ab9cf965604f90b0702"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\ai.mjs",
+      "bytes": 8190,
+      "sha256": "3ff35852998f16ea1997649213139e641284659460271d3f81f5d5b8fbfc5c08"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\ai.test.mjs",
+      "bytes": 959,
+      "sha256": "ba835bf37bef60338b56a22838a08434859ccaf8c60376d8185b59e7eb941c81"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\business-requests.mjs",
+      "bytes": 1668,
+      "sha256": "9c95e6b2982507865956e1caa2074ce270b4b91b8861c180c8ba91029d822b0b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\business-schema.mjs",
+      "bytes": 406352,
+      "sha256": "e521827dcb768ed6cb6fc9e08b1681114e1976701c04269647e8000d91e0d46c"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\business-view.mjs",
+      "bytes": 5685,
+      "sha256": "a2c57872e0ac486536c0ea54ac3c41ec8a3c18e8765a7c6b15c36d9492cfcd8b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\business.mjs",
+      "bytes": 24428,
+      "sha256": "96e1600e0c8482afafe9d09c5bfdcde4ca89a16209a1da48e5b00926aff115e7"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\data-lease.mjs",
+      "bytes": 686,
+      "sha256": "7de3d7a6d50241e09624d297bc46d7ee16d1a2e40c71a9ae8e0de9f401f9d131"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\import-drafts.mjs",
+      "bytes": 11349,
+      "sha256": "4c582cf2448d48d97bab262792daf9308ef28f8a3b71bc218a47195466b3b283"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\index.mjs",
+      "bytes": 15487,
+      "sha256": "fe6d8b6361f41dac19d284ee3afe6011f6f9faaa7fa4041d96f9f66ea10b7a4b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\index.test.mjs",
+      "bytes": 32033,
+      "sha256": "2526e67082458402ed47672ba9db95c82f921b7e584d2ddc876d9e739173f620"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\launch.mjs",
+      "bytes": 1309,
+      "sha256": "860951b6cc4695f817a478045e7bfea798255e090acf4e8619936df060d21071"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\model-store.mjs",
+      "bytes": 7522,
+      "sha256": "1b9c6d4742314bc744980ff00ee7e56fbc79fe884b1727b25d4a3e93fdfe94a5"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\model-store.test.mjs",
+      "bytes": 2762,
+      "sha256": "b77fb4b56e91991087f6677a7c938732e33eff09ebb9672c3da75a59c4b789f2"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\monitor.mjs",
+      "bytes": 9075,
+      "sha256": "6293d44609b24f35b637801568805f1ada02a560aa8a9d0dea2d04bbf7afd6de"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\monitor.test.mjs",
+      "bytes": 8792,
+      "sha256": "74de7ed8d8b1aaebf56b56fe582577e4c20e610477d1d6f3125da074c39923e1"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\outputs.mjs",
+      "bytes": 16286,
+      "sha256": "5d7f1beec81abb40297282d9ad903d2d06ce0daa997e12d8bbff9dce4b0b14f1"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\outputs.test.mjs",
+      "bytes": 11901,
+      "sha256": "d8b4169d307a93cb8354b718a29dbe95d1bb4e0638ddb02051be06cace850147"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\persistence.mjs",
+      "bytes": 5863,
+      "sha256": "22415c9dbc25f2aad3ddd0bc56eb05f9e1c5eecfc636fa9ab6d7deb8ab0a0a8a"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\plan-diff.mjs",
+      "bytes": 2783,
+      "sha256": "522c03ca49d865a48cde57720b098345e2fe85d85b806a921b3c406a1623a3ea"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\plan-steps.mjs",
+      "bytes": 2163,
+      "sha256": "f9ce1c732af131bf867fa1cd984ee3362b2ee83eedbdbf1b9b8d3ec4926513d8"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\publish-coordinator.mjs",
+      "bytes": 5562,
+      "sha256": "b37a1774f426342c71fb3a9679950bd5964071c91bdffef68666e162c2659d3b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\receipts.mjs",
+      "bytes": 13638,
+      "sha256": "90d1fd5e7d1c43f44ed6b4dab4c596ae2478cb541ef87601d7ea2a7d7bdaab53"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\receipts.test.mjs",
+      "bytes": 7876,
+      "sha256": "b7a4b80b9a01b7d0fe01c9ee691d08cd66af52e1badf9438ec67b7d40fc80c61"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\relationships.mjs",
+      "bytes": 5296,
+      "sha256": "f8d68537d85e9e97b5a22ffd54925b3bab44984bc7e94d988137d0d498e7afe2"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\relationships.test.mjs",
+      "bytes": 1866,
+      "sha256": "66ecca23004e80b6c8abab5d9e6b165ba14c44b339377e77ddc3ca41bd796432"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\store.mjs",
+      "bytes": 4652,
+      "sha256": "2a7234efb6d7ec1c8efb5ad62d7b4e12a8eb209966455a5e65389a2395e2622a"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\u03.test.mjs",
+      "bytes": 32670,
+      "sha256": "dc426f51b07a50c412449cd5a21d03e6bd85a42d500bb079ad5b393f3b13b958"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\validation.mjs",
+      "bytes": 5189,
+      "sha256": "c20283dcff9bee0e0bfa8f583f75aa10b59f2231aaca5d55dec8b82d32c8a883"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\BusinessPanel.tsx",
+      "bytes": 5352,
+      "sha256": "4ac879d7cf185ef5772abb7a3e444e6e86533df31cd350f904b67786474faffc"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\desktop-setup.css",
+      "bytes": 711,
+      "sha256": "05ae3743405bfa75d2f04754adfe2d759471709a0d470fad36309fd327819437"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\desktop.ts",
+      "bytes": 467,
+      "sha256": "87ac9894cb0c9e7b45f3eec1d2ed69a34f4b744e08bf0de7f87a3967b35eb301"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\DesktopSetup.tsx",
+      "bytes": 3981,
+      "sha256": "402bd8691272b899b9231f97edd58e6817e8767dc10f05fddf584d01db77ac47"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\domain.ts",
+      "bytes": 6598,
+      "sha256": "c5b4bf845083be0b500b1d0b594b4b50216edf19e6f8c77e142c85745f45f8b0"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\ImportWizard.tsx",
+      "bytes": 10249,
+      "sha256": "a864ba9ed421eeb28687a9e3ba2af97150ea099110532626923c7762b4d5b4b3"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\main.tsx",
+      "bytes": 34517,
+      "sha256": "23205e8961164a4e11c5de19fe900b172088f4b33478605b2eb6962c705c090b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\ModelEditor.tsx",
+      "bytes": 9976,
+      "sha256": "1f8892ce963eac45c9963c58a09b6598da8c5ec75199739b60759ebaa5ee0735"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\Monitor.tsx",
+      "bytes": 7311,
+      "sha256": "d4c67c88e1a1e698202e7d9fbcb65ca83f7de0afbc2d57b537606780274d147d"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\OutputPanel.tsx",
+      "bytes": 7652,
+      "sha256": "09c0900aa4aba96707b902ee301cc901e7bff660c89afd25ee9fa68d33cf4345"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\ReceiptPanel.tsx",
+      "bytes": 11228,
+      "sha256": "e976d790284227d1d9edf688af4be970ab555fee093f0aa3d709126143e9f9fa"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\styles.css",
+      "bytes": 23250,
+      "sha256": "ea3c759aa6c19cc560428cec8974f09768c8004c71f7f27b6f0ca7bb8b50b682"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\Cargo.lock",
+      "bytes": 112596,
+      "sha256": "14dc01cd94b25a6c8c3a32e612ab685eca0b119976ffaac396be35527c0280c0"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\Cargo.toml",
+      "bytes": 564,
+      "sha256": "9e7abb208bae1cd1bda49df1e8adeaba7ae4150566e52966aa171b4692c9cd12"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\src\\lib.rs",
+      "bytes": 17471,
+      "sha256": "2829ca615a7fc7faf478eee034165d0a0956cd6e8104127da7b822b372b1856b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\tauri.conf.json",
+      "bytes": 1007,
+      "sha256": "0663c92a7b04a7e2a8e4e00688a1199b6c44c3c8ae6d4f550a4cd9948d7c22f2"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\helpers\\u03-crash-worker.mjs",
+      "bytes": 471,
+      "sha256": "95cca11376261cbe3b359595c2c1bc0070b4289b593ce00060c0d62927eb389c"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\helpers\\u03-fixture.mjs",
+      "bytes": 3635,
+      "sha256": "4e2b6005d66624d90d6ff3b151576b93ec5fc886e722561ef2e8b0f78ceaa3a5"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\u03-packaged.mjs",
+      "bytes": 3751,
+      "sha256": "569f7686b4b7f1613559bc7064be82427d35c8098851c748948e3cf307295732"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\u03.e2e.mjs",
+      "bytes": 8903,
+      "sha256": "28fa47a628dc42bf82e525478aef118a3a8eb632e4852c0bc64f29d01f51f999"
+    }
+  ],
+  "authorities": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\00_统一执行总纲与手动试跑_2026-11-09.md",
+      "bytes": 10193,
+      "sha256": "506bd6a7113b3e2127a897d50ee273b52738a977682cf202a68bf5243393d7b9"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\01_需求总结与技术选型_2026-11-09.md",
+      "bytes": 20529,
+      "sha256": "0a81380b39cbb53827ed40031009f4339265b9749ecf1c1e0a5a49e19913ca2d"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\02_桌面工作台与顶部常驻面板_可执行开发方案_2026-11-09.md",
+      "bytes": 46330,
+      "sha256": "c2dc3240a386b66bbe73c93b02c91f512a6ec9f3ac09e7003f3bfa6d79c230b4"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\03_灵动岛式连续展开与收起动画_独立实现可执行方案_2026-11-09.md",
+      "bytes": 16783,
+      "sha256": "17110e42569ddad680c874198d13a67beb1c563c66ab9c9f422eb10bfbf98bf9"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\04_任务工作台MCP与Skill插件组合_可执行开发方案_2026-11-09.md",
+      "bytes": 17801,
+      "sha256": "7cdae37f5f29647ccc26bb4129bf87f99ef5c2370a9e0d405a8664dd02e4ea1c"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\05_Codex接入与会话进度监测_可执行方案_2026-11-09.md",
+      "bytes": 22715,
+      "sha256": "38bf8609c4e39f14fcf2f8d222d47fc9b7a4506ea8e025522cbac10d76f3456e"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\01_执行方案\\06_本地工作台插件_可执行开发方案_2026-11-09.md",
+      "bytes": 21170,
+      "sha256": "1f911021a77e19a563fa5e60846c489019030ca6250a8ceefe12c57542780620"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\README.md",
+      "bytes": 12223,
+      "sha256": "d97a47fbb9ecfc7aa98abb0fa972d46cc526db98ea1865e94f559b9342edcda6"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\02_方案导入与配置草稿\\01_执行方案\\01_一次导入自动生成配置草稿与集中确认_可执行方案_2026-11-08.md",
+      "bytes": 15909,
+      "sha256": "363f1234c2aa17328e32c818a5fd0bfe61f1d641c8ea00f979d7898cdc61fabd"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\01_任务监测工作台_v1.0\\01_执行方案\\01_Codex任务状态监测工作台_可执行方案_2026-11-08.md",
+      "bytes": 20907,
+      "sha256": "4da11a6d5bb6b6e74d21f276ba8760460f5415835e36298065968562c1910181"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_执行过程\\U01_统一接入与权限契约_2026-11-09.md",
+      "bytes": 16397,
+      "sha256": "00255861098697c12b1d8cc81e0bbcc33fdfa5fc0275c7157ce272993aff6d92"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_执行过程\\U02_桌面运行与数据基础_2026-11-10.md",
+      "bytes": 14700,
+      "sha256": "ee97ac47f6cff25dbf475d03c6009df89078036e4d57dc37eed69e8de82e01ff"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\backend-delivery.log",
+      "bytes": 10132,
+      "sha256": "d7ada7e0c2460f04e22fa15fb6be786bea6344a99a595fdc7d4e72df7f6692c5"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\backend-final.log",
+      "bytes": 10028,
+      "sha256": "1233fa7042e9587baa40d0c4bbb5567c317133d971d7b450a9f005a2bce41b64"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\browser-regression.log",
+      "bytes": 1361,
+      "sha256": "325e47840fd28c059a04048663db5d91c4dadcf31f29e7fce8e676c29312f875"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\build-delivery.log",
+      "bytes": 442,
+      "sha256": "fff7f021083eab061b5fbdee51e600550f811a3e526884b44acecbed360ebbdc"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\build-final.log",
+      "bytes": 404,
+      "sha256": "a81faf84792dd7b9d45c61c8b88fabbcacad10b442b271c611d77e3b60219b6c"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\build-stage3.log",
+      "bytes": 404,
+      "sha256": "7918b4747f0189952ae2751a2984724578250c35dc2ccbeeecb1a38866d6728b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\desktop-build.log",
+      "bytes": 1543,
+      "sha256": "2c44ed6fddf22b2ead338012c2058ab7ab32d42a1d781d130e6084cc8650e779"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\domain-delivery.log",
+      "bytes": 797,
+      "sha256": "d8ed736b92f7a5c43166d25e31d37fec2600e39dba9a73b07ec36609092bd8b5"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\domain.log",
+      "bytes": 798,
+      "sha256": "2927a549bfe23f5061c04c202dd95a0a1f1dc43255b2a91b01dda4d2ba2f4673"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\full-stage2.log",
+      "bytes": 10770,
+      "sha256": "daac2d981d1e99af3469401dbf47a5536ecb7e236143b1226dc9742468a75865"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\full-stage3.log",
+      "bytes": 10034,
+      "sha256": "a7edd638e38566ef5d994d116efdc1d92ec0a34a80afda2e4a6f3bb8a1d64efd"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\index-initial.log",
+      "bytes": 29217,
+      "sha256": "a21e55a0fcddefd3c1a6dfe79f4471a0e3bd2ad1edcc1390cfc7f8162ca004b7"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K01-original-goal-endpoint.json",
+      "bytes": 485065,
+      "sha256": "9c6757d9540a1e8b65a12a05c52b9d0b0779c5a0c2bc422f2ffb13636720a37a"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K01-plan-version.json",
+      "bytes": 2326310,
+      "sha256": "eef6f653e89bcacb754e03b20af77e883ce096c4472f03baebf3caa475bad56b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K01-publication.json",
+      "bytes": 1458843,
+      "sha256": "4f95c96959d85491c6bc942ae75a63f103e8dea101a10e3ab9b6ec1ae41c1095"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K01-rejections.json",
+      "bytes": 1112456,
+      "sha256": "e9e2fee1100ac75122b81c034a9444e183318e9b27eb79f6126e140131d84dbf"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K02-attempt-idempotency.json",
+      "bytes": 1881689,
+      "sha256": "81756e7a4ecc3e8d2c598550284228fcf99d91766da36f411ed4b1486482f0eb"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K02-repair-resume.json",
+      "bytes": 4223596,
+      "sha256": "790c21d46e3c1403236c86ddc3a4686b2f5b74a22f889db1c4f24258f58b359c"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K03-scope-ownership.json",
+      "bytes": 2678409,
+      "sha256": "f1ea4caf75de4c9b73a5b39cd569b7e7b921f2de603d99cd6ea3faa60481e46c"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-fault-beforePrepare.json",
+      "bytes": 347023,
+      "sha256": "aa19707b9e4cb812ef573ef6662eee86b6e15bacd3a884237b9ceaa0cd904367"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-fault-committed.json",
+      "bytes": 347220,
+      "sha256": "c4c37740384a3bfe903bd6f45b309c0f3f02fe5dbebd9fe5d1f03d25ad82fb9d"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-fault-installed.json",
+      "bytes": 347220,
+      "sha256": "6e6064bee4390768ed470f8cb4d79ca4a58bc60bc796256079212bfc01ab1bcf"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-fault-prepared.json",
+      "bytes": 347023,
+      "sha256": "041e8ef61c1ce63d6407e2d2b33c5ef52a02eb0104aaba78f38c2654d31a33ef"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-lost-response.json",
+      "bytes": 217998,
+      "sha256": "a214ea86565907e0d921e8b533a7938646ae186bca369d7936b88d7fa63a2224"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-migration-disk-backup.json",
+      "bytes": 198398,
+      "sha256": "9264d12a21cc7aebac6d8e003ac71f118606e3488dd8a22108e5a3b93430047a"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-process-crash-committed.json",
+      "bytes": 345525,
+      "sha256": "3f89ee02b5e3f4cd699934d72a8861bbe2a50ac551291ddeeb56e211a2587b73"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-process-crash-installed.json",
+      "bytes": 345525,
+      "sha256": "28ed693699c055fc313c954b6f39ae72ae56b307ecac00654bc969db9f80471a"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\K04-process-crash-prepared.json",
+      "bytes": 344901,
+      "sha256": "9e47af218c39057398643fa994fa4318eaadbd5b208ec154bc293bebc9937271"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\m06-regression.log",
+      "bytes": 897,
+      "sha256": "f1f2adedea287d22e0de65728acb2da8bb174ae523de576053a6ea33472c596b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\mcp-capabilities.json",
+      "bytes": 1172,
+      "sha256": "32c56c9322f10b80b68cf5149bfaed5207da2a331f5aa8572301d3ca025d2b01"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\packaged-delivery.log",
+      "bytes": 93,
+      "sha256": "d35abccaca7ce48b2ee6d428c94f848ce071441d23513ad8c18b61f06e63d81f"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\packaged-summary.json",
+      "bytes": 262000,
+      "sha256": "c85753246797d69e51845b02fadb6d5fb402aefa44dd84b6b3fdc96d9ae21ec6"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\preview-migration.json",
+      "bytes": 798,
+      "sha256": "a45b0b896a5774fe4972f3ead408236a340f3ea2bf3b386bc1946945621ade2c"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\regression-initial.log",
+      "bytes": 654,
+      "sha256": "2c03e454a51eeefbd6d95dc274bd08a0525fb6f6296cf9a59bf4b07baca8432d"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\regression-stage1.log",
+      "bytes": 7218,
+      "sha256": "c918dd87904866e174fc605cfbd6991408c430d7546da4abe06481fbf41c7dde"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\resources-delivery.log",
+      "bytes": 126,
+      "sha256": "d66b9ce4500f12f5604b757a06ba6f1f335f2a90e1df6e2ae3e90200a65837f6"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\resources-final.log",
+      "bytes": 126,
+      "sha256": "d66b9ce4500f12f5604b757a06ba6f1f335f2a90e1df6e2ae3e90200a65837f6"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\responsible-chat.json",
+      "bytes": 1096,
+      "sha256": "9be8f652cd503e22bbd285aba16a7641f9d816ee9999223d7e50490e7805d241"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\rust-delivery.log",
+      "bytes": 920,
+      "sha256": "4b766976ce3ceb719a54fd9d689a5d8569cac225091e303d38bd5894c6a893d3"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\rust-final.log",
+      "bytes": 1250,
+      "sha256": "d30388308daa7739f612ff1370e957d96e3d9471276475af68f361bdec0b9cd9"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\start-regression.log",
+      "bytes": 106,
+      "sha256": "b6832489f6135986913c4bbfb61d06440bed95fa13309542f604e7aa15229c12"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\startup-layout-failure.json",
+      "bytes": 442,
+      "sha256": "d30d3e9f351602762cd3f1989fea6c1c61248b594065e6687cae408329b32604"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\u03-first.log",
+      "bytes": 3852,
+      "sha256": "57c1812536e19df898a3c8427856b4e8507bf979535f74d98f0181c76f71906f"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\u03-second.log",
+      "bytes": 1696,
+      "sha256": "5b2f97149166ca4e9831c58b01d7ef6d8473d36d1a2c89ccd14957a693d636c4"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\u03-stage4.log",
+      "bytes": 2332,
+      "sha256": "42919d32f366eb911380e992f95b0d98004d644667d52f9876f289ccbdba0257"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\u03-third.log",
+      "bytes": 3236,
+      "sha256": "405cdc8cd9b7fa5c701ce97a9cf067050bea6650779d2829c17467940e8af280"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\u03-validator-fix.log",
+      "bytes": 2430,
+      "sha256": "4fe8ae504905ee0151c9bcfa54d79c4d819f62466c7c3cf33f09c35cd7e39003"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-delivery.log",
+      "bytes": 541,
+      "sha256": "bd5cbc4d4671d03c2ef7a370539a72d9a6fc592955986750b567eb009d6086cd"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-desktop-transport.png",
+      "bytes": 92768,
+      "sha256": "bf497df7fe43418b67b387429b46e2387552e137c7b8fae431235707929a61e0"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-draft-confirmation.png",
+      "bytes": 34499,
+      "sha256": "5408dda97f3af8201e7602dd1aa8933a9f5684095d9c179239fd3174a349e00b"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-draft-issues.png",
+      "bytes": 46423,
+      "sha256": "c6d81fb8a24afed47d6c0b0ce5fbc59fdd2de28f7caf7c0e9ba4ee6b07a46171"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-final.log",
+      "bytes": 464,
+      "sha256": "132616d108398f9fc1e298acdd3b11462586db83250d29bed90da0b01e040f37"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-fixed-input.json",
+      "bytes": 76575,
+      "sha256": "6785fe9cf86a6ca6895e98eed1b8d2f7ffc90c233545a17af68b872df46cffcf"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-published-route.png",
+      "bytes": 475417,
+      "sha256": "6ee91b61a1d555df205c071ccaac997f5675319b4716efa0f47bb18975ee1a13"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-repair-return.png",
+      "bytes": 22582,
+      "sha256": "5a6297c9866585b510848a8e9708eaaf8b81c0256c3e36c961e73e204436e9a5"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-stage1.log",
+      "bytes": 1322,
+      "sha256": "149c7970375b391f937e2a50f50339a85a7b21b61e35f24912e735b235ec5ead"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-stage2.log",
+      "bytes": 464,
+      "sha256": "c5106da9cea9c30aecb228bceee962b5ce86a1450a9ae2d6c9359d9add964e46"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\ui-summary.json",
+      "bytes": 930,
+      "sha256": "a8db9f9e99da330babea3bfbbe895ae19a18c658dc038d5d31c211b2951d1918"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\validation-summary.json",
+      "bytes": 4292,
+      "sha256": "1e3a7245518dacf0029abc4c2ff708397e9fbef99933d16e9431b0ed886c46a7"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\verify-delivery.ps1",
+      "bytes": 2459,
+      "sha256": "2df4c3b4395f63afda91fc17db882be90abc2b832981f408854722fe0f3e35b9"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\view-desktop.cmd",
+      "bytes": 314,
+      "sha256": "478cfe2154dbb7cb82c5c75bbe41196661974cde5b8cbe8475a8fc5ddac78fb5"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\desktop\\resources\\manifest.json",
+      "bytes": 7022,
+      "sha256": "0e4785b63e7e0e6190b669ed5a1dc3d171ad9978cff23e0bbfbcb51bfff1ddd8"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\route-workbench-desktop.exe",
+      "bytes": 15649792,
+      "sha256": "b6542533081582c166401645e307cb0719505caf46a5150df44858fb377c05cb"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\bundle\\nsis\\任务航线工作台_0.2.0_x64-setup.exe",
+      "bytes": 27123301,
+      "sha256": "a4a5fa215d2b42414f26484071ea79530b074d1bb1c331bb6a5d5482ec2828c3"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\desktop-preview\\route-workbench-desktop.exe",
+      "bytes": 15649792,
+      "sha256": "b6542533081582c166401645e307cb0719505caf46a5150df44858fb377c05cb"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\desktop-preview\\runtime\\manifest.json",
+      "bytes": 7022,
+      "sha256": "0e4785b63e7e0e6190b669ed5a1dc3d171ad9978cff23e0bbfbcb51bfff1ddd8"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\U03-EX01\\desktop-workspace-final\\data\\aggregate.json",
+      "bytes": 643523,
+      "sha256": "ac49419fe399b9b37319aed3d1dfd1743c806eea74cc79f5527846551d6f836c"
+    }
+  ],
+  "resourceManifestVerified": 65,
+  "documentation": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_执行过程\\U03_来源绑定与业务存储契约_2026-11-10.md",
+      "bytes": 2591,
+      "sha256": "7499bae644d55e78dcf38ce37aa6e4911fd33b24c5f570b82a9f6f36ae58cc65"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_执行过程\\U03_业务模型与方案发布_2026-11-10.md",
+      "bytes": 18935,
+      "sha256": "207934fa0c45ab03c98d341b2f288cab16fc61dcf56d3a75464b939951fc1e92"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_台账\\01_手动试跑主台账_2026-11-09.md",
+      "bytes": 31205,
+      "sha256": "5dbe6bf0682b42a40ef2ca3a44f5c4c497dcd14f1724765c2c4ac26a8db1ebde"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_桌面工作台与Codex连接\\02_台账\\02_站点任务卡与手动操作准备包_2026-11-09.md",
+      "bytes": 10628,
+      "sha256": "feaaf16e9b05778e5c2be9c514e963356fe862f1d3a51560eafff110ab3749c2"
+    }
+  ],
+  "limitations": [
+    "固定输入验证业务规则",
+    "独立核验及用户需求映射/回归呈现确认待完成",
+    "MCP OWNER_UNAVAILABLE，仅 project.read.probe",
+    "原生新界面实际体验待确认",
+    "进程崩溃恢复测试未覆盖断电"
+  ],
+  "recovery": "备份完整数据根，保留 aggregate、备份、prepared/committed 事务及原始旧文件；在新目录核对恢复"
+}
