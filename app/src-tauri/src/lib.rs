@@ -180,13 +180,17 @@ fn allowed_request(path: &str, method: &str) -> bool {
     let parts: Vec<&str> = path.split('/').collect();
     match parts.as_slice() {
         ["", "health" | "sample"] => method == "GET",
+        ["", "import-drafts"] => matches!(method, "GET" | "POST"),
+        ["", "requests"] => method == "POST",
+        ["", "import-drafts", id] => valid_id(id) && matches!(method, "GET" | "PUT"),
+        ["", "import-drafts", id, "validate" | "confirm" | "publish"] => valid_id(id) && method == "POST",
         ["", "projects"] => matches!(method, "GET" | "POST"),
         ["", "projects", id] => valid_id(id) && matches!(method, "GET" | "PUT"),
         ["", "projects", id, action] => {
             valid_id(id)
                 && match *action {
                     "model" => matches!(method, "GET" | "PUT"),
-                    "monitor" | "receipts" => matches!(method, "GET" | "POST"),
+                    "monitor" | "receipts" | "business" => matches!(method, "GET" | "POST"),
                     "outputs" => method == "POST",
                     _ => false,
                 }
@@ -415,6 +419,17 @@ mod tests {
     #[test]
     fn desktop_transport_rejects_arbitrary_targets_and_methods() {
         assert!(allowed_request("/projects", "POST"));
+        assert!(allowed_request("/import-drafts", "POST"));
+        assert!(allowed_request(
+            "/import-drafts/12345678-1234-1234-1234-123456789abc/publish",
+            "POST"
+        ));
+        assert!(allowed_request(
+            "/projects/12345678-1234-1234-1234-123456789abc/business",
+            "POST"
+        ));
+        assert!(!allowed_request("/import-drafts/other/publish", "POST"));
+        assert!(!allowed_request("/requests", "GET"));
         assert!(allowed_request(
             "/projects/12345678-1234-1234-1234-123456789abc/model",
             "PUT"

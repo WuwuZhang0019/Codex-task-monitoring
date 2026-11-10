@@ -35,7 +35,7 @@ try{
   await page.getByRole('button',{name:'保存记录',exact:true}).click();
   await page.getByRole('button',{name:'保存记录',exact:true}).waitFor({state:'visible'});
   await page.waitForFunction(()=>document.querySelector('.save-bar')?.textContent.includes('已保存到本地'));
-  await check('save persists to disk and does not automatically change other stations',async()=>{const disk=JSON.parse(await readFile(path.join(dataDir,'projects.json'),'utf8'));const p=disk.projects[0];assert.equal(p.steps[0].status,'done');assert.ok(p.steps[0].summary.includes('已核对'));assert.equal(p.steps[1].status,'todo');});
+  await check('save persists to disk and does not automatically change other stations',async()=>{const disk=JSON.parse(await readFile(path.join(dataDir,'aggregate.json'),'utf8')).projects;const p=disk.projects[0];assert.equal(p.steps[0].status,'done');assert.ok(p.steps[0].summary.includes('已核对'));assert.equal(p.steps[1].status,'todo');});
   await page.reload();
   await check('browser reload restores record',async()=>{await page.getByLabel('执行总结',{exact:true}).waitFor();assert.ok((await page.getByLabel('执行总结',{exact:true}).inputValue()).includes('已核对'));});
   await page.getByLabel('执行总结',{exact:true}).fill('未保存的内容');

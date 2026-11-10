@@ -1,3 +1,4 @@
+import { build } from 'esbuild';
 import { cp, mkdir, readFile, writeFile, copyFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -34,6 +35,7 @@ for (const directory of ['server', 'mcp', 'dist']) {
 for (const name of ['owner.mjs', 'migrate.mjs', 'client.mjs']) {
   await copyFile(path.join(app, 'desktop', name), path.join(root, 'app/desktop', name));
 }
+await build({entryPoints:[path.join(app,'server/business-schema.mjs')],outfile:path.join(root,'app/server/business-schema.mjs'),bundle:true,platform:'node',format:'esm',target:'node25',external:['./validation.mjs']});
 const probePackage = path.join(cache, 'probe-package');
 execFileSync(process.execPath, [path.join(app, 'mcp/package-probe.mjs'), probePackage], { windowsHide: true });
 await copyFile(path.join(probePackage, 'plugins/task-workbench/runtime/probe.mjs'), path.join(root, 'app/mcp/probe-bundled.mjs'));

@@ -53,4 +53,3 @@ export function resumeContext(projectId, model, revision, view, stationId) {
     claims: model.business?.claims ?? [], refinements: model.business?.refinements ?? [], scopeCandidates: model.business?.scopeCandidates ?? [],
     trackingCoverage: 'unknown', trackingReason: 'U03 固定输入业务登记，真实会话与事件观察由 U04 验证' };
 }
-
