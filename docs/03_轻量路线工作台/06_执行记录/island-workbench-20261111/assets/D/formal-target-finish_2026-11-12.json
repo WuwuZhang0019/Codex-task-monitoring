@@ -1,0 +1,990 @@
+{
+  "date": "2026-11-12",
+  "scope": "mock-twenty-20261111/project",
+  "projectId": "b83b6ffd-2aac-47b5-90df-67816a1b9963",
+  "eventId": "island-workbench-20261111/D/formal-test/cancel-test-1",
+  "result": {
+    "revision": 7,
+    "receipt": {
+      "schemaVersion": "light-1.0",
+      "eventId": "island-workbench-20261111/D/formal-test/cancel-test-1",
+      "requestId": "81d73a1d-d05f-4ba5-8d95-628b894e05ad",
+      "status": "committed",
+      "committedRevision": 7,
+      "receivedAt": "2026-11-11T17:04:40.735Z",
+      "resultRef": "light/events/island-workbench-20261111/D/formal-test/cancel-test-1",
+      "errorCode": null,
+      "recovery": "读取已提交快照或查询原事件"
+    },
+    "stepId": "3f3e475c-535e-42e7-a229-1ada5d634ce3",
+    "executionId": "b2f52b8f-f45c-4304-8ffb-494d7f685cb3",
+    "requestId": "81d73a1d-d05f-4ba5-8d95-628b894e05ad"
+  },
+  "queryState": "committed",
+  "snapshot": {
+    "schemaVersion": "light-1.0",
+    "date": "2026-11-12",
+    "mode": "service",
+    "revision": 156,
+    "generatedAt": "2026-11-11T17:04:40.735Z",
+    "projects": [
+      {
+        "key": "mock-twenty-20261111/project",
+        "id": "b83b6ffd-2aac-47b5-90df-67816a1b9963",
+        "name": "测试项目 · 二十步骤六条路线",
+        "planKeys": [
+          "mock-twenty-20261111/plan"
+        ],
+        "revision": 7
+      }
+    ],
+    "plans": [
+      {
+        "key": "mock-twenty-20261111/plan",
+        "id": "d6e0ac6b-1b6a-4ef0-87de-a171f350f0b4",
+        "projectKey": "mock-twenty-20261111/project",
+        "name": "测试项目 · 二十步骤六条路线",
+        "stageCount": 20,
+        "stageKeys": [
+          "mock-twenty-20261111/plan/steps/A-01",
+          "mock-twenty-20261111/plan/steps/A-02",
+          "mock-twenty-20261111/plan/steps/A-03",
+          "mock-twenty-20261111/plan/steps/A-04",
+          "mock-twenty-20261111/plan/steps/A-05",
+          "mock-twenty-20261111/plan/steps/A-06",
+          "mock-twenty-20261111/plan/steps/A-07",
+          "mock-twenty-20261111/plan/steps/A-08",
+          "mock-twenty-20261111/plan/steps/A-09",
+          "mock-twenty-20261111/plan/steps/A-10",
+          "mock-twenty-20261111/plan/steps/A-11",
+          "mock-twenty-20261111/plan/steps/A-12",
+          "mock-twenty-20261111/plan/steps/A-13",
+          "mock-twenty-20261111/plan/steps/A-14",
+          "mock-twenty-20261111/plan/steps/A-15",
+          "mock-twenty-20261111/plan/steps/A-16",
+          "mock-twenty-20261111/plan/steps/A-17",
+          "mock-twenty-20261111/plan/steps/A-18",
+          "mock-twenty-20261111/plan/steps/A-19",
+          "mock-twenty-20261111/plan/steps/A-20"
+        ],
+        "source": {
+          "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\03_测试样例\\01_模拟二十步骤与六分支工作树_测试文档_2026-11-10.md",
+          "version": "mock-display-2026-11-11",
+          "sha256": "8c69b3e525a46c5ef922d9ea0548e73bbb538255bd644697a2b8244a3270182b",
+          "locator": "完整步骤及依赖表",
+          "trust": "declared"
+        },
+        "endConditions": []
+      }
+    ],
+    "steps": [
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-01",
+        "id": "3f3e475c-535e-42e7-a229-1ada5d634ce3",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-01",
+        "originalCode": "A-01",
+        "sourceLocator": "utf16:2503:2762",
+        "title": "建立示例任务数据",
+        "order": 1,
+        "required": true,
+        "dependsOn": [],
+        "status": "cancelled",
+        "acceptance": "pending",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-01/exit",
+            "text": "生成一份含任务标识和标题的示例数据",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": "mock-twenty-20261111/plan/executions/b2f52b8f-f45c-4304-8ffb-494d7f685cb3",
+        "bindingKey": "mock-twenty-20261111/plan/bindings/057dc042-7eb6-40b0-b653-67b9221ba759",
+        "updatedAt": "2026-11-11T17:04:40.735Z"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-02",
+        "id": "2f0bd98b-04d3-47ac-83a4-42ad83f6f926",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-02",
+        "originalCode": "A-02",
+        "sourceLocator": "utf16:2762:3028",
+        "title": "补齐步骤编号与顺序",
+        "order": 2,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-01"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-02/exit",
+            "text": "二十个步骤编号唯一，六条路线顺序与分组表一致",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-03",
+        "id": "2db1d282-cd33-4a65-8f29-65d0278c6fc1",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-03",
+        "originalCode": "A-03",
+        "sourceLocator": "utf16:3028:3286",
+        "title": "校验模拟数据完整性",
+        "order": 3,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-02"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-03/exit",
+            "text": "缺失编号或重复编号能够被标记",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-04",
+        "id": "f6e0ba5a-bb15-4135-bc57-775ff307d1a9",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-04",
+        "originalCode": "A-04",
+        "sourceLocator": "utf16:3286:3540",
+        "title": "绘制任务卡片",
+        "order": 4,
+        "required": true,
+        "dependsOn": [],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-04/exit",
+            "text": "卡片显示步骤编号、标题和当前状态",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-05",
+        "id": "ad7171d8-0fdf-4a05-83cd-7c39f1910fd7",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-05",
+        "originalCode": "A-05",
+        "sourceLocator": "utf16:3540:3804",
+        "title": "展示三条分支路线",
+        "order": 5,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-04"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-05/exit",
+            "text": "分别展示 3、3、4 个站点及各自工作树信息",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-06",
+        "id": "6873a511-3cac-439a-8d24-38bd9fece54c",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-06",
+        "originalCode": "A-06",
+        "sourceLocator": "utf16:3804:4063",
+        "title": "增加状态文字与图标",
+        "order": 6,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-05"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-06/exit",
+            "text": "五种状态均有可辨识的文字和图标",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-07",
+        "id": "3320909a-9e91-4381-a765-d66e6bb03abc",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-07",
+        "originalCode": "A-07",
+        "sourceLocator": "utf16:4063:4325",
+        "title": "模拟开始与完成事件",
+        "order": 7,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-03",
+          "mock-twenty-20261111/plan/steps/A-06"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-07/exit",
+            "text": "记录开始和完成各一次，并保存结果摘要",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-08",
+        "id": "8665e899-e196-460c-be8c-c95b7ce9c721",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-08",
+        "originalCode": "A-08",
+        "sourceLocator": "utf16:4325:4589",
+        "title": "模拟阻塞与恢复事件",
+        "order": 8,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-07"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-08/exit",
+            "text": "记录阻塞原因及恢复条件，恢复后进入执行中",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-09",
+        "id": "dbf7227d-7b9d-4106-a77b-726745261716",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-09",
+        "originalCode": "A-09",
+        "sourceLocator": "utf16:4589:4851",
+        "title": "模拟取消与返工事件",
+        "order": 9,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-08"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-09/exit",
+            "text": "记录取消原因，并在返工时保留历史状态",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-10",
+        "id": "53bbd6ff-ebe5-4586-be6a-527347b6c93f",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-10",
+        "originalCode": "A-10",
+        "sourceLocator": "utf16:4851:5131",
+        "title": "汇总三条路线的测试结果",
+        "order": 10,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-09"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-10/exit",
+            "text": "汇总前三条分支的十个步骤最终状态、未完成事项和测试记录位置",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-11",
+        "id": "1d7e73aa-6066-46ef-88cf-4f51ce82e277",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-11",
+        "originalCode": "A-11",
+        "sourceLocator": "utf16:5131:5392",
+        "title": "准备同步事件样例",
+        "order": 11,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-10"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-11/exit",
+            "text": "样例包含事件标识、执行标识及步骤标识",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-12",
+        "id": "b475e9c4-206f-4e21-9b54-2c53c45f6482",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-12",
+        "originalCode": "A-12",
+        "sourceLocator": "utf16:5392:5653",
+        "title": "模拟重复事件上报",
+        "order": 12,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-11"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-12/exit",
+            "text": "相同事件重复提交后只保留一条逻辑记录",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-13",
+        "id": "10500d39-e67b-4c29-ac3f-062764caab9c",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-13",
+        "originalCode": "A-13",
+        "sourceLocator": "utf16:5653:5909",
+        "title": "模拟版本冲突",
+        "order": 13,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-12"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-13/exit",
+            "text": "过期版本更新被拒绝，并记录当前版本",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-14",
+        "id": "27fc7a43-9941-4810-b46e-60f988b9983b",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-14",
+        "originalCode": "A-14",
+        "sourceLocator": "utf16:5909:6172",
+        "title": "准备中断恢复样例",
+        "order": 14,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-10"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-14/exit",
+            "text": "保留中断前状态、最后更新时间及待确认提示",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-15",
+        "id": "6dd8bef1-e267-4c3f-a8d8-c53d83914d72",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-15",
+        "originalCode": "A-15",
+        "sourceLocator": "utf16:6172:6431",
+        "title": "模拟跨会话接续",
+        "order": 15,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-14"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-15/exit",
+            "text": "读取已有状态后沿用原执行标识继续记录",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-16",
+        "id": "14d5327f-a260-4778-9dfb-f5ec57542f91",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-16",
+        "originalCode": "A-16",
+        "sourceLocator": "utf16:6431:6696",
+        "title": "模拟结束消息补报",
+        "order": 16,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-15"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-16/exit",
+            "text": "补报结束原因及相关步骤状态，并保留原事件标识",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-17",
+        "id": "49f7d080-9e03-4699-93c7-92571980c2ce",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-17",
+        "originalCode": "A-17",
+        "sourceLocator": "utf16:6696:6957",
+        "title": "展示新增三条路线",
+        "order": 17,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-13",
+          "mock-twenty-20261111/plan/steps/A-16"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-17/exit",
+            "text": "新增路线分别显示 3、3、4 个站点",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-18",
+        "id": "9bb803cf-f215-4881-8303-8b2213fcd2ea",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-18",
+        "originalCode": "A-18",
+        "sourceLocator": "utf16:6957:7225",
+        "title": "核对六条工作树归属",
+        "order": 18,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-17"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-18/exit",
+            "text": "六条路线均关联到分组表中的分支及拟定工作树路径",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-19",
+        "id": "fd28ff7f-823c-494a-a439-e9a4414b3733",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-19",
+        "originalCode": "A-19",
+        "sourceLocator": "utf16:7225:7495",
+        "title": "检查二十步骤状态展示",
+        "order": 19,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-18"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-19/exit",
+            "text": "A-01 至 A-20 均能展示和切换五种状态",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      },
+      {
+        "key": "mock-twenty-20261111/plan/steps/A-20",
+        "id": "d9d4df2a-fff8-439d-9553-08efd16f47e2",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "parentKey": null,
+        "code": "A-20",
+        "originalCode": "A-20",
+        "sourceLocator": "utf16:7495:7792",
+        "title": "汇总全部模拟测试结果",
+        "order": 20,
+        "required": true,
+        "dependsOn": [
+          "mock-twenty-20261111/plan/steps/A-19"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "mock-twenty-20261111/plan/steps/A-20/exit",
+            "text": "汇总二十个步骤及六条路线的状态、未完成事项和证据位置，确认全部步骤满足验收要求后将方案 A 标记为已完成",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      }
+    ],
+    "routes": [
+      {
+        "key": "mock-twenty-20261111/plan/routes/1",
+        "id": "41a250d5-8839-4abf-ac13-5d93f31aa786",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "label": "分支一 · 数据准备",
+        "stepKeys": [
+          "mock-twenty-20261111/plan/steps/A-01",
+          "mock-twenty-20261111/plan/steps/A-02",
+          "mock-twenty-20261111/plan/steps/A-03"
+        ],
+        "order": 1,
+        "context": {
+          "sessionGroup": "测试",
+          "threadId": null,
+          "hostId": null,
+          "folderId": null,
+          "worktreeOrdinal": 1,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-data",
+          "branch": "codex/mock-data",
+          "head": null,
+          "trust": "declared"
+        },
+        "sourceStepKey": null,
+        "returnStepKey": null
+      },
+      {
+        "key": "mock-twenty-20261111/plan/routes/2",
+        "id": "9f7a3331-2ee1-47d2-9eac-3c198c614d14",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "label": "分支二 · 界面展示",
+        "stepKeys": [
+          "mock-twenty-20261111/plan/steps/A-04",
+          "mock-twenty-20261111/plan/steps/A-05",
+          "mock-twenty-20261111/plan/steps/A-06"
+        ],
+        "order": 2,
+        "context": {
+          "sessionGroup": "测试",
+          "threadId": null,
+          "hostId": null,
+          "folderId": null,
+          "worktreeOrdinal": 2,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-ui",
+          "branch": "codex/mock-ui",
+          "head": null,
+          "trust": "declared"
+        },
+        "sourceStepKey": null,
+        "returnStepKey": null
+      },
+      {
+        "key": "mock-twenty-20261111/plan/routes/3",
+        "id": "49275cc0-ca43-4a7c-ae69-084132a977f4",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "label": "分支三 · 交互验证",
+        "stepKeys": [
+          "mock-twenty-20261111/plan/steps/A-07",
+          "mock-twenty-20261111/plan/steps/A-08",
+          "mock-twenty-20261111/plan/steps/A-09",
+          "mock-twenty-20261111/plan/steps/A-10"
+        ],
+        "order": 3,
+        "context": {
+          "sessionGroup": "测试",
+          "threadId": null,
+          "hostId": null,
+          "folderId": null,
+          "worktreeOrdinal": 3,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-interaction",
+          "branch": "codex/mock-interaction",
+          "head": null,
+          "trust": "declared"
+        },
+        "sourceStepKey": null,
+        "returnStepKey": null
+      },
+      {
+        "key": "mock-twenty-20261111/plan/routes/4",
+        "id": "482f658a-3355-4c90-9ba3-c60a817908f2",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "label": "分支四 · 同步验证",
+        "stepKeys": [
+          "mock-twenty-20261111/plan/steps/A-11",
+          "mock-twenty-20261111/plan/steps/A-12",
+          "mock-twenty-20261111/plan/steps/A-13"
+        ],
+        "order": 4,
+        "context": {
+          "sessionGroup": "测试",
+          "threadId": null,
+          "hostId": null,
+          "folderId": null,
+          "worktreeOrdinal": 4,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-sync",
+          "branch": "codex/mock-sync",
+          "head": null,
+          "trust": "declared"
+        },
+        "sourceStepKey": null,
+        "returnStepKey": null
+      },
+      {
+        "key": "mock-twenty-20261111/plan/routes/5",
+        "id": "6b37f31e-9351-42e1-a212-ed8155da6ba8",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "label": "分支五 · 恢复验证",
+        "stepKeys": [
+          "mock-twenty-20261111/plan/steps/A-14",
+          "mock-twenty-20261111/plan/steps/A-15",
+          "mock-twenty-20261111/plan/steps/A-16"
+        ],
+        "order": 5,
+        "context": {
+          "sessionGroup": "测试",
+          "threadId": null,
+          "hostId": null,
+          "folderId": null,
+          "worktreeOrdinal": 5,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-recovery",
+          "branch": "codex/mock-recovery",
+          "head": null,
+          "trust": "declared"
+        },
+        "sourceStepKey": null,
+        "returnStepKey": null
+      },
+      {
+        "key": "mock-twenty-20261111/plan/routes/6",
+        "id": "e0d334d1-51fc-45e8-99b9-b1cd0008720f",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "label": "分支六 · 扩展汇总",
+        "stepKeys": [
+          "mock-twenty-20261111/plan/steps/A-17",
+          "mock-twenty-20261111/plan/steps/A-18",
+          "mock-twenty-20261111/plan/steps/A-19",
+          "mock-twenty-20261111/plan/steps/A-20"
+        ],
+        "order": 6,
+        "context": {
+          "sessionGroup": "测试",
+          "threadId": null,
+          "hostId": null,
+          "folderId": null,
+          "worktreeOrdinal": 6,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring-mock-summary",
+          "branch": "codex/mock-summary",
+          "head": null,
+          "trust": "declared"
+        },
+        "sourceStepKey": null,
+        "returnStepKey": null
+      }
+    ],
+    "bindings": [
+      {
+        "key": "mock-twenty-20261111/plan/bindings/057dc042-7eb6-40b0-b653-67b9221ba759",
+        "id": "0486caa2-500a-4002-a31a-6710e526de4a",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "stepKeys": [
+          "mock-twenty-20261111/plan/steps/A-01"
+        ],
+        "bindingRevision": 2,
+        "state": "confirmed",
+        "context": {
+          "sessionGroup": "D",
+          "threadId": "01a1cb43-4969-7a12-bdba-9b30e7c592bf",
+          "hostId": "local",
+          "folderId": null,
+          "worktreeOrdinal": 1,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring",
+          "branch": "main",
+          "head": "f27192c58969a06f5afbba553f11a198a17afaf5",
+          "trust": "declared"
+        },
+        "confirmationRef": "grant:7d1050aeb5bfc4f1ab5a517d11f47d50a403fe2210d5d8a2478012beee8c4d72",
+        "revokedAt": null
+      }
+    ],
+    "executions": [
+      {
+        "key": "mock-twenty-20261111/plan/executions/b2f52b8f-f45c-4304-8ffb-494d7f685cb3",
+        "id": "b2f52b8f-f45c-4304-8ffb-494d7f685cb3",
+        "projectKey": "mock-twenty-20261111/project",
+        "planKey": "mock-twenty-20261111/plan",
+        "stepKeys": [
+          "mock-twenty-20261111/plan/steps/A-01"
+        ],
+        "bindingKey": "mock-twenty-20261111/plan/bindings/057dc042-7eb6-40b0-b653-67b9221ba759",
+        "outcome": "cancelled",
+        "startedAt": "2026-11-11T16:51:54.532Z",
+        "endedAt": "2026-11-11T17:04:40.735Z",
+        "handoffConclusion": null
+      }
+    ],
+    "supplements": [],
+    "events": [
+      {
+        "eventId": "light/cd1d0cc9a1f1d24edae8f9120bee0c5f6a262282a0702084abd5c803cfe0dd44/island-workbench-20261111/D/formal-test/start-1",
+        "stepKey": "mock-twenty-20261111/plan/steps/A-01",
+        "executionKey": "mock-twenty-20261111/plan/executions/b2f52b8f-f45c-4304-8ffb-494d7f685cb3",
+        "fromStatus": "pending",
+        "toStatus": "running",
+        "occurredAt": "2026-11-11T16:51:54.494Z",
+        "receivedAt": "2026-11-11T16:51:54.532Z",
+        "reason": "D真实服务接线定向测试进展，不代表原任务完成；仅已授权测试项目",
+        "evidenceIds": [],
+        "sync": "synced"
+      },
+      {
+        "eventId": "light/cd1d0cc9a1f1d24edae8f9120bee0c5f6a262282a0702084abd5c803cfe0dd44/island-workbench-20261111/D/formal-test/progress-1",
+        "stepKey": "mock-twenty-20261111/plan/steps/A-01",
+        "executionKey": "mock-twenty-20261111/plan/executions/b2f52b8f-f45c-4304-8ffb-494d7f685cb3",
+        "fromStatus": "running",
+        "toStatus": "running",
+        "occurredAt": "2026-11-11T16:51:54.946Z",
+        "receivedAt": "2026-11-11T16:51:54.967Z",
+        "reason": "D新灵动岛真实接线验证：本聊天原生授权与绑定后，MCP上报测试进展；等待新壳同ID同状态显示，不代表业务验收完成",
+        "evidenceIds": [],
+        "sync": "synced"
+      },
+      {
+        "eventId": "light/cd1d0cc9a1f1d24edae8f9120bee0c5f6a262282a0702084abd5c803cfe0dd44/island-workbench-20261111/D/formal-test/cancel-test-1",
+        "stepKey": "mock-twenty-20261111/plan/steps/A-01",
+        "executionKey": "mock-twenty-20261111/plan/executions/b2f52b8f-f45c-4304-8ffb-494d7f685cb3",
+        "fromStatus": "running",
+        "toStatus": "cancelled",
+        "occurredAt": "2026-11-11T17:04:40.709Z",
+        "receivedAt": "2026-11-11T17:04:40.735Z",
+        "reason": "D专用真实服务接线测试已经结束；取消本次临时测试执行，不代表示例原任务已完成",
+        "evidenceIds": [],
+        "sync": "synced"
+      }
+    ],
+    "uiPreferences": {
+      "collapsedKeys": [],
+      "selectedStepKey": null,
+      "focusedRouteKey": null,
+      "scrollByProject": {}
+    }
+  },
+  "testExecutionEnded": true,
+  "taskPassed": false
+}

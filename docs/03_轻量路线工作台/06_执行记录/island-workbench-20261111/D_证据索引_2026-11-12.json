@@ -2,33 +2,18 @@
   "date": "2026-11-12",
   "planKey": "island-workbench-20261111",
   "stage": "D",
-  "localStatus": "blocked",
-  "acceptance": "pending",
-  "handoffConclusion": "B",
+  "localStatus": "completed",
+  "acceptance": "passed",
+  "handoffConclusion": "D",
   "sync": "deferredByAuthorization",
   "serviceSynced": false,
   "serviceIdentity": null,
-  "businessCommit": "efeaeb7",
-  "forkCommit": "8d154ec",
-  "nativeSha256": "906A197440DFEB19F2D3119F80C3577943D492677D588E2FABC6408DFF4E9412",
-  "nativeUiObserved": false,
-  "formalTestWrite": false,
+  "businessCommit": "f3229d49c5b76fc47878d13fb145dd35cd2a785f",
+  "forkCommit": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "nativeSha256": "32e8c4d7fc9f40c9df8ce930ba3ed73976e3d7f8129702b610ff2d7c83aa474d",
+  "nativeUiObserved": true,
+  "formalTestWrite": true,
   "artifacts": [
-    {
-      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_阶段回执_2026-11-12.md",
-      "bytes": 5146,
-      "sha256": "8d4a2be92107d6d43e43d1c9c90a28b6b66b958999bbd60e218849430d3261c5"
-    },
-    {
-      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_实现与验证_2026-11-12.md",
-      "bytes": 5748,
-      "sha256": "86d06215eec9683243ee43504073e07085c54170bbae438f3ae81be0359f51c5"
-    },
-    {
-      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_独立服务与新壳连接说明_2026-11-12.md",
-      "bytes": 3680,
-      "sha256": "137f1e7d4ac48655d50fc908ddabc7e2ea3072bd94143b1fde1aee35132b7a8c"
-    },
     {
       "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/business-checks_2026-11-12.json",
       "bytes": 1455,
@@ -41,13 +26,28 @@
     },
     {
       "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/fork-native-checks_2026-11-12.json",
-      "bytes": 8879,
-      "sha256": "e2ee27463567750d390f009b8839a629c5a34bb68bba8c17880bf7a49f1b9ca2"
+      "bytes": 12499,
+      "sha256": "86c8205b218867e800637d4a09a84b3f785808a0fc395bf8dab43f934cf8e3a2"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-native-observation_2026-11-12.json",
+      "bytes": 1888,
+      "sha256": "cee60f8b9d4a14ca2914ca8dea973d669196f687b2815df6c8ce9f7838ac9fdb"
     },
     {
       "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-readonly.json",
       "bytes": 1144,
       "sha256": "b6e8e9dd0e02f14dc0ff7b4a6725149bca2334fdaa879c221ae8aa4a79904d03"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-finish_2026-11-12.json",
+      "bytes": 34315,
+      "sha256": "fe209234480a2feb0db228ca68fc679a00f9b0c4d199bbe516f8a24180b5f38a"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-progress_2026-11-12.json",
+      "bytes": 36606,
+      "sha256": "552b9bbd9b84aefd87c7ccb6c04bb6c1b839d1eb3ee42c31f09032a6b334eb02"
     },
     {
       "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-readonly.json",
@@ -215,11 +215,37 @@
       "sha256": "ad8541e20b679b67d5a2919bdf81ae51cfe148d6d414d14edd31b962eb5c2efc"
     },
     {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_完成回执_2026-11-12.md",
+      "bytes": 6193,
+      "sha256": "9c9b3ef974d7d9ba48fa159450dcbf00cb071664f530d5f1f6b415710221b5fd"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_实现与验证_2026-11-12.md",
+      "bytes": 7013,
+      "sha256": "2bcf09e7c94a9a6bf52d92a788682301d7092c09dcc448fa4067f8d79d4432b2"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_独立服务与新壳连接说明_2026-11-12.md",
+      "bytes": 4121,
+      "sha256": "19048a3cdfc43c6e0a8638ff3e26e63ee6cca585132dec28f4503f34f3330eb2"
+    },
+    {
       "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_续接核对_2026-11-12.md",
       "bytes": 2257,
       "sha256": "ee85418b43b1433873fb4e46098eda19a649494c019f5c0e884d81402b0f1b98"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_阶段回执_2026-11-12.md",
+      "bytes": 5147,
+      "sha256": "e311d9bec9485353bc757fa9ba0495c2e9349e62203ec62556c345344a0f785d"
     }
   ],
   "resumeNativeSettingsObserved": true,
-  "resumeAuthorizationSigned": false
+  "resumeAuthorizationSigned": true,
+  "nativeDetailObservedByAssistant": false,
+  "nativeDetailConfirmedByUser": true,
+  "formalTestScope": "mock-twenty-20261111/project",
+  "formalTestFinalGlobalRevision": 156,
+  "formalTestFinalProjectRevision": 7,
+  "formalTestExecutionOutcome": "cancelled"
 }

@@ -184,3 +184,29 @@ flowchart LR
 日期：2026-11-12
 
 用户要求继续D。业务06e30eb/Fork8d154ec干净，D索引40/40、Fork源码13/13及exe指纹匹配。C现40/42，其两份浏览器脚本已由D合法适配且24+5回归通过，历史媒体未变，原前置仍适用。本轮实际观察新壳设置并展开本人确认表单，但字段为空、签发未发生。未代填或签发，不把继续请求当作已完成原生确认；没有正式业务新写入或未知提交，D仍blocked/pending，服务deferredByAuthorization。详见D_续接核对_2026-11-12.md，等待用户保存连接后继续原D。
+
+
+## D 本人签发、正式测试进展与侧栏修订
+
+日期：2026-11-12
+
+用户要求工作台确认从常规移至行为下方独立项，并确认已本人签发连接。安全metadata实际匹配当前聊天、mock-twenty-20261111/project、local及当前工作树。沿原键propose-1创建绑定0486caa2-500a-4002-a31a-6710e526de4a/1，保存pending-binding.json；用户在新“工作台”页本人签发后，原confirm-1、reserve-1、start-1、progress-1全部committed并原键查询确认。当前绑定/2，正式测试execution b2f52b8f-f45c-4304-8ffb-494d7f685cb3，A-01 running，global155/project6。这些身份仅属于已授权正式测试项目，不替代本地island路线服务身份。
+
+原生浮窗曾报不兼容。仅从仓库已追踪历史快照及服务schema定位合法originalCode:null被新协议误拒；没有新读其他正式项目或数据库。canonical最小修复f3229d4、Fork入口移动af289a3及兼容同步02823f6，保留null/固定ID/状态。协议10、strict TS、Fork lint61/build/Bun24/Rust28/clippy及debug构建通过；新exe32e8c4d7fc9f40c9df8ce930ba3ed73976e3d7f8129702b610ff2d7c83aa474d。重启后实际观察真实测试项目摘要执行1/阻塞0/待处理19，不兼容消失；独立侧栏顺序常规/外观/行为/工作台/关于已观察。
+
+当前D按1.4本地恢复running/pending，已完成正式上报与服务回读及原生摘要；浮窗未作为可操作窗口返回，等待用户展开A-01核对进展及阅读行为，暂不记整个D通过。未执行E/F。正式测试临时执行尚running，闭环确认后按受控取消结束该测试，不伪造completed或修改旧A—G。详情见assets/D/formal-target-progress_2026-11-12.json与formal-native-observation_2026-11-12.json。
+
+
+## D 正式闭环完成与结束
+
+日期：2026-11-12
+
+用户明确回复“已展开，状态和进展一致”。结合真实MCP绑定/预留/开始/进展原键committed及服务回读155/6、原生紧凑摘要观察，D正式必要闭环通过。之后按原execution b2f52b8f-f45c-4304-8ffb-494d7f685cb3和binding0486caa2-500a-4002-a31a-6710e526de4a/2，以cancel-test-1收尾：committed，global156/project7，示例A-01 cancelled/pending，execution.outcome cancelled、endedAt已回读，不把示例原任务伪报完成。只向授权测试项目写入，无未知提交。
+
+D-01—D-03及父D本地completed/passed，进度4/6，交接结论D。沿用local/D-20261111-01完成本地逻辑执行；本路线服务身份仍空、deferredByAuthorization，不借正式测试项目身份记synced。业务efeaeb7+f3229d49、Fork8d154ec+af289a3+02823f6及最终exe32e8c4d7fc9f40c9df8ce930ba3ed73976e3d7f8129702b610ff2d7c83aa474d已留证。完整18字段与E门禁见D_完成回执_2026-11-12.md；E/F未派发未开始。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
+ B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>本地completed/passed"] --> E["⑤ E 桌面与恢复验收<br/>pending，待另行派发"] --> F["⑥ F 许可与发布交付<br/>pending"]
+```

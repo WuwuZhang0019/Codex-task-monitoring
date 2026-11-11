@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-12",
+  "scope": "mock-twenty-20261111/project",
+  "projectId": "b83b6ffd-2aac-47b5-90df-67816a1b9963",
+  "principal": "9fd016c3-1f95-46df-b08c-30be3d7d5caf",
+  "bindingId": "0486caa2-500a-4002-a31a-6710e526de4a",
+  "bindingRevision": 2,
+  "executionId": "b2f52b8f-f45c-4304-8ffb-494d7f685cb3",
+  "revision": 155,
+  "projectRevision": 6,
+  "connectionSignedByUser": true,
+  "bindingSignedByUser": true,
+  "originalEventQueries": [
+    {
+      "eventId": "island-workbench-20261111/D/formal-test/confirm-1",
+      "state": "committed"
+    },
+    {
+      "eventId": "island-workbench-20261111/D/formal-test/reserve-1",
+      "state": "committed"
+    },
+    {
+      "eventId": "island-workbench-20261111/D/formal-test/start-1",
+      "state": "committed"
+    },
+    {
+      "eventId": "island-workbench-20261111/D/formal-test/progress-1",
+      "state": "committed"
+    }
+  ],
+  "nativeCompactObserved": true,
+  "nativeCompactCounts": {
+    "running": 1,
+    "blocked": 0,
+    "pending": 19
+  },
+  "nativeDetailConfirmation": "已展开，状态和进展一致",
+  "formalTestOutcome": "cancelled",
+  "sideNavigation": [
+    "常规",
+    "外观",
+    "行为",
+    "工作台",
+    "关于"
+  ],
+  "businessContractCommit": "f3229d49c5b76fc47878d13fb145dd35cd2a785f",
+  "forkCommit": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "nativeSha256": "32e8c4d7fc9f40c9df8ce930ba3ed73976e3d7f8129702b610ff2d7c83aa474d",
+  "nativeDetailConfirmedByUser": true,
+  "nativeDetailConfirmationSource": "current chat explicit user reply; not an assistant screenshot claim",
+  "nativeDetailObservedByAssistant": false,
+  "formalTestEnded": true,
+  "finalGlobalRevision": 156,
+  "finalProjectRevision": 7,
+  "exampleTaskPassed": false,
+  "scopeOutcome": "D local acceptance passed; original example task not declared completed"
+}

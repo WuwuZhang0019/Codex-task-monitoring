@@ -6,7 +6,7 @@
   "commands": [
     {
       "command": "bun run lint",
-      "result": "passed; 60 files"
+      "result": "passed; 61 files"
     },
     {
       "command": "bun run build",
@@ -14,7 +14,7 @@
     },
     {
       "command": "bun test src",
-      "result": "23 passed, 0 failed; 80 assertions; includes 9 service-client tests and 2 binding summary tests"
+      "result": "24 passed, 0 failed; 85 assertions; includes 10 service-client tests (nullable originalCode lossless mapping) and 2 binding summary tests"
     },
     {
       "command": "cargo clippy -- -D warnings",
@@ -27,6 +27,14 @@
     {
       "command": "bun run tauri build --debug --no-bundle --config G:/rust/Codex-task-monitoring/app/test-results/island-D/native-config.json",
       "result": "passed; no app started by this agent"
+    },
+    {
+      "command": "node --test app/contracts/island-workbench-v1/protocol.test.mjs (canonical business repository)",
+      "result": "10 passed, 0 failed; public light-v1 schema permits nullable originalCode; mapping preserves null, code, identities and other snapshot fields"
+    },
+    {
+      "command": "strict TypeScript check of canonical protocol.ts and fixtures.ts",
+      "result": "passed"
     }
   ],
   "failures": [
@@ -51,7 +59,7 @@
   "native": {
     "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\dynamic-island.exe",
     "bytes": 19657728,
-    "sha256": "906a197440dfeb19f2d3119f80c3577943d492677d588e2fabc6408dff4e9412",
+    "sha256": "32e8c4d7fc9f40c9df8ce930ba3ed73976e3d7f8129702b610ff2d7c83aa474d",
     "profile": "G:/rust/Codex-task-monitoring/app/test-results/island-D/native-profile",
     "uiObserved": false
   },
@@ -98,8 +106,8 @@
     },
     {
       "path": "G:\\rust\\windows-dynamic-island\\src\\workbench\\service-client.test.ts",
-      "bytes": 7690,
-      "sha256": "37f13960b123a6287f9597dede08e8a7d7398ccbf8801f0108e2f796fa28e23c"
+      "bytes": 8347,
+      "sha256": "d16d31a00b21ee0a3c3d1db64e74bd897feae7bc22bec3a48aaf1d0457e83436"
     },
     {
       "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\src\\workbench_connection.rs",
@@ -113,13 +121,38 @@
     },
     {
       "path": "G:\\rust\\windows-dynamic-island\\src\\settings\\pages\\GeneralPage.tsx",
-      "bytes": 4096,
-      "sha256": "b2711c3416e2041d51c1e1968e3905056aef68e9629b31fa48aedfeacd9c6267"
+      "bytes": 3995,
+      "sha256": "c11cfddcaa1079588d0621c440659c6fadf8a1ecdd21fca0284f9e063f2b8e98"
     },
     {
       "path": "G:\\rust\\windows-dynamic-island\\src\\settings\\components\\WorkbenchConnection.test.ts",
       "bytes": 1156,
       "sha256": "259e539aae56d6513d2b6b75db5fed69df1ab36582d94fddffcd8289d8c29a64"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\settings\\SettingsApp.tsx",
+      "bytes": 3275,
+      "sha256": "ef2c14e5543d044f96b5adc29a4ac7485f2d12108d22412d240d826f46e90b75"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\settings\\pages\\WorkbenchPage.tsx",
+      "bytes": 340,
+      "sha256": "6deda997116e1212603d5ba6ef44f0c4765c4e4fded095f98e4fc4ddb301aef4"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\workbench\\contract\\protocol.ts",
+      "bytes": 12434,
+      "sha256": "b69241c8c0ea74b4faa9ea7b8d5735e4669c9018857c94337fa411dddb3f974a"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\workbench\\contract\\fixtures.ts",
+      "bytes": 9651,
+      "sha256": "f2546369fd7888cf8bc4d1380846194fabf5959ba026f0bcaf15f61f82a60505"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\workbench\\contract\\source.json",
+      "bytes": 1028,
+      "sha256": "2ea4baa0ff49e9a2a6099a171bd27edbbd29d30d4846a62766ec9aaa542756ec"
     }
   ],
   "limits": [
@@ -142,17 +175,43 @@
       "issue": "config restore boolean short-circuited metadata restore; initial agent completion report did not match actual source",
       "fix": "Read actual source, independently call both restore operations before combining boolean results; metadata IO read errors fail before issuance",
       "verification": "Actual failure path injects config as directory so its restore fails while original metadata still restores; Rust28/28 passed; final build uses verified source"
+    },
+    {
+      "issue": "service-schema legal nullable originalCode rejected by the portable display contract",
+      "fix": "Synchronize canonical and Fork Step.originalCode:string|null and nullableText validation; update source.json to real canonical f3229d commit and fingerprints.",
+      "verification": "Canonical independent AJV check confirms null is legal in public schema, then validates complete lossless service snapshot; native response client regression preserves null/code/identity. Canonical10, Bun24/85 assertions, Rust28 and all required checks passed."
     }
   ],
   "browserReviewVerification": "13 isolated browser checks passed; not native UI or official business acceptance",
   "independentConnectionEntry": {
     "date": "2026-11-12",
     "reason": "User clarified the old workbench UI was deleted/unavailable; D must provide independent connection authorization and binding confirmation in the new shell",
-    "entry": "Settings > General > Workbench connection and binding confirmation",
+    "entry": "Settings > Workbench; dedicated sidebar item immediately after Behavior and before About",
     "scope": "settings window only; explicit acknowledgement and click; native-only owner session token; fixed grants/revoke/confirm-binding paths; no token or confirmation grant returned to WebView",
     "unknownHandling": "Network/malformed/500/generation failures retain unknown; new issuance is disabled in that settings session until external reconciliation",
     "backupHandling": "Existing config is protected and backed up before issuance; failed save attempts to revoke only the newly issued grant and independently attempts original config/metadata restoration. Metadata IO errors block issuance rather than being treated as absent. Restore failure reports CHECK_BACKUP; this generic error does not encode revocation outcome.",
     "nativeVisualAcceptance": "not claimed; final executable ready for user confirmation",
-    "readableBindingSummary": "Loaded confirmation shows exact projectId, context threadId/worktreePath/branch, stepIds count and expectedRevision before checkbox. Full text remains editable in advanced details; edits reset acknowledgement; malformed/incomplete scope disables confirmation."
+    "readableBindingSummary": "Loaded confirmation shows exact projectId, context threadId/worktreePath/branch, stepIds count and expectedRevision before checkbox. Full text remains editable in advanced details; edits reset acknowledgement; malformed/incomplete scope disables confirmation.",
+    "navigationRevision": {
+      "date": "2026-11-12",
+      "userRequest": "Move workbench confirmation out of General into a separate sidebar item below Behavior",
+      "changes": [
+        "SettingsApp adds workbench navigation and route",
+        "GeneralPage removes connection card",
+        "New WorkbenchPage contains the existing connection/confirmation component"
+      ],
+      "preserved": "No native authorization interface or existing signed connection configuration changed; no official project/credential accessed by this agent",
+      "checks": "lint61/build/Bun24(85 assertions)/clippy/Rust28/debug native build passed; includes nullable originalCode compatibility fix"
+    }
+  },
+  "nullableOriginalCodeCompatibility": {
+    "date": "2026-11-12",
+    "canonicalCommit": "f3229d49c5b76fc47878d13fb145dd35cd2a785f",
+    "publicSchema": "app/mcp/contracts/light-v1.json#/$defs/step/properties/originalCode",
+    "issue": "Portable display contract incorrectly rejected the existing service-schema legal originalCode:null value as incompatible.",
+    "fix": "Step.originalCode is string|null and validation uses nullableText; null remains unchanged rather than receiving fabricated numbering. Both repositories share the canonical protocol bytes.",
+    "checks": "canonical protocol10/strictTS; Fork lint61/build/Bun24(85 assertions)/Rust28/clippy/debug native passed",
+    "uiAudit": "Fork UI does not directly consume originalCode; existing business LightPanel renders the original value as React text, with null empty. No numbering fallback added.",
+    "delivery": "Final native executable contains the dedicated Workbench settings sidebar; built but not started by this agent."
   }
 }
