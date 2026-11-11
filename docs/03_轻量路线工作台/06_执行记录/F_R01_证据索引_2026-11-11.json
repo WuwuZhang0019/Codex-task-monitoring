@@ -1,0 +1,255 @@
+{
+  "date": "2026-11-11",
+  "deliveryVersion": "F-EX01-R01-20261111",
+  "status": "blocked/pending/synced；四项必要修复已交付，等待用户重新确认",
+  "repairAttempt": "R01",
+  "initialDeliveryCommit": "b03923f",
+  "baselineHead": "0970680",
+  "formal": {
+    "revision": 137,
+    "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+    "bindingId": "e7c235f5-e70a-4220-a96d-43ba3dc99a06",
+    "bindingRevision": 2,
+    "resumeRevision": 135,
+    "resumeRequestId": "a706d9e5-ae0f-415d-be53-efa911a80357",
+    "waitRequestId": "a9b0025a-1d67-4160-b57f-4bd241e40a9f",
+    "query": "committed",
+    "readback": "blocked/pending/synced"
+  },
+  "checks": {
+    "motionBrowser": {
+      "passed": 9,
+      "samples": 2792,
+      "openingIntermediate": 497,
+      "closingIntermediate": 433,
+      "anchorDriftCssPixels": 0
+    },
+    "resizeAndInvokeFixture": {
+      "passed": 6,
+      "peakCurrentGenerationGeometryRequests": 1,
+      "limit": "invoke替身，不代替原生Win32验证"
+    },
+    "rust": {
+      "passed": 6
+    },
+    "CRegression": {
+      "passed": 13
+    },
+    "liveHttpUi": {
+      "passed": 8
+    },
+    "native": {
+      "systemDpi": 120,
+      "scaleFactor": 1.25,
+      "top": 0,
+      "firstRunFrames": 80,
+      "firstRunIntermediateFrames": 73,
+      "firstRunHostRectangles": 1,
+      "outsideClickVerifiedAtCompact": true,
+      "userConfirmation": "pending"
+    }
+  },
+  "limits": [
+    "其他系统DPI/跨显示器切换未实测；浏览器deviceScaleFactor另计",
+    "无激活显示源码已检查；未新增独立持续输入焦点保持矩阵",
+    "native-preview为真实桌面合成录像前24秒，视觉路径在最后控制器异常恢复提示修正前采集，最后版本同一正常几何已重新观察",
+    "历史初次F局部通过不能覆盖用户四项否定反馈，需重新观感确认",
+    "未启动G；正式完成进度仍5/7"
+  ],
+  "evidence": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\useIslandMotion.ts",
+      "sha256": "9d56310eac1428a3cf3f2b0c11339ec49a364a0aec709c0c20ee6f1d6664daa4",
+      "bytes": 5850
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\LightPanel.tsx",
+      "sha256": "5b4cec5e0ebfe5991bc373b51622bd9059111d0fa443ced631a774a53e651585",
+      "bytes": 24381
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\light-panel.css",
+      "sha256": "fe40b804d88cf48613591be28712e15586cf28bf7aa1a38e1d525f766a940309",
+      "bytes": 8616
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\src\\lib.rs",
+      "sha256": "514692d55b25b8b051e03bdaa954b9fa7a9c1d312f6b90d55535b61e5775d698",
+      "bytes": 23037
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\src\\panel_shape.rs",
+      "sha256": "d10748d3507e1f81c2ec73644fb7ed3424eb2935247cd323cf6ed39e8f946c40",
+      "bytes": 12779
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\island-motion.mjs",
+      "sha256": "f141677db03e035723e369843b87ba49505026efd36d5ce701953891ed987648",
+      "bytes": 16652
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\island-ipc.mjs",
+      "sha256": "b5f1371a227dda75026ead48cbc8118c2b4a8c0e891ec423bf8f4f1bbb2f435a",
+      "bytes": 15190
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\light-live.mjs",
+      "sha256": "1fb9625113e4c1bcd2efd6a13d53becde948b974767d81ff3a7354acb1a74124",
+      "bytes": 10047
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\light-ui.mjs",
+      "sha256": "aee253863b784faafc29ae922e5cc7250d40d0f7f0d7308c3b3a78fc09ed1a1c",
+      "bytes": 9723
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\dist\\index.html",
+      "sha256": "48028edb0b883dcde8e10da6c4a3f55301231fbf23cecc26532d7e635a10d5ed",
+      "bytes": 422
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\route-workbench-desktop.exe",
+      "sha256": "78c226ade7a9fad753a90274c30dd141fe06329eca1ccebc3c2781a651d71d4c",
+      "bytes": 15933440
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\runtime\\manifest.json",
+      "sha256": "90e8b4670be1955cd8027613a68a233c3212cb272577f31c8f4ab2fbb5823543",
+      "bytes": 8812
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\F_R01_灵动岛动效修复_2026-11-11.md",
+      "sha256": "d2bb0ba96c30f1c2f9b8735c9f0713dc639be31dd02120b18e496f61aea476f4",
+      "bytes": 10584
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\rust.log",
+      "sha256": "812c98f280a18d55528313e59c7a63d9e5a47f069dd0e286d995013539bc3c27",
+      "bytes": 1296
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-build-final.log",
+      "sha256": "3b8e99161f3066efe86e9a47bebe36fbbb7e6d70fede906075bac38e0676591f",
+      "bytes": 1909
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\island-motion-result.json",
+      "sha256": "1d3398d63a9b0879eee690a6654d367062b857a2f5bd6f3d198ba8b3341bcfa5",
+      "bytes": 915795
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\island-motion.log",
+      "sha256": "b60cb32049cd3f9266a5004a4b242d8bdc2848e0a3623106852628bdc9320cb4",
+      "bytes": 983
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\island-motion-browser.webm",
+      "sha256": "53afcb6a6d7c5e4248f823b79e1cd268e3c61b0aa82ae7f030ad3e0f12606f76",
+      "bytes": 5914716
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\island-ipc-result.json",
+      "sha256": "177c02b019c78b79fc0135df9b2fc6a355d854958012d19ff699719ce16e90c8",
+      "bytes": 30278
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\island-ipc.log",
+      "sha256": "c5cf6347f7a2cc1efa5bc69f1b4bfe8086ba367b187105402525c86a7cbb1961",
+      "bytes": 742
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\c-ui.log",
+      "sha256": "1f49e2428f5dcc0fce70ba7dfd438d0910be32d5e432d02562817355feb726ab",
+      "bytes": 977
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\live-ui.log",
+      "sha256": "64869d47ba97610317faafa3cc4f894f080aae0d3b49a816ebea9dadaf85380e",
+      "bytes": 789
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-frames.jsonl",
+      "sha256": "fc077826994143c768b67f5d025b8879d4fa7b42ba6e91fd2e783562bdd0aadf",
+      "bytes": 33302
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-frames-final.jsonl",
+      "sha256": "5c6f9563dbce00d495d7f406426110298daf5de392da024ec1b44eb29fa1f8b2",
+      "bytes": 11158
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-final-acceptance-snapshot.jsonl",
+      "sha256": "00195c4d69b90f66838f64fdbeb02d684026474873e2b76d28a61d6bc5f89893",
+      "bytes": 955
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-summary.json",
+      "sha256": "e70771e62f34503b5154a597ec49150223a9f895778cb4427de94177b868f366",
+      "bytes": 1457
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-compact.jpg",
+      "sha256": "96e8455072e01ade6a7f9a173a0bafe2b64251dc2b19d5bda13287f4b01177e8",
+      "bytes": 52863
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-expanded.jpg",
+      "sha256": "14f6381d7abb5a43bdd79255dea5e7693ea8e887a807e5401ea4a68b552016d3",
+      "bytes": 46580
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\final-compact.jpg",
+      "sha256": "d287678338e3b84c653da518b02d85ffc391bcfd07208ec341589552244fb7bb",
+      "bytes": 57761
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\final-expanded.jpg",
+      "sha256": "38c4c71cd02e1117c382a008ebb720f3115c2ab380d2911cf3cf8176a766fe38",
+      "bytes": 47170
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-preview.mp4",
+      "sha256": "1d924a6511dee6071a59d42db9e253274c5a2ab1e6c25f9962c1df7cead33e44",
+      "bytes": 292929
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-desktop-island.mp4",
+      "sha256": "13576e46ce000cab91e4a20291ced4684d0b5c3fdab14f61b14eb828c1ad0282",
+      "bytes": 409337
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-desktop-video-check.png",
+      "sha256": "8d79b821aff99a82fbcac20e67935cda1af4058466a7ca00a2a8c8aff1c7d661",
+      "bytes": 193931
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-desktop-video.log",
+      "sha256": "283d15869c5b3f9bc385fa85a6eeb30e93f777577b83c4bea0709c13ff44df5a",
+      "bytes": 11463
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-pass-through-main.txt",
+      "sha256": "09321e173f599813ad321250c1263467c01f1ceec6a23dafc4777b80d417577a",
+      "bytes": 719
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\formal-events.json",
+      "sha256": "ea6fbfe935052098515d97b7c52f0606eefa758105ccc6fe4e6a39feed46090a",
+      "bytes": 179939
+    }
+  ],
+  "excludedFailedEvidence": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-island.mp4",
+      "sha256": "f7249d24aa4b78c527471471801048a6a5886b318e7440942a8f1df07f0818aa",
+      "bytes": 61706,
+      "reason": "单窗口GDI无法捕获WebView2合成内容，抽帧黑屏"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-R01\\native-video-check.png",
+      "sha256": "4da5cde5c31cf8243604e95817efbcd3a41d69cd7351632bec9bc4a70200e76c",
+      "bytes": 4029,
+      "reason": "无效窗口采集的黑屏抽帧，仅保留失败证据"
+    }
+  ]
+}

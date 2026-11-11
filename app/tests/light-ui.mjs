@@ -1,4 +1,4 @@
-// 日期 2026-11-10。C 正常页面入口回归及对照截图。
+// 更新日期 2026-11-11。C 入口回归；后继验证可独立指定证据目录。
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -7,7 +7,7 @@ import { createServer } from '../server/index.mjs';
 import { validateLightSnapshot } from '../server/light-model.mjs';
 import fixture from '../src/light-simulation.json' with { type: 'json' };
 
-const output = path.resolve('test-results/manual-trial/C-EX01');
+const output = path.resolve(process.env.WORKBENCH_UI_EVIDENCE_DIR || 'test-results/manual-trial/C-EX01');
 await mkdir(output, { recursive: true });
 const checks = [];
 async function check(name, operation) {

@@ -4,7 +4,8 @@ import fixture from './light-simulation.json';
 import sourceText from './light-source.json';
 import './light-panel.css';
 import { blankSnapshot, readPanel, savePanelPreferences, type Snapshot, type Preferences } from './light-live';
-import { desktopInvoke, isDesktop } from './desktop';
+import { desktopInvoke } from './desktop';
+import { useIslandMotion } from './useIslandMotion';
 
 type Route = Snapshot['routes'][number];
 const names: Record<string, string> = { pending: '待执行', running: '执行中', blocked: '已阻塞', completed: '已完成', cancelled: '已取消' };
@@ -36,7 +37,7 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
   const latestRevision = useRef<number | null>(null);
   const preferencesChanged = useRef(false);
   const [empty, setEmpty] = useState(false);
-  const [pinned, setPinned] = useState(true);
+  const [pinned, setPinned] = useState(!floating);
   const [message, setMessage] = useState(live ? '正在读取已保存路线…' : '模拟快照 · 所有身份仅用于演示');
   const [candidates, setCandidates] = useState<string[]>([]);
   const body = useRef<HTMLDivElement>(null);
@@ -54,6 +55,40 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
   const count = (projectKey: string, status: string) => snapshot.steps.filter(step => step.projectKey === projectKey && step.status === status).length;
   const openCount = (projectKey: string) => snapshot.supplements.filter(item => stepByKey.get(item.sourceStepKey)?.projectKey === projectKey && ['unconfirmed', 'unplanned'].includes(item.status)).length;
   const hidden = (key: string) => preferences.collapsed.includes(key);
+  const motion = useIslandMotion(floating, expanded, pinned, setMessage);
+  const hovered = useRef(false);
+  const holds = useRef({ pinned, detail });
+  holds.current = { pinned, detail };
+  const enterTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const leaveTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  function scheduleCollapse() {
+    clearTimeout(leaveTimer.current);
+    leaveTimer.current = setTimeout(() => {
+      if (!hovered.current && !holds.current.pinned && !holds.current.detail) setExpanded(false);
+    }, 350);
+  }
+  function enterIsland() {
+    hovered.current = true;
+    clearTimeout(leaveTimer.current);
+    clearTimeout(enterTimer.current);
+    if (motion.progress.current > 0) { setExpanded(true); motion.retry(); }
+    else enterTimer.current = setTimeout(() => { setExpanded(true); motion.retry(); }, floating ? 180 : 0);
+  }
+  function leaveIsland() {
+    hovered.current = false;
+    clearTimeout(enterTimer.current);
+    scheduleCollapse();
+  }
+  function collapseIsland() {
+    clearTimeout(enterTimer.current); clearTimeout(leaveTimer.current);
+    setPinned(false); setDetail(false); setFullDetail(false); setAssociation('');
+    setExpanded(false);
+  }
+  useEffect(() => {
+    if (floating && !pinned && !detail && !hovered.current) scheduleCollapse();
+    return () => clearTimeout(leaveTimer.current);
+  }, [floating, pinned, detail]);
+  useEffect(() => () => { clearTimeout(enterTimer.current); clearTimeout(leaveTimer.current); }, []);
 
   useEffect(() => {
     if (live) return;
@@ -100,9 +135,6 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
     const timer = setTimeout(() => { void savePanelPreferences(preferences).catch(() => setMessage('阅读偏好保存失败 · 当前阅读仍可继续')); }, 400);
     return () => clearTimeout(timer);
   }, [live, hydrated, preferences]);
-  useEffect(() => {
-    if (floating && isDesktop()) void desktopInvoke('panel_window', { expanded, pinned }).catch(error => setMessage(`窗口调整失败 · ${String(error)}`));
-  }, [expanded, pinned, floating]);
   async function associationEntry() {
     if (!selected) return;
     if (!live) { setMessage(selected.bindingKey ? '模拟跳转失败 · 宿主适配待 F 接线，阅读位置已保留' : '未绑定会话 · 模拟跳转失败，阅读位置已保留'); return; }
@@ -180,17 +212,18 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
     </div>;
   }
   const projects = empty ? [] : snapshot.projects.filter(project => (!focused || project.key === focused.projectKey) && (!onlyTodo || count(project.key, 'running') + count(project.key, 'blocked') + count(project.key, 'pending') + openCount(project.key) > 0));
-  return <main ref={shell} tabIndex={-1} className={`lp-shell ${floating ? 'lp-floating' : ''}`} onPointerDown={() => { preferencesChanged.current = true; }} onKeyDownCapture={() => { preferencesChanged.current = true; }} onMouseLeave={() => { if (!pinned && !detail) setExpanded(false); }} onKeyDown={event => {
+  return <main ref={shell} tabIndex={-1} className={`lp-shell ${floating ? 'lp-floating' : ''}`} onPointerDown={() => { preferencesChanged.current = true; }} onKeyDownCapture={() => { preferencesChanged.current = true; }} onKeyDown={event => {
     if (event.key !== 'Escape') return;
     event.stopPropagation();
     if (fullDetail) setFullDetail(false);
     else if (detail) setDetail(false);
     else if (preferences.focus.length) setPreferences(value => ({ ...value, focus: value.focus.slice(0, -1) }));
-    else setExpanded(false);
+    else collapseIsland();
   }}>
-    <button className="lp-compact" onMouseEnter={() => setExpanded(true)} aria-expanded={expanded} onClick={() => floating ? setExpanded(true) : setExpanded(value => !value)}><span className="lp-brand">⌁</span><strong>任务航线</strong><span className="lp-mini">{live ? compactSteps.map((step, index) => <span key={step.key} className={`lp-mini-${step.status}`} title={`${step.code} ${names[step.status]}`}>{index > 0 ? ' ━ ' : ''}{symbols[step.status]}</span>) : '● ━ ● ━ ◉ ━ ○ ━ ○'}</span><span>{snapshot.projects.length} 项目 · {live ? '已保存' : '模拟'}</span><span>{expanded ? '⌃' : '⌄'}</span></button>
-    {expanded && <section className="lp-panel" aria-label="项目路线面板">
-      <header className="lp-toolbar"><strong>项目路线</strong><label><input type="checkbox" checked={onlyTodo} onChange={e => setOnlyTodo(e.target.checked)} />只看有待办</label><button onClick={locateCurrent}>定位当前</button><button aria-pressed={pinned} onClick={() => setPinned(value => !value)}>{pinned ? '已固定' : '固定'}</button><button onClick={() => setExpanded(false)}>收起</button></header>
+    <div className="lp-island" ref={motion.surface} onMouseEnter={enterIsland} onMouseLeave={leaveIsland}>
+    <button className="lp-compact" aria-expanded={expanded} title={floating ? (message.startsWith('动效同步失败') ? message : '悬停预览 · 点击固定展开') : undefined} onClick={() => { if (floating) { setPinned(value => !value); setExpanded(true); motion.retry(); } else setExpanded(value => !value); }}><span className="lp-brand">⌁</span><strong>任务航线</strong><span className="lp-mini">{live ? compactSteps.map((step, index) => <span key={step.key} className={`lp-mini-${step.status}`} title={`${step.code} ${names[step.status]}`}>{index > 0 ? ' ━ ' : ''}{symbols[step.status]}</span>) : '● ━ ● ━ ◉ ━ ○ ━ ○'}</span><span>{snapshot.projects.length} 项目 · {live ? '已保存' : '模拟'}</span><span>{expanded ? '⌃' : '⌄'}</span></button>
+    {(expanded || floating) && <section className="lp-panel" aria-label="项目路线面板" aria-hidden={!expanded} inert={!expanded}>
+      <header className="lp-toolbar"><strong>项目路线</strong><label><input type="checkbox" checked={onlyTodo} onChange={e => setOnlyTodo(e.target.checked)} />只看有待办</label><button onClick={locateCurrent}>定位当前</button><button aria-pressed={pinned} onClick={() => setPinned(value => !value)}>{pinned ? '已固定' : '固定'}</button><button onClick={collapseIsland}>收起</button></header>
       <div className="lp-sync">{connected ? (live ? '已连接' : '模拟已连接') : '连接中断'} · 最后更新 {new Date(snapshot.generatedAt).toLocaleTimeString('zh-CN', { hour12: false })} · {snapshot.mode}{live && <> · 版本 {snapshot.revision ?? '待连接'} <button onClick={() => setRefreshKey(value => value + 1)}>刷新</button>{floating && <button onClick={() => void desktopInvoke('panel_show_main').catch(error => setMessage(String(error)))}>打开工作台</button>}</>}</div>
       <div className="lp-event" role="status">{message}</div>
       {preferences.focus.length > 0 && <nav className="lp-breadcrumb" aria-label="路线层级"><button onClick={() => setPreferences(value => ({ ...value, focus: [] }))}>全部项目</button>{preferences.focus.map((key, index) => <button key={key} onClick={() => setPreferences(value => ({ ...value, focus: value.focus.slice(0, index + 1) }))}>→ {snapshot.routes.find(route => route.key === key)?.label}</button>)}</nav>}
@@ -231,5 +264,6 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
       </aside>}
       {!live && <footer className="lp-demo" aria-label="模拟场景控制"><span>C 模拟场景</span><button onClick={simulateUpdate}>模拟更新与返工</button><button onClick={() => setConnected(value => !value)}>切换连接</button><button onClick={() => setEmpty(value => !value)}>切换空态</button></footer>}
     </section>}
+    </div>
   </main>;
 }

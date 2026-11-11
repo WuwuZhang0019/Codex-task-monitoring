@@ -62,8 +62,33 @@
 .lp-candidates { max-height: 130px; overflow: auto; }
 .lp-folded { margin: 24px; color: #aaaab4; }
 /* 日期 2026-11-11。浮窗尺寸由宿主按工作区裁定，收起态不留页面边距。 */
-.lp-floating { padding: 0; min-height: 100dvh; }
-.lp-floating .lp-panel { height: min(640px,calc(100dvh - 54px)); min-height: 0; width: min(960px,calc(100% - 16px)); }
+/* 固定透明宿主中，单一轮廓连续形变，顶部摘要始终锚定600×38区域。 */
+.lp-island { display: contents; }
+html.lp-floating-page, .lp-floating-page body, .lp-floating-page #root { background: transparent; overflow: hidden; margin: 0; }
+.lp-shell.lp-floating { padding: 0; min-height: 0; height: 100dvh; background: transparent; display: flex; justify-content: center; align-items: flex-start; }
+.lp-floating .lp-island {
+  --lp-host-width: min(960px,calc(100vw - 32px)); --lp-host-height: min(678px,calc(100dvh - 16px));
+  --lp-compact-width: min(600px,calc(100vw - 32px)); --lp-shape-width: var(--lp-compact-width); --lp-shape-height: 38px;
+  --lp-shape-inset: calc((var(--lp-host-width) - var(--lp-shape-width)) / 2); --lp-shape-bottom: calc(var(--lp-host-height) - 38px);
+  --lp-shape-radius: 18px; --lp-content-opacity: 0; --lp-content-offset: -6px;
+  display: block; position: relative; width: var(--lp-host-width); height: var(--lp-host-height); flex-shrink: 0;
+  clip-path: inset(0 var(--lp-shape-inset) var(--lp-shape-bottom) var(--lp-shape-inset) round 0 0 var(--lp-shape-radius) var(--lp-shape-radius));
+  isolation: isolate;
+}
+.lp-floating .lp-island::before {
+  content: ''; position: absolute; top: 0; left: var(--lp-shape-inset); width: var(--lp-shape-width); height: var(--lp-shape-height);
+  background: #141416; border: 1px solid #303034; border-top: 0; border-radius: 0 0 var(--lp-shape-radius) var(--lp-shape-radius); z-index: -1;
+}
+.lp-floating .lp-compact, .lp-floating .lp-compact:hover, .lp-floating .lp-compact[aria-pressed=true] {
+  position: relative; width: var(--lp-compact-width); height: 38px; margin: 0 auto; background: transparent; border: 0; border-radius: 0;
+}
+.lp-floating .lp-panel {
+  width: 100%; height: calc(var(--lp-host-height) - 38px); min-height: 0; margin: 0;
+  background: transparent; border: 0; border-radius: 0; opacity: var(--lp-content-opacity); transform: translateY(var(--lp-content-offset));
+}
+.lp-floating .lp-panel[aria-hidden=true] { pointer-events: none; }
+.lp-floating .lp-island[data-motion=compact] .lp-panel { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .lp-floating .lp-panel { transform: none; } }
 .lp-association { user-select: text; }
 .lp-association pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
 @media (max-width: 640px) {

@@ -14,6 +14,7 @@ use tauri::{
     tray::TrayIconBuilder,
     Manager,
 };
+mod panel_shape;
 
 struct Runtime {
     root: PathBuf,
@@ -314,22 +315,31 @@ async fn api_request(
     Ok(json!({"status":status,"data":value}))
 }
 
-// 日期 2026-11-11。浮窗只接受尺寸、置顶及显示主窗口意图，不接受 URL 或路径。
-#[tauri::command]
-fn panel_window(app: tauri::AppHandle, window: tauri::WebviewWindow, expanded: bool, pinned: bool) -> Result<Value, String> {
+// 日期 2026-11-11。所有原生区域操作都在窗口线程串行执行，动画路径不移动宿主。
+async fn panel_task<F>(window: tauri::WebviewWindow, task: F) -> Result<Value, String>
+where F: FnOnce(&tauri::WebviewWindow) -> Result<Value, String> + Send + 'static {
     if window.label() != "panel" { return Err("仅浮窗可调整自身".into()); }
-    let monitor = window.current_monitor().map_err(|e| e.to_string())?
-        .or(app.primary_monitor().map_err(|e| e.to_string())?).ok_or("显示区域不可用")?;
-    let scale = monitor.scale_factor();
-    let area = monitor.work_area();
-    let width = (if expanded { 992.0_f64 } else { 600.0 }).min(area.size.width as f64 / scale - 16.0).max(1.0);
-    let height = (if expanded { 694.0_f64 } else { 38.0 }).min(area.size.height as f64 / scale - 16.0).max(1.0);
-    window.set_size(tauri::LogicalSize::new(width, height)).map_err(|e| e.to_string())?;
-    window.set_position(tauri::PhysicalPosition::new(area.position.x + ((area.size.width as f64 - width * scale) / 2.0) as i32,
-        area.position.y + (8.0 * scale) as i32)).map_err(|e| e.to_string())?;
-    window.set_always_on_top(pinned).map_err(|e| e.to_string())?;
-    if expanded { window.set_focus().map_err(|e| e.to_string())?; }
-    Ok(json!({"width":width,"height":height,"scaleFactor":scale,"pinned":pinned,"expanded":expanded}))
+    let (sender, receiver) = std::sync::mpsc::sync_channel(1);
+    let target = window.clone();
+    window.run_on_main_thread(move || { let _ = sender.send(task(&target)); }).map_err(|e| e.to_string())?;
+    tauri::async_runtime::spawn_blocking(move || receiver.recv().map_err(|_| "浮窗窗口线程不可用".to_string()))
+        .await.map_err(|e| e.to_string())??
+}
+
+#[tauri::command]
+async fn panel_window(window: tauri::WebviewWindow, expanded: bool, pinned: bool) -> Result<Value, String> {
+    let _ = expanded; // 保留旧调用兼容；展开与收起仅改变内部轮廓。
+    panel_task(window, move |target| panel_shape::configure(target, pinned)).await
+}
+
+#[tauri::command]
+async fn panel_frame(window: tauri::WebviewWindow, frame: u64, progress: f64) -> Result<Value, String> {
+    panel_task(window, move |target| panel_shape::apply_frame(target, frame, progress)).await
+}
+
+#[tauri::command]
+async fn panel_pin(window: tauri::WebviewWindow, pinned: bool) -> Result<Value, String> {
+    panel_task(window, move |target| panel_shape::set_pinned(target, pinned)).await
 }
 
 #[tauri::command]
@@ -359,11 +369,7 @@ fn perform_runtime_action(app: &tauri::AppHandle, action: &str) -> Result<(), St
             let _ = window.unminimize();
             window.set_focus().map_err(|e| e.to_string())?;
         }
-        "panel" => app
-            .get_webview_window("panel")
-            .ok_or("浮窗不存在")?
-            .show()
-            .map_err(|e| e.to_string())?,
+        "panel" => panel_shape::show_without_activation(&app.get_webview_window("panel").ok_or("浮窗不存在")?)?,
         "recover" => {
             let handle = app.clone();
             std::thread::spawn(move || {
@@ -437,6 +443,7 @@ pub fn run() {
                 let _ = start_owner(&runtime);
             }
             app.manage(runtime);
+            app.manage(panel_shape::PanelShapeState::default());
             let show = MenuItem::with_id(app, "show", "打开工作台", true, None::<&str>)?;
             let panel = MenuItem::with_id(app, "panel", "显示浮窗宿主", true, None::<&str>)?;
             let recover = MenuItem::with_id(app, "recover", "恢复领域服务", true, None::<&str>)?;
@@ -449,18 +456,23 @@ pub fn run() {
                     let _ = perform_runtime_action(app, event.id.as_ref());
                 })
                 .build(app)?;
-            tauri::WebviewWindowBuilder::new(
+            let panel_window = tauri::WebviewWindowBuilder::new(
                 app,
                 "panel",
                 tauri::WebviewUrl::App("index.html?view=light-live&floating=1".into()),
             )
             .title("任务航线 · 浮窗宿主")
-            .inner_size(600.0, 38.0)
+            .inner_size(960.0, 678.0)
             .decorations(false)
+            .transparent(true)
+            .shadow(false)
+            .resizable(false)
             .always_on_top(true)
             .focused(false)
             .visible(false)
             .build()?;
+            // 初次显示前先裁为紧凑区域，不让透明宿主矩形阻挡下方应用。
+            panel_shape::configure(&panel_window, false)?;
             let handle = app.handle().clone();
             std::thread::spawn(move || loop {
                 if root.join("show.request").exists() {
@@ -486,6 +498,8 @@ pub fn run() {
             runtime_status,
             save_light_connection,
             panel_window,
+            panel_frame,
+            panel_pin,
             panel_show_main,
             initialize_workspace,
             recover_workspace,
