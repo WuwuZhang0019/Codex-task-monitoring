@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-11",
+  "planKey": "island-workbench-20261111",
+  "stage": "B",
+  "source": "用户在当前聊天对原生核验问题的直接回复",
+  "threadId": "01a1caf3-1eaa-75d1-adf6-801de34dac1c",
+  "question": "B 的最终 debug 版已打开。请实际检查顶部浮窗：点击展开后 Tab/Enter 可操作设置与固定按钮、Esc 可收起；悬停/离开及快速进出正常，且不意外抢走其他窗口输入焦点。结果如何？（浏览器对应项已通过，此处补原生证据）",
+  "answer": "原生这些操作均正常",
+  "forkCommit": "41a0e322055ae4674a6792208e70bc7016ab21f7",
+  "binarySha256": "0a3f9fd5b63d85c84e85c13a5db955218bcb2bcc7598066590e06a501e3e3caa",
+  "versionRecheckedUnchanged": true,
+  "acceptedScope": [
+    "显式展开后Tab/Enter操作设置与固定按钮",
+    "Esc收起",
+    "悬停/离开及快速进出正常",
+    "不意外抢走其他窗口输入焦点"
+  ],
+  "notClaimed": [
+    "用户逐项修改全部24项原生设置",
+    "两形态原生完整动效矩阵",
+    "DPI、多屏、安装、升级、发布",
+    "工作台服务已同步"
+  ],
+  "acceptanceBasis": "B设置保留出口由已有浏览器24项、原生四页/写盘/冷重开及Rust保护测试共同支持；方案未要求每个设置都在原生逐个改值。用户反馈仅关闭其实际确认的浮窗交互缺口。"
+}

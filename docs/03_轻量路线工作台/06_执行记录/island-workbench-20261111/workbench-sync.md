@@ -2,14 +2,14 @@
 
 日期：2026-11-11
 
-状态：A本地验收完成；B代码交付、原生必要核验待补；服务登记及同步未发生；C—F待执行
+状态：A/B本地completed/passed，进度2/6；服务登记及同步未发生；C—F待执行
 
 本地方案键 island-workbench-20261111，当前责任聊天01a1ca91-98c4-7101-8620-8380e28df33f。用户已明确授权按Codex/Git直接完成A，同日方案1.1修订取消A服务开始前置，未扩大正式服务写权限。
 
 | 阶段 | 细分 | 本地执行/验收 | 服务同步 |
 |---|---|---|---|
 | A 基线与授权范围 | A-01、A-02、A-03 | completed / passed | deferredByAuthorization，未发业务请求 |
-| B 裁剪外壳 | B-01、B-02、B-03 | blocked / pending（代码已交付，等待原生浮窗核验） | deferredByAuthorization，未登记 |
+| B 裁剪外壳 | B-01、B-02、B-03 | completed / passed | deferredByAuthorization，未登记 |
 | C 契约与模拟视图 | C-01、C-02、C-03 | pending / pending | 未登记 |
 | D 真实服务接线 | D-01、D-02、D-03 | pending / pending | 未登记 |
 | E 桌面与恢复验收 | E-01、E-02、E-03 | pending / pending | 未登记 |
@@ -60,4 +60,18 @@ B 已派发但因自动审批无法继续产品实施；C—F未开始。当前�
 flowchart LR
  A["① A 基线与授权范围<br/>本地completed/passed，服务延后同步"] --> B["② B 裁剪外壳<br/>代码已交付，blocked/pending，待原生核验"]
  B --> C["③ C 契约与模拟视图<br/>pending"] --> D["④ D 真实服务接线<br/>pending"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
+```
+
+## B 用户原生核验与完成
+
+日期：2026-11-11
+
+用户对最终debug版原生浮窗核验问题明确回复“原生这些操作均正常”，覆盖显式展开后的Tab/Enter设置与固定操作、Esc收起、悬停/离开与快速进出及不意外抢焦点。Fork41a0e32和二进制SHA256复核未变化，用户确认单独保存在B_用户原生核验_2026-11-11.json，不伪称机器观察。设置保留出口由已有浏览器24项、原生四页/写盘/冷重开与Rust保护测试共同支持，原方案没有要求24项都在原生逐个改值；不把此前边界说明升级为新门禁，也不扩展用户确认至两形态原生全矩阵或E/F场景。
+
+B本地completed/passed，交接结论D，可交付C核对/派发。A/B本地验收2/6；C未派发/未启动，仍需自身执行授权及开始门禁。服务deferredByAuthorization，真实服务身份全部留空，无业务写入和未知提交。此前blocked记录作为历史保留，当前状态以本节与主表为准。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed，服务延后同步"]
+ B --> C["③ C 契约与模拟视图<br/>pending，未派发"] --> D["④ D 真实服务接线<br/>pending"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
 ```
