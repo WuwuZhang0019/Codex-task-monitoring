@@ -7,12 +7,12 @@ import { chromium } from '@playwright/test';
 import { createServer, HttpError } from '../server/index.mjs';
 import { prepareLightPlan } from '../server/light-import.mjs';
 
-const output = path.resolve('test-results/manual-trial/F-R01');
+const output = path.resolve(process.env.WORKBENCH_UI_EVIDENCE_DIR || 'test-results/manual-trial/F-R01');
 await mkdir(output, { recursive: true });
 const root = await mkdtemp(path.join(output, 'motion-http-'));
 const checks = [], errors = [], contexts = [], videos = [];
 const record = { date: '2026-11-11', environment: 'Edge 浏览器、真实隔离持久快照；无原生 IPC，deviceScaleFactor 不等同系统 DPI', checks, errors, limits: [] };
-record.sourceIdentity = Object.fromEntries(await Promise.all(['src/useIslandMotion.ts', 'src/LightPanel.tsx', 'dist/index.html'].map(async file => [file, createHash('sha256').update(await readFile(file)).digest('hex')])));
+record.sourceIdentity = Object.fromEntries(await Promise.all(['src/useIslandMotion.ts', 'src/LightPanel.tsx', 'src/light-panel.css', 'dist/index.html'].map(async file => [file, createHash('sha256').update(await readFile(file)).digest('hex')])));
 let server, browser, page;
 const text = '# F-R01 动效隔离方案\n日期：2026-11-11\n## 实施路线与出口\n| 阶段 | 前置 | 范围 | 出口 |\n| A 准备 | 用户已确认 | 数据准备 | 持久快照完整 |\n| B 面板 | A | 连续轮廓 | 顶部锚点稳定且自动收起 |\n';
 const sourceFile = path.join(root, 'source.md');
@@ -61,7 +61,7 @@ const monitorScript = () => {
   requestAnimationFrame(sample);
 };
 
-async function makePage(options = {}, video = false) {
+async function makePage(options = {}, video = false, uiReadOverride = null) {
   let context;
   const common = { viewport: { width: 1280, height: 800 }, extraHTTPHeaders: { Authorization: 'Bearer F-R01-test-owner' }, ...options };
   try { context = await browser.newContext({ ...common, ...(video ? { recordVideo: { dir: path.join(output, 'browser-video'), size: { width: 1280, height: 800 } } } : {}) }); }
@@ -81,8 +81,12 @@ async function makePage(options = {}, video = false) {
   if (p.video()) videos.push(p.video());
   p.on('pageerror', error => errors.push(error.message));
   await p.addInitScript(monitorScript);
+  if (uiReadOverride) await p.route('**/api/light-panel', route => {
+    if (route.request().method() !== 'GET') return route.continue();
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(uiReadOverride) });
+  });
   await p.goto(`http://127.0.0.1:${server.address().port}/?view=light-live&floating=1`);
-  await p.waitForFunction(() => document.querySelector('.lp-island')?.dataset.motion === 'compact' && document.querySelectorAll('.lp-station').length === 2);
+  await p.waitForFunction(expected => document.querySelector('.lp-island')?.dataset.motion === 'compact' && document.querySelectorAll('.lp-station').length === expected, uiReadOverride?.snapshot.steps.length ?? 2);
   await moveOutside(p);
   return p;
 }
@@ -97,6 +101,68 @@ try {
   browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined });
   record.browserVersion = browser.version();
   page = await makePage({}, true);
+
+  await check('top miniature uses five-state metro circles and rails without glyphs while large stations retain their symbols', async () => {
+    // 仅替换本检查独立页面的 GET 展示副本。五站未向领域服务登记，不代表业务状态或验收通过。
+    const response = await fetch(`http://127.0.0.1:${server.address().port}/api/light-panel`, { headers: { Authorization: 'Bearer F-R01-test-owner' } });
+    assert.equal(response.status, 200);
+    const uiRead = structuredClone(await response.json());
+    const states = [
+      { status: 'completed', label: '已完成', color: 'rgb(206, 102, 108)', filled: true, borderStyle: 'solid' },
+      { status: 'running', label: '执行中', color: 'rgb(75, 166, 139)', filled: true, borderStyle: 'solid' },
+      { status: 'blocked', label: '已阻塞', color: 'rgb(194, 147, 69)', filled: true, borderStyle: 'solid' },
+      { status: 'pending', label: '待执行', color: 'rgb(136, 136, 146)', filled: false, borderStyle: 'solid' },
+      { status: 'cancelled', label: '已取消', color: 'rgb(136, 136, 146)', filled: false, borderStyle: 'dashed' },
+    ];
+    const template = uiRead.snapshot.steps[0], originalRoute = uiRead.snapshot.routes[0];
+    uiRead.snapshot.steps = states.map((item, index) => ({ ...structuredClone(template),
+      key: `${template.planKey}/ui-mini-fixture/${item.status}`, id: `ui-mini-fixture-${item.status}`, code: `UI-${index + 1}`, originalCode: `UI-${index + 1}`,
+      title: `圆点展示 ${item.label}`, order: index + 1, status: item.status, acceptance: item.status === 'completed' ? 'passed' : 'pending',
+      dependsOn: [], conditions: [], evidence: [], blockers: [], bindingKey: null, executionKey: null, sourceLocator: '仅浏览器只读展示替身，非业务证据',
+    }));
+    const keys = uiRead.snapshot.steps.map(item => item.key);
+    uiRead.snapshot.routes = [{ ...originalRoute, stepKeys: keys, sourceStepKey: null, returnStepKey: null }];
+    uiRead.snapshot.plans = uiRead.snapshot.plans.map(plan => ({ ...plan, stageCount: keys.length, stageKeys: keys }));
+    const p = await makePage({}, false, uiRead);
+    const compact = await geometry(p);
+    assert.equal(compact.compact.width, 600); assert.equal(compact.compact.height, 38); assert.equal(compact.compact.y, 0);
+    const miniature = await p.locator('.lp-mini').evaluate(node => ({
+      text: node.textContent.trim(), role: node.getAttribute('role'), label: node.getAttribute('aria-label'),
+      stops: [...node.querySelectorAll('.lp-mini-stop')].map(stop => {
+        const dot = stop.querySelector('.lp-mini-node'), rect = dot.getBoundingClientRect(), css = getComputedStyle(dot), rail = getComputedStyle(stop, '::before');
+        return { classes: stop.className, title: stop.getAttribute('title'), ariaHidden: stop.getAttribute('aria-hidden'),
+          x: rect.x, y: rect.y, right: rect.right, width: rect.width, height: rect.height, radius: css.borderRadius, color: getComputedStyle(stop).color, background: css.backgroundColor,
+          borderColor: css.borderTopColor, borderStyle: css.borderTopStyle, text: dot.textContent.trim(),
+          rail: { content: rail.content, width: parseFloat(rail.width), height: parseFloat(rail.height), background: rail.backgroundColor } };
+      }),
+    }));
+    assert.equal(miniature.role, 'img'); assert.equal(miniature.text, ''); assert.ok(!/[✓✔☑✅━─!×○●◉]/u.test(miniature.text));
+    assert.equal(miniature.stops.length, states.length);
+    for (let index = 0; index < states.length; index++) {
+      const expected = states[index], dot = miniature.stops[index], code = `UI-${index + 1}`;
+      assert.ok(dot.classes.includes(`lp-mini-${expected.status}`)); assert.equal(dot.text, '');
+      assert.ok(dot.width > 0 && dot.width <= 12); assert.equal(dot.width, dot.height); assert.equal(dot.radius, '50%');
+      assert.equal(dot.color, expected.color); assert.equal(dot.borderColor, expected.color); assert.equal(dot.borderStyle, expected.borderStyle);
+      assert.equal(dot.background, expected.filled ? expected.color : 'rgba(0, 0, 0, 0)');
+      assert.equal(dot.title, `${code} ${expected.label}`); assert.equal(dot.ariaHidden, 'true'); assert.ok(miniature.label.includes(`${code} ${expected.label}`));
+      if (index > 0) {
+        const previous = miniature.stops[index - 1];
+        assert.equal(dot.rail.content, '""'); assert.ok(dot.rail.width > 0); assert.equal(dot.rail.height, 2); assert.equal(dot.rail.background, expected.color);
+        assert.ok(Math.abs(dot.x - previous.right - dot.rail.width) <= .5, 'rail must connect adjacent metro nodes');
+        assert.ok(Math.abs(dot.y + dot.height / 2 - previous.y - previous.height / 2) <= .5, 'metro nodes must share a horizontal center line');
+      }
+    }
+    await p.screenshot({ path: path.join(output, 'mini-five-states-compact.png') });
+    await open(p); const expanded = await geometry(p);
+    assert.equal(expanded.compact.width, 600); assert.equal(expanded.compact.height, 38); assert.equal(expanded.compact.y, 0);
+    for (const key of ['brand', 'mini']) for (const axis of ['x', 'y']) assert.ok(Math.abs(expanded[key][axis] - compact[key][axis]) <= 1, `${key}.${axis} shifted during the five-state preview`);
+    assert.equal(await p.locator('.lp-station.lp-completed .lp-dot').innerText(), '✓');
+    await p.screenshot({ path: path.join(output, 'mini-five-states-expanded.png') });
+    await close(p); const closed = await geometry(p);
+    assert.equal(closed.shapeHeight, 38); assert.equal(closed.shapeWidth, 600);
+    await p.close();
+    return { kind: 'UI-only GET response override, five cloned display stations; no domain/business status writes', miniature, compact, expanded, closed };
+  });
 
   await check('continuous opening and closing expose intermediate geometry in one fixed host', async () => {
     const initial = await geometry(page);

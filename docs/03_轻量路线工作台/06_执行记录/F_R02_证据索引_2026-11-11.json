@@ -1,0 +1,255 @@
+{
+  "date": "2026-11-11",
+  "scope": "F-R02 缩略地铁圆点修复",
+  "status": "blocked/pending/synced; final user visual confirmation pending",
+  "baseHead": "c83f2dd",
+  "serviceRevision": 139,
+  "events": "app/test-results/manual-trial/F-R02/events.json",
+  "checks": [
+    {
+      "name": "top miniature uses five-state metro circles and rails without glyphs while large stations retain their symbols",
+      "result": "passed"
+    },
+    {
+      "name": "continuous opening and closing expose intermediate geometry in one fixed host",
+      "result": "passed"
+    },
+    {
+      "name": "a single joined island outline has transparent exterior and no separate panel frame",
+      "result": "passed"
+    },
+    {
+      "name": "twenty complete cycles preserve compact text and miniature route anchors within one CSS pixel",
+      "result": "passed"
+    },
+    {
+      "name": "default hover auto-closes but crossing into its content cancels the pending close",
+      "result": "passed"
+    },
+    {
+      "name": "click pin holds open outside and unpin returns to the normal leave rule",
+      "result": "passed"
+    },
+    {
+      "name": "reading details holds preview and closing details while outside restores automatic collapse",
+      "result": "passed"
+    },
+    {
+      "name": "rapid enter leave and reversal continue from intermediate geometry without stale final callbacks",
+      "result": "passed"
+    },
+    {
+      "name": "reduced motion keeps the same end states without content translation",
+      "result": "passed"
+    },
+    {
+      "name": "small viewport and browser scale factors keep the fixed top anchor and reachable controls",
+      "result": "passed"
+    }
+  ],
+  "environment": {
+    "node": "25.5.0",
+    "npm": "11.8.0",
+    "cargo": "1.88.0",
+    "browser": "157.0.4341.42",
+    "nativeDpi": 120,
+    "nativeScaleFactor": 1.25,
+    "embeddedPage": "http://tauri.localhost/index.html?view=light-live&floating=1"
+  },
+  "limits": [
+    "Five-state check uses an isolated UI-only GET override and does not prove five business state transitions",
+    "Browser scale factors do not prove Windows DPI switching",
+    "Native verification is current 125% only; no new cross-monitor or continuous typing focus matrix",
+    "F final visual approval is pending; G not started",
+    "First native build failed with os error 32; verified task test process was stopped, rebuild passed"
+  ],
+  "nativeFrames": {
+    "count": 28,
+    "intermediate": 23,
+    "last": {
+      "dpi": 120,
+      "foreground": 1248542,
+      "kind": "frame",
+      "metrics": {
+        "applied": true,
+        "frame": 1794376412863026,
+        "hostHeight": 678.0,
+        "hostWidth": 960.0,
+        "left": 180.0,
+        "progress": 0.0,
+        "radius": 18.0,
+        "scaleFactor": 1.25,
+        "shapeHeight": 38.0,
+        "shapeWidth": 600.0,
+        "top": 0
+      },
+      "panel": 2297272,
+      "timestampMs": 1794376490545,
+      "windowRect": {
+        "bottom": 848,
+        "left": 680,
+        "right": 1880,
+        "top": 0
+      }
+    }
+  },
+  "sourceIdentity": [
+    {
+      "path": "app/src/LightPanel.tsx",
+      "sha256": "d2416f7a35c39ea9718f180c177a6ef3993ce5f59ed0e2aefa75e2402da6a1f7",
+      "bytes": 24598
+    },
+    {
+      "path": "app/src/light-panel.css",
+      "sha256": "97e58938fb6a9b7acd32f2717f58362ba9c71f4dd2e1edaa90739850469e1f4e",
+      "bytes": 9221
+    },
+    {
+      "path": "app/tests/island-motion.mjs",
+      "sha256": "227bc4628c8fa024aac124e72e76c9893d963c3547cb956aa6f1cce29237650c",
+      "bytes": 22795
+    },
+    {
+      "path": "app/dist/index.html",
+      "sha256": "9613d845b93d403902abb0e0ba0b983189dd0a3fd00d692db7a849e4e93831b6",
+      "bytes": 422
+    },
+    {
+      "path": "app/dist/assets/index-5vFlfkI8.css",
+      "sha256": "e1f3adf576466097be1c4e028bb5d64bb90dc65430fdc42322bd5b225dfa6e2f",
+      "bytes": 32871
+    },
+    {
+      "path": "app/dist/assets/index-BCAWVKZp.js",
+      "sha256": "26cff0f0351024ec2f645f3e5c34494b1974b2b8e7aa4b4fe54f67c0944b4dbe",
+      "bytes": 430445
+    },
+    {
+      "path": "app/src-tauri/target/debug/route-workbench-desktop.exe",
+      "sha256": "ab6ed10095845962cd909745532cd374b4fb687a9dab768f22aed4ea01a11910",
+      "bytes": 15933440
+    }
+  ],
+  "evidence": [
+    {
+      "path": "app/test-results/manual-trial/F-R02/browser-scale-100-390.png",
+      "sha256": "007094d0cf3091a30d758acb2d7dc09dc7bcdd49b0892b5604a03e7fcc1e6ca6",
+      "bytes": 26957
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/browser-scale-125-1280.png",
+      "sha256": "3c3cdba074c476b7998914db5dea4e9a5142226f03e597ee1822dd2b9b3d3b55",
+      "bytes": 42748
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/browser-scale-150-1280.png",
+      "sha256": "17a483cbb5462530c5005c9cdca3f415a64f1416b657d4d7aa7a3fcac87a2a37",
+      "bytes": 54016
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/browser-scale-200-1280.png",
+      "sha256": "88deb170f97178b4b36334659efb8ec654c20c35d0fbb29e5331d2107f854f12",
+      "bytes": 103920
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/events.json",
+      "sha256": "fbc6e87039280ea5568782eb89ebeb5da057808498c52419943c9b74b71d07f2",
+      "bytes": 8233
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/island-motion-result.json",
+      "sha256": "aa421097d48e72b85c3c67d9b6602b549c60a58e4dcc11ff6db4c5ef1ae74900",
+      "bytes": 962256
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/island-motion.log",
+      "sha256": "c7401e192eea5ed9cdbd20e3df4a48f10ea62709332a127eae733fb72db67f5f",
+      "bytes": 1100
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/mini-five-states-compact.png",
+      "sha256": "1b96c06685c3c59e8a3c4208d80b6241cf1a210b2f277f0eb392d6e89c0dd22a",
+      "bytes": 8373
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/mini-five-states-expanded.png",
+      "sha256": "87e0f723308cbbdaf55b3d9c1ee2d335131e3814f73b05520b7d353e0972b14a",
+      "bytes": 34702
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/motion-closing.png",
+      "sha256": "abb670f7c625cc373f8226b014d67f78b569bc76540c63ab7b74f5d60aef93b7",
+      "bytes": 29085
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/motion-compact.png",
+      "sha256": "8496daaadd6cffccff58edb26b13c2ba19482f43acb561a4c6404d069d4b0a7e",
+      "bytes": 7537
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/motion-expanded.png",
+      "sha256": "c4f08c0a6c0074d9f9e5a9041f16c889e719e0f6f97bd853bd9e82c5fd11b2d6",
+      "bytes": 30494
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/motion-opening.png",
+      "sha256": "0037afa0aec7b076970c85f666f7921736a2f6ddb415afb021169d9fce03d5b1",
+      "bytes": 7657
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/motion-reduced-compact.png",
+      "sha256": "8496daaadd6cffccff58edb26b13c2ba19482f43acb561a4c6404d069d4b0a7e",
+      "bytes": 7537
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-build.log",
+      "sha256": "518d6cf9be30b10e71562e80fe4b5d2e00f7e7266234fd4a4c0e97045b2a27dc",
+      "bytes": 1081
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-compact-tree.txt",
+      "sha256": "64cd111b49e63fa79720066028532c3a85783f60bd90c8ced7687dd4f05e7357",
+      "bytes": 959
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-compact.png",
+      "sha256": "b4f2a34d0e09da5a16cb779e9e6941895784085eaf3be7471edca9dcc8012efe",
+      "bytes": 54953
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-expanded-tree.txt",
+      "sha256": "d59f896e4be263caa5e7fd13c87a7b39d02ab1ccfe057426e170312423ed12f4",
+      "bytes": 4924
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-expanded.png",
+      "sha256": "3323b08d8ad03f3a9b4527d153fa4a6ba07bdb73375c18d019b3dcfd4c155956",
+      "bytes": 46943
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-final-tree.txt",
+      "sha256": "653f8072c355b744b36f4efd8b68fbff31ae57b11f74855f24fe04e5ecdf0ec2",
+      "bytes": 959
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-final-wait.png",
+      "sha256": "96225f8a10ef4eebd2c0e1276166136a3a7677248c3da776b8ac95c68c43e384",
+      "bytes": 53641
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-frames.jsonl",
+      "sha256": "0546a401db97b2f457fe650aab65fc33fc98b34c321d229fa73c3b7dff4669fe",
+      "bytes": 11183
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/native-return-compact.png",
+      "sha256": "00fdb2776889f2b4dbe87411020caff399052db5ba82a52f1b9a6e02678ab5f9",
+      "bytes": 53634
+    },
+    {
+      "path": "app/test-results/manual-trial/F-R02/start.json",
+      "sha256": "862b76fc638f7f7cf2d9a8040548621e722036753dadda8dcab727c226168778",
+      "bytes": 3118
+    }
+  ]
+}

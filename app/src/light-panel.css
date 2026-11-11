@@ -1,4 +1,4 @@
-/* 日期 2026-11-10。沿用 top-panel 原型的黑底、边框、圆角和状态语义。 */
+/* 日期 2026-11-11。沿用 top-panel 原型的黑底、边框、圆角和状态语义。 */
 .lp-shell { color: #ededf0; background: #0c0c0e; min-height: 100vh; padding: 0 16px 16px; font: 12px/1.5 Inter, 'Segoe UI', 'Microsoft YaHei', sans-serif; }
 .lp-shell * { box-sizing: border-box; }
 .lp-shell button { font: inherit; color: inherit; cursor: pointer; border: 1px solid #38383e; background: #242429; border-radius: 8px; padding: 5px 9px; }
@@ -8,10 +8,16 @@
 .lp-shell small { color: #a4a4ae; font-size: 11px; }
 .lp-shell .lp-compact { height: 38px; width: min(600px,100%); margin: auto; display: flex; align-items: center; justify-content: center; gap: 14px; background: #141416; border-radius: 0 0 18px 18px; border-top: 0; white-space: nowrap; overflow: hidden; }
 .lp-brand { color: #b6bbff; font-size: 22px; }
-.lp-mini { color: #ce666c; letter-spacing: 2px; }
+.lp-mini { display: inline-flex; align-items: center; flex-shrink: 0; color: #ce666c; letter-spacing: 2px; }
+.lp-mini-stop { display: inline-flex; align-items: center; }
+.lp-mini-stop + .lp-mini-stop::before { content: ''; width: 16px; height: 2px; background: currentColor; opacity: .65; }
+.lp-mini-node { display: block; width: 9px; height: 9px; border: 2px solid currentColor; border-radius: 50%; background: currentColor; }
 .lp-mini .lp-mini-running { color: #4ba68b; }
+.lp-mini-running .lp-mini-node { box-shadow: 0 0 0 3px #4ba68b33; }
 .lp-mini .lp-mini-blocked { color: #c29345; }
 .lp-mini .lp-mini-pending, .lp-mini .lp-mini-cancelled { color: #888892; }
+.lp-mini-pending .lp-mini-node, .lp-mini-cancelled .lp-mini-node { background: transparent; }
+.lp-mini-cancelled .lp-mini-node { border-style: dashed; }
 .lp-panel { width: min(960px,100%); height: min(640px,calc(100dvh - 54px)); min-height: 220px; margin: 0 auto; display: flex; flex-direction: column; overflow: hidden; background: #141416; border: 1px solid #303034; border-radius: 0 0 18px 18px; }
 .lp-toolbar { display: flex; gap: 8px; align-items: center; padding: 12px 16px 6px; flex-wrap: wrap; }
 .lp-toolbar strong { margin-right: auto; font-size: 14px; }
