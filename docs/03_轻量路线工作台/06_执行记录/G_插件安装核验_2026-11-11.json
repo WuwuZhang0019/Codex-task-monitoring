@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-11",
+  "installed": "C:/Users/Zyf/.codex/plugins/cache/task-workbench-u01-local/task-workbench/0.1.6",
+  "version": "0.1.6",
+  "sourceCommit": "9c77237b9d2a4f0ae76bbdebd3a1665d5b98ae1a",
+  "fingerprints": 14,
+  "mismatches": [],
+  "tools": [
+    "workbench_get_project",
+    "workbench_register_plan",
+    "workbench_revise_plan",
+    "workbench_reserve_execution",
+    "workbench_update_step_status",
+    "workbench_record_supplement",
+    "workbench_bind_context",
+    "workbench_query_event",
+    "workbench_complete_plan"
+  ],
+  "requestId": "e22135ad-8acb-4f09-8397-858e30e448c2",
+  "status": "accepted",
+  "revision": 147,
+  "stage": {
+    "key": "light-workbench-20261110/A-07",
+    "id": "f144ff56-6282-4e73-b01a-3459cc92f53f",
+    "projectKey": "light-workbench-20261110/project",
+    "planKey": "light-workbench-20261110",
+    "parentKey": null,
+    "code": "G",
+    "originalCode": "G",
+    "sourceLocator": "实施路线与出口/G",
+    "title": "恢复与交付验收",
+    "order": 7,
+    "required": true,
+    "dependsOn": [
+      "light-workbench-20261110/A-06"
+    ],
+    "status": "running",
+    "acceptance": "pending",
+    "sync": "synced",
+    "conditions": [
+      {
+        "conditionId": "light-workbench-20261110/A-07/exit",
+        "text": "七模块必需场景有证据，全部必要步骤和验收满足",
+        "required": true,
+        "result": "pending",
+        "evidenceIds": []
+      }
+    ],
+    "evidence": [],
+    "blockers": [],
+    "executionKey": "light-workbench-20261110/executions/2f9405b3-17f1-4af4-9a62-1b6e4caa9456",
+    "bindingKey": "light-workbench-20261110/bindings/8573ae87-2d57-4cac-843f-6803f6840c69",
+    "updatedAt": "2026-11-11T07:27:28.775Z"
+  }
+}

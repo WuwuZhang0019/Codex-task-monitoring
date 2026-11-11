@@ -1,0 +1,107 @@
+{
+  "date": "2026-11-11",
+  "revision": 149,
+  "stages": [
+    {
+      "code": "A",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "B",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "C",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "D",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "E",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "F",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "code": "G",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    }
+  ],
+  "execution": {
+    "key": "light-workbench-20261110/executions/2f9405b3-17f1-4af4-9a62-1b6e4caa9456",
+    "id": "2f9405b3-17f1-4af4-9a62-1b6e4caa9456",
+    "projectKey": "light-workbench-20261110/project",
+    "planKey": "light-workbench-20261110",
+    "stepKeys": [
+      "light-workbench-20261110/A-07"
+    ],
+    "bindingKey": "light-workbench-20261110/bindings/8573ae87-2d57-4cac-843f-6803f6840c69",
+    "outcome": "completedScope",
+    "startedAt": "2026-11-11T07:12:20.235Z",
+    "endedAt": "2026-11-11T07:52:33.060Z",
+    "handoffConclusion": null
+  },
+  "frozenExitIndex": {
+    "path": "G_验收证据索引_2026-11-11.json",
+    "sha256": "dd1c1a3fbba69f10f5a7bc6e8d374bbff9a7db876aa333d9116b02d1f076d6f1",
+    "note": "冻结为提交时验收证据，文件中completion pending为当时状态；最终同步以G_完成事件回读为准"
+  },
+  "files": [
+    {
+      "path": "docs\\03_轻量路线工作台\\06_执行记录\\G_完成回执_2026-11-11.md",
+      "sha256": "11ab5abfbc30ead9decd494f00edcb0988bfcd8a42738ab8de3e27ec8249d29c",
+      "bytes": 6809
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\06_执行记录\\G_完成事件回读_2026-11-11.json",
+      "sha256": "b49258d312c3b508f611951784481e275950a97430f5ace9db0603513297d701",
+      "bytes": 26135
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\06_执行记录\\G_插件安装核验_2026-11-11.json",
+      "sha256": "060c97ba2f6e195c7adeff1bf5a968a1e124129bfb1a19ef4f8aaf269bfa570c",
+      "bytes": 1731
+    },
+    {
+      "path": "docs\\03_轻量路线工作台\\06_执行记录\\G_验收证据索引_2026-11-11.json",
+      "sha256": "dd1c1a3fbba69f10f5a7bc6e8d374bbff9a7db876aa333d9116b02d1f076d6f1",
+      "bytes": 70098
+    }
+  ],
+  "nativeFinal": {
+    "revision": 149,
+    "text": "Window: \"任务航线 · 浮窗宿主\", App: route-workbench-desktop.exe.\n\t0 窗口 任务航线 · 浮窗宿主 Secondary Actions: Raise\n\t\t1 窗格\n\t\t\t2 窗格 任务工作台 · 本地 MVP\n\t\t\t\t3 窗格 (disabled)\n\t\t\t\t4 区域 任务工作台 · 本地 MVP - Web 内容\n\t\t\t\t\t5 区域\n\t\t\t\t\t\t6 区域\n\t\t\t\t\t\t7 区域\n\t\t\t\t\t\t\t8 区域\n\t\t\t\t\t\t\t\t9 文档 任务工作台 · 本地 MVP Value: http://tauri.localhost/index.html?view=light-live&floating=1 ID: RootWebArea\n\t\t\t\t\t\t\t\t\t10 组 ID: root\n\t\t\t\t\t\t\t\t\t\t11 主要\n\t\t\t\t\t\t\t\t\t\t\t12 按钮 ⌁ 任务航线 路线：A 已完成，B 已完成，C 已完成，D 已完成，E 已完成，F 已完成，G 已完成 1 项目 · 已保存 ⌃ Description: 悬停预览 · 点击固定展开\n\t\t\t\t\t\t\t\t\t\t\t\t13 图形 路线：A 已完成，B 已完成，C 已完成，D 已完成，E 已完成，F 已完成，G 已完成\n\t\t\t\t\t\t\t\t\t\t\t447 区域 项目路线面板\n\t\t\t\t\t\t\t\t\t\t\t\t448 章节标题\n\t\t\t\t\t\t\t\t\t\t\t\t\t449 文本 项目路线\n\t\t\t\t\t\t\t\t\t\t\t\t\t450 复选框 (settable, string) 只看有待办\n\t\t\t\t\t\t\t\t\t\t\t\t\t451 按钮 定位当前\n\t\t\t\t\t\t\t\t\t\t\t\t\t452 切换按钮 已固定\n\t\t\t\t\t\t\t\t\t\t\t\t\t453 按钮 收起\n\t\t\t\t\t\t\t\t\t\t\t\t454 文本 已连接\n\t\t\t\t\t\t\t\t\t\t\t\t455 文本 · 最后更新\n\t\t\t\t\t\t\t\t\t\t\t\t456 文本 15:52:50\n\t\t\t\t\t\t\t\t\t\t\t\t457 文本 ·\n\t\t\t\t\t\t\t\t\t\t\t\t458 文本 service\n\t\t\t\t\t\t\t\t\t\t\t\t459 文本 · 版本\n\t\t\t\t\t\t\t\t\t\t\t\t460 文本 149\n\t\t\t\t\t\t\t\t\t\t\t\t461 按钮 刷新\n\t\t\t\t\t\t\t\t\t\t\t\t462 按钮 打开工作台\n\t\t\t\t\t\t\t\t\t\t\t\t463 状态\n\t\t\t\t\t\t\t\t\t\t\t\t\t464 按钮 已保存更新 · G必要故障恢复、全目录备份迁移、六路线、安装和交付验收通过；两项原条件缺陷已修复，真实125%/150%核验并恢复原设置；未启用双屏模式不冒充已实测 · 阅读位置已保留；定位到 轻量路线工作台正式实施方案 · G 恢复与交付验收 Description: 定位到 轻量路线工作台正式实施方案 · G 恢复与交付验收\n\t\t\t\t\t\t\t\t\t\t\t\t465 文章\n\t\t\t\t\t\t\t\t\t\t\t\t\t466 章节标题\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t467 按钮 ▾ 轻量路线工作台正式实施方案\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t468 文本 0\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t469 文本 执行中 ·\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t470 文本 0\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t471 文本 阻塞 ·\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t472 文本 0\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t473 文本 待处理事项\n\t\t\t\t\t\t\t\t\t\t\t\t\t474 区域 方案 轻量路线工作台正式实施方案\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t475 标题 轻量路线工作台正式实施方案按路线顺序阅读 · 横向可滚动 →\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t476 按钮 ▾ 轻量路线工作台正式实施方案\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t477 文本 7\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t478 文本 站 ·\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t479 文本 main\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t480 切换按钮 轻量路线工作台正式实施方案 A 复用核对与契约 已完成 ID: light-workbench-20261110/A-01\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t481 文本 ✓\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t482 文本 A\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t483 文本 复用核对与契约\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t484 文本 已完成\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t485 切换按钮 轻量路线工作台正式实施方案 B 路线与存储 已完成 ID: light-workbench-20261110/A-02\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t486 文本 ✓\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t487 文本 B\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t488 文本 路线与存储\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t489 文本 已完成\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t490 切换按钮 轻量路线工作台正式实施方案 C UI 模拟开发 已完成 ID: light-workbench-20261110/A-03\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t491 文本 ✓\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t492 文本 C\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t493 文本 UI 模拟开发\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t494 文本 已完成\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t495 切换按钮 轻量路线工作台正式实施方案 D MCP 真实接入 已完成 ID: light-workbench-20261110/A-04\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t496 文本 ✓\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t497 文本 D\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t498 文本 MCP 真实接入\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t499 文本 已完成\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t500 切换按钮 轻量路线工作台正式实施方案 E Skill 与会话关联 已完成 ID: light-workbench-20261110/A-05\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t501 文本 ✓\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t502 文本 E\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t503 文本 Skill 与会话关联\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t504 文本 已完成\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t505 切换按钮 轻量路线工作台正式实施方案 F 真实面板接线 已完成 ID: light-workbench-20261110/A-06\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t506 文本 ✓\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t507 文本 F\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t508 文本 真实面板接线\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t509 文本 已完成\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t510 切换按钮 轻量路线工作台正式实施方案 G 恢复与交付验收 已完成 ID: light-workbench-20261110/A-07\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t511 文本 ✓\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t512 文本 G\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t513 文本 恢复与交付验收\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t514 文本 已完成\n\t\t\t\t\t\t\t\t14 区域\n\nDocument text: ```\n⌁\n任务航线\n￼\n1 项目 · 已保存\n⌃\n项目路线\n￼\n定位当前\n已固定\n收起\n已连接 · 最后更新 15:52:50 · service · 版本 149刷新打开工作台\n已保存更新 · G必要故障恢复、全目录备份迁移、六路线、安装和交付验收通过；两项原条件缺陷已修复，真实125%/150%核验并恢复原设置；未启用双屏模式不冒充已实测 · 阅读位置已保留\n▾ 轻量路线工作台正式实施方案\n0 执行中 · 0 阻塞 · 0 待处理事项\n轻量路线工作台正式实施方案按路线顺序阅读 · 横向可滚动 →\n▾ 轻量路线工作台正式实施方案\n7 站 · main\n✓\nA\n复用核对与契约\n已完成\n✓\nB\n路线与存储\n已完成\n✓\nC\nUI 模拟开发\n已完成\n✓\nD\nMCP 真实接入\n已完成\n✓\nE\nSkill 与会话关联\n已完成\n✓\nF\n真实面板接线\n已完成\n✓\nG\n恢复与交付验收\n已完成\n```\n⌁\n任务航线\n￼\n1 项目 · 已保存\n⌃\n项目路线\n￼\n定位当前\n已固定\n收起\n已连接 · 最后更新 15:52:50 · service · 版本 149刷新打开工作台\n已保存更新 · G必要故障恢复、全目录备份迁移、六路线、安装和交付验收通过；两项原条件缺陷已修复，真实125%/150%核验并恢复原设置；未启用双屏模式不冒充已实测 · 阅读位置已保留\n▾ 轻量路线工作台正式实施方案\n0 执行中 · 0 阻塞 · 0 待处理事项\n轻量路线工作台正式实施方案按路线顺序阅读 · 横向可滚动 →\n▾ 轻量路线工作台正式实施方案\n7 站 · main\n✓\nA\n复用核对与契约\n已完成\n✓\nB\n路线与存储\n已完成\n✓\nC\nUI 模拟开发\n已完成\n✓\nD\nMCP 真实接入\n已完成\n✓\nE\nSkill 与会话关联\n已完成\n✓\nF\n真实面板接线\n已完成\n✓\nG\n恢复与交付验收\n已完成",
+    "sha256": "c6e4cfbd9bcd76f069b4e49b8819771780c8564a3d33e169332399f07ed5e5da",
+    "dpi": 120,
+    "scaleRestored": 1.25
+  },
+  "installer": {
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\bundle\\nsis\\任务航线工作台_0.2.0_x64-setup.exe",
+    "sha256": "d3ce1aa4e86bda9d146d931c44f1d7008684b4af3bd17a0580a10b7614fb8901",
+    "type": "NSIS debug acceptance package; installed through real installer"
+  },
+  "plugin": {
+    "version": "0.1.6",
+    "path": "C:/Users/Zyf/.codex/plugins/cache/task-workbench-u01-local/task-workbench/0.1.6",
+    "readbackRevision": 147,
+    "status": "installed fingerprints match, real STDIO9tools and read accepted; not current chat Skill hot reload"
+  }
+}

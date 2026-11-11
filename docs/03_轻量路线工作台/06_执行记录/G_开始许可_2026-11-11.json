@@ -1,0 +1,195 @@
+{
+  "date": "2026-11-11",
+  "status": "running/pending/synced",
+  "source": {
+    "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\00_执行入口\\00_新路线实施总纲与接口决定_2026-11-10.md",
+    "version": "364adc0b20c7066c4bb7247707b9ed07223f433a",
+    "sha256": "4da43b79373faa8baeefe393fcfab080df4b5675d5444c3ebdbc6d9c4ebc4c6d",
+    "locator": "完整步骤及依赖表"
+  },
+  "proposal": {
+    "schemaVersion": "light-1.0",
+    "requestId": "f9c5c797-0034-441b-af76-b765b9d200ef",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "revision": 143,
+      "receipt": {
+        "schemaVersion": "light-1.0",
+        "eventId": "light-workbench-20261110/G-EX01/bind-propose-source-aligned",
+        "requestId": "f9c5c797-0034-441b-af76-b765b9d200ef",
+        "status": "committed",
+        "committedRevision": 143,
+        "receivedAt": "2026-11-11T07:10:19.095Z",
+        "resultRef": "light/events/light-workbench-20261110/G-EX01/bind-propose-source-aligned",
+        "errorCode": null,
+        "recovery": "读取已提交快照或查询原事件"
+      },
+      "bindingId": "1f658256-4cb0-4293-b2e6-f4111d1e89ae",
+      "bindingRevision": 1,
+      "state": "proposed",
+      "requestId": "f9c5c797-0034-441b-af76-b765b9d200ef"
+    }
+  },
+  "confirmation": {
+    "schemaVersion": "light-1.0",
+    "requestId": "34b91632-7429-4c12-aab8-0a0c1f261725",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "revision": 144,
+      "receipt": {
+        "schemaVersion": "light-1.0",
+        "eventId": "light-workbench-20261110/G-EX01/bind-confirm",
+        "requestId": "34b91632-7429-4c12-aab8-0a0c1f261725",
+        "status": "committed",
+        "committedRevision": 144,
+        "receivedAt": "2026-11-11T07:11:54.671Z",
+        "resultRef": "light/events/light-workbench-20261110/G-EX01/bind-confirm",
+        "errorCode": null,
+        "recovery": "读取已提交快照或查询原事件"
+      },
+      "bindingId": "1f658256-4cb0-4293-b2e6-f4111d1e89ae",
+      "bindingRevision": 2,
+      "state": "confirmed",
+      "requestId": "34b91632-7429-4c12-aab8-0a0c1f261725"
+    }
+  },
+  "reserve": {
+    "schemaVersion": "light-1.0",
+    "requestId": "ebed3a89-063a-4d2c-a1b4-f11e89452dc0",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "revision": 145,
+      "receipt": {
+        "schemaVersion": "light-1.0",
+        "eventId": "light-workbench-20261110/G-EX01/reserve",
+        "requestId": "ebed3a89-063a-4d2c-a1b4-f11e89452dc0",
+        "status": "committed",
+        "committedRevision": 145,
+        "receivedAt": "2026-11-11T07:12:07.440Z",
+        "resultRef": "light/events/light-workbench-20261110/G-EX01/reserve",
+        "errorCode": null,
+        "recovery": "读取已提交快照或查询原事件"
+      },
+      "executionId": "2f9405b3-17f1-4af4-9a62-1b6e4caa9456",
+      "requestId": "ebed3a89-063a-4d2c-a1b4-f11e89452dc0"
+    }
+  },
+  "start": {
+    "schemaVersion": "light-1.0",
+    "requestId": "a18d15ac-1b8c-4331-b41b-2acd87ac3e9a",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "revision": 146,
+      "receipt": {
+        "schemaVersion": "light-1.0",
+        "eventId": "light-workbench-20261110/G-EX01/start",
+        "requestId": "a18d15ac-1b8c-4331-b41b-2acd87ac3e9a",
+        "status": "committed",
+        "committedRevision": 146,
+        "receivedAt": "2026-11-11T07:12:20.235Z",
+        "resultRef": "light/events/light-workbench-20261110/G-EX01/start",
+        "errorCode": null,
+        "recovery": "读取已提交快照或查询原事件"
+      },
+      "stepId": "f144ff56-6282-4e73-b01a-3459cc92f53f",
+      "executionId": "2f9405b3-17f1-4af4-9a62-1b6e4caa9456",
+      "requestId": "a18d15ac-1b8c-4331-b41b-2acd87ac3e9a"
+    }
+  },
+  "read": {
+    "revision": 146,
+    "requestId": "1d202a01-ea27-49df-8685-08d90d48095b",
+    "step": {
+      "key": "light-workbench-20261110/A-07",
+      "id": "f144ff56-6282-4e73-b01a-3459cc92f53f",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "parentKey": null,
+      "code": "G",
+      "originalCode": "G",
+      "sourceLocator": "实施路线与出口/G",
+      "title": "恢复与交付验收",
+      "order": 7,
+      "required": true,
+      "dependsOn": [
+        "light-workbench-20261110/A-06"
+      ],
+      "status": "running",
+      "acceptance": "pending",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "light-workbench-20261110/A-07/exit",
+          "text": "七模块必需场景有证据，全部必要步骤和验收满足",
+          "required": true,
+          "result": "pending",
+          "evidenceIds": []
+        }
+      ],
+      "evidence": [],
+      "blockers": [],
+      "executionKey": "light-workbench-20261110/executions/2f9405b3-17f1-4af4-9a62-1b6e4caa9456",
+      "bindingKey": "light-workbench-20261110/bindings/8573ae87-2d57-4cac-843f-6803f6840c69",
+      "updatedAt": "2026-11-11T07:12:20.235Z"
+    }
+  },
+  "authorization": {
+    "method": "用户回复你来操作后，通过原生连接授权和绑定确认表单完成，未直接修改授权库",
+    "principal": "750c4d21-892e-4391-910a-3b726cdcb44f"
+  },
+  "knownRejections": [
+    {
+      "requestId": "72f29626-0ec4-4f5a-a0a0-f4855595fc05",
+      "code": "FORBIDDEN"
+    },
+    {
+      "requestId": "c4cc7169-553b-4bb0-9f14-251c93305f38",
+      "code": "STALE_PLAN",
+      "reason": "本次错误使用代码HEAD作为方案登记version；更正为服务已登记版本，内容指纹不变"
+    }
+  ]
+}
