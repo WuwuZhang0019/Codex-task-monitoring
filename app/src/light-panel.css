@@ -25,6 +25,8 @@
 .lp-toolbar input { width: 14px; height: 14px; margin: 0; accent-color: #b6bbff; }
 .lp-sync { color: #aaaab4; padding: 0 16px 5px; }
 .lp-event { color: #c9c9d5; padding: 5px 16px; border-block: 1px solid #2a2a30; }
+.lp-event .lp-event-target { background: transparent; border: 0; border-radius: 0; padding: 0; text-align: left; }
+.lp-event .lp-event-target:hover { background: transparent; text-decoration: underline; }
 .lp-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 12px; scrollbar-width: thin; scrollbar-color: #444 transparent; }
 .lp-project { background: #1b1b20; border: 1px solid #303034; border-radius: 12px; margin-bottom: 12px; overflow: clip; }
 .lp-project > header { padding: 8px 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }

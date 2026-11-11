@@ -39,6 +39,7 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
   const [empty, setEmpty] = useState(false);
   const [pinned, setPinned] = useState(!floating);
   const [message, setMessage] = useState(live ? '正在读取已保存路线…' : '模拟快照 · 所有身份仅用于演示');
+  const [eventNotice, setEventNotice] = useState<{ message: string; stepKey: string; eventId: string } | null>(null);
   const [candidates, setCandidates] = useState<string[]>([]);
   const body = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLElement>(null);
@@ -48,6 +49,8 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
   const compactSteps = compactRoute?.stepKeys.slice(0, 7).map(key => snapshot.steps.find(step => step.key === key)).filter(step => !!step) || [];
   const focused = snapshot.routes.find(route => route.key === preferences.focus.at(-1));
   const stepByKey = new Map(snapshot.steps.map(step => [step.key, step]));
+  const noticeStep = eventNotice?.message === message ? stepByKey.get(eventNotice.stepKey) : undefined;
+  const noticeLocation = noticeStep ? `定位到 ${snapshot.projects.find(project => project.key === noticeStep.projectKey)?.name || noticeStep.projectKey} · ${noticeStep.code} ${noticeStep.title}` : '';
   const routeOf = (key: string) => snapshot.routes.find(route => route.stepKeys.includes(key));
   const sourceOf = (route: Route) => route.sourceStepKey || snapshot.supplements.find(item => item.linkedPlanKey === route.planKey)?.sourceStepKey || null;
   const children = (route: Route) => snapshot.routes.filter(item => sourceOf(item) && route.stepKeys.includes(sourceOf(item)!));
@@ -114,9 +117,11 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
           if (!preferencesChanged.current && result.preferences) setPreferences(result.preferences);
           setHydrated(true);
           setMessage('已读取持久路线');
-        } else if (revision !== latestRevision.current) {
-          const completed = result.snapshot.events.at(-1);
-          setMessage(completed ? `已保存更新 · ${completed.reason} · 阅读位置已保留` : '已保存更新 · 阅读位置已保留');
+        } else if (revision > latestRevision.current) {
+          const event = result.snapshot.events.at(-1);
+          const nextMessage = event ? `已保存更新 · ${event.reason} · 阅读位置已保留` : '已保存更新 · 阅读位置已保留';
+          setMessage(nextMessage);
+          setEventNotice(event?.stepKey && result.snapshot.steps.some(step => step.key === event.stepKey) ? { message: nextMessage, stepKey: event.stepKey, eventId: event.eventId } : null);
         }
         if (latestRevision.current === null || revision >= latestRevision.current) {
           setSnapshot(result.snapshot); setSources(result.sources);
@@ -165,7 +170,16 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
       ancestors.unshift(parent.key);
       parent = sourceOf(parent) ? routeOf(sourceOf(parent)!) : undefined;
     }
-    setPreferences(value => ({ ...value, focus: ancestors, selected: key, collapsed: value.collapsed.filter(item => item !== step.projectKey && item !== route?.key) }));
+    setOnlyTodo(false);
+    setPreferences(value => {
+      const collapsed = value.collapsed.filter(item => item !== step.projectKey && item !== route?.key);
+      const parentKey = ancestors.at(-1);
+      if (parentKey && route) {
+        const branchSwitch = `${parentKey}/${ended(route) ? 'ended' : 'more'}`;
+        if (!collapsed.includes(branchSwitch)) collapsed.push(branchSwitch);
+      }
+      return { ...value, focus: ancestors, selected: key, collapsed };
+    });
     setExpanded(true);
     choose(key);
     requestAnimationFrame(() => {
@@ -225,7 +239,7 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
     {(expanded || floating) && <section className="lp-panel" aria-label="项目路线面板" aria-hidden={!expanded} inert={!expanded}>
       <header className="lp-toolbar"><strong>项目路线</strong><label><input type="checkbox" checked={onlyTodo} onChange={e => setOnlyTodo(e.target.checked)} />只看有待办</label><button onClick={locateCurrent}>定位当前</button><button aria-pressed={pinned} onClick={() => setPinned(value => !value)}>{pinned ? '已固定' : '固定'}</button><button onClick={collapseIsland}>收起</button></header>
       <div className="lp-sync">{connected ? (live ? '已连接' : '模拟已连接') : '连接中断'} · 最后更新 {new Date(snapshot.generatedAt).toLocaleTimeString('zh-CN', { hour12: false })} · {snapshot.mode}{live && <> · 版本 {snapshot.revision ?? '待连接'} <button onClick={() => setRefreshKey(value => value + 1)}>刷新</button>{floating && <button onClick={() => void desktopInvoke('panel_show_main').catch(error => setMessage(String(error)))}>打开工作台</button>}</>}</div>
-      <div className="lp-event" role="status">{message}</div>
+      <div className="lp-event" role="status">{noticeStep && eventNotice ? <button className="lp-event-target" data-event-id={eventNotice.eventId} title={noticeLocation} aria-label={`${message}；${noticeLocation}`} onClick={() => locate(noticeStep.key)}>{message}</button> : message}</div>
       {preferences.focus.length > 0 && <nav className="lp-breadcrumb" aria-label="路线层级"><button onClick={() => setPreferences(value => ({ ...value, focus: [] }))}>全部项目</button>{preferences.focus.map((key, index) => <button key={key} onClick={() => setPreferences(value => ({ ...value, focus: value.focus.slice(0, index + 1) }))}>→ {snapshot.routes.find(route => route.key === key)?.label}</button>)}</nav>}
       {candidates.length > 0 && <div className="lp-candidates" aria-label="当前站候选">{candidates.map(key => <button key={key} onClick={() => locate(key)}>{snapshot.projects.find(p => p.key === stepByKey.get(key)?.projectKey)?.name} · {stepByKey.get(key)?.code} · {stepByKey.get(key)?.title}</button>)}</div>}
       <div className="lp-body" ref={body} onScroll={event => { const y = event.currentTarget.scrollTop; setPreferences(value => ({ ...value, y: { ...value.y, [viewKey]: y } })); }}>

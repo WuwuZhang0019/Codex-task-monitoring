@@ -1,0 +1,314 @@
+{
+  "date": "2026-11-11",
+  "scope": "F原验收必要补齐R03：完成事件提示与显式定位",
+  "baseHead": "714c80699e36fbe7400115fd74cb80ca0a3b12c0",
+  "deliveryVersion": "F-EX01-R03-20261111",
+  "status": "implementation verified; F final focus verification pending",
+  "checks": {
+    "liveHttpUi": [
+      {
+        "name": "three persisted projects, six original routes, thirty stations and eight branches",
+        "result": "passed"
+      },
+      {
+        "name": "verified original text and explicit missing thread-jump capability",
+        "result": "passed"
+      },
+      {
+        "name": "MCP committed update, readback and UI agree while selection and position survive",
+        "result": "passed"
+      },
+      {
+        "name": "same event replay and stale conflicting write preserve committed state",
+        "result": "passed"
+      },
+      {
+        "name": "lost write response remains observable through original event query and committed UI",
+        "result": "passed"
+      },
+      {
+        "name": "read disconnect retains snapshot, recovery resumes without viewport jump",
+        "result": "passed"
+      },
+      {
+        "name": "persisted reading preference survives page reload",
+        "result": "passed"
+      },
+      {
+        "name": "authorized completed event is saved, read back and located only on user activation",
+        "result": "passed"
+      },
+      {
+        "name": "collapsed floating bar stays expanded after hover then click",
+        "result": "passed"
+      }
+    ],
+    "completion": {
+      "eventId": "3c1c34c2-fffd-4159-bd0e-bbcd0dabfe5d",
+      "panelEventId": "light/c972d75b1a453ef681c434fa19510aeb9ac66ccb5dc350728496282fecece665/3c1c34c2-fffd-4159-bd0e-bbcd0dabfe5d",
+      "requestId": "b5f34088-73c2-4fc3-8e80-2a36ff282482",
+      "executionId": "c0d29346-b824-4530-b5c2-7529258bccf6",
+      "committedRevision": 6,
+      "panelRevision": 8,
+      "updatedAt": "2026-11-11T06:12:18.063Z",
+      "stepKey": "F1/plan/steps/A-01",
+      "previousSelection": "F3/plan/steps/A-01",
+      "readingBefore": 0,
+      "activation": [
+        "pointer click",
+        "keyboard Enter"
+      ],
+      "scope": "临时隔离授权项目；真实HTTP写入与持久回读；浏览器面板，非原生验证"
+    },
+    "motion": [
+      {
+        "name": "top miniature uses five-state metro circles and rails without glyphs while large stations retain their symbols",
+        "result": "passed"
+      },
+      {
+        "name": "continuous opening and closing expose intermediate geometry in one fixed host",
+        "result": "passed"
+      },
+      {
+        "name": "a single joined island outline has transparent exterior and no separate panel frame",
+        "result": "passed"
+      },
+      {
+        "name": "twenty complete cycles preserve compact text and miniature route anchors within one CSS pixel",
+        "result": "passed"
+      },
+      {
+        "name": "default hover auto-closes but crossing into its content cancels the pending close",
+        "result": "passed"
+      },
+      {
+        "name": "click pin holds open outside and unpin returns to the normal leave rule",
+        "result": "passed"
+      },
+      {
+        "name": "reading details holds preview and closing details while outside restores automatic collapse",
+        "result": "passed"
+      },
+      {
+        "name": "rapid enter leave and reversal continue from intermediate geometry without stale final callbacks",
+        "result": "passed"
+      },
+      {
+        "name": "reduced motion keeps the same end states without content translation",
+        "result": "passed"
+      },
+      {
+        "name": "small viewport and browser scale factors keep the fixed top anchor and reachable controls",
+        "result": "passed"
+      }
+    ],
+    "native": [
+      "embedded Tauri page",
+      "revision141 event notice agrees with real service",
+      "actual event click locates F and opens detail",
+      "first Escape closes detail; second Escape collapses",
+      "current Windows DPI120/125%"
+    ]
+  },
+  "limits": [
+    "Browser and native evidence are distinct",
+    "Five-state miniature check is UI-only GET override",
+    "Native hover non-activation awaits targeted user check; automatic input activates its target",
+    "Full DPI/cross-monitor/recovery/installation/six-route integrated matrix remains G",
+    "Growing diagnostic was copied to immutable native-frames-snapshot.jsonl; live append log excluded"
+  ],
+  "sourceIdentity": [
+    {
+      "path": "app/src/LightPanel.tsx",
+      "sha256": "67c742011727c1e9d3596a07b4db253289aa13f44997369ef4cea9687468cbc9",
+      "bytes": 25794
+    },
+    {
+      "path": "app/src/light-panel.css",
+      "sha256": "cfe66c9f91c4affbe287fccf0c91c4162c4e7369466081410a828a61862562af",
+      "bytes": 9428
+    },
+    {
+      "path": "app/tests/light-live.mjs",
+      "sha256": "0deea5ef4628b99f3b221c72aabba70495debaf0d857f50a3218256525f40f8d",
+      "bytes": 15381
+    },
+    {
+      "path": "app/src/useIslandMotion.ts",
+      "sha256": "9d56310eac1428a3cf3f2b0c11339ec49a364a0aec709c0c20ee6f1d6664daa4",
+      "bytes": 5850
+    },
+    {
+      "path": "app/src-tauri/src/lib.rs",
+      "sha256": "514692d55b25b8b051e03bdaa954b9fa7a9c1d312f6b90d55535b61e5775d698",
+      "bytes": 23037
+    },
+    {
+      "path": "app/src-tauri/src/panel_shape.rs",
+      "sha256": "d10748d3507e1f81c2ec73644fb7ed3424eb2935247cd323cf6ed39e8f946c40",
+      "bytes": 12779
+    },
+    {
+      "path": "app/dist/index.html",
+      "sha256": "090b624e83604376833b223264f4c58269ccb5ed4d8933f86a0915194d5a7875",
+      "bytes": 422
+    },
+    {
+      "path": "app/dist/assets/index-CLQDetdA.css",
+      "sha256": "396fe5fcd7fee4226ee5be6e940779b1c05c3b258b4f756d053bbb0c0922a645",
+      "bytes": 33054
+    },
+    {
+      "path": "app/dist/assets/index-DeZluRAy.js",
+      "sha256": "f67a384c6056a0cf9fd9f2d7a5103b1f745383a19a4c3259311ac7e434efaa76",
+      "bytes": 431025
+    },
+    {
+      "path": "app/src-tauri/target/debug/route-workbench-desktop.exe",
+      "sha256": "1335c1e8512002faf89e5c29c8fb5d1ccf9910d10fb4e291788383df697316a4",
+      "bytes": 15933952
+    }
+  ],
+  "evidence": [
+    {
+      "path": "app/test-results/manual-trial/F-closure/frontend-build.log",
+      "sha256": "b610e558fe08f82679bb85b95361d8862814da8166fc70f02308715fc78845b8",
+      "bytes": 445
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/live.log",
+      "sha256": "0450275641473a87474bf1d587af20e6fdea0bfc908ac6112a2dacb39830ab29",
+      "bytes": 878
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion.log",
+      "sha256": "15e8618fd72d97904ac31c5d4cb14f2d045f6756b986b04fb1f9d12688feb26a",
+      "bytes": 1100
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-build.log",
+      "sha256": "217df5f69a25440eb1dea28e1eda90d51cd3212c168763589823f18f84ee5673",
+      "bytes": 1081
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-esc-compact.png",
+      "sha256": "66b25488dcaa714356bc3cdd8e7fb89f2ba8a97dfea7888c6570d3f54c1be56f",
+      "bytes": 57833
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-esc-compact.txt",
+      "sha256": "ee7e9f3cfc5e74e1a9d14f40428d3a7a395b8686d29151bf489d27fac724929b",
+      "bytes": 66
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-esc-details-closed.png",
+      "sha256": "a0f5385dfdba225530e33c731a5516f1d134eabeeb40e0f611eb8411260f3d36",
+      "bytes": 53827
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-esc-details-closed.txt",
+      "sha256": "7369b03d93a9ef4ebc25a4d1fb67b6e75638a64d1f7c4d8083a7e475bd0345ec",
+      "bytes": 889
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-event-before.png",
+      "sha256": "9cccf1764a3fe5b3f5525e319f074256e56a970a15cfeb7cf15a5d9e55cf49cb",
+      "bytes": 52376
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-event-located-tree.txt",
+      "sha256": "35c6e510c3e3799fcc902131584713a10cd814dbf83cb7bea2944465cbf5e872",
+      "bytes": 6334
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-focus-before.jsonl",
+      "sha256": "7372ff8fb1e3db9b86e1072fbe286cfbb828ea94ea0ebf1b26ae6315cb2430bc",
+      "bytes": 64045
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/native-frames-snapshot.jsonl",
+      "sha256": "7a798bd51907c29eea96cf42d709dca6132001d45c6fef10dfc7dee1e780079a",
+      "bytes": 14075
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/live/live-browser.png",
+      "sha256": "2676d2ee2b1b5a2eacb5e7fd66908c3ae487587929d3d2ce097425dd012bf2ec",
+      "bytes": 52305
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/live/live-completed-located.png",
+      "sha256": "2676d2ee2b1b5a2eacb5e7fd66908c3ae487587929d3d2ce097425dd012bf2ec",
+      "bytes": 52305
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/live/live-completed-notice.png",
+      "sha256": "a56500663e5e2321d158723fa46dedde765d20f9bdfb9538922fbc000a6b58e8",
+      "bytes": 50784
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/live/live-ui-result.json",
+      "sha256": "0f73cda1b30f958cef3fbe1e0632c728276071a0ed190acfe23e9ecfabc05e5c",
+      "bytes": 175569
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/browser-scale-100-390.png",
+      "sha256": "5993ca358c841db552855e730620f44cde96a157a1c81cc2615cf91d3dac94bf",
+      "bytes": 26961
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/browser-scale-125-1280.png",
+      "sha256": "6f2f0815c939185ab68b4507734337d6c8f735ebf6214be649d4463c912b3150",
+      "bytes": 42763
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/browser-scale-150-1280.png",
+      "sha256": "6a4391999d35e7759ae15545a7a0fe58710c5998252fd8719e47232cda003918",
+      "bytes": 54069
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/browser-scale-200-1280.png",
+      "sha256": "dec861a62e6cdab4bd9e4e0b68eb56ca0c09cf5abc5d64f9f8f56f4ba9f4bd76",
+      "bytes": 103985
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/island-motion-result.json",
+      "sha256": "9d4a20f09937d99d5daa02ccea9353285869d48008fb6db523ba4bfcb3bfaea5",
+      "bytes": 974197
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/mini-five-states-compact.png",
+      "sha256": "1b96c06685c3c59e8a3c4208d80b6241cf1a210b2f277f0eb392d6e89c0dd22a",
+      "bytes": 8373
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/mini-five-states-expanded.png",
+      "sha256": "3978a80618264b521464856f25ec6f26b70bebf739cd9d2d0b5836ea97fe9feb",
+      "bytes": 34712
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/motion-closing.png",
+      "sha256": "5979a6c0b546173f4117252614d03d0ba14c3bbe048b9bcb0802c6dbd5c8f370",
+      "bytes": 28972
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/motion-compact.png",
+      "sha256": "8496daaadd6cffccff58edb26b13c2ba19482f43acb561a4c6404d069d4b0a7e",
+      "bytes": 7537
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/motion-expanded.png",
+      "sha256": "218b1821b5587f9b97b7be3a05f8436b4d4cc5404bce7972968878ef23f79ea5",
+      "bytes": 30506
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/motion-opening.png",
+      "sha256": "a3758b712bacd6c98d40e4c5ff92ffe4cf8cf34252768592c3a61dce056b459d",
+      "bytes": 7658
+    },
+    {
+      "path": "app/test-results/manual-trial/F-closure/motion/motion-reduced-compact.png",
+      "sha256": "8496daaadd6cffccff58edb26b13c2ba19482f43acb561a4c6404d069d4b0a7e",
+      "bytes": 7537
+    }
+  ]
+}
