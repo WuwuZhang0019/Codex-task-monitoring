@@ -292,7 +292,8 @@ async function createOwnedServer(options) {
       if (res.headersSent || res.destroyed) return;
       const status = error instanceof HttpError ? error.status : 500;
       if (status === 500) console.error('Local workbench request failed:', error.message);
-      if (status === 413) { res.setHeader('Connection', 'close'); req.resume(); }
+      // 日期 2026-11-11：排空被拒绝的请求；提前 close 会在并发上传尚未结束时重置连接，丢失 JSON 413。
+      if (status === 413) req.resume();
       sendJSON(res,status, { error: status === 500 ? '本地服务错误，请检查服务日志；数据未被清空' : error.message });
     }
   });

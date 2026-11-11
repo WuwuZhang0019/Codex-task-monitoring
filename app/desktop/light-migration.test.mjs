@@ -1,0 +1,42 @@
+// 日期：2026-11-11。新版轻量数据全目录迁移、备份和回滚组合验收；仅使用独立样例。
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, readFile, rm, cp } from 'node:fs/promises';
+import path from 'node:path';
+import os from 'node:os';
+import { createPersistence } from '../server/persistence.mjs';
+import { createRequests } from '../server/business-requests.mjs';
+import { createLightService } from '../server/light-service.mjs';
+import { createLightOutbox } from '../server/light-outbox.mjs';
+import { prepareLightPlan } from '../server/light-import.mjs';
+import { migrate, recoverMigration } from './migrate.mjs';
+
+test('light six-route snapshot, history, preferences and unsent events survive interrupted migration and full backup restore', async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'light-delivery-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = path.join(root, 'source'), target = path.join(root, 'target');
+  const persistence = await createPersistence(source);
+  const service = createLightService(persistence, createRequests(persistence), { authorize: () => true });
+  const original = new URL('../../docs/03_轻量路线工作台/03_测试样例/01_模拟二十步骤与六分支工作树_测试文档_2026-11-10.md', import.meta.url);
+  const snapshot = prepareLightPlan({ text: await readFile(original, 'utf8'), sourcePath: original.pathname, version: 'G-isolated', projectKey: 'G/project', planKey: 'G/plan', name: 'G migration fixture', date: '2026-11-11', context: { sessionGroup: 'G', threadId: null, hostId: null, folderId: null, worktreeOrdinal: 1, worktreePath: root, branch: 'fixture', head: null, trust: 'declared' } });
+  const registration = { eventId: 'G-register', expectedRevision: 0, snapshot };
+  const result = await service.register('G-fixture', registration);
+  const current = service.read('G-fixture', result.projectId);
+  assert.equal(current.steps.length, 20); assert.equal(current.routes.length, 6);
+  await createLightOutbox(persistence).enqueue('G-fixture', 'update', { eventId: 'G-unsent', projectId: result.projectId }, { scope: 'not yet submitted' });
+  await service.savePreferences('G-fixture', { schemaVersion: 'light-1.0', projectId: result.projectId, planId: result.planIds[0], expectedRevision: current.revision, eventId: 'G-preferences', source: current.plans[0].source, occurredAt: new Date().toISOString(), reason: 'G migration preference', uiPreferences: { ...current.uiPreferences, selectedStepKey: current.steps[0].key, scrollByProject: { [current.projects[0].key]: { x: 440, y: 20 } } } });
+  const before = await readFile(path.join(source, 'aggregate.json'));
+  await assert.rejects(migrate(source, target, { failAfterCopy: true }), /Injected/);
+  await recoverMigration(target);
+  const moved = await migrate(source, target);
+  assert.equal(moved.sourceUnchanged, true);
+  assert.deepEqual(await readFile(path.join(source, 'aggregate.json')), before);
+  assert.deepEqual(await readFile(path.join(target, 'aggregate.json')), before);
+  const restored = path.join(root, 'restore');
+  await cp(moved.backup, restored, { recursive: true });
+  const recovered = await createPersistence(restored);
+  for (const key of ['light', 'lightOutbox', 'requests', 'audit']) assert.deepEqual(recovered.read(key), persistence.read(key), key);
+  const reopened = createLightService(recovered, createRequests(recovered), { authorize: () => true });
+  assert.deepEqual(await reopened.register('G-fixture', registration), result, 'original event replay survives restore');
+  assert.equal(createLightOutbox(recovered).list('G-fixture')[0].sync, 'pendingSync');
+});

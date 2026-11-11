@@ -43,6 +43,8 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
   const [candidates, setCandidates] = useState<string[]>([]);
   const body = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLElement>(null);
+  // 日期 2026-11-11：仅挂载或切换阅读范围时恢复位置，避免更新渲染覆盖显式定位。
+  const restoredScroll = useRef(new WeakMap<HTMLDivElement, string>());
   const viewKey = preferences.focus.at(-1) || 'all';
   const selected = snapshot.steps.find(step => step.key === preferences.selected);
   const compactRoute = snapshot.routes.find(route => route.stepKeys.includes(preferences.selected)) || snapshot.routes.find(route => route.stepKeys.some(key => snapshot.steps.some(step => step.key === key && step.status === 'running'))) || snapshot.routes[0];
@@ -249,7 +251,7 @@ export function LightPanel({ live = false, floating = false }: { live?: boolean;
           const parentRoutes = focused ? [focused] : roots;
           return <article className="lp-project" key={project.key}>
             <header><button aria-expanded={!hidden(project.key)} onClick={() => toggle(project.key)}>{hidden(project.key) ? '▸' : '▾'} {project.name}</button><small>{count(project.key, 'running')} 执行中 · {count(project.key, 'blocked')} 阻塞 · {openCount(project.key)} 待处理事项</small></header>
-            {!hidden(project.key) && <div className="lp-project-scroll" ref={element => { if (element) element.scrollLeft = preferences.scroll[`${viewKey}/${project.key}`] || 0; }} onScroll={event => { const x = event.currentTarget.scrollLeft; setPreferences(value => ({ ...value, scroll: { ...value.scroll, [`${viewKey}/${project.key}`]: x } })); }}>
+            {!hidden(project.key) && <div className="lp-project-scroll" ref={element => { if (element && restoredScroll.current.get(element) !== viewKey) { element.scrollLeft = preferences.scroll[`${viewKey}/${project.key}`] || 0; restoredScroll.current.set(element, viewKey); } }} onScroll={event => { const x = event.currentTarget.scrollLeft; setPreferences(value => ({ ...value, scroll: { ...value.scroll, [`${viewKey}/${project.key}`]: x } })); }}>
               {parentRoutes.map(route => {
                 const branches = children(route);
                 const active = branches.filter(item => !ended(item));
