@@ -1,0 +1,609 @@
+{
+  "date": "2026-11-11",
+  "resumeRequest": {
+    "schemaVersion": "light-1.0",
+    "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+    "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+    "expectedRevision": 139,
+    "eventId": "light-workbench-20261110/F-EX01/closure/resume",
+    "source": {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\00_执行入口\\00_新路线实施总纲与接口决定_2026-11-10.md",
+      "version": "364adc0b20c7066c4bb7247707b9ed07223f433a",
+      "sha256": "4da43b79373faa8baeefe393fcfab080df4b5675d5444c3ebdbc6d9c4ebc4c6d",
+      "locator": "完整步骤及依赖表"
+    },
+    "occurredAt": "2026-11-11T06:02:57.650Z",
+    "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+    "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+    "bindingId": "e7c235f5-e70a-4220-a96d-43ba3dc99a06",
+    "bindingRevision": 2,
+    "targetStatus": "running",
+    "reason": "用户已明确回复原生面板整体符合预期；重读C/E、责任绑定和当前版本，解除R02等待并沿用原执行核对F全部出口后收尾",
+    "evidence": [],
+    "checks": [],
+    "blocker": {
+      "blockerId": "F-EX01/R02/user-visual-confirmation",
+      "reason": "用户要求缩略路线使用圆点而非勾号，R02修复需实际复看；F最终观感尚未签署通过",
+      "waitingFor": [
+        "用户复看原生缩略地铁圆点及现有开合交互，确认符合预期或给出剩余问题"
+      ],
+      "releaseConditions": [
+        "取得用户反馈；重读C/E、当前绑定与版本，沿用原executionId显式解除等待并成功恢复；有具体问题继续F原范围修复"
+      ],
+      "resolved": true
+    },
+    "reopen": null,
+    "successorImpact": null
+  },
+  "resumeReceipt": {
+    "schemaVersion": "light-1.0",
+    "requestId": "addcefc7-6d44-4f93-b784-f846769d9318",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "revision": 140,
+      "receipt": {
+        "schemaVersion": "light-1.0",
+        "eventId": "light-workbench-20261110/F-EX01/closure/resume",
+        "requestId": "addcefc7-6d44-4f93-b784-f846769d9318",
+        "status": "committed",
+        "committedRevision": 140,
+        "receivedAt": "2026-11-11T06:03:01.054Z",
+        "resultRef": "light/events/light-workbench-20261110/F-EX01/closure/resume",
+        "errorCode": null,
+        "recovery": "读取已提交快照或查询原事件"
+      },
+      "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+      "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+      "requestId": "addcefc7-6d44-4f93-b784-f846769d9318"
+    }
+  },
+  "progressRequest": {
+    "schemaVersion": "light-1.0",
+    "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+    "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+    "expectedRevision": 140,
+    "eventId": "light-workbench-20261110/F-EX01/closure/progress-acceptance",
+    "source": {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\00_执行入口\\00_新路线实施总纲与接口决定_2026-11-10.md",
+      "version": "364adc0b20c7066c4bb7247707b9ed07223f433a",
+      "sha256": "4da43b79373faa8baeefe393fcfab080df4b5675d5444c3ebdbc6d9c4ebc4c6d",
+      "locator": "完整步骤及依赖表"
+    },
+    "occurredAt": "2026-11-11T06:14:44.208Z",
+    "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+    "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+    "bindingId": "e7c235f5-e70a-4220-a96d-43ba3dc99a06",
+    "bindingRevision": 2,
+    "targetStatus": "running",
+    "reason": "用户整体观感已确认；完成事件点击定位已补齐，隔离HTTP闭环9组及动效10组、嵌入式构建通过，原生焦点收尾核验中",
+    "evidence": [],
+    "checks": [],
+    "blocker": null,
+    "reopen": null,
+    "successorImpact": null
+  },
+  "progressReceipt": {
+    "schemaVersion": "light-1.0",
+    "requestId": "b51fae84-922f-4786-ba9c-f28cdec52131",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "revision": 141,
+      "receipt": {
+        "schemaVersion": "light-1.0",
+        "eventId": "light-workbench-20261110/F-EX01/closure/progress-acceptance",
+        "requestId": "b51fae84-922f-4786-ba9c-f28cdec52131",
+        "status": "committed",
+        "committedRevision": 141,
+        "receivedAt": "2026-11-11T06:14:53.230Z",
+        "resultRef": "light/events/light-workbench-20261110/F-EX01/closure/progress-acceptance",
+        "errorCode": null,
+        "recovery": "读取已提交快照或查询原事件"
+      },
+      "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+      "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+      "requestId": "b51fae84-922f-4786-ba9c-f28cdec52131"
+    }
+  },
+  "completedRequest": {
+    "schemaVersion": "light-1.0",
+    "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+    "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+    "expectedRevision": 141,
+    "eventId": "light-workbench-20261110/F-EX01/completed",
+    "source": {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\00_执行入口\\00_新路线实施总纲与接口决定_2026-11-10.md",
+      "version": "364adc0b20c7066c4bb7247707b9ed07223f433a",
+      "sha256": "4da43b79373faa8baeefe393fcfab080df4b5675d5444c3ebdbc6d9c4ebc4c6d",
+      "locator": "完整步骤及依赖表"
+    },
+    "occurredAt": "2026-11-11T06:18:45.164Z",
+    "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+    "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+    "bindingId": "e7c235f5-e70a-4220-a96d-43ba3dc99a06",
+    "bindingRevision": 2,
+    "targetStatus": "completed",
+    "reason": "F必要出口已逐项核验；用户确认整体观感符合预期、悬停输入焦点保持及点击后Esc正常；完成事件定位已补齐，当前原生与定向检查通过，完成F但不启动G",
+    "evidence": [
+      {
+        "evidenceId": "F-EX01/final-exit-proof",
+        "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\F_用户确认与出口核验_2026-11-11.json",
+        "method": "本聊天真实MCP/持久回读/嵌入式原生验证、分环境定向检查与用户原生确认；SHA256 42a66f1828a885e6241c5311fabc721019c00081a46b4c4e7ad40e5be840af02",
+        "deliveryVersion": "F-closure-6aaee581569ca8303208626ba0461fd05c0c691b",
+        "result": "passed"
+      }
+    ],
+    "checks": [
+      {
+        "conditionId": "light-workbench-20261110/A-06/exit",
+        "text": "真实上报、回读和面板一致，视觉及焦点检查通过",
+        "required": true,
+        "result": "passed",
+        "evidenceIds": [
+          "F-EX01/final-exit-proof"
+        ]
+      }
+    ],
+    "blocker": null,
+    "reopen": null,
+    "successorImpact": null
+  },
+  "completedReceipt": {
+    "schemaVersion": "light-1.0",
+    "requestId": "cb60a9a9-1033-477d-9075-6753b075ffb3",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "revision": 142,
+      "receipt": {
+        "schemaVersion": "light-1.0",
+        "eventId": "light-workbench-20261110/F-EX01/completed",
+        "requestId": "cb60a9a9-1033-477d-9075-6753b075ffb3",
+        "status": "committed",
+        "committedRevision": 142,
+        "receivedAt": "2026-11-11T06:18:50.330Z",
+        "resultRef": "light/events/light-workbench-20261110/F-EX01/completed",
+        "errorCode": null,
+        "recovery": "读取已提交快照或查询原事件"
+      },
+      "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+      "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+      "requestId": "cb60a9a9-1033-477d-9075-6753b075ffb3"
+    }
+  },
+  "completedQuery": {
+    "schemaVersion": "light-1.0",
+    "requestId": "cb60a9a9-1033-477d-9075-6753b075ffb3",
+    "status": "accepted",
+    "supportedCapabilities": [
+      "workbench_get_project",
+      "workbench_register_plan",
+      "workbench_revise_plan",
+      "workbench_reserve_execution",
+      "workbench_update_step_status",
+      "workbench_record_supplement",
+      "workbench_bind_context",
+      "workbench_query_event",
+      "workbench_complete_plan"
+    ],
+    "result": {
+      "state": "committed",
+      "requestId": "cb60a9a9-1033-477d-9075-6753b075ffb3",
+      "semanticHash": "ee22e3ba55b4a56cfb1cfcbb3e533d270b4c6dc5a1b6d43a06c6f9d022f96aa3",
+      "result": {
+        "revision": 142,
+        "receipt": {
+          "schemaVersion": "light-1.0",
+          "eventId": "light-workbench-20261110/F-EX01/completed",
+          "requestId": "cb60a9a9-1033-477d-9075-6753b075ffb3",
+          "status": "committed",
+          "committedRevision": 142,
+          "receivedAt": "2026-11-11T06:18:50.330Z",
+          "resultRef": "light/events/light-workbench-20261110/F-EX01/completed",
+          "errorCode": null,
+          "recovery": "读取已提交快照或查询原事件"
+        },
+        "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+        "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+        "requestId": "cb60a9a9-1033-477d-9075-6753b075ffb3"
+      }
+    }
+  },
+  "readback": {
+    "revision": 142,
+    "stages": [
+      {
+        "key": "light-workbench-20261110/A-01",
+        "id": "8b5e87dd-6b00-4efe-8b3b-58a99d881b0e",
+        "projectKey": "light-workbench-20261110/project",
+        "planKey": "light-workbench-20261110",
+        "parentKey": null,
+        "code": "A",
+        "originalCode": "A",
+        "sourceLocator": "实施路线与出口/A",
+        "title": "复用核对与契约",
+        "order": 1,
+        "required": true,
+        "dependsOn": [],
+        "status": "completed",
+        "acceptance": "passed",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "light-workbench-20261110/A-01/exit",
+            "text": "原文步骤映射、事件、状态、绑定及存储契约可验证，复用清单有实际证据",
+            "required": true,
+            "result": "passed",
+            "evidenceIds": [
+              "light-workbench-20261110/A-01/formal-proof"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "evidenceId": "light-workbench-20261110/A-01/formal-proof",
+            "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\A_复用核对与契约回执_2026-11-10.md",
+            "method": "核对原阶段回执及适用回归后同步，SHA256 2e406e6d5e2323d772b6bacbf061f629e65c398fea2cc762816bd13847503a95",
+            "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+            "result": "passed"
+          }
+        ],
+        "blockers": [],
+        "executionKey": "light-workbench-20261110/executions/c2c92926-2f49-4619-801c-bb7ce86595a1",
+        "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+        "updatedAt": "2026-11-10T16:35:16.130Z"
+      },
+      {
+        "key": "light-workbench-20261110/A-02",
+        "id": "97c2f703-1f89-4eac-8f4d-ce01630d4225",
+        "projectKey": "light-workbench-20261110/project",
+        "planKey": "light-workbench-20261110",
+        "parentKey": null,
+        "code": "B",
+        "originalCode": "B",
+        "sourceLocator": "实施路线与出口/B",
+        "title": "路线与存储",
+        "order": 2,
+        "required": true,
+        "dependsOn": [
+          "light-workbench-20261110/A-01"
+        ],
+        "status": "completed",
+        "acceptance": "passed",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "light-workbench-20261110/A-02/exit",
+            "text": "二十步骤六路线可提交、回读和重启恢复，前置门禁正确",
+            "required": true,
+            "result": "passed",
+            "evidenceIds": [
+              "light-workbench-20261110/A-02/formal-proof"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "evidenceId": "light-workbench-20261110/A-02/formal-proof",
+            "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\B_路线与存储回执_2026-11-10.md",
+            "method": "核对原阶段回执及适用回归后同步，SHA256 c5c770f3b6d89754945c2a489b9fad83395fb936ca29f70950f6ac10b8d8d344",
+            "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+            "result": "passed"
+          }
+        ],
+        "blockers": [],
+        "executionKey": "light-workbench-20261110/executions/6b1d0de8-afa8-4fc9-99a4-bf162d4ec99f",
+        "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+        "updatedAt": "2026-11-10T16:35:24.070Z"
+      },
+      {
+        "key": "light-workbench-20261110/A-03",
+        "id": "a276ed1e-a4b3-4ab8-a3c1-1c709833005f",
+        "projectKey": "light-workbench-20261110/project",
+        "planKey": "light-workbench-20261110",
+        "parentKey": null,
+        "code": "C",
+        "originalCode": "C",
+        "sourceLocator": "实施路线与出口/C",
+        "title": "UI 模拟开发",
+        "order": 3,
+        "required": true,
+        "dependsOn": [
+          "light-workbench-20261110/A-01"
+        ],
+        "status": "completed",
+        "acceptance": "passed",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "light-workbench-20261110/A-03/exit",
+            "text": "原型对照、长路线及多分支交互检查通过",
+            "required": true,
+            "result": "passed",
+            "evidenceIds": [
+              "light-workbench-20261110/A-03/formal-proof"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "evidenceId": "light-workbench-20261110/A-03/formal-proof",
+            "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\C_UI模拟开发回执_2026-11-10.md",
+            "method": "核对原阶段回执及适用回归后同步，SHA256 6fc30c0384ac6aff6cd02dda98a8464463819a7654554a5a8372c2f816b47114",
+            "deliveryVersion": "D-formal-364adc0b20c7066c4bb7247707b9ed07223f433a",
+            "result": "passed"
+          }
+        ],
+        "blockers": [],
+        "executionKey": "light-workbench-20261110/executions/a6af252d-d76e-4386-b656-4cd1e3b0f0ad",
+        "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+        "updatedAt": "2026-11-10T16:35:32.502Z"
+      },
+      {
+        "key": "light-workbench-20261110/A-04",
+        "id": "3a1d4c35-e184-4479-a06c-2bbe91c4da0b",
+        "projectKey": "light-workbench-20261110/project",
+        "planKey": "light-workbench-20261110",
+        "parentKey": null,
+        "code": "D",
+        "originalCode": "D",
+        "sourceLocator": "实施路线与出口/D",
+        "title": "MCP 真实接入",
+        "order": 4,
+        "required": true,
+        "dependsOn": [
+          "light-workbench-20261110/A-02"
+        ],
+        "status": "completed",
+        "acceptance": "passed",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "light-workbench-20261110/A-04/exit",
+            "text": "真实聊天可开始、更新、结束，重复及冲突有正确结果",
+            "required": true,
+            "result": "passed",
+            "evidenceIds": [
+              "D-formal-closure-proof"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "evidenceId": "D-formal-closure-proof",
+            "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\D_正式桌面验收清单_2026-11-11.json",
+            "method": "正式桌面MCP直连、135项回归、6项UI、2项Rust及资源重启回读核验",
+            "deliveryVersion": "D-desktop-3663c54",
+            "result": "passed"
+          }
+        ],
+        "blockers": [],
+        "executionKey": "light-workbench-20261110/executions/22902687-2544-4a9c-83ba-cc89f27a6cba",
+        "bindingKey": "light-workbench-20261110/bindings/36361c93-8c3f-4212-8137-4b2dbba43ba1",
+        "updatedAt": "2026-11-10T16:54:10.073Z"
+      },
+      {
+        "key": "light-workbench-20261110/A-05",
+        "id": "bfdbf0e2-115c-4322-bd26-e1f8675133e1",
+        "projectKey": "light-workbench-20261110/project",
+        "planKey": "light-workbench-20261110",
+        "parentKey": null,
+        "code": "E",
+        "originalCode": "E",
+        "sourceLocator": "实施路线与出口/E",
+        "title": "Skill 与会话关联",
+        "order": 5,
+        "required": true,
+        "dependsOn": [
+          "light-workbench-20261110/A-04"
+        ],
+        "status": "completed",
+        "acceptance": "passed",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "light-workbench-20261110/A-05/exit",
+            "text": "单会话细分任务、多工作树及续接流程可运行",
+            "required": true,
+            "result": "passed",
+            "evidenceIds": [
+              "E/proof"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "evidenceId": "E/proof",
+            "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\E_验收证据索引_2026-11-11.json",
+            "method": "本次实际操作、实现或定向检查，详细证据见交付回执",
+            "deliveryVersion": "E-EX01-20261111",
+            "result": "passed"
+          }
+        ],
+        "blockers": [
+          {
+            "blockerId": "revision:light-workbench-20261110/E-EX01/register-E-details",
+            "reason": "按授权E范围登记七个必要细分；保留七总阶段、原身份依赖及验收，不降低既定出口",
+            "waitingFor": [
+              "修订后复核"
+            ],
+            "releaseConditions": [
+              "重新满足验收"
+            ],
+            "resolved": true
+          },
+          {
+            "blockerId": "E-EX01/new-chat-approval",
+            "reason": "宿主创建聊天要求用户明确授权，模块06要求真实新聊天加载与流程证据",
+            "waitingFor": [
+              "用户明确授权创建本地E验收聊天并发送验收指令"
+            ],
+            "releaseConditions": [
+              "取得用户授权后重读D前置及当前绑定，沿用原executionId取得恢复回执"
+            ],
+            "resolved": true
+          }
+        ],
+        "executionKey": "light-workbench-20261110/executions/96c9ec78-f71f-46ce-86ae-a9f9410b0fd2",
+        "bindingKey": "light-workbench-20261110/bindings/f145139e-315f-40df-966a-378ea958d64f",
+        "updatedAt": "2026-11-11T03:03:56.730Z"
+      },
+      {
+        "key": "light-workbench-20261110/A-06",
+        "id": "53a247e5-d289-4fe0-850a-e43890c5a200",
+        "projectKey": "light-workbench-20261110/project",
+        "planKey": "light-workbench-20261110",
+        "parentKey": null,
+        "code": "F",
+        "originalCode": "F",
+        "sourceLocator": "实施路线与出口/F",
+        "title": "真实面板接线",
+        "order": 6,
+        "required": true,
+        "dependsOn": [
+          "light-workbench-20261110/A-03",
+          "light-workbench-20261110/A-05"
+        ],
+        "status": "completed",
+        "acceptance": "passed",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "light-workbench-20261110/A-06/exit",
+            "text": "真实上报、回读和面板一致，视觉及焦点检查通过",
+            "required": true,
+            "result": "passed",
+            "evidenceIds": [
+              "F-EX01/final-exit-proof"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "evidenceId": "F-EX01/final-exit-proof",
+            "location": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\F_用户确认与出口核验_2026-11-11.json",
+            "method": "本聊天真实MCP/持久回读/嵌入式原生验证、分环境定向检查与用户原生确认；SHA256 42a66f1828a885e6241c5311fabc721019c00081a46b4c4e7ad40e5be840af02",
+            "deliveryVersion": "F-closure-6aaee581569ca8303208626ba0461fd05c0c691b",
+            "result": "passed"
+          }
+        ],
+        "blockers": [
+          {
+            "blockerId": "F-EX01/user-visual-confirmation",
+            "reason": "原方案要求取得用户实际观感确认",
+            "waitingFor": [
+              "用户确认已打开原生面板的视觉与交互符合预期，或提供具体调整项"
+            ],
+            "releaseConditions": [
+              "取得明确用户确认；如有调整先修复并定向复验；重读C/E及绑定，沿用原executionId成功恢复"
+            ],
+            "resolved": true
+          },
+          {
+            "blockerId": "F-EX01/R01/user-visual-confirmation",
+            "reason": "用户首次反馈四项视觉和交互不满足，R01修复后需重新实际确认",
+            "waitingFor": [
+              "用户复看连续动效、收起贴顶、自动收起和融合轮廓后确认或指出剩余问题"
+            ],
+            "releaseConditions": [
+              "取得用户反馈；重读C/E与当前绑定，沿用原executionId恢复；如有具体调整继续F原范围修复"
+            ],
+            "resolved": true
+          },
+          {
+            "blockerId": "F-EX01/R02/user-visual-confirmation",
+            "reason": "用户要求缩略路线使用圆点而非勾号，R02修复需实际复看；F最终观感尚未签署通过",
+            "waitingFor": [
+              "用户复看原生缩略地铁圆点及现有开合交互，确认符合预期或给出剩余问题"
+            ],
+            "releaseConditions": [
+              "取得用户反馈；重读C/E、当前绑定与版本，沿用原executionId显式解除等待并成功恢复；有具体问题继续F原范围修复"
+            ],
+            "resolved": true
+          }
+        ],
+        "executionKey": "light-workbench-20261110/executions/7c687ceb-27a8-4889-b643-d044252aa81d",
+        "bindingKey": "light-workbench-20261110/bindings/d0010717-7fc7-404e-9386-78e4eebef8d4",
+        "updatedAt": "2026-11-11T06:18:50.330Z"
+      },
+      {
+        "key": "light-workbench-20261110/A-07",
+        "id": "f144ff56-6282-4e73-b01a-3459cc92f53f",
+        "projectKey": "light-workbench-20261110/project",
+        "planKey": "light-workbench-20261110",
+        "parentKey": null,
+        "code": "G",
+        "originalCode": "G",
+        "sourceLocator": "实施路线与出口/G",
+        "title": "恢复与交付验收",
+        "order": 7,
+        "required": true,
+        "dependsOn": [
+          "light-workbench-20261110/A-06"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "light-workbench-20261110/A-07/exit",
+            "text": "七模块必需场景有证据，全部必要步骤和验收满足",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-11T00:00:00+08:00"
+      }
+    ],
+    "execution": {
+      "key": "light-workbench-20261110/executions/7c687ceb-27a8-4889-b643-d044252aa81d",
+      "id": "7c687ceb-27a8-4889-b643-d044252aa81d",
+      "projectKey": "light-workbench-20261110/project",
+      "planKey": "light-workbench-20261110",
+      "stepKeys": [
+        "light-workbench-20261110/A-06"
+      ],
+      "bindingKey": "light-workbench-20261110/bindings/d0010717-7fc7-404e-9386-78e4eebef8d4",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-11T03:36:37.813Z",
+      "endedAt": "2026-11-11T06:18:50.330Z",
+      "handoffConclusion": null
+    }
+  }
+}

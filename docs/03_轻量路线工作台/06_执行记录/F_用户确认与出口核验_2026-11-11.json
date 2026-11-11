@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-11",
+  "scope": "F 真实面板接线最终出口核验",
+  "status": "必要出口核验通过，待提交正式完成事件",
+  "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+  "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+  "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+  "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+  "bindingId": "e7c235f5-e70a-4220-a96d-43ba3dc99a06",
+  "bindingRevision": 2,
+  "readRevision": 141,
+  "implementationCommit": "6aaee581569ca8303208626ba0461fd05c0c691b",
+  "userConfirmations": [
+    {
+      "requestId": "call_fb7784332bb946f2a27aa29f84827e28",
+      "question": "新版原生面板已打开：缩略路线已改为地铁式圆点和连线；连同此前的连续动效、自动收起和融合效果，整体是否符合预期？",
+      "answer": "整体符合预期",
+      "verifiedVersion": "714c806",
+      "source": "本聊天真实用户异步答复，2026-11-11"
+    },
+    {
+      "requestId": "call_315358cb6c6842e88d14428c0319c244",
+      "question": "请补做一次原生焦点核验：在其他窗口输入文字，不点击面板，只把鼠标移入紧凑条再移开，随后继续输入；再明确点击面板，试用 Esc 退出详情并收起。是否均正常？自动操作会主动激活窗口，无法据此证明悬停不抢焦点。",
+      "answer": "输入焦点保持，点击后 Esc 正常",
+      "source": "本聊天真实用户针对性原生操作答复，2026-11-11"
+    }
+  ],
+  "checks": [
+    {
+      "code": "F-01",
+      "result": "passed",
+      "method": "真实C/E completed/passed；绑定confirmed/2、原执行仍有效；closure/resume revision140并成功回读running",
+      "evidence": "F_开始门禁回执_2026-11-11.md、最终真实服务读取"
+    },
+    {
+      "code": "F-02",
+      "result": "passed",
+      "method": "MCP与原生页面同一持久快照；真实读取不降级模拟；模拟身份入口独立",
+      "evidence": "F_实现与验证_2026-11-11.md，F_R03_证据索引_2026-11-11.json"
+    },
+    {
+      "code": "F-03",
+      "result": "passed",
+      "method": "正式MCP进展revision141与嵌入式原生面板同版本原因；隔离授权HTTP闭环9/9，覆盖completed/回放/冲突/丢响应/断线",
+      "evidence": "app/test-results/manual-trial/F-closure/live/live-ui-result.json、native-event-located-tree.txt"
+    },
+    {
+      "code": "F-04",
+      "result": "passed",
+      "method": "原文指纹、验收/进展/证据/绑定与明确跳转失败降级；真实闭环与当前原生详情核对",
+      "evidence": "F_实现与验证_2026-11-11.md、F_R03_证据索引_2026-11-11.json"
+    },
+    {
+      "code": "F-05",
+      "result": "passed",
+      "method": "三项目/六路线/三十站/八分支与深层事项；选中、滚动、折叠、过滤和阅读偏好保持；完成事件显式点击及Enter定位",
+      "evidence": "app/test-results/manual-trial/F-closure/live/live-ui-result.json，原C/R01复杂场景证据按版本保留"
+    },
+    {
+      "code": "F-06",
+      "result": "passed",
+      "method": "125%真实系统DPI120，600×38/960×640设计基线及工作区约束；原生置顶、连续开合、自动收起、融合轮廓、圆点及键盘Esc；整体观感和悬停输入焦点均获用户实际确认",
+      "evidence": "F_R01_证据索引_2026-11-11.json、F_R02_证据索引_2026-11-11.json、F_R03_证据索引_2026-11-11.json、本文件userConfirmations"
+    },
+    {
+      "code": "F-07",
+      "result": "passed",
+      "method": "当前HTTP/UI9组、动效10组及嵌入式构建通过；R03当前38个指纹匹配；源实现已提交；正式完成回执及后继前置将按服务真实返回记录",
+      "evidence": "6aaee58、F_R03_证据索引_2026-11-11.json"
+    }
+  ],
+  "limits": [
+    "用户确认不代替未实测的其他系统DPI/跨屏/多应用完整环境矩阵，留G综合复核",
+    "浏览器、UI响应副本、受控invoke、真实HTTP与原生证据各按环境解释",
+    "历史索引源码/构建漂移和被覆盖的初次live结果已列明；旧索引不改写",
+    "E单次并发2MB ECONNRESET观察、恢复/安装/迁移/六路线组合留G；未影响F必要出口",
+    "G尚无执行/绑定身份，本次不启动或派发G"
+  ],
+  "verification": "本聊天实际核验与真实用户答复；不伪称服务授予独立可信验证资格"
+}

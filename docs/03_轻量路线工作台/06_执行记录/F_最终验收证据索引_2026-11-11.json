@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-11",
+  "status": "F completed/passed/synced",
+  "revision": 142,
+  "progress": "6/7",
+  "implementationCommit": "6aaee581569ca8303208626ba0461fd05c0c691b",
+  "formal": {
+    "eventId": "light-workbench-20261110/F-EX01/completed",
+    "requestId": "cb60a9a9-1033-477d-9075-6753b075ffb3",
+    "committedRevision": 142,
+    "query": "committed",
+    "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+    "outcome": "completedScope",
+    "endedAt": "2026-11-11T06:18:50.330Z",
+    "localHandoffConclusion": "D",
+    "serviceHandoffConclusion": null
+  },
+  "checks": {
+    "liveHttpUi": 9,
+    "motion": 10,
+    "embeddedBuild": "passed",
+    "R03CurrentFingerprints": 38,
+    "userOverallVisual": "整体符合预期",
+    "userNativeFocusAndEsc": "输入焦点保持，点击后 Esc 正常",
+    "nativeEventAndEsc": "observed at revision141",
+    "finalNative142": "not observed: Computer Use stopped by physical Escape",
+    "G": "business dependencies passed; pending, no binding/execution/start, not dispatched"
+  },
+  "limits": [
+    "Other system DPI/cross-monitor/full multi-application matrices remain G",
+    "Historical source/build drift is preserved; old overwritten initial live result excluded from current verification",
+    "Growing native diagnostic is not authoritative by mutable path; R03 immutable snapshot is indexed",
+    "E single concurrent 2MB ECONNRESET observation remains G",
+    "No Computer Use call after physical Escape stop"
+  ],
+  "evidence": [
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/F_用户确认与出口核验_2026-11-11.json",
+      "sha256": "42a66f1828a885e6241c5311fabc721019c00081a46b4c4e7ad40e5be840af02",
+      "bytes": 4417
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/F_结束事件回读_2026-11-11.json",
+      "sha256": "b2a1060154c6fd38fea21cad3046854eb6d7afe86ea67d1f4061c28b164765b4",
+      "bytes": 24918
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/F_完成回执_2026-11-11.md",
+      "sha256": "f6a6570e26074aa8299dff5910e1eb371cfcf9078f60eced58be07dc3c75b664",
+      "bytes": 4772
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/F_收尾验收补齐_2026-11-11.md",
+      "sha256": "417d46f5f757c311e8393fa8c4de7abe847e0478d38477893601d0c9f1e0b80e",
+      "bytes": 5534
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/F_R03_证据索引_2026-11-11.json",
+      "sha256": "27fe44cc457bdd302032b77aab1376ebe6385d3b599d58d2f5b18e14d5a7dcbd",
+      "bytes": 12153
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/F_R02_证据索引_2026-11-11.json",
+      "sha256": "7475c016c903bfb52df71d000fb11fb5d41b154b73b83fca1f57a11a93ee8c5c",
+      "bytes": 9163
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/F_R01_证据索引_2026-11-11.json",
+      "sha256": "bc7685cb612d82b1266b98a5001caf544d0c4e4519c180d0b65b61bf9a523853",
+      "bytes": 10769
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/G_待派发交接入口_2026-11-11.md",
+      "sha256": "c34afa8c45781c44008ff0b59a956b0262ccc928c776c4ca9c5731d344570e0a",
+      "bytes": 6033
+    }
+  ]
+}
