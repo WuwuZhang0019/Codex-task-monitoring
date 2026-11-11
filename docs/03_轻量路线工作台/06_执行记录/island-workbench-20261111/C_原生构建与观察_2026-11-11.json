@@ -1,0 +1,10 @@
+{
+  "binary": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\dynamic-island.exe",
+  "processId": 41544,
+  "profile": "app/test-results/island-C/native-profile",
+  "sha256": "5D8DEAADD7AD85F74C5BA9B8AE7CD432F756DBB79B14F06D6F431D3705985674",
+  "config": "app/test-results/island-C/native-config.json",
+  "windowBinding": "failed-no-targetable-window",
+  "nativeInteraction": "pending-user-observation",
+  "date": "2026-11-11"
+}

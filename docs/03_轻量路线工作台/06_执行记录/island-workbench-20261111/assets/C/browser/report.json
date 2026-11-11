@@ -1,0 +1,162 @@
+{
+  "date": "2026-11-11",
+  "native": false,
+  "checks": [
+    {
+      "name": "dynamic 收起摘要",
+      "result": "passed",
+      "details": {
+        "x": 435,
+        "y": 0,
+        "width": 410,
+        "height": 38
+      }
+    },
+    {
+      "name": "dynamic 原外壳形变及内容过渡",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 多项目五状态六路线及只读",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 刷新保留选择与滚动",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 定位当前与事件定位",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 长路线横向滚动",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 深分支及细分详情",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 故障与未知结果不触发写入",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 空快照不是全部完成",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 固定移出与取消固定收起",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 快速进出与再次展开",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic Tab Enter与Esc及收起再开保留",
+      "result": "passed"
+    },
+    {
+      "name": "windows 收起摘要",
+      "result": "passed",
+      "details": {
+        "x": 435,
+        "y": 8,
+        "width": 410,
+        "height": 38
+      }
+    },
+    {
+      "name": "windows 原外壳形变及内容过渡",
+      "result": "passed"
+    },
+    {
+      "name": "windows 多项目五状态六路线及只读",
+      "result": "passed"
+    },
+    {
+      "name": "windows 刷新保留选择与滚动",
+      "result": "passed"
+    },
+    {
+      "name": "windows 定位当前与事件定位",
+      "result": "passed"
+    },
+    {
+      "name": "windows 长路线横向滚动",
+      "result": "passed"
+    },
+    {
+      "name": "windows 深分支及细分详情",
+      "result": "passed"
+    },
+    {
+      "name": "windows 故障与未知结果不触发写入",
+      "result": "passed"
+    },
+    {
+      "name": "windows 空快照不是全部完成",
+      "result": "passed"
+    },
+    {
+      "name": "windows 固定移出与取消固定收起",
+      "result": "passed"
+    },
+    {
+      "name": "windows 快速进出与再次展开",
+      "result": "passed"
+    },
+    {
+      "name": "windows Tab Enter与Esc及收起再开保留",
+      "result": "passed"
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "requests": [],
+  "styles": [
+    {
+      "style": "dynamic",
+      "compact": {
+        "x": 435,
+        "y": 0,
+        "width": 410,
+        "height": 38
+      },
+      "transition": {
+        "x": 420.28125,
+        "y": 0,
+        "width": 439.421875,
+        "height": 69.90625
+      },
+      "expanded": {
+        "x": 210,
+        "y": 0,
+        "width": 860,
+        "height": 526
+      }
+    },
+    {
+      "style": "windows",
+      "compact": {
+        "x": 435,
+        "y": 8,
+        "width": 410,
+        "height": 38
+      },
+      "transition": {
+        "x": 430.0625,
+        "y": 8,
+        "width": 419.859375,
+        "height": 48.640625
+      },
+      "expanded": {
+        "x": 210,
+        "y": 8,
+        "width": 860,
+        "height": 524
+      }
+    }
+  ],
+  "passed": true
+}

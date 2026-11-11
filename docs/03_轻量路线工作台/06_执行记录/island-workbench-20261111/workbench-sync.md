@@ -2,7 +2,7 @@
 
 日期：2026-11-11
 
-状态：A/B本地completed/passed，进度2/6；服务登记及同步未发生；C—F待执行
+状态：A/B本地completed/passed，进度2/6；服务登记及同步未发生；C待原生核验，D—F待执行
 
 本地方案键 island-workbench-20261111，当前责任聊天01a1ca91-98c4-7101-8620-8380e28df33f。用户已明确授权按Codex/Git直接完成A，同日方案1.1修订取消A服务开始前置，未扩大正式服务写权限。
 
@@ -10,7 +10,7 @@
 |---|---|---|---|
 | A 基线与授权范围 | A-01、A-02、A-03 | completed / passed | deferredByAuthorization，未发业务请求 |
 | B 裁剪外壳 | B-01、B-02、B-03 | completed / passed | deferredByAuthorization，未登记 |
-| C 契约与模拟视图 | C-01、C-02、C-03 | pending / pending | 未登记 |
+| C 契约与模拟视图 | C-01、C-02、C-03 | blocked / pending，原生待核验 | deferredByAuthorization，未登记 |
 | D 真实服务接线 | D-01、D-02、D-03 | pending / pending | 未登记 |
 | E 桌面与恢复验收 | E-01、E-02、E-03 | pending / pending | 未登记 |
 | F 许可与发布交付 | F-01、F-02、F-03 | pending / pending | 未登记 |
@@ -84,3 +84,29 @@ flowchart LR
 用户明确允许 C 本地执行、Git 留证，服务恢复后再同步；方案1.3已记录。B本地completed/passed，C仍pending/pending，未登记实际开始，服务deferredByAuthorization；所有真实服务身份继续留空，未发送业务请求，无未知提交。旧路线A—G不变。
 
 业务仓库准备时main/09b04cc37ce5102ef8ca1891f7baac1befc8e814，工作区干净。读取Fork G:\rust\windows-dynamic-island的Git状态、分支及HEAD均返回Permission denied，当前实际版本待执行聊天核实；B回执记录41a0e322055ae4674a6792208e70bc7016ab21f7，仅作为预期基线。当前宿主未暴露workbench工具。未进行C产品修改、构建或测试。C执行指令见同目录C_待执行指令_2026-11-11.md。
+
+
+## C 本地执行开始
+
+日期：2026-11-11
+
+用户发送C待执行指令并授权实际实施。方案1.3有效，B本地completed/passed及必要证据已复核，C-01—C-03进入本地running/pending。责任聊天01a1cb1f-2e71-7211-a4f8-a3bff30fbf52，标题已由宿主改名成功。业务仓库main/fcce7b36fdd354dd0bd10ce8b72bfd80ce1a69ff，Fork codex/island-workbench-shell/41a0e322055ae4674a6792208e70bc7016ab21f7，均初始干净。Fork沙箱Git读取Permission denied，正常升级审批后读取成功，无版本漂移。已读Fork AGENTS.md；本次明确用户提交格式、中文说明及日期要求优先。
+
+本地执行键island-workbench-20261111/local/C-20261111-01，不是服务身份。服务deferredByAuthorization，真实ID全部留空，未发送业务请求，无未知提交。仅实施C，D—F未开始。
+
+
+## C 代码交付与当前核验位置
+
+日期：2026-11-11
+
+业务协议4b80fb1，Fork8b07d33及最终修复611684c。C-01/C-02本地completed/passed，C-03代码和浏览器检查完成、原生代表项待核验，父C blocked/pending；正式验收进度仍2/6。契约9、前端12、Rust17、浏览器24及阅读5检查通过，lint/build/strictTS/clippy和嵌入式debug构建通过。两仓库契约一致、六个原动画实现未改。
+
+等待当前用户实测最终C debug版路线/详情/依赖、固定/取消固定/Esc及悬停/快速进出。工具未返回可绑定浮窗，不把浏览器或B历史反馈当C原生通过；等待条件、工具恢复误启动及已撤销情况见C_实现与验证_2026-11-11.md。无真实服务写入、未知提交或同步，真实身份全部留空。D—F未派发未开始。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
+ B --> C["③ C 契约与模拟视图<br/>blocked/pending，等待原生核验"] --> D["④ D 真实服务接线<br/>pending"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
+```
+
+完整十八字段见C_契约与模拟视图阶段回执_2026-11-11.md，指纹见C_证据索引_2026-11-11.json。恢复沿用本地执行键及方案1.3授权，有缺陷继续C，通过后再完成；不自动派发D。

@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-11",
+  "checks": [
+    "独立长路线样例60阶段"
+  ],
+  "errors": [],
+  "passed": false,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 1\n\n    at file:///G:/rust/Codex-task-monitoring/app/tests/island-c-reading.mjs:21:9"
+}

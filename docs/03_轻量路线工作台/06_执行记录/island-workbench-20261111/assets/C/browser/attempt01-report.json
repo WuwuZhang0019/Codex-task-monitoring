@@ -1,0 +1,163 @@
+{
+  "date": "2026-11-11",
+  "native": false,
+  "checks": [
+    {
+      "name": "dynamic 收起摘要",
+      "result": "passed",
+      "details": {
+        "x": 435,
+        "y": 0,
+        "width": 410,
+        "height": 38
+      }
+    },
+    {
+      "name": "dynamic 原外壳形变及内容过渡",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 多项目五状态六路线及只读",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 刷新保留选择与滚动",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 定位当前与事件定位",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 长路线横向滚动",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 故障与未知结果不触发写入",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 空快照不是全部完成",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 固定移出与取消固定收起",
+      "result": "passed"
+    },
+    {
+      "name": "dynamic 快速进出与再次展开",
+      "result": "passed"
+    },
+    {
+      "name": "windows 收起摘要",
+      "result": "passed",
+      "details": {
+        "x": 435,
+        "y": 0,
+        "width": 410,
+        "height": 38
+      }
+    },
+    {
+      "name": "windows 原外壳形变及内容过渡",
+      "result": "passed"
+    },
+    {
+      "name": "windows 多项目五状态六路线及只读",
+      "result": "passed"
+    },
+    {
+      "name": "windows 刷新保留选择与滚动",
+      "result": "passed"
+    },
+    {
+      "name": "windows 定位当前与事件定位",
+      "result": "passed"
+    },
+    {
+      "name": "windows 长路线横向滚动",
+      "result": "passed"
+    },
+    {
+      "name": "windows 故障与未知结果不触发写入",
+      "result": "passed"
+    },
+    {
+      "name": "windows 空快照不是全部完成",
+      "result": "passed"
+    },
+    {
+      "name": "windows 固定移出与取消固定收起",
+      "result": "passed"
+    },
+    {
+      "name": "windows 快速进出与再次展开",
+      "result": "passed"
+    }
+  ],
+  "failures": [
+    {
+      "name": "dynamic 深分支及细分详情",
+      "error": "locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-workbench-detail]').getByRole('button', { name: /进入关联方案/ })\u001b[22m\n\n    at G:\\rust\\Codex-task-monitoring\\app\\tests\\island-c-workbench.mjs:38:230\n    at async check (G:\\rust\\Codex-task-monitoring\\app\\tests\\island-c-workbench.mjs:10:97)\n    at async file:///G:/rust/Codex-task-monitoring/app/tests/island-c-workbench.mjs:38:3"
+    },
+    {
+      "name": "dynamic Tab Enter与Esc及收起再开保留",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'C-04原生焦点待核验已阻塞'\n- '刷新'\n\n    at file:///G:/rust/Codex-task-monitoring/app/tests/island-c-workbench.mjs:43:210\n    at async check (file:///G:/rust/Codex-task-monitoring/app/tests/island-c-workbench.mjs:10:97)\n    at async file:///G:/rust/Codex-task-monitoring/app/tests/island-c-workbench.mjs:43:3"
+    },
+    {
+      "name": "windows 深分支及细分详情",
+      "error": "locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-workbench-detail]').getByRole('button', { name: /进入关联方案/ })\u001b[22m\n\n    at G:\\rust\\Codex-task-monitoring\\app\\tests\\island-c-workbench.mjs:38:230\n    at async check (G:\\rust\\Codex-task-monitoring\\app\\tests\\island-c-workbench.mjs:10:97)\n    at async file:///G:/rust/Codex-task-monitoring/app/tests/island-c-workbench.mjs:38:3"
+    },
+    {
+      "name": "windows Tab Enter与Esc及收起再开保留",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'C-04原生焦点待核验已阻塞'\n- '刷新'\n\n    at file:///G:/rust/Codex-task-monitoring/app/tests/island-c-workbench.mjs:43:210\n    at async check (file:///G:/rust/Codex-task-monitoring/app/tests/island-c-workbench.mjs:10:97)\n    at async file:///G:/rust/Codex-task-monitoring/app/tests/island-c-workbench.mjs:43:3"
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "styles": [
+    {
+      "style": "dynamic",
+      "compact": {
+        "x": 435,
+        "y": 0,
+        "width": 410,
+        "height": 38
+      },
+      "transition": {
+        "x": 404.46875,
+        "y": 0,
+        "width": 471.046875,
+        "height": 104.203125
+      },
+      "expanded": {
+        "x": 210,
+        "y": 0,
+        "width": 860,
+        "height": 526
+      }
+    },
+    {
+      "style": "windows",
+      "compact": {
+        "x": 435,
+        "y": 0,
+        "width": 410,
+        "height": 38
+      },
+      "transition": {
+        "x": 394.53125,
+        "y": 0,
+        "width": 490.9375,
+        "height": 125.765625
+      },
+      "expanded": {
+        "x": 210,
+        "y": 0,
+        "width": 860,
+        "height": 526
+      }
+    }
+  ],
+  "passed": false
+}
