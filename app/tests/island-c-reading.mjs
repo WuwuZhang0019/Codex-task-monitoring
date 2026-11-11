@@ -1,18 +1,20 @@
-// 日期：2026-11-11。阅读位置与窄窗口回归，使用独立浏览器上下文。
+// 更新日期：2026-11-12。阅读位置与窄窗口回归，使用独立浏览器上下文。
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
-import { writeFile } from 'node:fs/promises';
+import { writeFile, mkdir } from 'node:fs/promises';
+const out = process.env.ISLAND_EVIDENCE_DIR || '../docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/C/browser';
+await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
 const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: 'zh-CN' });
 await context.addInitScript(() => localStorage.setItem('island-workbench-settings-v1', JSON.stringify({ 'shell.configVersion': 1, 'app.language': 'zh-CN', 'appearance.style': 'windows', 'appearance.border': 'intelligence' })));
 const page = await context.newPage();
-const report = { date: '2026-11-11', checks: [], errors: [] };
+const report = { date: process.env.ISLAND_TEST_DATE || new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date()), checks: [], errors: [] };
 page.on('pageerror', e => report.errors.push(e.message));
 try {
- await page.goto('http://127.0.0.1:1420/', { waitUntil: 'networkidle' });
+ await page.goto('http://127.0.0.1:1420/?workbench=simulation', { waitUntil: 'networkidle' });
  const shell = page.locator('[data-hit]').first();
  await shell.click(); await page.waitForTimeout(900);
- await page.screenshot({ path: '../docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/C/browser/windows-intelligence-comparison.png' });
+ await page.screenshot({ path: `${out}/windows-intelligence-comparison.png` });
  const select = page.getByRole('combobox', { name: '演示场景' });
  await select.selectOption('long-route');
  assert.equal(await page.locator('[data-project-key]').count(), 1);
@@ -48,10 +50,10 @@ try {
  const box = await shell.boundingBox(); assert.ok(box.width <= 560 && box.x >= 0);
  assert.ok(await page.locator('[data-workbench-detail]').isVisible());
  report.checks.push('600px窄窗口不超出外壳边界');
- await page.screenshot({ path: '../docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/C/browser/narrow.png' });
+ await page.screenshot({ path: `${out}/narrow.png` });
  assert.equal(report.errors.length, 0);
  report.passed = true;
 } catch (e) { report.passed = false; report.error = String(e.stack); process.exitCode = 1; }
 await browser.close();
-await writeFile('../docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/C/browser/reading-report.json', JSON.stringify(report, null, 2));
+await writeFile(`${out}/reading-report.json`, JSON.stringify(report, null, 2));
 console.log(JSON.stringify(report, null, 2));

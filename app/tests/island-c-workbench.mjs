@@ -1,11 +1,11 @@
-// 日期：2026-11-11。C 模拟视图验收，不连接正式业务服务。
+// 更新日期：2026-11-12。C 模拟视图验收，不连接正式业务服务。
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-const out = path.resolve('../docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/C/browser');
+const out = path.resolve(process.env.ISLAND_EVIDENCE_DIR || '../docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/C/browser');
 await mkdir(out, { recursive: true });
-const report = { date: '2026-11-11', native: false, checks: [], failures: [], errors: [], requests: [], styles: [] };
+const report = { date: process.env.ISLAND_TEST_DATE || new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date()), native: false, checks: [], failures: [], errors: [], requests: [], styles: [] };
 const browser = await chromium.launch({ headless: true, executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
 const check = async (name, fn) => { try { report.checks.push({ name, result: 'passed', details: await fn() }); } catch (e) { report.failures.push({ name, error: String(e.stack) }); } };
 for (const style of ['dynamic', 'windows']) {
@@ -20,10 +20,10 @@ for (const style of ['dynamic', 'windows']) {
  const hover = async () => { const b = await shell.boundingBox(); await page.mouse.move(b.x + b.width / 2, b.y + 15); await page.waitForTimeout(1150); };
  const open = async () => { await shell.click({ position: { x: 100, y: 15 } }); await page.waitForTimeout(900); };
  try {
-  await page.goto('http://127.0.0.1:1420/#settings', { waitUntil: 'networkidle' });
+  await page.goto('http://127.0.0.1:1420/?workbench=simulation#settings', { waitUntil: 'networkidle' });
   await page.locator('nav').getByText('外观', { exact: true }).click();
   await page.getByRole('button', { name: style === 'dynamic' ? /刘海模式/ : /Windows 灵动岛/ }).click();
-  await page.goto('http://127.0.0.1:1420/', { waitUntil: 'networkidle' });
+  await page.goto('http://127.0.0.1:1420/?workbench=simulation', { waitUntil: 'networkidle' });
   await page.mouse.move(20, 700); await page.waitForTimeout(1400);
   const compact = await snap('collapsed');
   await check(`${style} 收起摘要`, async () => { assert.ok(await page.locator('[data-workbench-summary]').isVisible()); assert.match(await page.locator('[data-workbench-summary]').innerText(), /模拟/); return compact; });

@@ -41,7 +41,7 @@ for (const directory of ['server', 'mcp', 'dist']) {
   await rm(destination, { recursive: true, force: true });
   await cp(path.join(app, directory), destination, { recursive: true });
 }
-for (const name of ['owner.mjs', 'migrate.mjs', 'client.mjs']) {
+for (const name of ['owner.mjs', 'migrate.mjs', 'client.mjs', 'private-runtime.mjs', 'service.mjs']) {
   await copyFile(path.join(app, 'desktop', name), path.join(root, 'app/desktop', name));
 }
 // 日期 2026-11-11。保持 server/index 的相对位置，随发行物携带运行依赖。

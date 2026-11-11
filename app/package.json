@@ -15,6 +15,7 @@
     "test:domain": "tsc src/domain.ts --outDir .test-build --module ESNext --target ES2022 --moduleResolution Bundler --skipLibCheck && node --test tests/domain.test.mjs",
     "test:e2e": "npm run build && node tests/e2e.mjs",
     "tauri": "tauri",
+    "service": "node desktop/service.mjs",
     "desktop:resources": "node desktop/prepare-resources.mjs",
     "test:desktop": "node --test desktop/*.test.mjs"
   },

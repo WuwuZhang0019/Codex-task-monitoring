@@ -21,7 +21,7 @@ struct Runtime {
     resources: PathBuf,
     child: Mutex<Option<Child>>,
     endpoint: Mutex<Option<String>>,
-    token: String,
+    token: Mutex<String>,
     _lock: File,
 }
 
@@ -48,6 +48,37 @@ fn private_command(executable: &std::path::Path) -> Command {
     command
 }
 
+// 日期：2026-11-12。只在原生层读取受保护会话；附着外部所有者不接管其生命周期。
+fn attached_owner_session(data: &std::path::Path) -> Result<(String, String), String> {
+    if data.join("stopped.json").exists() { return Err("领域服务已停止".into()); }
+    let record: Value = serde_json::from_slice(&fs::read(data.join("owner.json")).map_err(|_| "无所有者发现记录")?)
+        .map_err(|_| "无效所有者发现记录")?;
+    let session: Value = serde_json::from_slice(&fs::read(data.join("runtime-private/owner-session.json")).map_err(|_| "无受保护会话")?)
+        .map_err(|_| "无效受保护会话")?;
+    let endpoint = record["endpoint"].as_str().ok_or("无效所有者地址")?;
+    if !endpoint.strip_prefix("http://127.0.0.1:").is_some_and(|port| port.parse::<u16>().is_ok_and(|p| p > 0))
+        || record["version"] != 1 || session["version"] != 1
+        || record["ownerGeneration"].as_str().is_none_or(|v| v.is_empty())
+        || record["ownerGeneration"] != session["ownerGeneration"] {
+        return Err("无效所有者会话或地址".into());
+    }
+    let token = session["token"].as_str().filter(|v| v.len() == 64 && v.chars().all(|c| c.is_ascii_hexdigit()))
+        .ok_or("无效所有者凭据")?;
+    Ok((endpoint.into(), token.into()))
+}
+
+fn attach_owner(runtime: &Runtime) -> Result<(), String> {
+    let (endpoint, token) = attached_owner_session(&runtime.root.join("data"))?;
+    // 此函数在同步启动/恢复线程运行，网络探测有短时限且禁止代理与重定向。
+    let response = reqwest::blocking::Client::builder().timeout(Duration::from_secs(2)).no_proxy()
+        .redirect(reqwest::redirect::Policy::none()).build().map_err(|_| "所有者连接组件不可用")?
+        .get(format!("{endpoint}/api/health")).bearer_auth(&token).send().map_err(|_| "所有者不可用")?;
+    if !response.status().is_success() { return Err("所有者授权失败".into()); }
+    *runtime.endpoint.lock().unwrap() = Some(endpoint);
+    *runtime.token.lock().unwrap() = token;
+    Ok(())
+}
+
 fn start_owner(runtime: &Runtime) -> Result<(), String> {
     let mut guard = runtime.child.lock().map_err(|e| e.to_string())?;
     if let Some(child) = guard.as_mut() {
@@ -56,6 +87,7 @@ fn start_owner(runtime: &Runtime) -> Result<(), String> {
         }
     }
     *runtime.endpoint.lock().unwrap() = None;
+    if attach_owner(runtime).is_ok() { return Ok(()); }
     #[cfg(windows)]
     {
         let account = std::env::var("USERNAME").map_err(|e| e.to_string())?;
@@ -79,9 +111,6 @@ fn start_owner(runtime: &Runtime) -> Result<(), String> {
     }
     let data = runtime.root.join("data");
     let discovery = data.join("owner.json");
-    if discovery.exists() {
-        fs::remove_file(&discovery).map_err(|e| e.to_string())?;
-    }
     let log = OpenOptions::new()
         .create(true)
         .append(true)
@@ -90,7 +119,7 @@ fn start_owner(runtime: &Runtime) -> Result<(), String> {
     let child = private_command(&runtime.resources.join("node.exe"))
         .arg(runtime.resources.join("app/desktop/owner.mjs"))
         .env("WORKBENCH_DATA_DIR", &data)
-        .env("WORKBENCH_SESSION_TOKEN", &runtime.token)
+        .env("WORKBENCH_SESSION_TOKEN", runtime.token.lock().unwrap().clone())
         .env_remove("NODE_OPTIONS")
         .stdin(Stdio::piped())
         .stdout(log.try_clone().map_err(|e| e.to_string())?)
@@ -219,7 +248,9 @@ async fn initialize_workspace(
             return Err(String::from_utf8_lossy(&output.stderr).to_string());
         }
     }
-    start_owner(&state)
+    let app = window.app_handle().clone();
+    tauri::async_runtime::spawn_blocking(move || start_owner(&app.state::<Runtime>()))
+        .await.map_err(|e| e.to_string())?
 }
 
 fn allowed_request(path: &str, method: &str) -> bool {
@@ -300,7 +331,7 @@ async fn api_request(
             method.parse().map_err(|_| "无效请求方法")?,
             format!("{endpoint}/api{path}"),
         )
-        .bearer_auth(&state.token);
+        .bearer_auth(state.token.lock().unwrap().clone());
     if body.is_some() {
         request = request
             .header("Content-Type", "application/json")
@@ -433,7 +464,7 @@ pub fn run() {
                 resources,
                 child: Mutex::new(None),
                 endpoint: Mutex::new(None),
-                token,
+                token: Mutex::new(token),
                 _lock: lock,
             };
             if workspace_initialized(&root)
@@ -519,7 +550,23 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
-    use super::{allowed_request, workspace_initialized, panel_read_request};
+    use super::{allowed_request, workspace_initialized, panel_read_request, attached_owner_session};
+    #[test]
+    fn external_owner_session_requires_local_address_and_matching_generation() {
+        let root = std::env::temp_dir().join(format!("island-session-{}", std::process::id()));
+        std::fs::create_dir_all(root.join("runtime-private")).unwrap();
+        let session = serde_json::json!({"version":1,"ownerGeneration":"current","token":"a".repeat(64)});
+        std::fs::write(root.join("runtime-private/owner-session.json"), session.to_string()).unwrap();
+        for endpoint in ["http://example.com:123", "http://127.0.0.1:123/path", "http://127.0.0.1:0", "http://127.0.0.1:123?x=1"] {
+            std::fs::write(root.join("owner.json"), serde_json::json!({"version":1,"ownerGeneration":"current","endpoint":endpoint}).to_string()).unwrap();
+            assert!(attached_owner_session(&root).is_err());
+        }
+        std::fs::write(root.join("owner.json"), serde_json::json!({"version":1,"ownerGeneration":"current","endpoint":"http://127.0.0.1:123"}).to_string()).unwrap();
+        assert!(attached_owner_session(&root).is_ok());
+        std::fs::write(root.join("stopped.json"), "{}").unwrap();
+        assert!(attached_owner_session(&root).is_err());
+        std::fs::remove_dir_all(root).unwrap();
+    }
     #[test]
     fn floating_panel_has_only_exact_read_and_preference_routes() {
         assert!(panel_read_request("/light-panel", "GET"));
