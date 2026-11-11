@@ -213,6 +213,13 @@
       "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-unauthorized.png",
       "bytes": 166842,
       "sha256": "ad8541e20b679b67d5a2919bdf81ae51cfe148d6d414d14edd31b962eb5c2efc"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_续接核对_2026-11-12.md",
+      "bytes": 2257,
+      "sha256": "ee85418b43b1433873fb4e46098eda19a649494c019f5c0e884d81402b0f1b98"
     }
-  ]
+  ],
+  "resumeNativeSettingsObserved": true,
+  "resumeAuthorizationSigned": false
 }

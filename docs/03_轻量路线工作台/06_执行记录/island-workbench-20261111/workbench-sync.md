@@ -177,3 +177,10 @@ flowchart LR
  A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
  B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>blocked/pending，等待新壳本人确认"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
 ```
+
+
+## D 本轮续接核对
+
+日期：2026-11-12
+
+用户要求继续D。业务06e30eb/Fork8d154ec干净，D索引40/40、Fork源码13/13及exe指纹匹配。C现40/42，其两份浏览器脚本已由D合法适配且24+5回归通过，历史媒体未变，原前置仍适用。本轮实际观察新壳设置并展开本人确认表单，但字段为空、签发未发生。未代填或签发，不把继续请求当作已完成原生确认；没有正式业务新写入或未知提交，D仍blocked/pending，服务deferredByAuthorization。详见D_续接核对_2026-11-12.md，等待用户保存连接后继续原D。
