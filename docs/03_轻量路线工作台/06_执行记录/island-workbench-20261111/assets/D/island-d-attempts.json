@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-12",
+  "formalProject": false,
+  "attempts": [
+    {
+      "attempt": 1,
+      "environment": "sandbox",
+      "result": "failed",
+      "error": "SERVICE_START_TIMEOUT: inspect service-runtime.log",
+      "interpretation": "沙箱回环/子进程环境无法完成服务启动；审批相同隔离命令后通过，未判产品失败"
+    },
+    {
+      "attempt": 2,
+      "environment": "approved isolated loopback",
+      "browser": false,
+      "result": "passed",
+      "tests": 1,
+      "durationMs": 5313.9823
+    },
+    {
+      "attempt": 3,
+      "environment": "approved isolated loopback + browser binding",
+      "result": "failed",
+      "error": "AssertionError: detail expected /island-d-integration/; actual fixed UUID",
+      "interpretation": "测试错把本地关联键当服务固定ID；只改测试为step.id，未改产品代码"
+    },
+    {
+      "attempt": 4,
+      "environment": "approved isolated loopback + browser binding",
+      "result": "passed",
+      "tests": 1,
+      "durationMs": 12414.6535,
+      "checks": 11
+    },
+    {
+      "attempt": 5,
+      "environment": "approved isolated loopback + browser binding",
+      "result": "passed",
+      "tests": 1,
+      "durationMs": 10034.0291,
+      "checks": 12,
+      "additionalCoverage": "首次离线后恢复服务保存的第二阶段选择；所有成功后保留受路径限制的临时服务供原生观察"
+    },
+    {
+      "attempt": 6,
+      "environment": "approved isolated service + browser after recovery fixes",
+      "result": "failed",
+      "error": "ReactDOM.createRoot is not a function",
+      "durationMs": 9308.5936,
+      "interpretation": "长详情恢复scrollTop180已通过；新增hook探针动态导入Vite CommonJS预打包模块需取default；修测试导入，不改产品"
+    },
+    {
+      "attempt": 7,
+      "environment": "approved isolated service + browser after recovery fixes",
+      "result": "passed",
+      "tests": 1,
+      "durationMs": 11486.9015,
+      "checks": 13,
+      "additionalCoverage": "首次离线→恢复另一阶段长详情scrollTop180；同页真实useWorkbench挂载/慢poll/卸载/迟到完成后未再安排timer"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-12",
+  "formalProject": false,
+  "dataDir": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-D\\native-observe-20261112-01\\data",
+  "ownerPid": 8428,
+  "ownerGeneration": "92153a29-125f-4869-a308-283d3a413244",
+  "note": "Only isolated test state retained for native observation; private credentials stay in ignored test-results. Parent cleans up after observation.",
+  "cleanup": {
+    "date": "2026-11-12",
+    "ownerStopped": true,
+    "temporaryRootRemoved": true,
+    "nativeUiObserved": false,
+    "note": "新壳测试实例曾启动但CUA未返回可绑定浮窗，不把构建或浏览器当原生UI验收"
+  }
+}

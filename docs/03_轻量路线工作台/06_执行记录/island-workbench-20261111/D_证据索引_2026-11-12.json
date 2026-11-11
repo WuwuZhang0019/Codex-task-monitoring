@@ -1,0 +1,218 @@
+{
+  "date": "2026-11-12",
+  "planKey": "island-workbench-20261111",
+  "stage": "D",
+  "localStatus": "blocked",
+  "acceptance": "pending",
+  "handoffConclusion": "B",
+  "sync": "deferredByAuthorization",
+  "serviceSynced": false,
+  "serviceIdentity": null,
+  "businessCommit": "efeaeb7",
+  "forkCommit": "8d154ec",
+  "nativeSha256": "906A197440DFEB19F2D3119F80C3577943D492677D588E2FABC6408DFF4E9412",
+  "nativeUiObserved": false,
+  "formalTestWrite": false,
+  "artifacts": [
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_阶段回执_2026-11-12.md",
+      "bytes": 5146,
+      "sha256": "8d4a2be92107d6d43e43d1c9c90a28b6b66b958999bbd60e218849430d3261c5"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_实现与验证_2026-11-12.md",
+      "bytes": 5748,
+      "sha256": "86d06215eec9683243ee43504073e07085c54170bbae438f3ae81be0359f51c5"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_独立服务与新壳连接说明_2026-11-12.md",
+      "bytes": 3680,
+      "sha256": "137f1e7d4ac48655d50fc908ddabc7e2ea3072bd94143b1fde1aee35132b7a8c"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/business-checks_2026-11-12.json",
+      "bytes": 1455,
+      "sha256": "36a6de40193562059c1d10cb006ec7dbc32ef3a3a69976442ef6bd48eddad3e3"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/desktop-tests.log",
+      "bytes": 1637,
+      "sha256": "076b67b97252ecc6e210ceb21026e81b25cfa6f3a95b0193edd9336591f6d8e8"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/fork-native-checks_2026-11-12.json",
+      "bytes": 8879,
+      "sha256": "e2ee27463567750d390f009b8839a629c5a34bb68bba8c17880bf7a49f1b9ca2"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-readonly.json",
+      "bytes": 1144,
+      "sha256": "b6e8e9dd0e02f14dc0ff7b4a6725149bca2334fdaa879c221ae8aa4a79904d03"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-readonly.json",
+      "bytes": 295,
+      "sha256": "7ca995413e3a3018a923bfc4dff87b64c0de011cc004a58ffc204346b3745d87"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-attempts.json",
+      "bytes": 2268,
+      "sha256": "ccb0cc8c997bdb062b863966537de9948d634e9e751c0a6f95d72924798e0a27"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-browser-failed.json",
+      "bytes": 2200,
+      "sha256": "06abf34aea4b43d6ddf124831b09d32cf0857b368e523ce62de8ace67df57362"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-browser-failed.png",
+      "bytes": 155640,
+      "sha256": "a55b2cda860c2e4419dad43bf64fc6f314f83777565f06d7df3660d555a11510"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-native-test-root.json",
+      "bytes": 668,
+      "sha256": "b8be251cfb3c4e563593ab6ed7d128aca698bea498077f04e633da91b6790594"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-service-browser.png",
+      "bytes": 155511,
+      "sha256": "47f04d947f9c102d3868641ab038ab59df7bfcaa3b4dfd3ca06ad465e66f0232"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-service.json",
+      "bytes": 9303,
+      "sha256": "f6cbb629805c9989dfe4acd5af5a448bf42131280555e71ee6b5c844d5e652d7"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-collapsed.png",
+      "bytes": 129645,
+      "sha256": "3d3df3c180d59653fcd0f6d1a244f8d5503a986e4d1d5d63f7abc7cb5d63208f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-empty.png",
+      "bytes": 134274,
+      "sha256": "eecb8b8475e5dca065bfa01a14576aed0857de47e35484d6adf1c840f264fb4d"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-expanded.png",
+      "bytes": 163510,
+      "sha256": "17e938a0a70a10256bc7b707c362573cc1de2381c004b5abd4a4723e16d5daf5"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-incompatible.png",
+      "bytes": 167787,
+      "sha256": "39bf9f312a3c7dd38064ed43f8b582cf65d902f309a77af1c262ec101f51b913"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-offline.png",
+      "bytes": 166482,
+      "sha256": "8473582ca67b2fe250340be1413ce2126108f944d0fec4dc4c57f680c3e791fa"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-pinned.png",
+      "bytes": 163317,
+      "sha256": "40ded70ef8c787d61ec951c0a39142cd003d1da14fbc465b7c41c3b3413413a7"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-reopened.png",
+      "bytes": 162889,
+      "sha256": "9bf72ce63b48bbc32b9f964706f23f98968d38cbd155c91cca8272899fe881e3"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-stale.png",
+      "bytes": 166369,
+      "sha256": "19175f2a06b1c4be93b42396fabadcd72cf106cb7fd3dac506f7d8e3ccf0da79"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-transition.png",
+      "bytes": 126599,
+      "sha256": "5c97a5a30375a2aeadc0b52814e8ab9569610aebe2ff0a22ecff5d88d1b86972"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-unauthorized.png",
+      "bytes": 165976,
+      "sha256": "2a208e5587c1f1628cbe57782ecd6dd092417635819101b84fb85bd7ee0cd171"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/narrow.png",
+      "bytes": 91699,
+      "sha256": "e41addcbf416d876b3cb5e27fe3f4cba271051aae9c3d67d8878d300456da585"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/page@b18f29e504d40a0b2e16837bee5627a1.webm",
+      "bytes": 2130512,
+      "sha256": "768ac01403630d48abc58a162e5d98080354a310c3e8e240122669bb802e5242"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/page@e60a3bce4e7d52f053546f354d2c5192.webm",
+      "bytes": 1764381,
+      "sha256": "037ada72fb5dc45b1de231ab24e495f6229f7258eac7a7e0460abb6541703f3c"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/reading-report.json",
+      "bytes": 310,
+      "sha256": "f38c5496648af79ab57bb00903ff868480246a523405d6eb958a0a8e1b0fa42d"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/report.json",
+      "bytes": 3479,
+      "sha256": "75a70a6c8c5060b8c294f03f13a64d3dc9c8e4b641749448229ba85e7c5a49ae"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-collapsed.png",
+      "bytes": 131085,
+      "sha256": "04812e92ca48e026e14042fd8a1b0ecc66ee4951223a4ef923d8ef505a4fbe68"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-empty.png",
+      "bytes": 135757,
+      "sha256": "725442ecbe3662fee19c602fb6e46578dcf30d05fc1ca981182bcdb0baafda90"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-expanded.png",
+      "bytes": 164338,
+      "sha256": "75643bd1ef1cffa490b0232f0400b967a5ea84bb1472742b27382523e64be1b5"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-incompatible.png",
+      "bytes": 168617,
+      "sha256": "aac9ee266986458602df65079458b35c21198710ff3acdb1d1905291569679d1"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-intelligence-comparison.png",
+      "bytes": 173036,
+      "sha256": "d704d8abd494ed2d342990ffa027f446f8e14aaf4d71b92fe1b3c753c2a48432"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-offline.png",
+      "bytes": 167355,
+      "sha256": "329dd1272fc6ca6d6ead5fc5aa2c5b2d0ede6babae1149416d26f0c0c8cf297b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-pinned.png",
+      "bytes": 167074,
+      "sha256": "2767b3950b7ea5db0f1d730a72376c60c8e5b206765dc57b8b1dd2eb1eb93858"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-reopened.png",
+      "bytes": 166449,
+      "sha256": "870df38d0a9b3d4c9507e98d8fcdcefff50d40c0de0ea0305890b3a07a901a92"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-stale.png",
+      "bytes": 167262,
+      "sha256": "a8834cdbff6c6080fdf1aa908de5df29ef963ef5943fc63c4e8da6933b8b1c60"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-transition.png",
+      "bytes": 126966,
+      "sha256": "dcd7d57917dd3a2e7b3141c968551f8adf351b97c97a3188460dd4e702c43a60"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-unauthorized.png",
+      "bytes": 166842,
+      "sha256": "ad8541e20b679b67d5a2919bdf81ae51cfe148d6d414d14edd31b962eb5c2efc"
+    }
+  ]
+}

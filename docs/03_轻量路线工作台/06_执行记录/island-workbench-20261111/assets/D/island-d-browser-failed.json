@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-12",
+  "native": false,
+  "checks": [
+    {
+      "name": "独立所有者与重复显式启动附着同一PID",
+      "result": "passed",
+      "lifetime": "standalone"
+    },
+    {
+      "name": "真实STDIO登记/绑定/状态上报与最小面板完整快照一致",
+      "result": "passed",
+      "revision": 5,
+      "stepId": "4dcda352-3046-4278-9585-edcb13e5a39c",
+      "status": "running"
+    },
+    {
+      "name": "面板偏好保存回读且不递增业务revision",
+      "result": "passed",
+      "revision": 5
+    },
+    {
+      "name": "面板令牌拒绝业务、签发授权、MCP、非白名单方法/查询及Origin",
+      "result": "passed"
+    },
+    {
+      "name": "原scope/event查询与重放幂等，无记录保持unknown",
+      "result": "passed"
+    },
+    {
+      "name": "停止可识别、generation重发现、旧凭据拒绝、MCP原配置和偏好恢复",
+      "result": "passed"
+    },
+    {
+      "name": "浏览器无原生桥首次读取明确离线且无模拟回退",
+      "result": "passed"
+    },
+    {
+      "name": "首次离线后重连恢复第二阶段选择及长详情阅读位置",
+      "result": "passed",
+      "displayVariant": "browser-only long-detail blockers + preferences y override; service business snapshot unchanged",
+      "expectedDetailTop": 180,
+      "actualDetailTop": 180
+    },
+    {
+      "name": "真实STDIO项目在新外壳service视图显示，身份和running状态一致",
+      "result": "passed",
+      "native": false,
+      "transport": "Playwright exposed binding to real scoped panel HTTP"
+    },
+    {
+      "name": "新外壳拒绝授权/版本错误/离线及旧revision保留最后快照且可重连",
+      "result": "passed"
+    },
+    {
+      "name": "阅读交互只保存偏好且不改变业务版本",
+      "result": "passed",
+      "reads": 6,
+      "saves": 1
+    }
+  ],
+  "error": "page.evaluate: TypeError: ReactDOM.createRoot is not a function\n    at eval (eval at evaluate (:370:30), <anonymous>:21:31)\n    at async <anonymous>:381:23\n    at TestContext.<anonymous> (G:\\rust\\Codex-task-monitoring\\app\\tests\\island-d-service.test.mjs:257:18)",
+  "errors": []
+}

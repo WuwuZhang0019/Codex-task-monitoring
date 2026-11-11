@@ -142,3 +142,38 @@ flowchart LR
  A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
  B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>pending，准备完成未开始"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
 ```
+
+
+## D 本地开始
+
+日期：2026-11-11
+
+用户发送“开始执行④ 灵动岛工作台 / D 真实服务接线”，依方案1.4核对后开始D-01—D-03。业务main/d0e1944、Fork codex/island-workbench-shell/611684c均干净；Fork只读权限审批成功，两仓库指令已核对。C证据索引实际42项bytes/SHA256全部匹配（历史回执41项表述保留）。C原出口passed，E原生条件不前置给D。
+
+本地执行键：island-workbench-20261111/local/D-20261111-01；责任聊天01a1cb43-4969-7a12-bdba-9b30e7c592bf，host local。宿主set_thread_title成功设为“④ 灵动岛工作台 / D 真实服务接线”。D本地running/pending，服务deferredByAuthorization，所有正式服务身份留空，未发送业务写入，无未知提交。仅开始D，E/F pending。
+
+
+## D 独立确认入口与定向正式验收范围
+
+日期：2026-11-12
+
+业务服务实现已提交efeaeb7，隔离STDIO/HTTP及浏览器13项检查、原模拟24+5回归通过；Fork最后审查修复了客户端旧响应改写内部状态和长详情恢复顺序问题，当前新壳确认入口仍在实施。D保持running/pending，本路线服务deferredByAuthorization，不冒称completed/synced。
+
+首次正式独立启动前后aggregate SHA256一致，私有面板读到revision150；原MCP凭据读取旧A—G项目FORBIDDEN。随后试图逐项目MCP回读的操作被自动审批拒绝，未执行，未用其他路径绕过。用户明确批准只对mock-twenty-20261111/project开展定向读取、受控绑定和测试进展事件；该项目已定向MCP回读accepted/revision150，尚无本聊天新绑定及测试写入。旧A—G不得修改或借用身份。
+
+用户明确指出旧工作台已删除/打不开。先前要求在旧UI中确认的路径撤回，方案1.5已记录；改在新壳常规设置提供原生连接授权及绑定确认，仍由用户本人签发。此前本次启动的旧桌面调试进程已核实路径并停止，独立服务继续运行等待新入口。未恢复旧安装，E/F未启动。
+
+
+## D 本轮保存与等待原生确认
+
+日期：2026-11-12
+
+业务实现efeaeb7、Fork8d154ec已提交，最终新壳exe906A197440DFEB19F2D3119F80C3577943D492677D588E2FABC6408DFF4E9412。新壳独立连接授权/绑定确认入口已实现并通过最终检查，不再要求已删除旧UI；复核恢复短路后Rust28、Bun23、lint60、build/clippy及隔离13项通过。用户物理Esc停止Computer Use，之后没有继续电脑控制。
+
+D-01本地实现及生命周期验证完成，D-02/D-03正式出口待验；父D blocked/pending，进度3/6。停止等待用户在新壳本人签发连接及绑定，固定正式测试项目只读accepted150，未发正式绑定或进展事件，无未知业务提交。本地执行键沿用D-20261111-01，所有本路线服务身份仍为空，deferredByAuthorization。新壳及正式独立服务留待本人操作，隔离native根已停止并清理。完整十八字段见D_阶段回执_2026-11-12.md，E/F未派发。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
+ B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>blocked/pending，等待新壳本人确认"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
+```

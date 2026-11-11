@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-12",
+  "commit": "efeaeb7",
+  "commands": [
+    {
+      "command": "npm run build",
+      "result": "passed"
+    },
+    {
+      "command": "npm test",
+      "result": "passed",
+      "serverAndMcp": 139,
+      "domain": 6,
+      "skill": 10
+    },
+    {
+      "command": "npm run test:desktop",
+      "result": "passed",
+      "tests": 9
+    },
+    {
+      "command": "cargo test --lib",
+      "cwd": "app/src-tauri",
+      "result": "passed",
+      "tests": 7
+    },
+    {
+      "command": "cargo clippy -- -D warnings",
+      "cwd": "app/src-tauri",
+      "result": "passed"
+    },
+    {
+      "command": "npm run desktop:resources; cargo build",
+      "result": "passed; final lifecycle lease included"
+    }
+  ],
+  "formalBusinessWrites": false,
+  "notes": [
+    "npm test结果来自本次实际工具输出汇总，非伪造原始日志",
+    "desktop-tests.log为最终桌面测试原始输出",
+    "原生debug业务桌面构建用于附着兼容性验证，用户明确已删除旧安装，正式授权入口改迁新壳"
+  ],
+  "skill": {
+    "source": "C:/Users/Zyf/.codex/plugins/cache/task-workbench-u01-local/task-workbench/0.1.6/skills/workbench-handoff/SKILL.md",
+    "version": "0.1.6",
+    "sha256": "5D17F0D02C755EE9E9A461459295651E1BE9839F419D3A383E65483445C97D75",
+    "executionSyncSha256": "C086E7F790490F9E2D8DC95CD90FB837D97AD18F669A6950712E96D710B72539"
+  }
+}

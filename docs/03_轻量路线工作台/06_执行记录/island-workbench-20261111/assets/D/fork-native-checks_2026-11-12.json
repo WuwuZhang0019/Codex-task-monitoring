@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-12",
+  "scope": "island-workbench-20261111/D-02,D-03",
+  "forkBase": "611684c7b1bca210bfe321ebc386d745f1d7b5e6",
+  "status": "implementation-and-isolated-checks-passed; real authorized business closure and native visual observation tracked separately",
+  "commands": [
+    {
+      "command": "bun run lint",
+      "result": "passed; 60 files"
+    },
+    {
+      "command": "bun run build",
+      "result": "passed; TypeScript and Vite"
+    },
+    {
+      "command": "bun test src",
+      "result": "23 passed, 0 failed; 80 assertions; includes 9 service-client tests and 2 binding summary tests"
+    },
+    {
+      "command": "cargo clippy -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "cargo test --lib",
+      "result": "28 passed, 0 failed; includes native HTTP, settings-only scope, private grant persistence, backup/restore, malformed/500 unknown results, binding confirmation and actual config-restore-failure metadata recovery tests"
+    },
+    {
+      "command": "bun run tauri build --debug --no-bundle --config G:/rust/Codex-task-monitoring/app/test-results/island-D/native-config.json",
+      "result": "passed; no app started by this agent"
+    }
+  ],
+  "failures": [
+    {
+      "attempt": "initial-native-http-tests",
+      "expected": "21 native tests passed",
+      "actual": "19 passed, 2 HTTP tests failed",
+      "error": "No rustls crypto provider is configured. When using the rustls-no-provider feature you must install a crypto provider before building a Client.",
+      "cause": "tauri-plugin-updater unifies reqwest rustls-no-provider; building the HTTP-only reqwest client still initializes that TLS backend",
+      "fix": "Use the existing updater approach to install rustls ring default provider when absent; add direct reqwest/json and rustls/ring,std references to already locked dependencies. No new locked packages.",
+      "recheck": "clippy passed; 21/21 native tests passed"
+    },
+    {
+      "attempt": "independent-review-read-race-reproduction",
+      "expected": "latest completed read keeps ready/revision9 and permits preference save",
+      "actual": "7 service tests passed, 2 new regression tests failed; older failed request returned unauthorized, older revision returned stale",
+      "cause": "ServiceWorkbenchClient mutated internal connection state even when useWorkbench discarded the superseded outer result",
+      "fix": "Add client-local readSequence; only the latest read may commit current envelope and initial preferences",
+      "recheck": "9/9 service-client tests, 21/21 frontend tests; build/lint/clippy/Rust21 passed"
+    }
+  ],
+  "native": {
+    "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\dynamic-island.exe",
+    "bytes": 19657728,
+    "sha256": "906a197440dfeb19f2d3119f80c3577943d492677d588e2fabc6408dff4e9412",
+    "profile": "G:/rust/Codex-task-monitoring/app/test-results/island-D/native-profile",
+    "uiObserved": false
+  },
+  "artifacts": [
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\Cargo.lock",
+      "bytes": 130896,
+      "sha256": "09f2d1a167de6e260bdc29527b5ee7cf3312763fbc0a60d61da09012b2733f56"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\Cargo.toml",
+      "bytes": 3666,
+      "sha256": "6a32e073102552a7714cdf8fe41c591bc59eb196ede70583b6c454f687d919b0"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\src\\lib.rs",
+      "bytes": 2676,
+      "sha256": "ed3dd16702f73e68157bdadafd25c49808e5b812cc915ca527f9e03dc19cbadf"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\src\\workbench.rs",
+      "bytes": 12136,
+      "sha256": "00e23fa879b7db6d5d112e423bca74c870cceeb3be36d4bd6308e25ce26a81c2"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\components\\island\\content.tsx",
+      "bytes": 1918,
+      "sha256": "14eaf9b12bf87928f0d585a8567fdfa9e84ad7daa4dc6c68494f78eb63afa204"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\workbench\\WorkbenchView.tsx",
+      "bytes": 19096,
+      "sha256": "9a0d97dc608f7f13500521fc509228e2711304efa712e555b2af4c72de472364"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\workbench\\useWorkbench.ts",
+      "bytes": 3663,
+      "sha256": "de16dd5d44a767c8fc53ccc706578699b859aed5b61071af67dde4f2bccf4b81"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\workbench\\service-client.ts",
+      "bytes": 4960,
+      "sha256": "9ad3acd0d2f0b61b87d55ec7631c3600914f3ad316da3d81d95c4c88506545ab"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\workbench\\service-client.test.ts",
+      "bytes": 7690,
+      "sha256": "37f13960b123a6287f9597dede08e8a7d7398ccbf8801f0108e2f796fa28e23c"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\src\\workbench_connection.rs",
+      "bytes": 25989,
+      "sha256": "da00a2048582d388eb2dd48468234418ca833a799ec122b34d22fd31dffc8abe"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\settings\\components\\WorkbenchConnection.tsx",
+      "bytes": 10440,
+      "sha256": "c6b5f4acc9aa56a74e251882071e0aefbc578b70feb43b3acf8626c116da6491"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\settings\\pages\\GeneralPage.tsx",
+      "bytes": 4096,
+      "sha256": "b2711c3416e2041d51c1e1968e3905056aef68e9629b31fa48aedfeacd9c6267"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src\\settings\\components\\WorkbenchConnection.test.ts",
+      "bytes": 1156,
+      "sha256": "259e539aae56d6513d2b6b75db5fed69df1ab36582d94fddffcd8289d8c29a64"
+    }
+  ],
+  "limits": [
+    "No official data or credential read by this agent",
+    "No business writes or service synced claim",
+    "Event lookup without original principal/project/operation remains unknown and returns to original MCP caller",
+    "Browser simulation requires explicit workbench=simulation; service never falls back to mock"
+  ],
+  "reviewFixes": [
+    {
+      "issue": "saved detail scroll applied before selected DOM committed",
+      "fix": "Stage pendingDetailTop and restore in a following layout effect only when the selected key matches rendered detail",
+      "verification": "integration agent browser first offline then reconnect, saved other stage B detail scroll180px ±2 passed; display-only long-content variant, no service business write"
+    },
+    {
+      "issue": "poll completion after component unmount",
+      "verification": "integration agent independent real-hook React root: accelerated10/30s poll to25ms, unmount during two pending reads, release reads, no further timer scheduled; passed"
+    },
+    {
+      "issue": "config restore boolean short-circuited metadata restore; initial agent completion report did not match actual source",
+      "fix": "Read actual source, independently call both restore operations before combining boolean results; metadata IO read errors fail before issuance",
+      "verification": "Actual failure path injects config as directory so its restore fails while original metadata still restores; Rust28/28 passed; final build uses verified source"
+    }
+  ],
+  "browserReviewVerification": "13 isolated browser checks passed; not native UI or official business acceptance",
+  "independentConnectionEntry": {
+    "date": "2026-11-12",
+    "reason": "User clarified the old workbench UI was deleted/unavailable; D must provide independent connection authorization and binding confirmation in the new shell",
+    "entry": "Settings > General > Workbench connection and binding confirmation",
+    "scope": "settings window only; explicit acknowledgement and click; native-only owner session token; fixed grants/revoke/confirm-binding paths; no token or confirmation grant returned to WebView",
+    "unknownHandling": "Network/malformed/500/generation failures retain unknown; new issuance is disabled in that settings session until external reconciliation",
+    "backupHandling": "Existing config is protected and backed up before issuance; failed save attempts to revoke only the newly issued grant and independently attempts original config/metadata restoration. Metadata IO errors block issuance rather than being treated as absent. Restore failure reports CHECK_BACKUP; this generic error does not encode revocation outcome.",
+    "nativeVisualAcceptance": "not claimed; final executable ready for user confirmation",
+    "readableBindingSummary": "Loaded confirmation shows exact projectId, context threadId/worktreePath/branch, stepIds count and expectedRevision before checkbox. Full text remains editable in advanced details; edits reset acknowledgement; malformed/incomplete scope disables confirmation."
+  }
+}

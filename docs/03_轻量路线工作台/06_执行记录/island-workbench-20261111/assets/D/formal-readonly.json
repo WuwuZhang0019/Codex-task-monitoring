@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-12",
+  "formalReadOnly": true,
+  "formalWrite": false,
+  "native": false,
+  "owner": {
+    "pid": 51792,
+    "generation": "fc35ea75-786e-4005-8ea4-d32b8c38627a",
+    "endpoint": "http://127.0.0.1:4641",
+    "lifetime": "standalone",
+    "attached": false
+  },
+  "snapshot": {
+    "revision": 150,
+    "projects": [
+      {
+        "id": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+        "key": "light-workbench-20261110/project",
+        "name": "轻量路线工作台正式实施方案"
+      },
+      {
+        "id": "b83b6ffd-2aac-47b5-90df-67816a1b9963",
+        "key": "mock-twenty-20261111/project",
+        "name": "测试项目 · 二十步骤六条路线"
+      }
+    ],
+    "steps": 60
+  },
+  "mcp": {
+    "toolCount": 9,
+    "status": "rejected",
+    "errorCode": "FORBIDDEN",
+    "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+    "revision": null,
+    "sameSnapshot": false,
+    "readOnly": true
+  },
+  "businessDataUnchanged": true,
+  "beforeSha256": "0261561637ddf7f1c0936217d0a4ee09ba81870a0fd520640ec57b839b117698",
+  "afterSha256": "0261561637ddf7f1c0936217d0a4ee09ba81870a0fd520640ec57b839b117698"
+}
