@@ -1,0 +1,335 @@
+{
+  "date": "2026-11-11",
+  "sourceCommit": "85085083d05099dc68153694c23e4e7cef7640ae",
+  "pluginVersion": "0.1.5",
+  "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+  "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+  "revision": 128,
+  "parentExecutionId": "96c9ec78-f71f-46ce-86ae-a9f9410b0fd2",
+  "bindingId": "d6e89d87-918d-498f-8204-8c69693ff2bf",
+  "bindingRevision": 2,
+  "stages": [
+    {
+      "code": "E",
+      "id": "bfdbf0e2-115c-4322-bd26-e1f8675133e1",
+      "status": "completed",
+      "acceptance": "passed",
+      "executionKey": "light-workbench-20261110/executions/96c9ec78-f71f-46ce-86ae-a9f9410b0fd2"
+    },
+    {
+      "code": "E-01",
+      "id": "8b132f2c-f307-4a59-98bf-e350523669fb",
+      "status": "completed",
+      "acceptance": "passed",
+      "executionKey": "light-workbench-20261110/executions/1fb30edd-90fa-4b54-83ea-0827f8035122"
+    },
+    {
+      "code": "E-02",
+      "id": "c76503d4-20e2-493b-8a88-c7521bc10bad",
+      "status": "completed",
+      "acceptance": "passed",
+      "executionKey": "light-workbench-20261110/executions/5fdb0604-43b1-4aaa-804f-748361db704a"
+    },
+    {
+      "code": "E-03",
+      "id": "66543a65-cefd-4778-8ad9-9b8d2b1c6da5",
+      "status": "completed",
+      "acceptance": "passed",
+      "executionKey": "light-workbench-20261110/executions/99d25bdf-55d0-47ca-a9b0-f7b0dd05d996"
+    },
+    {
+      "code": "E-04",
+      "id": "cc0e92de-c924-47ac-a7f5-bdea79f12aeb",
+      "status": "completed",
+      "acceptance": "passed",
+      "executionKey": "light-workbench-20261110/executions/eea6f613-03f8-425c-bbcf-99164805d98f"
+    },
+    {
+      "code": "E-05",
+      "id": "690242cd-4021-44f5-8dfa-1c1d27cae67f",
+      "status": "completed",
+      "acceptance": "passed",
+      "executionKey": "light-workbench-20261110/executions/88010a99-685e-4dc2-a5b2-21990a1212d8"
+    },
+    {
+      "code": "E-06",
+      "id": "aa2fb689-ed7b-4ccd-8f36-68e285563198",
+      "status": "completed",
+      "acceptance": "passed",
+      "executionKey": "light-workbench-20261110/executions/bf99060b-946b-466c-b105-92be7f20635f"
+    },
+    {
+      "code": "E-07",
+      "id": "636322a3-635f-459b-a6f5-0702ebb5dff6",
+      "status": "completed",
+      "acceptance": "passed",
+      "executionKey": "light-workbench-20261110/executions/99179c53-d8e2-47b1-9f6d-a33925582005"
+    }
+  ],
+  "checks": {
+    "serverMcpSerial": {
+      "passed": 136,
+      "failed": 0
+    },
+    "domain": {
+      "passed": 6,
+      "failed": 0
+    },
+    "skill": {
+      "passed": 10,
+      "failed": 0
+    },
+    "connectionUi": {
+      "passed": 7,
+      "failed": 0,
+      "environment": "Edge headless and native invoke fixture"
+    },
+    "rust": {
+      "passed": 2,
+      "failed": 0
+    },
+    "publishedBridge": {
+      "passed": 6,
+      "failed": 0
+    },
+    "independentForward": {
+      "passed": true,
+      "initialFractionalOrderFailurePreserved": true,
+      "fixRechecked": true
+    },
+    "installed": {
+      "matched": 14,
+      "total": 14
+    },
+    "standalone": {
+      "matched": 9,
+      "total": 9
+    },
+    "nativeUi": {
+      "supplementEntry": true,
+      "supplementInput": true,
+      "supplementSubmit": true
+    },
+    "liveInstalledStdio": {
+      "toolCount": 9,
+      "takeoverSchema": true,
+      "supplementConfirmationSchema": true,
+      "replayEqual": true,
+      "queryState": "committed",
+      "beforeRevision": 118,
+      "afterRevision": 119
+    },
+    "newDesktopChat": {
+      "status": "passedWithinReadOnlyScope",
+      "threadId": "01a1c889-970d-70a0-801a-3071b4af1bb0",
+      "loadedPath": "C:/Users/Zyf/.codex/plugins/cache/task-workbench-u01-local/task-workbench/0.1.5/skills/workbench-handoff/SKILL.md",
+      "fileConsistency": "passed",
+      "skillDiscovery": "passed",
+      "flowSelection": "passed",
+      "capabilities": "passedForReadScope",
+      "serviceRead": "passed",
+      "revision": 123,
+      "originalStartEvent": "committedAtRevision99",
+      "businessWrites": [],
+      "limit": "桌面三项写工具摘要为unknown类型，完整schema由真实已安装STDIO发现单独保存；本新聊天按授权仅只读"
+    }
+  },
+  "limits": [
+    "首次并发回归2MB请求发生一次ECONNRESET，单项及同组顺序复核通过，根因未确认",
+    "实际宿主未暴露普通项目创建、项目改名和聊天跳转，记录unsupported及建议名",
+    "首次cargo build得到开发服务器模式；已用Tauri嵌入式debug构建纠正并观察真实主页面",
+    "正式界面显示轻量路线与视觉验收归F，整项目恢复交付归G"
+  ],
+  "evidence": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\regression.log",
+      "sha256": "51e8390e73a7fb31dc54604e73391ffffac3c7606b6eb621a15b1a4e7e66706c",
+      "bytes": 15091
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\regression-serial.log",
+      "sha256": "8a9fcaddebdd3ef8df656cf96a233ddec2981ec14333caca3f4dd2f118e9a58d",
+      "bytes": 14172
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\native-build.log",
+      "sha256": "ca6f0e92755e42997614aadc3d02b9efab72feadb9212897ae3baed0639ae88b",
+      "bytes": 1081
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\install-fingerprints.json",
+      "sha256": "7665870c1b7db39ebd4504a60b37764666a47ef104ff3f432ada06e768c99ace",
+      "bytes": 2559
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\live-stdio-result.json",
+      "sha256": "c637eb4f474444c495bf6d459ab0905e8f174959aa141d938fd890a06ced57c2",
+      "bytes": 352608
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\native-ui-presence.json",
+      "sha256": "1d30c7ac35589ed6cb1f58ae51d696ac974794ce1c7d8495ba0d4de7cbad47f8",
+      "bytes": 6119
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\light-connection-ui.json",
+      "sha256": "ae83cd508eba314234da7eedfbbda74c7152b81006066adf6a8563b13d67061a",
+      "bytes": 1048
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-forward-check\\report.md",
+      "sha256": "cd3817d50f6ea95d24bc0b4a12b3ecf09ac1e47e97534fe5e19f2c7776fbafc6",
+      "bytes": 5884
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-forward-check\\result.json",
+      "sha256": "21374c4d80d25273ee183d11e95510b5fec3cff18aadf23af9f141ef419f6a96",
+      "bytes": 1940
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-forward-check\\recheck-order-result.json",
+      "sha256": "25cde0300f91c010aa0cfbca66b95eca2b83c3caa1d4f963a68775cd25b7981d",
+      "bytes": 1746
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\route-workbench-desktop.exe",
+      "sha256": "10f5e617bd5239839816cc52c28668a2795d36caf657fb974f45af45d402ef45",
+      "bytes": 15701504
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\runtime\\manifest.json",
+      "sha256": "1da2d7e45eaccdb184cac5484ec33b706f0174dd42631a301d9fa643d699f791",
+      "bytes": 8603
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\mcp\\contracts\\light-v1.json",
+      "sha256": "14d70ef9ea0403838f0ad36bfefc12136f9e6322e8793404bd2c376042557a21",
+      "bytes": 43517
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\E_宿主操作记录_2026-11-11.json",
+      "sha256": "bd3448a8ff317c2fa14fc19c972253c95d5498786dec6679d4ad0e73f4044e26",
+      "bytes": 4137
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\live-stdio-tools.json",
+      "sha256": "6a1287133b7470247803acb3748e0e30112aa109299b1b46019f7813c0403cd5",
+      "bytes": 98666
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\final-read-result.json",
+      "sha256": "c0ed91474017fc1e154cc436646ed123878582ac12ee4e95e471be4df240f134",
+      "bytes": 171245
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\E_阶段回执_2026-11-11.md",
+      "sha256": "6b263e6a635a19cf0bee01644b9baf25bd9f29e267a307af73c8516f597dbd58",
+      "bytes": 5360
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\new-chat\\documents-and-repository.json",
+      "sha256": "d22bb1198443db6325dee66d495fb569effb604519074743e3429370a9484c6b",
+      "bytes": 24902
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\new-chat\\event-query.json",
+      "sha256": "1713c6a7fd05ee87141b61dc6234f3a03891c76e837c09164ea99e5cb427990c",
+      "bytes": 1789
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\new-chat\\evidence-index.json",
+      "sha256": "d1a8e9112d91da0d12a354d46f42258069dbe8ff580b2234d538411d664ecd38",
+      "bytes": 2206
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\new-chat\\E_Skill加载验收报告_2026-11-11.md",
+      "sha256": "172616cc6cf30220b5e19e0ca0e42cf3bef355553c18e3b7aac900f00beaa5a3",
+      "bytes": 11795
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\new-chat\\installation-hashes.json",
+      "sha256": "adb1438a894725b17f6bf3f1989e65b489b465e55552314bdf8cf7ae20f4a4c0",
+      "bytes": 21487
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\new-chat\\mcp-capabilities.json",
+      "sha256": "0183bea890188366fbe2fc39fb2913d92924cf35c2a0ff9685dff599367c18f7",
+      "bytes": 5310
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\new-chat\\project-readback.json",
+      "sha256": "368c6feb06ed5bf153f815a6f86267362153bac01f3331f165e25e72efaa88aa",
+      "bytes": 35370
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\new-chat\\skill-discovery.json",
+      "sha256": "f2270394e0e657398b7453f6d2d579044a94eaf272dbea4585ae4560e0c9c5e3",
+      "bytes": 2045
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\http\\RSDkuovpobnnoa7orqTnu5Hlrprnsr7noa7lhoXlrrnvvIzlhbPogZTmlrnmoYjlrozmiJDlj6rop6PpmaTlr7nlupTpmLvloZ7l.json",
+      "sha256": "2136ecf0c8cbe758d94afc7fb7f9a47525bfd45b5b72269b8c55eaa85f61bc31",
+      "bytes": 408075
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\http\\RSDlv4XopoHkuovpobnlj5bmtojpobvlj5fmjqfnoa7orqTlkozmmI7noa7mib_mjqXvvIzop6PpmaTlkI7ku43moLjlr7nmnaXm.json",
+      "sha256": "df08995854ba173aab1fcd07ef50acb16638e15426115ad81cc04bc65099d546",
+      "bytes": 109897
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\http\\RSDmiafooYzlj5bmtojkuI7mmL7lvI_ov5Tlt6XjgIHpmLvloZ7mgaLlpI3msr_nlKjnu5Hlrprlubbph43mo4DliY3nva4.json",
+      "sha256": "ca61c143cddeb42a2507477464e9a966786e44058419a2357e96cdeea3d9bc7d",
+      "bytes": 134275
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\http\\RSDmjqXmiYvlv4XpobvmoLjlr7nljp_otKPku7vlhajpg6jojIPlm7Tlj4rmnKrnu5PmnZ_miafooYzvvIznoa7orqTmhI_lm77k.json",
+      "sha256": "675f6073d199d59c8f331c23a72902a5ed92da00c92fe1456a24fbba7f66c4b8",
+      "bytes": 117684
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\http\\RSDmmL7lvI_mjqXmiYvkv53nlZlleGVjdXRpb25JZO-8jOaXp-aWsOi0o-S7u-WUr-S4gO-8jOi_n-WIsOe7k-aenOaMgeS5heW-.json",
+      "sha256": "bcedb8f3c60c3498deb05a6bff220dfd2a715eb54a0404ae1baecc968613aa6e",
+      "bytes": 132391
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\E-EX01\\http\\RSDph43lj6DotKPku7vmi5Lnu53vvIzmnKrorqTor4Hnoa7orqTjgIHplJnor6_nm67lvZXlkozliIbmlK_kuI3nlJ_mlYg.json",
+      "sha256": "92875740d1dd0cb9c469ee941f3c1486e8ba21e946ea3d73e4463964d5b3e685",
+      "bytes": 56140
+    }
+  ],
+  "finalReceipt": {
+    "revision": 128,
+    "requestId": "d3df5b48-d7d9-4f5e-90cf-3c5c25be2faa",
+    "executionId": "96c9ec78-f71f-46ce-86ae-a9f9410b0fd2",
+    "replaySame": true,
+    "queryState": "committed"
+  },
+  "handoff": {
+    "conclusion": "D",
+    "phaseProgress": {
+      "completed": 5,
+      "total": 7
+    },
+    "nextStage": "F",
+    "next": {
+      "status": "pending",
+      "dependencies": [
+        {
+          "code": "C",
+          "status": "completed",
+          "acceptance": "passed"
+        },
+        {
+          "code": "E",
+          "status": "completed",
+          "acceptance": "passed"
+        }
+      ],
+      "bindingKey": null,
+      "executionKey": null,
+      "beginPermission": "notRequested",
+      "nextDispatch": "F另行派发后核对实际绑定并取得开始回执"
+    },
+    "started": false
+  }
+}

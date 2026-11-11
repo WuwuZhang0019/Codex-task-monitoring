@@ -1,0 +1,112 @@
+{
+  "date": "2026-11-11",
+  "recordedAfterExecution": true,
+  "note": "操作ID为本次实际调用及其结果的稳定归档键；不宣称宿主支持原生幂等参数。未来重试沿用归档键并先核对固定目标。",
+  "mapping": {
+    "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+    "planKey": "light-workbench-20261110",
+    "stepKeys": [
+      "light-workbench-20261110/A-05",
+      "light-workbench-20261110/stages/E/steps/E-01",
+      "light-workbench-20261110/stages/E/steps/E-02",
+      "light-workbench-20261110/stages/E/steps/E-03",
+      "light-workbench-20261110/stages/E/steps/E-04",
+      "light-workbench-20261110/stages/E/steps/E-05",
+      "light-workbench-20261110/stages/E/steps/E-06",
+      "light-workbench-20261110/stages/E/steps/E-07"
+    ],
+    "threadId": "01a1c852-c69a-7bc0-a8e8-bfdd63e135f6",
+    "hostId": "local",
+    "hostProjectId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d",
+    "worktreeOrdinal": 1,
+    "worktreePath": "G:\\rust\\Codex-task-monitoring",
+    "branch": "main",
+    "title": "⑤ 轻量路线工作台 / E Skill 与会话关联",
+    "stepIds": [
+      "bfdbf0e2-115c-4322-bd26-e1f8675133e1",
+      "8b132f2c-f307-4a59-98bf-e350523669fb",
+      "c76503d4-20e2-493b-8a88-c7521bc10bad",
+      "66543a65-cefd-4778-8ad9-9b8d2b1c6da5",
+      "cc0e92de-c924-47ac-a7f5-bdea79f12aeb",
+      "690242cd-4021-44f5-8dfa-1c1d27cae67f",
+      "aa2fb689-ed7b-4ccd-8f36-68e285563198",
+      "636322a3-635f-459b-a6f5-0702ebb5dff6"
+    ]
+  },
+  "operations": [
+    {
+      "operationId": "E-EX01/host/list-projects",
+      "kind": "list",
+      "status": "succeeded",
+      "targetId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d",
+      "result": "实际宿主返回已有同仓库项目；未创建项目",
+      "retryStatus": "notNeeded"
+    },
+    {
+      "operationId": "E-EX01/host/title",
+      "kind": "rename",
+      "status": "succeeded",
+      "targetId": "01a1c852-c69a-7bc0-a8e8-bfdd63e135f6",
+      "attempts": [
+        {
+          "status": "succeeded",
+          "evidence": "E_开始门禁证据_2026-11-11.json/rename"
+        },
+        {
+          "status": "succeeded",
+          "result": {
+            "threadId": "01a1c852-c69a-7bc0-a8e8-bfdd63e135f6",
+            "title": "⑤ 轻量路线工作台 / E Skill 与会话关联"
+          }
+        }
+      ],
+      "retryStatus": "sameTitleIdempotentResult"
+    },
+    {
+      "operationId": "E-EX01/host/move",
+      "kind": "move",
+      "status": "succeeded",
+      "targetId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d",
+      "result": {
+        "source": "codex",
+        "threadId": "01a1c852-c69a-7bc0-a8e8-bfdd63e135f6",
+        "hostId": "local",
+        "projectId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d"
+      },
+      "retryStatus": "notNeeded"
+    },
+    {
+      "operationId": "E-EX01/host/create-project",
+      "kind": "createProject",
+      "status": "unsupported",
+      "targetId": null,
+      "reason": "当前宿主未暴露普通项目创建工具",
+      "suggestedName": "轻量路线工作台正式实施方案",
+      "retryStatus": "waitForCapability"
+    },
+    {
+      "operationId": "E-EX01/host/rename-project",
+      "kind": "renameProject",
+      "status": "unsupported",
+      "targetId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d",
+      "reason": "当前宿主未暴露项目改名工具",
+      "retryStatus": "waitForCapability"
+    },
+    {
+      "operationId": "E-EX01/host/jump",
+      "kind": "jump",
+      "status": "unsupported",
+      "targetId": "01a1c852-c69a-7bc0-a8e8-bfdd63e135f6",
+      "reason": "open_in_codex可打开文档或面板，不能视为跳转聊天能力",
+      "retryStatus": "manualHostNavigation"
+    },
+    {
+      "operationId": "E-EX01/host/create-acceptance-chat",
+      "kind": "createChat",
+      "status": "succeeded",
+      "targetId": "01a1c889-970d-70a0-801a-3071b4af1bb0",
+      "reason": "用户明确授权创建并执行验收后调用create_thread，五项只读验收通过",
+      "retryStatus": "completedNoRetry"
+    }
+  ]
+}
