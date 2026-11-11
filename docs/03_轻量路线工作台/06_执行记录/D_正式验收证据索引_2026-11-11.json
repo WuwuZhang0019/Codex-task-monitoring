@@ -1,0 +1,304 @@
+{
+  "date": "2026-11-11",
+  "executionKey": "light-workbench-20261110/executions/D-EX01",
+  "resumeHead": "491c04bc2cd2565cdb6eeaf61f6725c962d9b548",
+  "implementationCommit": "3663c54dab5fef769c306f17c83a61e590c87bcb",
+  "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+  "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+  "revision": 94,
+  "status": {
+    "business": "completed",
+    "acceptance": "passed",
+    "sync": "synced",
+    "handoffConclusion": "D",
+    "completedPhases": 4,
+    "totalPhases": 7,
+    "registeredStepEntities": 33,
+    "completedStepEntities": 30,
+    "nextStage": "E",
+    "nextStageStatus": "pending",
+    "stagePrerequisiteSatisfied": true,
+    "eExecutionId": null
+  },
+  "checks": {
+    "sourceFingerprints": 6,
+    "runtimeFingerprints": 2,
+    "installedFingerprints": 12,
+    "evidenceFingerprints": 6,
+    "fingerprintsMatched": 26,
+    "resumeSnapshotMatchesPublishedAfterRedaction": true,
+    "bindingConfirmationDigestMatchesOriginalRegistration": true,
+    "completedDParentEvents": 1,
+    "coldReadback": "passed",
+    "combinationRegressionPassed": 135,
+    "connectionUiChecksPassed": 6,
+    "rustChecksPassed": 2
+  },
+  "checkedFiles": [
+    {
+      "path": "app/src/LightConnection.tsx",
+      "sha256": "bc49218c8c82b90533fa94688c530bbb59804fa9cf7c9a5900b114fbfcba10c1",
+      "bytes": 8925
+    },
+    {
+      "path": "app/src/light-connection.css",
+      "sha256": "41676fabf87b8be9f407781a28004a10029b7ccde783d0ca50b86ab60337182e",
+      "bytes": 1416
+    },
+    {
+      "path": "app/src/DesktopSetup.tsx",
+      "sha256": "f397e78e7dd98ab54b604713e7c8bd9bba5120ebebd94627de0a084fe0e104db",
+      "bytes": 4085
+    },
+    {
+      "path": "app/src/main.tsx",
+      "sha256": "230b6c75654bbb9e0caff7ff1cb5161b7450b99e2d0c235bad3a2607d5995c71",
+      "bytes": 34700
+    },
+    {
+      "path": "app/src-tauri/src/lib.rs",
+      "sha256": "cd57d226fe47a7d3d092977ffc9c6da4d4df405cf0c1f6f5b292d80c4dcc5540",
+      "bytes": 19857
+    },
+    {
+      "path": "app/tests/light-connection.mjs",
+      "sha256": "b775bf9f56a3957d2a88b2374746669d40372b6b0d450612c66bb65978968a0d",
+      "bytes": 10091
+    },
+    {
+      "path": "app/src-tauri/target/debug/route-workbench-desktop.exe",
+      "sha256": "c3eb63ff80fdfc08a851a2ff03e5e2d35ec57c16182f68e9268dc08b5b9e0345",
+      "bytes": 15700992
+    },
+    {
+      "path": "app/src-tauri/target/debug/runtime/manifest.json",
+      "sha256": "2978b62e16601a0d97e87b5ba6252f95ce18efa5e3ea0fafcf98c691098b8bdf",
+      "bytes": 8386
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\mcp.json",
+      "sha256": "ef3c96bea190953dfa10bd2a327c788f84125ad50fecd84ea9251a9f309e69da",
+      "bytes": 262
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\plugin.json",
+      "sha256": "be21cd93c8bcc18a6cdc9563da047771dfc1a374c774b14c9ea91cdcb8930204",
+      "bytes": 464
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\README.md",
+      "sha256": "f9e0af14fdf43fd278aa210b92fd01c62543a66a1549f0ecaec6f06280f3daaa",
+      "bytes": 3067
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\THIRD-PARTY-NOTICES.txt",
+      "sha256": "0d5ff334ce3b33c5024738393de4c1235dd92f9006034f800fc0179b8df18eba",
+      "bytes": 9303
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\runtime\\light.mjs",
+      "sha256": "832cea7e58af271d0b8d9147733c21c9de02064e90bab00d847cefb4cc1749cf",
+      "bytes": 683645
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\SKILL.md",
+      "sha256": "fdf87061042b57c8667e086b5ca52d9989e123da44717979e68345ab6ca1dbd2",
+      "bytes": 9186
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\agents\\openai.yaml",
+      "sha256": "ec61bef2a662205266d3358760ae8b432834d8803d88bb498899577407ea81c1",
+      "bytes": 332
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\context-supplements.md",
+      "sha256": "9b1b72b2e105781385315f2f4244f3b08d4f6a0f8c990fd7de5d47cb1635202b",
+      "bytes": 3754
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\execution-sync.md",
+      "sha256": "eac385934240ec0f12213633e1a36c8b5c62c05abf7f5847624b2dbbc7a79ebe",
+      "bytes": 8578
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\handoff-template.md",
+      "sha256": "515404002157c912414cc8fbe4260398c5c2325b7219036d12f0652dec5bf2f4",
+      "bytes": 8908
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\handoff-workflow.md",
+      "sha256": "ea0c237f515d06d7076c11f4158df76a7b1000c61dcfe44791d845a567d6f4c4",
+      "bytes": 9554
+    },
+    {
+      "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.4\\skills\\workbench-handoff\\references\\plan-registration.md",
+      "sha256": "4309fc447f1cc0b0b437a0c9ecd899d68ee5318fed6711f843880fc01cfa3704",
+      "bytes": 3158
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/desktop-build-final.log",
+      "sha256": "bb12f8508fe7783b3f14ecf06668885487e6fb17ec030426bd5733a5e5980589",
+      "bytes": 1081
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/regression.log",
+      "sha256": "267c6963687f652c625de50adddbb647ebe5cbefbe90d095174850a633670a96",
+      "bytes": 13920
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/rust-final.log",
+      "sha256": "3df41121a21c072b80d88eb5a4c699a87f765970ad416e83e61cb047e324812d",
+      "bytes": 959
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/native-restart.json",
+      "sha256": "af57ed889f0fbc131d74e696a4b6448b0c9922858e77e565a67373656b95e39f",
+      "bytes": 2063
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/desktop-chat-evidence.json",
+      "sha256": "7128c97df243318763f1b077bac38bf66774e4f54aab06355c2c4ff69a469089",
+      "bytes": 752416
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/desktop-deployment/light-connection-ui.json",
+      "sha256": "a74ffa4b96130f390fa9adf8a876c992e9341b776b4a1b111753971e6a9ff774",
+      "bytes": 917
+    }
+  ],
+  "rawEvidence": [
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/connection-result.json",
+      "sha256": "33d5ece2a921c45a0fbfeffc68d67283b17a2e0c4800868e614c0dc874734ca9",
+      "bytes": 157
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/native-restart.json",
+      "sha256": "af57ed889f0fbc131d74e696a4b6448b0c9922858e77e565a67373656b95e39f",
+      "bytes": 2063
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/desktop-chat-evidence.json",
+      "sha256": "7128c97df243318763f1b077bac38bf66774e4f54aab06355c2c4ff69a469089",
+      "bytes": 752416
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/desktop-closure-evidence.json",
+      "sha256": "949e576de2893116e80122a9d47f137d723cce5509621d8a44907e330bbcd922",
+      "bytes": 1279521
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/desktop-cold-readback.json",
+      "sha256": "745f0999e0910075bc87b16e0d4d9dfadaff1b30ff63bc5e7f2ba5ac53400562",
+      "bytes": 258890
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/desktop-build-final.log",
+      "sha256": "bb12f8508fe7783b3f14ecf06668885487e6fb17ec030426bd5733a5e5980589",
+      "bytes": 1081
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/regression.log",
+      "sha256": "267c6963687f652c625de50adddbb647ebe5cbefbe90d095174850a633670a96",
+      "bytes": 13920
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/rust-final.log",
+      "sha256": "3df41121a21c072b80d88eb5a4c699a87f765970ad416e83e61cb047e324812d",
+      "bytes": 959
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/resume-readback.json",
+      "sha256": "11e6b4d456c4b0d2e739ab5797d3752ac5043f295b05b0175a82ab8ba72447a4",
+      "bytes": 125738
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/formal-state.json",
+      "sha256": "8cd14488ea5ef1744f6e1011433b5723bc40c31e1fa995f62f324a44603ec05c",
+      "bytes": 216735
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/resume-read.mjs",
+      "sha256": "464a9d66459aa47dfe54434326d4e725dae4442c7da8a56a85acd8111fdb466c",
+      "bytes": 1133
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/formal-desktop/assemble-final-index.py",
+      "sha256": "dd077a91731ab976987f92d7a97c1da62976e2df77e6b5d700dffa852734d31e",
+      "bytes": 5876
+    },
+    {
+      "path": "app/test-results/manual-trial/D-EX01/desktop-deployment/light-connection-ui.json",
+      "sha256": "a74ffa4b96130f390fa9adf8a876c992e9341b776b4a1b111753971e6a9ff774",
+      "bytes": 917
+    }
+  ],
+  "deliveryFiles": [
+    {
+      "path": "docs/03_轻量路线工作台/00_执行入口/01_当前执行台账_2026-11-10.md",
+      "sha256": "890b1fa1d750a2262960e943fa06e28bd28828c27a8f8ea10943ed8b29587868",
+      "bytes": 30946
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/D_正式桌面验收回执_2026-11-11.md",
+      "sha256": "8a4900f1c624e13a173aa374dc573fd66e295fa1b49f35353dbb2895c09c8dd3",
+      "bytes": 9922
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/E_执行入口_2026-11-11.md",
+      "sha256": "85116dc3f709ac836eeec800aa0fc6a40f86c0b9fa11cabe545a0245e29ee36b",
+      "bytes": 5218
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/D_暂停交接_2026-11-11.md",
+      "sha256": "97ca74eb606b5458a101924ac95a1ee2c800591ecc596e5c93e50c16462d9d3d",
+      "bytes": 1906
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/D_MCP接入续接回执_2026-11-11.md",
+      "sha256": "23300f0a33b3475057d8a8f332ac171ecc33a4177c535cee403a3553c6ac9b14",
+      "bytes": 9584
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/D_正式桌面验收清单_2026-11-11.json",
+      "sha256": "e502aac81d18604f8ea22064be8459f718490f88191efb2c760a5e1f4642d11e",
+      "bytes": 9157
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/D_正式桌面直连证据_2026-11-11.json",
+      "sha256": "2de0f7e9204b2d3a3412992b228c804484bcf6951cb6ee48cf98c04c9774e01c",
+      "bytes": 5259
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/D_正式服务快照_2026-11-11.json",
+      "sha256": "c5985fea21461a7a91bbd4a52e5853ffc06185331df62a2c635babfdf2bfba1e",
+      "bytes": 122880
+    }
+  ],
+  "actualDesktopThreadId": "01a1c656-fe58-7bf1-ae39-1796919fcfcc",
+  "controlThreadId": "01a1c618-df58-7791-bd89-9f9caf19527d",
+  "resumeObservation": {
+    "firstRead": "OWNER_UNAVAILABLE",
+    "stoppedReason": "explicitExit",
+    "recovery": "通过现有原生入口恢复后只读回读94",
+    "snapshotComparison": "已发布快照的confirmationRef为脱敏占位。摘要另与原始登记快照核对，通过后按同一脱敏口径深比较。",
+    "businessWritesDuringThisResume": 0
+  },
+  "handoff": {
+    "E": "阶段前置D已完成，执行入口已准备，实际开工核对授权绑定并取得开始回执",
+    "F": "C已完成，等待E",
+    "G": "等待F"
+  },
+  "scopeNotes": [
+    "A/B/C补报服务时间与历史执行来源分别保存，旧非状态候选通过复合回执和来源承接",
+    "真实桌面聊天身份与控制责任声明分别保存，自动宿主身份关联继续按E验收",
+    "当前原生部署使用本项目debug构建，最终发行安装组合验收按G推进",
+    "面板正式状态接线与必要用户观感确认按F推进",
+    "本轮完成回读核验、正式文档及主台账收尾，E执行入口处于准备状态"
+  ],
+  "documentValidation": {
+    "utf8": true,
+    "relativeLinksChecked": 30,
+    "brokenLinks": []
+  }
+}
