@@ -8,6 +8,7 @@ import {createLightOutbox} from './light-outbox.mjs';
 import {createLightPublication} from './light-publication.mjs';
 import {createLightMcp,createLightHandler} from '../mcp/light.mjs';
 import {createLightAccess} from './light-access.mjs';
+import {createLightPanel} from './light-panel.mjs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -152,6 +153,7 @@ async function createOwnedServer(options) {
     verifyExecutionContext: options.lightVerifyExecutionContext ?? lightAccess?.verifyExecutionContext,
   });
   const lightOutbox = createLightOutbox(persistence);
+  const lightPanel = createLightPanel(persistence);
   const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const distDir = options.distDir ?? path.join(APP_DIR, 'dist');
@@ -186,6 +188,13 @@ async function createOwnedServer(options) {
           }
         } else throw new HttpError(405, '不支持的请求方法');
       } else await persistence.run(async () => {
+      if (pathname === '/api/light-panel' || pathname === '/api/light-panel/preferences') {
+        // 私有桌面会话令牌由 authorize 校验；插件令牌不能访问该入口。
+        if (!options.lightAccessEnabled || typeof options.authorize !== 'function') throw new HttpError(403, '需要桌面所有者');
+        if (pathname === '/api/light-panel' && method === 'GET') return respond(200, await lightPanel.read());
+        if (pathname.endsWith('/preferences') && method === 'PUT') return respond(200, await lightPanel.save(await jsonBody(req)));
+        throw new HttpError(405, '不支持的请求方法');
+      }
       if (pathname.startsWith('/api/light-access/') && lightAccess) {
         if (method !== 'POST') throw new HttpError(405, '不支持的请求方法');
         const body = await jsonBody(req);

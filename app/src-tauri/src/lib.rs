@@ -258,6 +258,11 @@ fn valid_id(id: &str) -> bool {
         })
 }
 
+fn panel_read_request(path: &str, method: &str) -> bool {
+    (path == "/light-panel" && method == "GET")
+        || (path == "/light-panel/preferences" && method == "PUT")
+}
+
 #[tauri::command]
 async fn api_request(
     window: tauri::WebviewWindow,
@@ -266,10 +271,11 @@ async fn api_request(
     method: String,
     body: Option<Value>,
 ) -> Result<Value, String> {
-    if window.label() != "main" {
-        return Err("仅主窗口可以请求业务服务".into());
+    let panel_read = panel_read_request(&path, &method);
+    if window.label() != "main" && !(window.label() == "panel" && panel_read) {
+        return Err("当前窗口不允许请求该业务服务".into());
     }
-    if !allowed_request(&path, &method) {
+    if !panel_read && !allowed_request(&path, &method) {
         return Err("禁止的桌面请求".into());
     }
     let bytes = body.as_ref().map(|v| v.to_string()).unwrap_or_default();
@@ -306,6 +312,30 @@ async fn api_request(
     let status = response.status().as_u16();
     let value: Value = response.json().await.map_err(|_| "领域服务响应无效")?;
     Ok(json!({"status":status,"data":value}))
+}
+
+// 日期 2026-11-11。浮窗只接受尺寸、置顶及显示主窗口意图，不接受 URL 或路径。
+#[tauri::command]
+fn panel_window(app: tauri::AppHandle, window: tauri::WebviewWindow, expanded: bool, pinned: bool) -> Result<Value, String> {
+    if window.label() != "panel" { return Err("仅浮窗可调整自身".into()); }
+    let monitor = window.current_monitor().map_err(|e| e.to_string())?
+        .or(app.primary_monitor().map_err(|e| e.to_string())?).ok_or("显示区域不可用")?;
+    let scale = monitor.scale_factor();
+    let area = monitor.work_area();
+    let width = (if expanded { 992.0_f64 } else { 600.0 }).min(area.size.width as f64 / scale - 16.0).max(1.0);
+    let height = (if expanded { 694.0_f64 } else { 38.0 }).min(area.size.height as f64 / scale - 16.0).max(1.0);
+    window.set_size(tauri::LogicalSize::new(width, height)).map_err(|e| e.to_string())?;
+    window.set_position(tauri::PhysicalPosition::new(area.position.x + ((area.size.width as f64 - width * scale) / 2.0) as i32,
+        area.position.y + (8.0 * scale) as i32)).map_err(|e| e.to_string())?;
+    window.set_always_on_top(pinned).map_err(|e| e.to_string())?;
+    if expanded { window.set_focus().map_err(|e| e.to_string())?; }
+    Ok(json!({"width":width,"height":height,"scaleFactor":scale,"pinned":pinned,"expanded":expanded}))
+}
+
+#[tauri::command]
+fn panel_show_main(app: tauri::AppHandle, window: tauri::WebviewWindow) -> Result<(), String> {
+    if window.label() != "panel" { return Err("仅浮窗可打开主工作台".into()); }
+    perform_runtime_action(&app, "show")
 }
 
 fn stop_owner(runtime: &Runtime) {
@@ -422,7 +452,7 @@ pub fn run() {
             tauri::WebviewWindowBuilder::new(
                 app,
                 "panel",
-                tauri::WebviewUrl::App("panel.html".into()),
+                tauri::WebviewUrl::App("index.html?view=light-live&floating=1".into()),
             )
             .title("任务航线 · 浮窗宿主")
             .inner_size(600.0, 38.0)
@@ -455,6 +485,8 @@ pub fn run() {
             runtime_action,
             runtime_status,
             save_light_connection,
+            panel_window,
+            panel_show_main,
             initialize_workspace,
             recover_workspace,
             api_request
@@ -465,7 +497,16 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
-    use super::{allowed_request, workspace_initialized};
+    use super::{allowed_request, workspace_initialized, panel_read_request};
+    #[test]
+    fn floating_panel_has_only_exact_read_and_preference_routes() {
+        assert!(panel_read_request("/light-panel", "GET"));
+        assert!(panel_read_request("/light-panel/preferences", "PUT"));
+        for (path, method) in [("/light-panel", "POST"), ("/light-panel/preferences", "POST"),
+            ("/light-panel?project=other", "GET"), ("/light-mcp", "POST"), ("/light-access/grants", "POST")] {
+            assert!(!panel_read_request(path, method));
+        }
+    }
     #[test]
     fn aggregate_and_recovery_records_are_initialized_workspaces() {
         let root = std::env::temp_dir().join(format!("u03-workspace-{}", std::process::id()));

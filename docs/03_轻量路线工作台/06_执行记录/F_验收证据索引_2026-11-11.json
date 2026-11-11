@@ -1,0 +1,174 @@
+{
+  "date": "2026-11-11",
+  "status": "F实现已交付，用户观感待确认",
+  "projectId": "c166b75f-90f4-4e4c-95f0-608e1084b01a",
+  "planId": "c6f340ef-4aca-43f7-8e1b-d4cb8647a62b",
+  "stepId": "53a247e5-d289-4fe0-850a-e43890c5a200",
+  "bindingId": "e7c235f5-e70a-4220-a96d-43ba3dc99a06",
+  "bindingRevision": 2,
+  "executionId": "7c687ceb-27a8-4889-b643-d044252aa81d",
+  "checks": {
+    "serverMcp": {
+      "passed": 138,
+      "failed": 0
+    },
+    "simulationUi": {
+      "passed": 13,
+      "environment": "Edge浏览器模拟入口"
+    },
+    "liveUi": {
+      "passed": 8,
+      "environment": "隔离真实HTTP MCP及持久快照、Edge浏览器；可信测试绑定适配器"
+    },
+    "rust": {
+      "passed": 3,
+      "failed": 0
+    },
+    "native": {
+      "embeddedPage": true,
+      "compactScreenshotOuterPixels": [
+        602,
+        40
+      ],
+      "expandedScreenshotOuterPixels": [
+        994,
+        696
+      ],
+      "formalRevisions": [
+        132,
+        133
+      ],
+      "userVisualConfirmation": "pending",
+      "otherSystemDpiScales": "notTested"
+    }
+  },
+  "formalWait": {
+    "revision": 134,
+    "requestId": "652cc034-cbee-433f-88a5-9fbf6d0a11e5",
+    "status": "blocked",
+    "eventId": "light-workbench-20261110/F-EX01/wait-user-visual"
+  },
+  "limits": [
+    "未取得用户观感确认，不完成F，不启动G",
+    "原生观察覆盖当前显示器；其他系统DPI比例未实测",
+    "宿主聊天跳转不可用，提供固定ID与复制降级",
+    "原生二进制与本机截图为忽略目录证据，源码及脚本可重建"
+  ],
+  "evidence": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\LightPanel.tsx",
+      "sha256": "56624c607b75f3c178efb1ab20d28781683ad1821f6839f7b7e89c87e6c3b63f",
+      "bytes": 22755
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\light-live.ts",
+      "sha256": "99bd80c6e3ccbe2518ff993b891e1ed4e560efc809c12a3fabf50d7a371b3741",
+      "bytes": 1584
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\light-panel.css",
+      "sha256": "5ee95b968a1e61e9dba4588c26a76b0fe938c3144bc68c7e99fef6d4be0945a1",
+      "bytes": 6474
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src\\main.tsx",
+      "sha256": "0a461f1aa06138884ad6cd0d7a30796d53e0ca744dfe5b424cdb7acd5efdf300",
+      "bytes": 34861
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\src\\lib.rs",
+      "sha256": "e4cd405202580ecc2eaa6cac43f8d67e6923daea0045710af6fe3d6319b88d06",
+      "bytes": 22557
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\light-panel.mjs",
+      "sha256": "0cbeddd4d0e313a07ab18c390c28fa82907210a4ec151675e5cceb19bedce642",
+      "bytes": 2628
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\light-panel.test.mjs",
+      "sha256": "e8f041b4e90ccffcc8980d14ed1d976f2c2bfd3a1c8bf0ce17809e5d83246723",
+      "bytes": 3134
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\server\\index.mjs",
+      "sha256": "42983f74cc826411f75cbd8e300063e49a79b021dcddd3fd4b0d77d2d9efa827",
+      "bytes": 19533
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\tests\\light-live.mjs",
+      "sha256": "11da9df5717a7f43e87bb8c10e0166be618abfa2a994f8f193e8ec47bb7809e3",
+      "bytes": 9788
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\route-workbench-desktop.exe",
+      "sha256": "67839ca1e2252e4e8101e9924ec128d95a2052061a9299f129853bc3b18f1479",
+      "bytes": 15721472
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\src-tauri\\target\\debug\\runtime\\manifest.json",
+      "sha256": "981eec9ae9b51ba6bc6be724b02c3351b8b6437b2a3a551adf7198bf4e0e2876",
+      "bytes": 8812
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\native-build.log",
+      "sha256": "b8f323e1c3ef05b6335e2ea6f3837ba0adc3f48c016ce3f7c9e655d19a74fb32",
+      "bytes": 1909
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\regression.log",
+      "sha256": "9c6c8ada102e45e1a82fed639a7e1327ea45eae025bf4bc9c3db2d0731b7dc73",
+      "bytes": 14662
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\live-ui.log",
+      "sha256": "8c3b12d88a026face9da34d6dc68d2c17db12eee2372316a7d10339ab63f83d7",
+      "bytes": 789
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\live-ui-result.json",
+      "sha256": "97b646a423a066379786ea93b0da0d241ff49f70ab81dbe0a7fb6b1bf6133998",
+      "bytes": 90831
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\native-compact.jpg",
+      "sha256": "ac2db1ba71b9d1d081af1d7c6ed9018dcbb4a939cbae183f40cd0f33da6723cf",
+      "bytes": 3570
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\native-live-update.jpg",
+      "sha256": "430ecec69a006e41dd083c52c9ab4fd0dd1daabd94d78f1439e03334eeab3883",
+      "bytes": 70558
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\native-final.jpg",
+      "sha256": "b85522fca13c532b7163c4a6e0b8af84c0595dd65835a63e2d718d7275adc879",
+      "bytes": 62288
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\native-final-tree.txt",
+      "sha256": "2785c91efb1726c808e02fc5436dc411c5c4a816a9913dfe7fd41929c296dcea",
+      "bytes": 6190
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\formal-events.json",
+      "sha256": "c7c1a5962defc785f23951dd654486543b1da536bc08a546d153ebde9facf283",
+      "bytes": 173924
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\manual-trial\\F-EX01\\wait-events.json",
+      "sha256": "d6c4406151ed3e824e72a0983dba497d08dadb02cd00045977276d128a979bce",
+      "bytes": 174823
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\F_实现与验证_2026-11-11.md",
+      "sha256": "e44bdbb61ec48dde8089e80483c093ea08cf4f6de37805fee02e3494138619c2",
+      "bytes": 7573
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\docs\\03_轻量路线工作台\\06_执行记录\\F_阶段回执_2026-11-11.md",
+      "sha256": "211fa7c629103309ca7d38ab14dc4341d2b8abe78ae2af1e6e2fcfdd28da74a0",
+      "bytes": 4520
+    }
+  ]
+}

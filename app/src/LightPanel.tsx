@@ -1,18 +1,19 @@
-// 日期 2026-11-10。C 阶段模拟面板，F 接入持久快照。
+// 更新日期 2026-11-11。模拟与真实面板复用布局，真实模式只读取持久服务。
 import { useEffect, useRef, useState } from 'react';
 import fixture from './light-simulation.json';
 import sourceText from './light-source.json';
 import './light-panel.css';
+import { blankSnapshot, readPanel, savePanelPreferences, type Snapshot, type Preferences } from './light-live';
+import { desktopInvoke, isDesktop } from './desktop';
 
-type Snapshot = typeof fixture;
 type Route = Snapshot['routes'][number];
 const names: Record<string, string> = { pending: '待执行', running: '执行中', blocked: '已阻塞', completed: '已完成', cancelled: '已取消' };
 const symbols: Record<string, string> = { pending: '○', running: '●', blocked: '!', completed: '✓', cancelled: '×' };
 const preferenceKey = 'workbench/C/simulation/preferences/v1';
-type Preferences = { collapsed: string[]; selected: string; focus: string[]; scroll: Record<string, number>; y: Record<string, number> };
 
-function loadPreferences(): Preferences {
+function loadPreferences(live = false): Preferences {
   const empty: Preferences = { collapsed: matchMedia('(max-width: 640px)').matches ? fixture.projects.slice(1).map(project => project.key) : [], selected: '', focus: [], scroll: {}, y: {} };
+  if (live) return { ...empty, collapsed: [] };
   try {
     const value = JSON.parse(localStorage.getItem(preferenceKey) || 'null');
     if (!value || !Array.isArray(value.collapsed) || !Array.isArray(value.focus) || typeof value.selected !== 'string' || typeof value.scroll !== 'object' || !value.y || typeof value.y !== 'object') return empty;
@@ -20,22 +21,30 @@ function loadPreferences(): Preferences {
   } catch { return empty; }
 }
 
-export function LightPanel() {
-  const [snapshot, setSnapshot] = useState<Snapshot>(() => structuredClone(fixture));
-  const [preferences, setPreferences] = useState(loadPreferences);
-  const [expanded, setExpanded] = useState(true);
+export function LightPanel({ live = false, floating = false }: { live?: boolean; floating?: boolean }) {
+  const [snapshot, setSnapshot] = useState<Snapshot>(() => structuredClone(live ? blankSnapshot : fixture));
+  const [preferences, setPreferences] = useState(() => loadPreferences(live));
+  const [expanded, setExpanded] = useState(!floating);
   const [detail, setDetail] = useState(false);
   const [fullDetail, setFullDetail] = useState(false);
   const [onlyTodo, setOnlyTodo] = useState(false);
-  const [connected, setConnected] = useState(true);
+  const [connected, setConnected] = useState(!live);
+  const [sources, setSources] = useState<Record<string, string | null>>({});
+  const [hydrated, setHydrated] = useState(!live);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [association, setAssociation] = useState('');
+  const latestRevision = useRef<number | null>(null);
+  const preferencesChanged = useRef(false);
   const [empty, setEmpty] = useState(false);
   const [pinned, setPinned] = useState(true);
-  const [message, setMessage] = useState('模拟快照 · 所有身份仅用于演示');
+  const [message, setMessage] = useState(live ? '正在读取已保存路线…' : '模拟快照 · 所有身份仅用于演示');
   const [candidates, setCandidates] = useState<string[]>([]);
   const body = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLElement>(null);
   const viewKey = preferences.focus.at(-1) || 'all';
   const selected = snapshot.steps.find(step => step.key === preferences.selected);
+  const compactRoute = snapshot.routes.find(route => route.stepKeys.includes(preferences.selected)) || snapshot.routes.find(route => route.stepKeys.some(key => snapshot.steps.some(step => step.key === key && step.status === 'running'))) || snapshot.routes[0];
+  const compactSteps = compactRoute?.stepKeys.slice(0, 7).map(key => snapshot.steps.find(step => step.key === key)).filter(step => !!step) || [];
   const focused = snapshot.routes.find(route => route.key === preferences.focus.at(-1));
   const stepByKey = new Map(snapshot.steps.map(step => [step.key, step]));
   const routeOf = (key: string) => snapshot.routes.find(route => route.stepKeys.includes(key));
@@ -47,14 +56,61 @@ export function LightPanel() {
   const hidden = (key: string) => preferences.collapsed.includes(key);
 
   useEffect(() => {
+    if (live) return;
     try { localStorage.setItem(preferenceKey, JSON.stringify(preferences)); }
     catch { setMessage('模拟阅读偏好保存失败，当前阅读仍可继续'); }
-  }, [preferences]);
+  }, [preferences, live]);
   useEffect(() => { if (body.current) body.current.scrollTop = preferences.y[viewKey] || 0; }, [expanded, viewKey]);
   useEffect(() => {
     if (document.activeElement === document.body) shell.current?.focus({ preventScroll: true });
   }, [viewKey, detail, fullDetail]);
 
+  useEffect(() => {
+    if (!live) return;
+    let stopped = false;
+    let timer: ReturnType<typeof setTimeout>;
+    async function poll() {
+      try {
+        const result = await readPanel();
+        if (stopped) return;
+        if (result.snapshot.mode !== 'service' || !Array.isArray(result.snapshot.steps) || typeof result.snapshot.revision !== 'number') throw Error('持久快照格式无效');
+        const revision = result.snapshot.revision;
+        if (latestRevision.current === null) {
+          if (!preferencesChanged.current && result.preferences) setPreferences(result.preferences);
+          setHydrated(true);
+          setMessage('已读取持久路线');
+        } else if (revision !== latestRevision.current) {
+          const completed = result.snapshot.events.at(-1);
+          setMessage(completed ? `已保存更新 · ${completed.reason} · 阅读位置已保留` : '已保存更新 · 阅读位置已保留');
+        }
+        if (latestRevision.current === null || revision >= latestRevision.current) {
+          setSnapshot(result.snapshot); setSources(result.sources);
+          latestRevision.current = revision;
+        }
+        setConnected(true);
+      } catch (error) {
+        if (!stopped) { setConnected(false); setMessage(`连接中断 · ${error instanceof Error ? error.message : String(error)} · 保留最后成功快照`); }
+      } finally { if (!stopped) timer = setTimeout(() => void poll(), 1500); }
+    }
+    void poll();
+    return () => { stopped = true; clearTimeout(timer); };
+  }, [live, refreshKey]);
+  useEffect(() => {
+    if (!live || !hydrated || !preferencesChanged.current) return;
+    const timer = setTimeout(() => { void savePanelPreferences(preferences).catch(() => setMessage('阅读偏好保存失败 · 当前阅读仍可继续')); }, 400);
+    return () => clearTimeout(timer);
+  }, [live, hydrated, preferences]);
+  useEffect(() => {
+    if (floating && isDesktop()) void desktopInvoke('panel_window', { expanded, pinned }).catch(error => setMessage(`窗口调整失败 · ${String(error)}`));
+  }, [expanded, pinned, floating]);
+  async function associationEntry() {
+    if (!selected) return;
+    if (!live) { setMessage(selected.bindingKey ? '模拟跳转失败 · 宿主适配待 F 接线，阅读位置已保留' : '未绑定会话 · 模拟跳转失败，阅读位置已保留'); return; }
+    const binding = snapshot.bindings.find(item => item.key === selected.bindingKey);
+    if (!binding) { setMessage('未绑定会话 · 阅读位置已保留'); return; }
+    setAssociation(`聊天固定 ID：${binding.context.threadId || '未声明'}\n工作树：${binding.context.worktreePath || '未声明'}\n分支：${binding.context.branch || '未声明'}\n绑定状态：${binding.state}\n当前宿主未提供聊天跳转；复制固定 ID 后在 Codex 中查找。`);
+    setMessage('无法自动跳转 · 已显示关联信息，阅读位置已保留');
+  }
   function toggle(key: string) {
     setPreferences(value => ({ ...value, collapsed: value.collapsed.includes(key) ? value.collapsed.filter(item => item !== key) : [...value.collapsed, key] }));
   }
@@ -63,6 +119,7 @@ export function LightPanel() {
     setDetail(true);
     setFullDetail(false);
     setCandidates([]);
+    setAssociation('');
   }
   function locate(key: string) {
     const step = stepByKey.get(key);
@@ -123,7 +180,7 @@ export function LightPanel() {
     </div>;
   }
   const projects = empty ? [] : snapshot.projects.filter(project => (!focused || project.key === focused.projectKey) && (!onlyTodo || count(project.key, 'running') + count(project.key, 'blocked') + count(project.key, 'pending') + openCount(project.key) > 0));
-  return <main ref={shell} tabIndex={-1} className="lp-shell" onMouseLeave={() => { if (!pinned && !detail) setExpanded(false); }} onKeyDown={event => {
+  return <main ref={shell} tabIndex={-1} className={`lp-shell ${floating ? 'lp-floating' : ''}`} onPointerDown={() => { preferencesChanged.current = true; }} onKeyDownCapture={() => { preferencesChanged.current = true; }} onMouseLeave={() => { if (!pinned && !detail) setExpanded(false); }} onKeyDown={event => {
     if (event.key !== 'Escape') return;
     event.stopPropagation();
     if (fullDetail) setFullDetail(false);
@@ -131,15 +188,15 @@ export function LightPanel() {
     else if (preferences.focus.length) setPreferences(value => ({ ...value, focus: value.focus.slice(0, -1) }));
     else setExpanded(false);
   }}>
-    <button className="lp-compact" onMouseEnter={() => setExpanded(true)} aria-expanded={expanded} onClick={() => setExpanded(value => !value)}><span className="lp-brand">⌁</span><strong>任务航线</strong><span className="lp-mini">● ━ ● ━ ◉ ━ ○ ━ ○</span><span>{snapshot.projects.length} 项目 · 模拟</span><span>{expanded ? '⌃' : '⌄'}</span></button>
+    <button className="lp-compact" onMouseEnter={() => setExpanded(true)} aria-expanded={expanded} onClick={() => floating ? setExpanded(true) : setExpanded(value => !value)}><span className="lp-brand">⌁</span><strong>任务航线</strong><span className="lp-mini">{live ? compactSteps.map((step, index) => <span key={step.key} className={`lp-mini-${step.status}`} title={`${step.code} ${names[step.status]}`}>{index > 0 ? ' ━ ' : ''}{symbols[step.status]}</span>) : '● ━ ● ━ ◉ ━ ○ ━ ○'}</span><span>{snapshot.projects.length} 项目 · {live ? '已保存' : '模拟'}</span><span>{expanded ? '⌃' : '⌄'}</span></button>
     {expanded && <section className="lp-panel" aria-label="项目路线面板">
       <header className="lp-toolbar"><strong>项目路线</strong><label><input type="checkbox" checked={onlyTodo} onChange={e => setOnlyTodo(e.target.checked)} />只看有待办</label><button onClick={locateCurrent}>定位当前</button><button aria-pressed={pinned} onClick={() => setPinned(value => !value)}>{pinned ? '已固定' : '固定'}</button><button onClick={() => setExpanded(false)}>收起</button></header>
-      <div className="lp-sync">{connected ? '模拟已连接' : '连接中断'} · 最后更新 {new Date(snapshot.generatedAt).toLocaleTimeString('zh-CN', { hour12: false })} · {snapshot.mode}</div>
+      <div className="lp-sync">{connected ? (live ? '已连接' : '模拟已连接') : '连接中断'} · 最后更新 {new Date(snapshot.generatedAt).toLocaleTimeString('zh-CN', { hour12: false })} · {snapshot.mode}{live && <> · 版本 {snapshot.revision ?? '待连接'} <button onClick={() => setRefreshKey(value => value + 1)}>刷新</button>{floating && <button onClick={() => void desktopInvoke('panel_show_main').catch(error => setMessage(String(error)))}>打开工作台</button>}</>}</div>
       <div className="lp-event" role="status">{message}</div>
       {preferences.focus.length > 0 && <nav className="lp-breadcrumb" aria-label="路线层级"><button onClick={() => setPreferences(value => ({ ...value, focus: [] }))}>全部项目</button>{preferences.focus.map((key, index) => <button key={key} onClick={() => setPreferences(value => ({ ...value, focus: value.focus.slice(0, index + 1) }))}>→ {snapshot.routes.find(route => route.key === key)?.label}</button>)}</nav>}
       {candidates.length > 0 && <div className="lp-candidates" aria-label="当前站候选">{candidates.map(key => <button key={key} onClick={() => locate(key)}>{snapshot.projects.find(p => p.key === stepByKey.get(key)?.projectKey)?.name} · {stepByKey.get(key)?.code} · {stepByKey.get(key)?.title}</button>)}</div>}
       <div className="lp-body" ref={body} onScroll={event => { const y = event.currentTarget.scrollTop; setPreferences(value => ({ ...value, y: { ...value.y, [viewKey]: y } })); }}>
-        {projects.length === 0 && <div className="lp-empty">{onlyTodo ? '当前条件下没有路线' : '尚未收到路线'}<button onClick={() => { setEmpty(false); setOnlyTodo(false); }}>清除筛选并恢复样例</button></div>}
+        {projects.length === 0 && <div className="lp-empty">{onlyTodo ? '当前条件下没有路线' : '尚未收到路线'}<button onClick={() => { setEmpty(false); setOnlyTodo(false); }}>{live ? '清除筛选' : '清除筛选并恢复样例'}</button></div>}
         {projects.map(project => {
           const roots = snapshot.routes.filter(route => route.projectKey === project.key && !sourceOf(route));
           const parentRoutes = focused ? [focused] : roots;
@@ -169,10 +226,10 @@ export function LightPanel() {
         <header><strong>{selected.code} · {selected.title}</strong><button onClick={() => { setDetail(false); setFullDetail(false); }}>关闭详情</button></header>
         <p>{symbols[selected.status]} {names[selected.status]} · 验收 {selected.acceptance} · 同步 {selected.sync} · {new Date(selected.updatedAt).toLocaleString('zh-CN')}</p>
         <p>前置全部完成后可执行 · {selected.dependsOn.map(key => stepByKey.get(key)?.code).join('、') || '无前置'} · 原编号 {selected.originalCode}</p>
-        <div className="lp-detail-actions"><button onClick={() => setFullDetail(value => !value)}>{fullDetail ? '返回简要详情' : '查看完整详情'}</button><button onClick={() => setMessage(selected.bindingKey ? '模拟跳转失败 · 宿主适配待 F 接线，阅读位置已保留' : '未绑定会话 · 模拟跳转失败，阅读位置已保留')}>打开关联会话</button><button onClick={() => setMessage(`方案来源 ${snapshot.plans.find(plan => plan.key === selected.planKey)?.source.path}`)}>查看方案</button></div>
-        {fullDetail && <div className="lp-full-content"><h3>原文与验收</h3><p className="lp-excerpt">{sourceText[selected.key as keyof typeof sourceText] || '独立模拟样例。按模拟检查通过且证据可回读验收。'}</p><p>{selected.sourceLocator} · {snapshot.plans.find(plan => plan.key === selected.planKey)?.source.locator}</p><ul>{selected.conditions.map(condition => <li key={condition.conditionId}>{condition.text} · {condition.result}</li>)}</ul><h3>证据与历史</h3>{selected.evidence.map(evidence => <p key={evidence.evidenceId}>{evidence.location} · {evidence.method} · {evidence.deliveryVersion}</p>)}{!selected.evidence.length && <p>尚无完成证据</p>}<p>进展以快照状态及更新时间为准 · {selected.acceptance === 'recheck' ? '返工待复核，历史完成证据保留' : '模拟进展'}</p><h3>阻塞与关联</h3>{selected.blockers.map((blocker, index) => <p key={index}>{JSON.stringify(blocker)}</p>)}<p>{routeOf(selected.key)?.context.worktreePath} · {routeOf(selected.key)?.context.branch} · {selected.bindingKey || '未绑定会话'}</p></div>}
+        <div className="lp-detail-actions"><button onClick={() => setFullDetail(value => !value)}>{fullDetail ? '返回简要详情' : '查看完整详情'}</button><button onClick={() => void associationEntry()}>打开关联会话</button><button onClick={() => setMessage(`方案来源 ${snapshot.plans.find(plan => plan.key === selected.planKey)?.source.path}`)}>查看方案</button></div>
+        {association && <div className="lp-association"><pre>{association}</pre><button onClick={() => { void navigator.clipboard.writeText(association).then(() => setMessage('关联信息已复制')).catch(() => setMessage('复制失败，请选择上方文字手动复制')); }}>复制关联信息</button><button onClick={() => setAssociation('')}>关闭关联信息</button></div>}{fullDetail && <div className="lp-full-content"><h3>原文与验收</h3><p className="lp-excerpt">{live ? sources[selected.planKey] || '原文当前不可验证，请按来源路径、版本及定位核对原文。' : sourceText[selected.key as keyof typeof sourceText] || '独立模拟样例。按模拟检查通过且证据可回读验收。'}</p><p>{selected.sourceLocator} · {snapshot.plans.find(plan => plan.key === selected.planKey)?.source.locator}</p><ul>{selected.conditions.map(condition => <li key={condition.conditionId}>{condition.text} · {condition.result}</li>)}</ul><h3>证据与历史</h3>{selected.evidence.map(evidence => <p key={evidence.evidenceId}>{evidence.location} · {evidence.method} · {evidence.deliveryVersion}</p>)}{!selected.evidence.length && <p>尚无完成证据</p>}<p>进展以快照状态及更新时间为准 · {selected.acceptance === 'recheck' ? '返工待复核，历史完成证据保留' : live ? snapshot.events.filter(event => event.stepKey === selected.key).slice(-5).map(event => `${event.receivedAt} ${event.reason}`).join('；') || '尚无进展事件' : '模拟进展'}</p><h3>阻塞与关联</h3>{selected.blockers.map((blocker, index) => <p key={index}>{JSON.stringify(blocker)}</p>)}<p>{routeOf(selected.key)?.context.worktreePath} · {routeOf(selected.key)?.context.branch} · {selected.bindingKey || '未绑定会话'}</p></div>}
       </aside>}
-      <footer className="lp-demo" aria-label="模拟场景控制"><span>C 模拟场景</span><button onClick={simulateUpdate}>模拟更新与返工</button><button onClick={() => setConnected(value => !value)}>切换连接</button><button onClick={() => setEmpty(value => !value)}>切换空态</button></footer>
+      {!live && <footer className="lp-demo" aria-label="模拟场景控制"><span>C 模拟场景</span><button onClick={simulateUpdate}>模拟更新与返工</button><button onClick={() => setConnected(value => !value)}>切换连接</button><button onClick={() => setEmpty(value => !value)}>切换空态</button></footer>}
     </section>}
   </main>;
 }
