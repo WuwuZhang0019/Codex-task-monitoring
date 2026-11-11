@@ -75,3 +75,12 @@ flowchart LR
  A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed，服务延后同步"]
  B --> C["③ C 契约与模拟视图<br/>pending，未派发"] --> D["④ D 真实服务接线<br/>pending"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
 ```
+
+
+## C 执行准备与本地授权
+
+日期：2026-11-11
+
+用户明确允许 C 本地执行、Git 留证，服务恢复后再同步；方案1.3已记录。B本地completed/passed，C仍pending/pending，未登记实际开始，服务deferredByAuthorization；所有真实服务身份继续留空，未发送业务请求，无未知提交。旧路线A—G不变。
+
+业务仓库准备时main/09b04cc37ce5102ef8ca1891f7baac1befc8e814，工作区干净。读取Fork G:\rust\windows-dynamic-island的Git状态、分支及HEAD均返回Permission denied，当前实际版本待执行聊天核实；B回执记录41a0e322055ae4674a6792208e70bc7016ab21f7，仅作为预期基线。当前宿主未暴露workbench工具。未进行C产品修改、构建或测试。C执行指令见同目录C_待执行指令_2026-11-11.md。
