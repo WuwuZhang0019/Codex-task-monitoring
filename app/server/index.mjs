@@ -193,6 +193,7 @@ async function createOwnedServer(options) {
         if (pathname === '/api/light-access/revoke') return respond(200, await lightAccess.revoke(body));
         if (pathname === '/api/light-access/confirm-publication') return respond(200, await lightAccess.confirmPublication(lightPublication, body));
         if (pathname === '/api/light-access/confirm-binding') return respond(200, await lightAccess.confirmBinding(body));
+        if (pathname === '/api/light-access/confirm-supplement') return respond(200, await lightAccess.confirmSupplement(body));
         throw new HttpError(404, 'API 不存在');
       }
       if (pathname === '/api/import-drafts') {

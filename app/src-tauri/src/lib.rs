@@ -230,7 +230,7 @@ fn allowed_request(path: &str, method: &str) -> bool {
         ["", "health" | "sample"] => method == "GET",
         ["", "import-drafts"] => matches!(method, "GET" | "POST"),
         ["", "requests"] => method == "POST",
-        ["", "light-access", "grants" | "revoke" | "confirm-publication" | "confirm-binding"] => method == "POST",
+        ["", "light-access", "grants" | "revoke" | "confirm-publication" | "confirm-binding" | "confirm-supplement"] => method == "POST",
         ["", "import-drafts", id] => valid_id(id) && matches!(method, "GET" | "PUT"),
         ["", "import-drafts", id, "validate" | "confirm" | "publish"] => valid_id(id) && method == "POST",
         ["", "projects"] => matches!(method, "GET" | "POST"),
@@ -495,6 +495,8 @@ mod tests {
         assert!(!allowed_request("/import-drafts/other/publish", "POST"));
         assert!(!allowed_request("/requests", "GET"));
         assert!(allowed_request("/light-access/confirm-binding", "POST"));
+        assert!(allowed_request("/light-access/confirm-supplement", "POST"));
+        assert!(!allowed_request("/light-access/confirm-supplement", "GET"));
         assert!(allowed_request("/light-access/confirm-publication", "POST"));
         assert!(!allowed_request("/light-access/grants", "GET"));
         assert!(!allowed_request("/light-access/other", "POST"));

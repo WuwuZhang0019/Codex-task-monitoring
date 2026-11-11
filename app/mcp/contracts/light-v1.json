@@ -1252,6 +1252,16 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "takeover": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fromBindingId": { "type": "string", "minLength": 1 },
+            "expectedBindingRevision": { "type": "integer", "minimum": 1 },
+            "executionIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+          },
+          "required": ["fromBindingId", "expectedBindingRevision", "executionIds"]
+        },
         "schemaVersion": {
           "const": "light-1.0"
         },
@@ -1427,6 +1437,8 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "confirmationGrant": { "type": ["string", "null"], "minLength": 1 },
+        "cancellationHandoff": { "type": "string", "minLength": 1 },
         "schemaVersion": {
           "const": "light-1.0"
         },

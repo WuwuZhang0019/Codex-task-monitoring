@@ -4,6 +4,16 @@
 
 状态：Skill 操作规则
 
+## 固定映射与宿主操作日志
+
+更新日期：2026-11-11
+
+同包 `scripts/context-ledger.mjs` 提供 `folderName`、`executionTitle`、`inspectWorktree`、`recordMapping` 和 `runHostOperation`。保存 `planKey/planId`、`stepKeys/stepIds` 集合、`threadId/hostId`、`hostProjectId`、目录、分支及工作树序号。名称改变追加 mappingHistory，不以同名会话合并固定身份。真实目录由 Git 工作树根、实际分支和 HEAD 核对；子目录或错误分支不能当成工作树根绑定。
+
+宿主工具由当前聊天发现并调用，不由脚本伪造接口。将真实工具作为 adapter 注入 `runHostOperation`，或以相同结构记录实际返回；每项包含稳定 operationId、意图指纹、pending/succeeded/failed/unsupported、目标固定 ID 和 attempts。重试同键异意图拒绝；成功结果复用；部分失败保存已经取得的目标 ID。掉响应保持 pending/resultUnknown，先 reconcile 原 operationId；没有确认未提交前不重复创建。新增聊天只有用户明确要求创建后执行。列表能力与创建项目、改名、移动和跳转分别核对，不以创建侧栏分区代替项目创建，也不把打开文档当作跳转聊天。
+
+操作日志放在当前台账旁的同步记录或证据 JSON，不写入凭据。宿主项目创建或项目改名缺能力时保存建议名称；分支或方案名称变化重新计算名称，另建改名事件并保留原序号、目标 ID 和历史。
+
 ## 会话组织
 
 总方案直接执行时文件夹使用方案名，内部会话采用 `[A] 数据准备`、`[B] 界面展示`。每个会话对应原方案的一组工具步骤，组内步骤在该会话连续执行。
@@ -21,6 +31,14 @@ confirm 使用已认证 UI 或其签发的限范围确认凭据。来源声明�
 创建和移动以稳定 operationId 记录 pending、succeeded、failed 或 unsupported。重试先核对已经成功的项目及序号，部分失败保留成功结果。宿主缺能力时提供可复制名称及人工绑定指引。新增会话或文件夹按任务授权范围进行。
 
 ## 补充事项
+
+更新日期：2026-11-11
+
+真实所有者对“待确认→待规划”和必要事项取消提供原生「确认补充事项」入口。先展示实际事项、来源与规划范围；取消时明确 `cancellationHandoff` 替代或承接安排。用户已有授权覆盖这些内容时按范围处理，缺少决定时等待用户；不能用测试授权代替真实用户决定。
+
+入口提交 `{principal,input,acknowledged:true}` 到私有 `/api/light-access/confirm-supplement`，签发绑定精确项目、来源、版本、动作和内容的短期凭据。MCP `workbench_record_supplement` 的对应 update/cancel 请求携带 `confirmationGrant`。普通插件凭据不能调用该私有入口，内容或版本变化须重读并重新确认。事项 create 的稳定 eventId 和 repairId 继续沿用；linkPlan 须确认规划且关联授权完整，resolve 须引用关联方案已提交的必要交付证据。
+
+仅解除该 supplementId 对应的阻塞，保留其他事项、人工及依赖阻塞；全部前置与阻塞检查后才能恢复 running，完成来源步骤仍检查来源自身验收。取消必要事项的承接决定保存在受控确认请求及历史中。
 
 原验收所需的普通调试、重试和小修复保留在原步骤内。独立目标、单独安排或验收的事项经实际工具 `workbench_record_supplement` 登记，使用 create、update、linkPlan、resolve、cancel 等 schema 支持的动作。
 

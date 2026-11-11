@@ -4,6 +4,16 @@
 
 状态：Skill 操作规则
 
+## 可执行规范化入口
+
+更新日期：2026-11-11
+
+使用同包 `scripts/normalize-plan.mjs`。先由当前聊天按原文语义识别步骤，生成 UTF-16 精确范围清单；脚本只执行已确认的编号及引用替换，不从普通列表猜步骤。清单字段为 `expectedSha256`、`nodes`、`references`、`previous`。每个 node 含稳定 `key`、`parentKey`、原编号 `originalCode`、`title`、`locator`、显式 `order`、`dependsOn`（固定本地键数组）、`acceptance`、`codeRange: {start,end,expected}`；新增中插项另含 `insertAfterKey`。references 每项含相同范围及 `targetKey`，覆盖依赖表、Mermaid 标签、文内及已授权外部引用。未确认范围保留待确认，不执行猜测性替换。
+
+`node <Skill绝对路径>/scripts/normalize-plan.mjs <清单.json> <原文.md> <候选.json>` 默认仅生成含日期、前后 SHA256、文本、映射及差异的候选。order 为各父作用域内唯一正整数，插入后按实际位置重排 order，不改已有编号和固定身份。相同来源再次处理保持编号；已有映射必须完整传入，`stepId` 原样保留，插入使用锚点后缀。源变化、缺失或循环依赖、身份删除及重叠范围明确拒绝。需要写回时使用导出的 `applyNormalizedFile`，保留 Git 旧版本并重检来源；其他编辑器出现并行变化时停止合并，不覆盖用户内容。
+
+导出的 `registrationSnapshot` 将包含逐项验收的结果转换为当前 `light-1.0` 本地候选，未登记服务 ID 全部为空。对已经登记方案使用服务现有 projectKey、planKey 和步骤 key，保留既有编号、必要验收与依赖语义；真实 ID 由发布成功回读取得。先读取工具 schema 校验候选，再走原生确认发布，不把文本处理成功当成服务已登记。重复发布使用同一精确请求和 eventId；来源或内容改变属于新修订。
+
 ## 读取与确定步骤
 
 读取用户指定方案、引用的当前权威资料及现有工具映射，确定正式执行步骤、顺序、依赖、验收、终点和当前来源版本。章节标题、普通列表和验收子项按其语义分类。已有清晰顺序时直接采用，涉及并行时采用方案的显式排列。顺序或步骤边界含糊时先完成明确部分的提取，向用户确认歧义后再改受影响部分。

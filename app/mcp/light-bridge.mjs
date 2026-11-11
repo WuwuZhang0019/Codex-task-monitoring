@@ -33,16 +33,18 @@ function failure(code, unknown = false) {
   return { isError: true, content: [{ type: 'text', text: JSON.stringify(value) }], structuredContent: value };
 }
 
-export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000 } = {}) {
-  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.4' }, { capabilities: { tools: {} } });
-  async function endpoint() {
-    const owner = config.dataDir ? await discoverOwner(config.dataDir) : config;
-    return `${owner.endpoint.replace(/\/$/, '')}/api/light-mcp`;
+export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000, reloadConfig } = {}) {
+  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.5' }, { capabilities: { tools: {} } });
+  async function connection() {
+    const current = reloadConfig ? await reloadConfig() : config;
+    const owner = current.dataDir ? await discoverOwner(current.dataDir) : current;
+    return { endpoint: `${owner.endpoint.replace(/\/$/, '')}/api/light-mcp`, token: current.token };
   }
   const toolsByName = new Map(lightTools.map(tool => [tool.name, tool]));
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     try {
-      const response = await fetch(await endpoint(), { headers: { Authorization: `Bearer ${config.token}` },
+      const current = await connection();
+      const response = await fetch(current.endpoint, { headers: { Authorization: `Bearer ${current.token}` },
         signal: AbortSignal.timeout(readTimeoutMs), redirect: 'error' });
       if (!response.ok) throw new Error('OWNER_UNAVAILABLE');
       const result = await response.json();
@@ -62,8 +64,9 @@ export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs
     if (Buffer.byteLength(body) > 2 * 1024 * 1024) throw new McpError(ErrorCode.InvalidParams, 'Workbench request exceeds 2MB');
     const readOnly = tool.annotations.readOnlyHint;
     try {
-      const response = await fetch(await endpoint(), { method: 'POST',
-        headers: { Authorization: `Bearer ${config.token}`, 'Content-Type': 'application/json' }, body,
+      const current = await connection();
+      const response = await fetch(current.endpoint, { method: 'POST',
+        headers: { Authorization: `Bearer ${current.token}`, 'Content-Type': 'application/json' }, body,
         signal: AbortSignal.timeout(readOnly ? readTimeoutMs : writeTimeoutMs), redirect: 'error' });
       if (response.status === 403) return failure('FORBIDDEN');
       if (response.status === 400 || response.status === 413) return failure('INVALID_INPUT');

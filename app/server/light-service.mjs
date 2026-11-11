@@ -165,7 +165,12 @@ export function createLightService(persistence, requests, {
         const publication = requests.query(principal, scopeId, `light.publish.${operation}`, eventId);
         if (publication.state === 'committed') return publication;
       }
-      return requests.query(principal, scopeId, `light.${operation}`, eventId);
+      const result = requests.query(principal, scopeId, `light.${operation}`, eventId);
+      if (operation === 'update' && result.state === 'unknown') {
+        const late = load().metadata.lateReceipts?.find(item => item.key === digest([principal, projectId, eventId]));
+        if (late) return { state: 'pendingReview', result: structuredClone(late) };
+      }
+      return result;
     },
     register(principal, input) {
       text(input.eventId, 'eventId');
@@ -238,6 +243,7 @@ export function createLightService(persistence, requests, {
     },
     bind(principal, input) {
       return commit(principal, 'bind', input, async (value, project, plan, time) => {
+        if (input.action === 'revoke' && input.takeover) lightError('INVALID_INPUT', '撤销不能附带接手意图');
         const steps = input.stepIds.map(id => value.snapshot.steps.find(step => step.id === id && step.planKey === plan.key));
         if (steps.some(step => !step)) lightError('NOT_FOUND', '绑定步骤归属不匹配', 404);
         unique(input.stepIds, '绑定步骤重复');
@@ -249,12 +255,33 @@ export function createLightService(persistence, requests, {
             stepKeys: steps.map(step => step.key), bindingRevision: 1, state: 'proposed', context: structuredClone(input.context),
             confirmationRef: null, revokedAt: null };
           value.snapshot.bindings.push(binding);
+          value.metadata.bindingIntents ??= {};
+          value.metadata.bindingIntents[binding.key] = { takeover: structuredClone(input.takeover ?? null) };
         } else {
           if (!binding || binding.bindingRevision !== input.expectedBindingRevision) lightError('STALE_BINDING', '绑定版本不匹配', 409);
           if (digest(binding.stepKeys) !== digest(steps.map(step => step.key)) || digest(binding.context) !== digest(input.context)) lightError('STALE_BINDING', '绑定提案内容已变化', 409);
           if (input.action === 'confirm') {
+            if (digest(value.metadata.bindingIntents?.[binding.key]?.takeover ?? null) !== digest(input.takeover ?? null)) lightError('STALE_BINDING', '接手意图与提案不一致', 409);
             permitted(principal, input.projectId, 'confirmBinding', { input, binding, steps });
             if (binding.state !== 'proposed' || await confirmBinding(principal, structuredClone(binding), structuredClone(input)) !== true) lightError('CONFIRMATION_REQUIRED', '需要可信确认及目录分支核验');
+            if (input.takeover) {
+              permitted(principal, input.projectId, 'takeoverBinding', { input, binding, steps });
+              const old = value.snapshot.bindings.find(item => item.id === input.takeover.fromBindingId && item.planKey === plan.key);
+              if (!old || old.key === binding.key || !['confirmed', 'revoked'].includes(old.state)
+                || old.bindingRevision !== input.takeover.expectedBindingRevision
+                || digest([...old.stepKeys].sort()) !== digest([...binding.stepKeys].sort())) lightError('STALE_BINDING', '接手须核对完整旧责任范围和版本', 409);
+              const executions = value.snapshot.executions.filter(item => item.bindingKey === old.key && !item.endedAt);
+              if (digest(executions.map(item => item.id).sort()) !== digest([...input.takeover.executionIds].sort())) lightError('STALE_EXECUTION', '接手必须覆盖旧绑定全部未结束执行', 409);
+              value.metadata.continuations ??= [];
+              value.metadata.continuations.push({ eventId: input.eventId, fromBindingKey: old.key, fromBindingId: old.id,
+                fromBindingRevision: old.bindingRevision, toBindingKey: binding.key, toBindingId: binding.id,
+                executions: structuredClone(executions), receivedAt: time, reason: input.reason });
+              old.state = 'revoked'; old.revokedAt ??= time; old.bindingRevision += 1;
+              for (const execution of executions) {
+                execution.bindingKey = binding.key;
+                for (const step of value.snapshot.steps.filter(item => execution.stepKeys.includes(item.key))) step.bindingKey = binding.key;
+              }
+            }
             binding.state = 'confirmed'; binding.confirmationRef = `grant:${digest(input.confirmationGrant)}`;
           } else {
             permitted(principal, input.projectId, 'revokeBinding', { input, binding, steps });
@@ -266,8 +293,8 @@ export function createLightService(persistence, requests, {
         return { bindingId: binding.id, bindingRevision: binding.bindingRevision, state: binding.state };
       }, 'bind');
     },
-    update(principal, input) {
-      return commit(principal, 'update', input, async (value, project, plan, time, eventScope) => {
+    async update(principal, input) {
+      try { return await commit(principal, 'update', input, async (value, project, plan, time, eventScope) => {
         const snapshot = value.snapshot;
         const step = snapshot.steps.find(item => item.id === input.stepId && item.planKey === plan.key);
         if (!step) lightError('NOT_FOUND', '步骤不属于当前方案', 404);
@@ -331,7 +358,24 @@ export function createLightService(persistence, requests, {
         }
         history(value, input, step, from, execution?.key ?? null, time, eventScope);
         return { stepId: step.id, executionId: execution?.id ?? null };
-      }, 'update');
+      }, 'update'); } catch (error) {
+        // 接手后迟到的新事件只进入历史待核对，不改变实时业务或项目版本。
+        if (['STALE_BINDING', 'STALE_EXECUTION', 'REVISION_CONFLICT'].includes(error.code)) await persistence.run(() => {
+          const value = load(), old = value.snapshot.bindings.find(item => item.id === input.bindingId);
+          const continuation = value.metadata.continuations?.find(item => item.fromBindingId === input.bindingId
+            && item.executions.some(execution => execution.id === input.executionId));
+          if (!old || !continuation || authorize(principal, input.projectId, 'update', { input, binding: old,
+            step: value.snapshot.steps.find(item => item.id === input.stepId) }) !== true) return;
+          value.metadata.lateReceipts ??= [];
+          const key = digest([principal, input.projectId, input.eventId]);
+          if (!value.metadata.lateReceipts.some(item => item.key === key)) {
+            value.metadata.lateReceipts.push({ key, eventId: input.eventId, executionId: input.executionId,
+              bindingId: input.bindingId, status: 'pendingReview', reason: error.code, input: structuredClone(input), receivedAt: now() });
+            persistence.write('light', value);
+          }
+        });
+        throw error;
+      }
     },
     reserveExecutionId(principal, input) {
       return commit(principal, 'reserveExecution', input, (value, project, plan) => {
@@ -383,7 +427,7 @@ export function createLightService(persistence, requests, {
           if (['completed', 'cancelled'].includes(item.status) || item.blocksSource !== input.blocksSource || item.repairId !== input.repairId) lightError('INVALID_TRANSITION', '已结束事项或来源阻塞关系不能改写');
           if (item.status !== input.status) {
             if (item.status !== 'unconfirmed' || input.status !== 'unplanned') lightError('INVALID_TRANSITION', '状态变化须确认规划或关联方案');
-            permitted(principal, input.projectId, 'confirmSupplement'); item.status = 'unplanned';
+            permitted(principal, input.projectId, 'confirmSupplement', { input, item, step }); item.status = 'unplanned';
           }
           item.title = input.title; item.goal = input.goal;
         }
@@ -396,7 +440,7 @@ export function createLightService(persistence, requests, {
         }
         if (input.action === 'cancel') {
           if (['completed', 'cancelled'].includes(item.status)) lightError('INVALID_TRANSITION', '事项已经结束');
-          if (item.blocksSource) permitted(principal, input.projectId, 'approveSupplementCancellation');
+          if (item.blocksSource) permitted(principal, input.projectId, 'approveSupplementCancellation', { input, item, step });
           text(input.reason, '取消需替代承接说明'); item.status = 'cancelled';
         }
         const blockerId = `supplement:${item.id}`;

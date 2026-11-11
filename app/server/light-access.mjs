@@ -9,7 +9,8 @@ import { lightError, requireLightShape } from './light-model.mjs';
 
 const git = promisify(execFile);
 const operations = new Set(['read', 'query', 'register', 'revise', 'confirmPublication', 'reserveExecution', 'update',
-  'bind', 'proposeBinding', 'confirmBinding', 'revokeBinding', 'supplement', 'linkPlan', 'completePlan']);
+  'bind', 'proposeBinding', 'confirmBinding', 'revokeBinding', 'takeoverBinding', 'supplement', 'confirmSupplement',
+  'approveSupplementCancellation', 'linkPlan', 'completePlan']);
 function requireBody(input, fields) {
   if (!input || typeof input !== 'object' || Array.isArray(input) || input.acknowledged !== true
     || Object.keys(input).some(key => !fields.includes(key))) lightError('INVALID_INPUT', '需要明确确认及受支持字段');
@@ -35,6 +36,12 @@ export function createLightAccess(persistence) {
     const grant = grantFor(principal);
     const projectKey = persistence.read('light')?.snapshot.projects.find(project => project.id === scope)?.key ?? scope;
     if (!grant || !grant.projectKeys.includes(projectKey) || !operations.has(operation)) return false;
+    if (['confirmSupplement', 'approveSupplementCancellation'].includes(operation)) {
+      const input = details.input, confirmation = persistence.read('grants')[input?.confirmationGrant];
+      if (!confirmation || confirmation.kind !== 'lightSupplementConfirmation' || confirmation.principal !== principal
+        || confirmation.operation !== operation || confirmation.expiresAt < Date.now()
+        || confirmation.contentHash !== digest(withoutConfirmation(input))) return false;
+    }
     const context = details.binding?.context ?? details.input?.context;
     return !context || matches(grant, context);
   }
@@ -96,6 +103,31 @@ export function createLightAccess(persistence) {
       requireBody(body, ['principal', 'operation', 'input', 'acknowledged']);
       return publisher.confirm(body.principal, body.operation, body.input);
     },
+    confirmSupplement(body) {
+      requireBody(body, ['principal', 'input', 'acknowledged']);
+      return persistence.run(() => {
+        const input = requireLightShape('supplementWrite', body.input);
+        if (!authorize(body.principal, input.projectId, 'supplement', { input })) lightError('FORBIDDEN', '补充事项超出授权', 403);
+        const snapshot = persistence.read('light')?.snapshot;
+        const project = snapshot?.projects.find(item => item.id === input.projectId);
+        const plan = snapshot?.plans.find(item => item.id === input.planId && item.projectKey === project?.key);
+        const step = snapshot?.steps.find(item => item.id === input.sourceStepId && item.planKey === plan?.key);
+        const item = snapshot?.supplements.find(item => item.id === input.supplementId && item.sourceStepKey === step?.key);
+        if (!item || project.revision !== input.expectedRevision || input.blocksSource !== item.blocksSource || input.repairId !== item.repairId
+          || ['path', 'version', 'sha256'].some(key => input.source[key] !== plan.source[key])) lightError('STALE_PLAN', '补充事项来源或版本已变化', 409);
+        let operation;
+        if (input.action === 'update' && input.status === 'unplanned' && item.status === 'unconfirmed'
+          && input.repairId === item.repairId && input.blocksSource === item.blocksSource) operation = 'confirmSupplement';
+        else if (input.action === 'cancel' && item.blocksSource && !['completed', 'cancelled'].includes(item.status)) {
+          if (!input.cancellationHandoff?.trim()) lightError('CONFIRMATION_REQUIRED', '取消必要事项须明确替代或承接');
+          operation = 'approveSupplementCancellation';
+        } else lightError('INVALID_TRANSITION', '仅确认规划或必要事项取消承接');
+        const confirmationGrant = randomUUID();
+        persistence.write('grants', { ...persistence.read('grants'), [confirmationGrant]: { kind: 'lightSupplementConfirmation',
+          principal: body.principal, operation, contentHash: digest(withoutConfirmation(input)), expiresAt: Date.now() + 15 * 60 * 1000 } });
+        return { confirmationGrant, operation };
+      });
+    },
     confirmBinding(body) {
       requireBody(body, ['principal', 'input', 'acknowledged']);
       return persistence.run(async () => {
@@ -109,6 +141,7 @@ export function createLightAccess(persistence) {
           || binding.projectKey !== project?.key || snapshot.plans.find(plan => plan.id === input.planId)?.key !== binding.planKey
           || project.revision !== input.expectedRevision || digest(binding.context) !== digest(input.context)
           || digest(binding.stepKeys) !== digest(input.stepIds.map(id => snapshot.steps.find(step => step.id === id)?.key))) lightError('STALE_BINDING', '提案与确认内容不一致', 409);
+        if (digest(persistence.read('light').metadata.bindingIntents?.[binding.key]?.takeover ?? null) !== digest(input.takeover ?? null)) lightError('STALE_BINDING', '接手意图与提案不一致', 409);
         const observed = await verifyWorktree(input.context, grantFor(body.principal));
         const confirmationGrant = randomUUID();
         persistence.write('grants', { ...persistence.read('grants'), [confirmationGrant]: { kind: 'lightBindingConfirmation',

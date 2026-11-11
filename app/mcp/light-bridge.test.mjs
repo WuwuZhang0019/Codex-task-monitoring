@@ -176,3 +176,14 @@ test('D bridge 同一连接跟随dataDir所有者端口与generation变化，显
   assert.equal((await call()).structuredContent.error.code, 'OWNER_UNAVAILABLE');
   assert.equal(requests, 2, '显式停止后不向任一旧所有者发请求');
 });
+
+test('E 同一STDIO进程在原生授权轮换后读取新受控配置，配置失效不沿用旧令牌',async t=>{
+ const root=await mkdtemp(path.join(os.tmpdir(),'light-e-rotate-'));t.after(()=>rm(root,{recursive:true,force:true}));
+ const file=path.join(root,'config.json'),first=randomBytes(32).toString('hex'),second=randomBytes(32).toString('hex');let expected=first,calls=0;
+ const owner=http.createServer(async(req,res)=>{calls++;assert.equal(req.headers.authorization,'Bearer '+expected);for await(const chunk of req){}res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify(result({status:'accepted',result:{grant:expected===first?'first':'second'}})));});await new Promise(resolve=>owner.listen(0,'127.0.0.1',resolve));t.after(()=>{owner.closeAllConnections();owner.close();});
+ const endpoint='http://127.0.0.1:'+owner.address().port;await writeFile(file,JSON.stringify({endpoint,token:first}));
+ const client=new Client({name:'E-rotate',version:'2026-11-11'});await client.connect(new StdioClientTransport({command:process.execPath,args:[entry],env:{WORKBENCH_LIGHT_CONFIG:file},stderr:'pipe'}));t.after(()=>client.close());
+ const call=()=>client.callTool({name:'workbench_get_project',arguments:{projectId:'E-fixture'}});assert.equal((await call()).structuredContent.result.grant,'first');
+ expected=second;await writeFile(file,JSON.stringify({endpoint,token:second}));assert.equal((await call()).structuredContent.result.grant,'second');
+ await writeFile(file,'{}');assert.equal((await call()).structuredContent.error.code,'OWNER_UNAVAILABLE');assert.equal(calls,2);
+});

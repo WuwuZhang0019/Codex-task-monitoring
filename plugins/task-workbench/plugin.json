@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "2026-11-11 轻量路线工作台私有 MCP 连接与执行交接",
   "extensions": {
     "com.openai": {

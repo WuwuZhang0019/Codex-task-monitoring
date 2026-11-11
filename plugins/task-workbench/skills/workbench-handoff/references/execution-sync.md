@@ -61,6 +61,12 @@
 
 ## 接续与中断
 
+更新日期：2026-11-11
+
+换聊继续未结束执行时，`workbench_bind_context` 的 propose/confirm 可携带 `takeover: {fromBindingId,expectedBindingRevision,executionIds}`。完整核对旧责任范围和全部未结束执行，原生确认入口核验新会话、实际目录分支及相同接手意图。成功确认在同一事务撤销旧责任、确认新责任并转移所列原 executionId，保存原绑定版本和执行快照。不得自行预留新 executionId 替代仍有效的原执行；不能核对完整旧范围时先明确分配，不吞并无关责任。
+
+已提交旧事件按原键回放仍返回原回执；接手后旧绑定的新事件拒绝实时写入，并保存历史待核对记录。使用旧主体在原作用域 `workbench_query_event({operation:'update',eventId,...})` 查询时，`state: pendingReview` 表示迟到历史等待核对，不是已提交或可自动重放。新会话继续沿用原 executionId、当前新 bindingId/bindingRevision 和最新 revision。宿主标题、业务状态、验收状态、同步状态及执行结束原因分别保存。
+
 新会话先读取现有版本、原绑定、执行和未确认事件。跨会话继续同一次执行时沿用 executionId，重新核对责任绑定。接手建立有效新绑定，迟到结果按历史待核对处理。
 
 异常中断后的结束时刻和结果依据已有证据补记，未知项保留未知。界面最后更新时间或会话停止只能用于定位核对范围。未到达服务端的事件由本地待同步记录恢复。

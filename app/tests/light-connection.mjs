@@ -43,6 +43,7 @@ async function openDesktop({ saveFails = false, revokeFails = false } = {}) {
         '/light-access/revoke': { principal: 'fixture-principal', revoked: true },
         '/light-access/confirm-publication': { confirmationGrant: 'fixture-publication-confirmation', contentHash: 'fixture-content-hash' },
         '/light-access/confirm-binding': { confirmationGrant: 'fixture-binding-confirmation', observed: { path: 'G:\\fixture', branch: 'main', head: 'fixture-head' } },
+        '/light-access/confirm-supplement': { confirmationGrant: 'fixture-supplement-confirmation', operation: 'confirmSupplement' },
       };
       if (args.path === '/light-access/revoke' && state.revokeFails) throw new Error('FIXTURE_REVOKE_FAILED');
       if (!Object.hasOwn(responses, args.path)) throw new Error(`Unexpected path ${args.path}`);
@@ -108,6 +109,20 @@ try {
     assert.deepEqual(recorded.find(call => call.args?.path === '/light-access/confirm-publication').args.body, {
       ...publication, principal: 'fixture-principal', acknowledged: true,
     });
+  });
+
+  await check('补充事项确认显式核对，改动内容和主体后必须重新核对', async () => {
+    const supplement = { input: { action: 'update', supplementId: 'fixture-supplement', status: 'unplanned' } };
+    await page.getByLabel('补充事项确认JSON').fill(JSON.stringify(supplement));
+    const submit = page.getByRole('button', { name: '签发事项确认' });
+    assert.equal(await submit.isDisabled(), true);
+    await page.getByLabel('我已核对补充事项目标、来源及取消承接').check();
+    await page.getByLabel('接入授权主体ID').fill('explicit-supplement-principal');
+    assert.equal(await submit.isDisabled(), true);
+    await page.getByLabel('我已核对补充事项目标、来源及取消承接').check();
+    await submit.click();
+    await page.waitForFunction(() => document.querySelector('[aria-label="接入确认回执"]')?.value.includes('fixture-supplement-confirmation'));
+    assert.deepEqual((await calls(page)).find(call => call.args?.path === '/light-access/confirm-supplement').args.body, { ...supplement, principal: 'explicit-supplement-principal', acknowledged: true });
   });
 
   const binding = { principal: 'explicit-fixture-principal', input: { schemaVersion: 'light-1.0', action: 'confirm',

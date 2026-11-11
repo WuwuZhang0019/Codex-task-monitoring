@@ -25,6 +25,8 @@ export function LightConnection({ dataPath }: { dataPath: string }) {
   const [publicationAcknowledged, setPublicationAcknowledged] = useState(false);
   const [bindingJson, setBindingJson] = useState('');
   const [bindingAcknowledged, setBindingAcknowledged] = useState(false);
+  const [supplementJson, setSupplementJson] = useState('');
+  const [supplementAcknowledged, setSupplementAcknowledged] = useState(false);
   const [busy, setBusy] = useState('');
   const [error, setError] = useState('');
   const [result, setResult] = useState('');
@@ -49,6 +51,9 @@ export function LightConnection({ dataPath }: { dataPath: string }) {
       try {
         const saved = await desktopInvoke<{ configPath: string }>('save_light_connection', { token: grant.token });
         setPrincipal(grant.principal);
+        setPublicationAcknowledged(false);
+        setBindingAcknowledged(false);
+        setSupplementAcknowledged(false);
         setResult(JSON.stringify({ principal: grant.principal, configPath: saved.configPath }, null, 2));
       } catch (saveFailure) {
         try {
@@ -110,6 +115,21 @@ export function LightConnection({ dataPath }: { dataPath: string }) {
     }
   }
 
+  async function confirmSupplement() {
+    begin('supplement');
+    try {
+      const body = parseObject(supplementJson);
+      if (!body.input || typeof body.input !== 'object' || Array.isArray(body.input)) throw new Error('请提供 input 对象。');
+      const response = await api<ConfirmationResult>('/light-access/confirm-supplement', 'POST', {
+        principal: body.principal || principal.trim(), input: body.input, acknowledged: supplementAcknowledged,
+      });
+      setConfirmationGrant(response.confirmationGrant);
+      setResult(JSON.stringify(response, null, 2));
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : String(failure));
+    } finally { setBusy(''); }
+  }
+
   return <details className="light-connection">
     <summary>Codex 接入</summary>
     <div className="light-connection-content">
@@ -125,7 +145,7 @@ export function LightConnection({ dataPath }: { dataPath: string }) {
         <label className="light-connection-check"><input type="checkbox" checked={authorizationAcknowledged} onChange={event => setAuthorizationAcknowledged(event.target.checked)} />我已核对授权项目、聊天及工作树范围</label>
         <button className="button" disabled={!!busy || !authorizationAcknowledged || !projectKey.trim() || !threadId.trim() || !hostId.trim() || !worktreeRoot.trim()} onClick={() => void authorizeConnection()}>{busy === 'authorize' ? '正在保存连接…' : '授权并保存连接'}</button>
       </section>
-      <label className="light-connection-principal">授权主体 ID<input aria-label="接入授权主体ID" value={principal} onChange={event => { setPrincipal(event.target.value); setPublicationAcknowledged(false); setBindingAcknowledged(false); }} /></label>
+      <label className="light-connection-principal">授权主体 ID<input aria-label="接入授权主体ID" value={principal} onChange={event => { setPrincipal(event.target.value); setPublicationAcknowledged(false); setBindingAcknowledged(false); setSupplementAcknowledged(false); }} /></label>
       <section>
         <h2>确认方案发布或修订</h2>
         <p>填写含 operation、input 和可选 principal 的 JSON。请核对完整步骤、依赖、验收及修订差异。</p>
@@ -139,6 +159,13 @@ export function LightConnection({ dataPath }: { dataPath: string }) {
         <textarea aria-label="绑定确认JSON" rows={8} value={bindingJson} onChange={event => { setBindingJson(event.target.value); setBindingAcknowledged(false); }} spellCheck={false} />
         <label className="light-connection-check"><input type="checkbox" checked={bindingAcknowledged} onChange={event => setBindingAcknowledged(event.target.checked)} />我已核对绑定步骤、聊天与工作树</label>
         <button className="button" disabled={!!busy || !bindingAcknowledged || !bindingJson.trim()} onClick={() => void confirmBinding()}>{busy === 'binding' ? '正在确认绑定…' : '签发绑定确认'}</button>
+      </section>
+      <section>
+        <h2>确认补充事项</h2>
+        <p>核对事项来源、规划范围及阻塞影响。取消必要事项时填写替代或承接安排。</p>
+        <textarea aria-label="补充事项确认JSON" rows={8} value={supplementJson} onChange={event => { setSupplementJson(event.target.value); setSupplementAcknowledged(false); }} spellCheck={false} />
+        <label className="light-connection-check"><input type="checkbox" checked={supplementAcknowledged} onChange={event => setSupplementAcknowledged(event.target.checked)} />我已核对补充事项目标、来源及取消承接</label>
+        <button className="button" disabled={!!busy || !supplementAcknowledged || !supplementJson.trim()} onClick={() => void confirmSupplement()}>{busy === 'supplement' ? '正在确认事项…' : '签发事项确认'}</button>
       </section>
       {error && <p className="light-connection-error" role="alert">{error}</p>}
       {result && <section className="light-connection-result"><h2>本次回执</h2><textarea aria-label="接入确认回执" rows={6} readOnly value={result} />{confirmationGrant && <><p>确认凭据仅保留在本次页面内存中，请用于对应 MCP 请求。</p><button className="button" onClick={() => void copyConfirmation()}>{copied ? '已复制确认凭据' : '复制确认凭据'}</button></>}</section>}

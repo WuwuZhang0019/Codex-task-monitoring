@@ -7,7 +7,7 @@ import { createLightBridge, loadLightConfig } from './light-bridge.mjs';
 try {
   const file = process.env.WORKBENCH_LIGHT_CONFIG ?? path.join(os.homedir(), '.codex', 'task-workbench-light', 'config.json');
   const config = await loadLightConfig(file);
-  await createLightBridge(config).connect(new StdioServerTransport());
+  await createLightBridge(config, { reloadConfig: () => loadLightConfig(file) }).connect(new StdioServerTransport());
 } catch {
   console.error('Workbench light bridge failed to start. Check the private owner configuration.');
   process.exitCode = 1;
