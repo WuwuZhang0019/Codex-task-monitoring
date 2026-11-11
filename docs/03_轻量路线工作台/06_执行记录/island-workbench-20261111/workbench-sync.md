@@ -127,3 +127,18 @@ flowchart LR
  A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
  B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>pending，未派发"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
 ```
+
+
+## D 执行准备与本地授权
+
+日期：2026-11-11
+
+用户明确选择“允许 D 本地执行，服务恢复后同步”，方案1.4已登记。C本地completed/passed，D交付依赖满足；结论D。当前仅准备D-01—D-03，D pending/pending，未实际派发或开始，进度3/6。执行入口见D_待执行指令_2026-11-11.md。业务main/e56cf773准备前干净；Fork读取Permission denied，最新现场及实施权限待执行聊天核对。
+
+服务工具未发现，本路线身份均留空，无业务请求或未知提交；服务deferredByAuthorization，不记synced。正式业务写入校验不变，E/F未获豁免。仅新增准备文档及方案授权修订，未实施、未运行构建或测试。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
+ B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>pending，准备完成未开始"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
+```
