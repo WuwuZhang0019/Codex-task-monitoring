@@ -405,6 +405,184 @@
     "steps": 18,
     "scope": "记录一致性检查，不是产品测试或 A 基线验收"
   },
+  "resumeAttempts": [
+    {
+      "date": "2026-11-11",
+      "trigger": "用户继续执行A",
+      "repositoryHead": "8c32328f6c17bc3fdb526f8a56760163d3303ffa",
+      "branch": "main",
+      "initialWorktreeClean": true,
+      "discovery": {
+        "date": "2026-11-11",
+        "toolCount": 487,
+        "matches": []
+      },
+      "sourceHashesChecked": 17,
+      "sourceHashDrift": false,
+      "owner": {
+        "dataDir": "C:\\Users\\Zyf\\AppData\\Local\\com.codextaskmonitor.workbench\\data",
+        "ownerJsonExists": false,
+        "stoppedJsonExists": true,
+        "stoppedRecord": {
+          "ownerGeneration": "ee6666cf-5b76-46b4-80ab-c386e8f409f6",
+          "stoppedAt": "2026-11-11T11:34:50.781Z",
+          "reason": "explicitExit"
+        },
+        "health": "stoppedMarkerPresent",
+        "note": "停止标记是可核实条件；未找到本次宿主MCP失败日志，不断言这是工具缺失的唯一原因。"
+      },
+      "plugin": {
+        "enabled": true,
+        "configPath": "C:\\Users\\Zyf\\.codex\\config.toml",
+        "enabledLine": 64,
+        "version": "0.1.6",
+        "runtimeEntryExists": true,
+        "runtimeSha256": "5a8a8c2f25ba40aa00abf122fc767c677b975345f4175274fed622c6a384e786",
+        "connectionConfigExists": true,
+        "credentialRead": false
+      },
+      "recoveryAuthorization": {
+        "state": "authorized",
+        "answer": "允许恢复已有工作台和 MCP 连接",
+        "question": "是否允许启动已安装的任务航线工作台并恢复已有MCP连接",
+        "reason": "原门禁第6条限制工具不可用时仅只读，本轮请求限范围恢复运行态授权",
+        "launched": true,
+        "configChanged": false
+      },
+      "stage": "pending",
+      "acceptance": "pending",
+      "sync": "pendingSync",
+      "serviceRequestsSent": 0,
+      "remaining": [
+        "恢复宿主工具发现（已有所有者已恢复）",
+        "独立路线原生登记/绑定/有效开始回执",
+        "完整设置后台矩阵",
+        "浏览器/原生基线及动画"
+      ],
+      "evidenceScope": "只读调查及已授权的已有工作台运行态恢复，不是A开始或完成回执",
+      "hostRecovery": {
+        "state": "requiresHostReload",
+        "userReply": "找不到重连入口",
+        "cliReloadCommandAvailable": false,
+        "advice": "保持业务工作台运行，完全退出并重开宿主应用后在本聊天继续；仍须重新发现工具并取得服务回执",
+        "configChanged": false,
+        "reinstalled": false
+      }
+    }
+  ],
+  "ownerAfterRecovery": {
+    "ownerGeneration": "4b251fec-204e-4aad-9551-c5488a907163",
+    "pid": 37068,
+    "endpoint": "http://127.0.0.1:9447",
+    "nodeVersion": "25.5.0",
+    "ownerJsonExists": true,
+    "stoppedJsonExists": false,
+    "nativeWindowObserved": true,
+    "hostToolsVisible": false,
+    "note": "已有工作台恢复成功；宿主MCP发现尚未恢复，不据此认定授权/绑定有效。"
+  },
+  "remoteSnapshot": {
+    "date": "2026-11-11",
+    "fork": "WuwuZhang0019/windows-dynamic-island",
+    "upstream": "HeyyCzer/windows-dynamic-island",
+    "defaultBranch": "main",
+    "forkHead": "e286d9045746837bf1960e0d13b7ed572b8d9e50",
+    "upstreamHead": "e286d9045746837bf1960e0d13b7ed572b8d9e50",
+    "method": "已连接GitHub只读工具固定ref读取",
+    "files": [
+      {
+        "path": "package.json",
+        "blobSha": "a2fd3129f141b5b03a32b77cef7cc9f19505715e"
+      },
+      {
+        "path": "LICENSE",
+        "blobSha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7"
+      },
+      {
+        "path": "README.md",
+        "blobSha": "9593bcf210447b5835fae7f0e9a5bcec056c69a0"
+      },
+      {
+        "path": "AGENTS.md",
+        "blobSha": "9c72eb00b129c3f2fe039421661c5ec0351eb669"
+      },
+      {
+        "path": "bun.lock",
+        "blobSha": "39f8974afbe020573dfd9fb4b78c9efb8c29188e"
+      },
+      {
+        "path": "src-tauri/Cargo.lock",
+        "blobSha": "76bac43470dd05df1d465a8ee5aa4f29c512280b"
+      },
+      {
+        "path": "src-tauri/rust-toolchain.toml",
+        "blobSha": "22770733c648424bbe29ada034298939907518e9"
+      },
+      {
+        "path": "src-tauri/Cargo.toml",
+        "blobSha": "3f145e735a6e9085c188d47f42c59d7b1517e01c"
+      },
+      {
+        "path": "src-tauri/tauri.conf.json",
+        "blobSha": "98b7f8f25cd0a75b49fb7a23550b979a2ebecf22"
+      },
+      {
+        "path": ".github/workflows/check.yml",
+        "blobSha": "56c0ddba2276230dc7b956d2df56715c2b108c78"
+      },
+      {
+        "path": "src/settings/pages/GeneralPage.tsx",
+        "blobSha": "776bcc196de6f5f1b3470f86a2b5771e0517d115"
+      },
+      {
+        "path": "src/settings/pages/AppearancePage.tsx",
+        "blobSha": "4ad2934bbed231418aa3bf121faa36c563d3a7cf"
+      },
+      {
+        "path": "src/settings/pages/BehaviorPage.tsx",
+        "blobSha": "cbbfc9239f0ee72dc541e9065239174aae5e5e2d"
+      },
+      {
+        "path": "src/settings/pages/AboutPage.tsx",
+        "blobSha": "5cf8ff8a6c27e670cd260dbc79136703bae6f3a2"
+      },
+      {
+        "path": "src/core/settings.ts",
+        "blobSha": "f92dcd0246ee64463849a62b2f9290d976a1e6b9"
+      },
+      {
+        "path": "src/settings/SettingsApp.tsx",
+        "blobSha": "d7b325efba5315e432685ac2b6b2ae39441b586d"
+      },
+      {
+        "path": "src/locales/zh-CN.json5",
+        "blobSha": "5120c0d4004298e2bb9a77c378cedf86a30a8c46"
+      },
+      {
+        "path": "src/modules/index.ts",
+        "blobSha": "28949666fedfc7817c3683ce69524a88c697d12d"
+      },
+      {
+        "path": "src-tauri/src/providers/mod.rs",
+        "blobSha": "02c77e05e8b727c5ff0142208c727385c0de3b06"
+      },
+      {
+        "path": "src-tauri/src/lib.rs",
+        "blobSha": "c9d9afea86219500a26846bb12158b8f0ebfe7df"
+      },
+      {
+        "path": "src-tauri/src/providers/shortcuts.rs",
+        "blobSha": "24f7beef2f43bdf2b866b72158ffcb94bd9f1df7"
+      },
+      {
+        "path": "src-tauri/src/plugins/mod.rs",
+        "blobSha": "894a9453f595b111632a4045f2f8916d7da33095"
+      }
+    ],
+    "resourceLicensesVerified": false,
+    "checkoutCreated": false,
+    "programRun": false
+  },
   "nextStage": {
     "code": "B",
     "started": false,
