@@ -11,7 +11,7 @@
   },
   "app": {
     "withGlobalTauri": true,
-    "windows": [{ "label": "main", "title": "任务航线工作台", "width": 1280, "height": 850, "minWidth": 900, "minHeight": 650 }],
+    "windows": [{ "label": "main", "visible": false, "skipTaskbar": true, "title": "任务航线工作台", "width": 1280, "height": 850, "minWidth": 900, "minHeight": 650 }],
     "security": {
       "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src ipc: http://ipc.localhost"
     }

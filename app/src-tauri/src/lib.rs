@@ -468,11 +468,19 @@ pub fn run() {
             .shadow(false)
             .resizable(false)
             .always_on_top(true)
+            .skip_taskbar(true)
             .focused(false)
             .visible(false)
             .build()?;
             // 初次显示前先裁为紧凑区域，不让透明宿主矩形阻挡下方应用。
             panel_shape::configure(&panel_window, false)?;
+            // 日期：2026-11-11。托盘常驻，正常启动仅显示轻量浮窗；异常时提供恢复入口。
+            let ready = app.state::<Runtime>().endpoint.lock().unwrap().is_some();
+            if ready {
+                panel_shape::show_without_activation(&panel_window)?;
+            } else if let Some(main) = app.get_webview_window("main") {
+                main.show()?;
+            }
             let handle = app.handle().clone();
             std::thread::spawn(move || loop {
                 if root.join("show.request").exists() {
