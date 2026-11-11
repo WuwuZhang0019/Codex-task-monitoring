@@ -1,0 +1,373 @@
+{
+  "date": "2026-11-11",
+  "localPlanKey": "island-workbench-20261111",
+  "localRecordKey": "island-workbench-20261111/local/A-20261111-01",
+  "status": {
+    "sync": "deferredByAuthorization",
+    "acceptance": "passed",
+    "execution": "completed",
+    "serviceSynced": false
+  },
+  "authorization": {
+    "scope": "仅A取消服务开始回执前置，保持原验收与正式业务写授权，不自动执行B",
+    "planSection": "1.1",
+    "userDecision": "按你的建议执行，继续完成A阶段",
+    "date": "2026-11-11"
+  },
+  "source": {
+    "version": "2026-11-11",
+    "sha256": "5ea58f910a17037346fdf6676b0d0168b0f648ab7e09c7b102aa3ca32149e82c",
+    "previousHash": "6576a191b324a6e593f42c8a529d0821fa91171ac2c76cbf2b364b1e9088568f",
+    "path": "docs/03_轻量路线工作台/00_执行入口/02_灵动岛外壳接入可执行方案_2026-11-11.md"
+  },
+  "business": {
+    "startHead": "89e6d6fc633f4546cacc7ee450c3fc5e35a4e133",
+    "initiallyClean": true,
+    "branch": "main",
+    "path": "G:\\rust\\Codex-task-monitoring"
+  },
+  "fork": {
+    "configRestoredByteForByte": true,
+    "upstreamMain": "e286d9045746837bf1960e0d13b7ed572b8d9e50",
+    "upstream": "https://github.com/HeyyCzer/windows-dynamic-island.git",
+    "path": "G:\\rust\\windows-dynamic-island",
+    "origin": "https://github.com/WuwuZhang0019/windows-dynamic-island.git",
+    "branch": "codex/island-workbench-shell",
+    "head": "e286d9045746837bf1960e0d13b7ed572b8d9e50",
+    "originMain": "e286d9045746837bf1960e0d13b7ed572b8d9e50",
+    "files": [
+      {
+        "path": "package.json",
+        "sha256": "08444906ebe9812694fa19cc3dbb64743b026fc7800aacba8ab701efb7da477b"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "b5c5c2788dd7b2a09b83cd02cb94f3a80b2ceeece3892eb0a63f49bdc468fa29"
+      },
+      {
+        "path": "src-tauri/Cargo.lock",
+        "sha256": "b6333e15fa540f46870d5fc539e3b5fbd0ed70e30c597087402faf4d8db71361"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      },
+      {
+        "path": "AGENTS.md",
+        "sha256": "5d1becc0c06ace626e71e6ac2e25613cb67a39f28b2c4aa3c0b1aaeb77d808d5"
+      },
+      {
+        "path": "src-tauri/tauri.conf.json",
+        "sha256": "3ddde395bdcb6bd5c4b435c25f540b6508591938219a12d8a78746602b6da5b8"
+      }
+    ],
+    "finalDiffEmpty": true
+  },
+  "serviceIdentity": {
+    "stepIds": null,
+    "bindingRevision": null,
+    "planId": null,
+    "executionId": null,
+    "revision": null,
+    "bindingId": null,
+    "eventId": null,
+    "idempotencyKey": null,
+    "delivery": "notSent",
+    "projectId": null
+  },
+  "toolchain": {
+    "cargo": "1.98.0 (797e8a9bc 2026-08-05)",
+    "bun": "1.4.4",
+    "rustc": "1.98.0 (88d9e12ae 2026-08-18)",
+    "npm": "11.8.0",
+    "node": "25.5.0",
+    "edge": "157.0.4341.42",
+    "playwright": "1.65.0",
+    "defaultRust": "1.88.0 unchanged"
+  },
+  "checks": [
+    {
+      "result": "passed",
+      "name": "A-01 repository and remote baseline"
+    },
+    {
+      "result": "passed",
+      "name": "A-02 commits GPL source and resource-pending inventory"
+    },
+    {
+      "result": "passed",
+      "modules": 12,
+      "settings": 24,
+      "name": "A-03 static settings/background matrix",
+      "providers": 14
+    },
+    {
+      "result": "passed",
+      "lockfileUnchanged": true,
+      "name": "bun install --frozen-lockfile"
+    },
+    {
+      "result": "passed",
+      "name": "bun run lint",
+      "files": 188
+    },
+    {
+      "result": "passed",
+      "name": "bun run build"
+    },
+    {
+      "result": "passed",
+      "checks": 12,
+      "name": "original browser baseline",
+      "styles": 2,
+      "mock": true
+    },
+    {
+      "result": "passed",
+      "coldReopenReturnDelay": 6,
+      "name": "native debug baseline with isolated deployment config",
+      "binarySha256": "d5b27d5a74b306e91e00ba9fd3d976fdd4bfa5f47b3325320c2c236af5718d04"
+    },
+    {
+      "result": "passed",
+      "tests": 1,
+      "name": "private owner lifecycle isolated existing test"
+    },
+    {
+      "result": "passed",
+      "tests": 1,
+      "name": "light-panel authorization/persistence isolated existing test"
+    }
+  ],
+  "nativeConditions": {
+    "settingsPersisted": {
+      "appearance.style": "windows",
+      "island.returnDelay": 6
+    },
+    "browserAnimationComparisonSaved": true,
+    "originalCacheIntegrityFullyVerified": false,
+    "nativeVideo": {
+      "fps": 15,
+      "seconds": 20,
+      "frameVisuallyVerified": true,
+      "crop": {
+        "x": 760,
+        "height": 560,
+        "width": 800,
+        "y": 312
+      }
+    },
+    "nativeAnimationAllCasesVerified": false,
+    "temporaryOverrides": {
+      "identifier": "com.codextaskmonitor.islandbaselinea",
+      "productName": "Island A Baseline",
+      "appDirectoriesOverride": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-A\\native-profile"
+    },
+    "knownOriginalClipboardDirectoryMetadata": {
+      "creationTime": "2026-11-11T19:42:55.627+08:00",
+      "lastWriteTime": "2026-11-11T19:42:55.627+08:00",
+      "files": 0,
+      "path": "C:\\Users\\Zyf\\AppData\\Roaming\\com.heyyczer.dynamicisland\\clipboard",
+      "observation": "earlier than this run; no evidence of directory recreation in this run; not a full prior snapshot"
+    }
+  },
+  "knownLimitations": [
+    "browser single404 not reproduced; no pageerror",
+    "native first isolation attempt not accepted as isolated evidence",
+    "Spotify account credential read probe remains; no auth action",
+    "native window GDI recording background-only excluded; smaller window-interior recording accepted",
+    "all24 setting interactions, tray normal exit, DPI/multi-monitor and installer not claimed",
+    "resource licenses remain explicit F audit items",
+    "D independent service/authorization adapter not implemented"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/03_轻量路线工作台/00_执行入口/02_灵动岛外壳接入可执行方案_2026-11-11.md",
+      "sha256": "5ea58f910a17037346fdf6676b0d0168b0f648ab7e09c7b102aa3ca32149e82c"
+    },
+    {
+      "path": "app/tests/island-a-browser-baseline.mjs",
+      "sha256": "9b6dc87e9503915ceea29dbda47dd18a1c3bcaf704f9bdf7936d0e12e5bf5824"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/A_基线与授权范围回执_2026-11-11.md",
+      "sha256": "a3ddc467145158293228358246f595c32190a1429013ef9f6cf19677c9bf74fb"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/A_浏览器基线_2026-11-11.md",
+      "sha256": "9833ab691d3c6997369e937152c1df47d280d8e7b27c98a7c7de0e650ebfa690"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/A_浏览器基线证据_2026-11-11.json",
+      "sha256": "fa2c93b09580426fdefb3724c572f0ff75b174d48c8d00ba57994fb37e50fb8f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/A_原生桌面基线_2026-11-11.md",
+      "sha256": "ee5def6f35fb1e7cbb6e4e17ec9248307a77a61eaa7719972a9472d061cdbef4"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/A_设置与后台矩阵_2026-11-11.md",
+      "sha256": "7f2a2963356ffdcf3eff0c2442e7614bcd70e1a87acce715b5639ea58aa333b2"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/A_服务与授权边界_2026-11-11.md",
+      "sha256": "21274b88e7e3178e62f6e9163b4a93df3ff909b383dbcbf207c85f6028d1f435"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/workbench-sync.md",
+      "sha256": "8ed2b3d298126911f52d9725f5d687fa3902348f3139deef1d8ac7fac297e56c"
+    },
+    {
+      "path": "app/package.json",
+      "sha256": "8fd8ad3ae42c3e1157e9bac09c74292d06bd73e9d025290868d2e2237687a827"
+    },
+    {
+      "path": "app/package-lock.json",
+      "sha256": "72a3620b38165d0a847599bf7df117c8f702898a2b96da27741174a03044f545"
+    },
+    {
+      "path": "app/src-tauri/Cargo.lock",
+      "sha256": "14dc01cd94b25a6c8c3a32e612ab685eca0b119976ffaac396be35527c0280c0"
+    }
+  ],
+  "media": [
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-appearance.png",
+      "bytes": 83444,
+      "sha256": "2a410726009b73524ee27046133c31ea08366826773c772f0346cf22227d61a7"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-baseline.webm",
+      "bytes": 1211696,
+      "sha256": "6df5997ad35624f63c8c800966291919b05546bb47ce7e725bfce5b8eead6a81"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-collapsed-after-unpin.png",
+      "bytes": 137373,
+      "sha256": "29a0acf6f917dcc6f549afa6b10582095d27775300ab5dd118abe0bb16918b52"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-collapsed.png",
+      "bytes": 137452,
+      "sha256": "f347a3ea31eae43eb9502eeecad4d8dea4452320e2d587135647432075352c6a"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-expanded-after-rapid.png",
+      "bytes": 184261,
+      "sha256": "9175874b40b732043cc700a4760adbbf8450e29b8ee46858c9036ba187d37cae"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-expanded.png",
+      "bytes": 184089,
+      "sha256": "955dbe8237b7d4fac15041d1bcd2e2fa60b8e122099ea449b9707a996479dfbb"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-hover-transition.png",
+      "bytes": 165753,
+      "sha256": "21db34d4d45a7d3e12a7e566f78f3fb810277f8db4fc6241fcb6a84573415285"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-pinned-outside.png",
+      "bytes": 184571,
+      "sha256": "e888dd0dbe706e0c35610a3b3e50a00cb20316528170cc3127a0021e71d55b0b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/dynamic-rapid-exit-final.png",
+      "bytes": 137582,
+      "sha256": "0ed483a61dd7b5b868caf9b18923b3610f5757626b291a763cf9d8170e86fb24"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-appearance.png",
+      "bytes": 89157,
+      "sha256": "5a70b8c87ebd3a6e00685a0a79c1e5fa8cca190708bff9303527a10f61a998b0"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-baseline.webm",
+      "bytes": 1503928,
+      "sha256": "c898d008bc90bb52fed2e6ae9350fd3af3afcf29b5abaf29a289e9ad56e4cafb"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-collapsed-after-unpin.png",
+      "bytes": 144561,
+      "sha256": "138187a536ed8e8d69bc722f59836a8ec288794f3eb851a126a8ea8a1a904d08"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-collapsed.png",
+      "bytes": 144115,
+      "sha256": "ae1551880cc42b33893be45585376a53a8a4e5629178a20ee2dad729db9ed825"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-expanded-after-rapid.png",
+      "bytes": 198071,
+      "sha256": "f98f663a2a70dca76940d4400721559dc91afd2a4f0c27c19759cb2b7915ef2d"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-expanded.png",
+      "bytes": 197726,
+      "sha256": "72212ac41b8b1f37b7a8c98f41a0ca70810e163d18bdd9998cbde43f0a315a80"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-hover-transition.png",
+      "bytes": 170185,
+      "sha256": "e43e5246e6a174419770d54e9fb86f087113b53aeb3f06c876ffeff3fb9bc614"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-pinned-outside.png",
+      "bytes": 198486,
+      "sha256": "c0ccb87119ea9b602d02cb88df0a272675c997613bb3514c9d4ec00a912dbdf5"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/browser/windows-rapid-exit-final.png",
+      "bytes": 144893,
+      "sha256": "eb5e8bbab06c8a614e3a6651c0eb9eb18730604c74bafe308c51092f1acbbe4d"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/native/about.png",
+      "bytes": 31470,
+      "sha256": "d982f7762a51145d7dbaeb501f40d2825c44ae728edf8f1eefc2fb786b51e39d"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/native/appearance-dynamic.png",
+      "bytes": 39846,
+      "sha256": "82bfa6de241d05b219f7df848f1f835533b3bbe694c70efc1c47e1ce630d13bb"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/native/appearance-windows.png",
+      "bytes": 43876,
+      "sha256": "ec7b2062b97ce0dbb8fbb60afd6d81e333bab8a5d930d2026a489f6b3282e135"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/native/behavior.png",
+      "bytes": 47236,
+      "sha256": "f9619d8e1474b30d478640249cbb0d2a1a87593969e8f8fa1c946236e415a62d"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/native/cold-reopen-behavior.png",
+      "bytes": 47659,
+      "sha256": "be092e045b013d4bd31e6f4c74776f35155c4467c728f6f095347b83724224df"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/native/general.png",
+      "bytes": 30679,
+      "sha256": "1322639f4cc021490189cf8ed6e41f8e24e38500f9baeb8c46c1b279fcbfbb54"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/native/observations.json",
+      "bytes": 5700,
+      "sha256": "ad7e5946e091b3204342097ce7ba6a5da2a89bd9a573a6aaaa2b23083e3e9090"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/native/settings-baseline.mp4",
+      "bytes": 85252,
+      "sha256": "094a61438dabedd611e9a1a32570bbd814ab8c337562a8486c224e02fbae3d41"
+    }
+  ],
+  "next": {
+    "started": false,
+    "owner": "待分配",
+    "priorStageAcceptance": "passed",
+    "dispatched": false,
+    "stage": "B",
+    "startAuthorizationAndGate": "mustRecheck"
+  }
+}

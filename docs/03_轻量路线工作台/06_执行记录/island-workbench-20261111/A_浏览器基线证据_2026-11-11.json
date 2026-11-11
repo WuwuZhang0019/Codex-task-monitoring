@@ -1,0 +1,371 @@
+{
+  "date": "2026-11-11",
+  "sourceCommit": "e286d9045746837bf1960e0d13b7ed572b8d9e50",
+  "base": "http://localhost:1420",
+  "browser": "157.0.4341.42",
+  "executablePath": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "native": false,
+  "feed": "upstream src/dev/mock via startBridge",
+  "styles": [
+    {
+      "style": "dynamic",
+      "states": [
+        {
+          "name": "collapsed",
+          "elapsedMs": 4527,
+          "geometry": {
+            "x": 470,
+            "y": 0,
+            "width": 340,
+            "height": 38
+          },
+          "screenshot": "dynamic-collapsed.png"
+        },
+        {
+          "name": "hover-transition",
+          "elapsedMs": 5129,
+          "geometry": {
+            "x": 438.265625,
+            "y": 0,
+            "width": 403.46875,
+            "height": 144.984375
+          },
+          "screenshot": "dynamic-hover-transition.png"
+        },
+        {
+          "name": "expanded",
+          "elapsedMs": 6293,
+          "geometry": {
+            "x": 330,
+            "y": 0,
+            "width": 620,
+            "height": 510
+          },
+          "screenshot": "dynamic-expanded.png"
+        },
+        {
+          "name": "pinned-outside",
+          "elapsedMs": 7835,
+          "geometry": {
+            "x": 330,
+            "y": 0,
+            "width": 620,
+            "height": 510
+          },
+          "screenshot": "dynamic-pinned-outside.png"
+        },
+        {
+          "name": "collapsed-after-unpin",
+          "elapsedMs": 9675,
+          "geometry": {
+            "x": 470,
+            "y": 0,
+            "width": 340,
+            "height": 38
+          },
+          "screenshot": "dynamic-collapsed-after-unpin.png"
+        },
+        {
+          "name": "rapid-exit-final",
+          "elapsedMs": 12302,
+          "geometry": {
+            "x": 470,
+            "y": 0,
+            "width": 340,
+            "height": 38
+          },
+          "screenshot": "dynamic-rapid-exit-final.png"
+        },
+        {
+          "name": "expanded-after-rapid",
+          "elapsedMs": 13682,
+          "geometry": {
+            "x": 330,
+            "y": 0,
+            "width": 620,
+            "height": 510
+          },
+          "screenshot": "dynamic-expanded-after-rapid.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "collapsed",
+          "elapsedMs": 4341
+        },
+        {
+          "name": "pointer-enter",
+          "elapsedMs": 4533
+        },
+        {
+          "name": "pin",
+          "elapsedMs": 6388
+        },
+        {
+          "name": "unpin",
+          "elapsedMs": 7950
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 9687,
+          "cycle": 1
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 9771,
+          "cycle": 1
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 9854,
+          "cycle": 2
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 9920,
+          "cycle": 2
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 10005,
+          "cycle": 3
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 10071,
+          "cycle": 3
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 10154,
+          "cycle": 4
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 10222,
+          "cycle": 4
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 10305,
+          "cycle": 5
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 10372,
+          "cycle": 5
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 10454,
+          "cycle": 6
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 10521,
+          "cycle": 6
+        }
+      ],
+      "errors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "failures": [],
+      "checks": [
+        "通过原始设置页面切换样式并保存 localStorage",
+        "悬停展开高度明显大于收起态",
+        "固定后指针离开仍保持展开",
+        "取消固定后离开可收起",
+        "六轮快速进出后最终回到收起态",
+        "快速进出后仍可再次展开"
+      ],
+      "savedSettings": {
+        "appearance.style": "dynamic"
+      },
+      "completed": true,
+      "video": "dynamic-baseline.webm"
+    },
+    {
+      "style": "windows",
+      "states": [
+        {
+          "name": "collapsed",
+          "elapsedMs": 4457,
+          "geometry": {
+            "x": 470,
+            "y": 8,
+            "width": 340,
+            "height": 38
+          },
+          "screenshot": "windows-collapsed.png"
+        },
+        {
+          "name": "hover-transition",
+          "elapsedMs": 4855,
+          "geometry": {
+            "x": 414.703125,
+            "y": 8,
+            "width": 450.578125,
+            "height": 223.625
+          },
+          "screenshot": "windows-hover-transition.png"
+        },
+        {
+          "name": "expanded",
+          "elapsedMs": 5994,
+          "geometry": {
+            "x": 330,
+            "y": 8,
+            "width": 620,
+            "height": 508
+          },
+          "screenshot": "windows-expanded.png"
+        },
+        {
+          "name": "pinned-outside",
+          "elapsedMs": 7477,
+          "geometry": {
+            "x": 330,
+            "y": 8,
+            "width": 620,
+            "height": 508
+          },
+          "screenshot": "windows-pinned-outside.png"
+        },
+        {
+          "name": "collapsed-after-unpin",
+          "elapsedMs": 9290,
+          "geometry": {
+            "x": 470,
+            "y": 8,
+            "width": 340,
+            "height": 38
+          },
+          "screenshot": "windows-collapsed-after-unpin.png"
+        },
+        {
+          "name": "rapid-exit-final",
+          "elapsedMs": 11875,
+          "geometry": {
+            "x": 470,
+            "y": 8,
+            "width": 340,
+            "height": 38
+          },
+          "screenshot": "windows-rapid-exit-final.png"
+        },
+        {
+          "name": "expanded-after-rapid",
+          "elapsedMs": 13229,
+          "geometry": {
+            "x": 330,
+            "y": 8,
+            "width": 620,
+            "height": 508
+          },
+          "screenshot": "windows-expanded-after-rapid.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "collapsed",
+          "elapsedMs": 4304
+        },
+        {
+          "name": "pointer-enter",
+          "elapsedMs": 4469
+        },
+        {
+          "name": "pin",
+          "elapsedMs": 6063
+        },
+        {
+          "name": "unpin",
+          "elapsedMs": 7542
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 9305,
+          "cycle": 1
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 9371,
+          "cycle": 1
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 9437,
+          "cycle": 2
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 9505,
+          "cycle": 2
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 9588,
+          "cycle": 3
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 9671,
+          "cycle": 3
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 9755,
+          "cycle": 4
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 9821,
+          "cycle": 4
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 9888,
+          "cycle": 5
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 9955,
+          "cycle": 5
+        },
+        {
+          "name": "rapid-enter",
+          "elapsedMs": 10038,
+          "cycle": 6
+        },
+        {
+          "name": "rapid-leave",
+          "elapsedMs": 10105,
+          "cycle": 6
+        }
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "failures": [],
+      "checks": [
+        "通过原始设置页面切换样式并保存 localStorage",
+        "悬停展开高度明显大于收起态",
+        "固定后指针离开仍保持展开",
+        "取消固定后离开可收起",
+        "六轮快速进出后最终回到收起态",
+        "快速进出后仍可再次展开"
+      ],
+      "savedSettings": {
+        "appearance.style": "windows",
+        "appearance.border": "intelligence"
+      },
+      "completed": true,
+      "video": "windows-baseline.webm"
+    }
+  ],
+  "passed": true
+}
