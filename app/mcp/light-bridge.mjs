@@ -34,7 +34,7 @@ function failure(code, unknown = false) {
 }
 
 export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000, reloadConfig } = {}) {
-  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.5' }, { capabilities: { tools: {} } });
+  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.6' }, { capabilities: { tools: {} } });
   async function connection() {
     const current = reloadConfig ? await reloadConfig() : config;
     const owner = current.dataDir ? await discoverOwner(current.dataDir) : current;
