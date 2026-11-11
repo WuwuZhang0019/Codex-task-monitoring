@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
 import { createServer } from '../server/index.mjs';
+import fixture from '../src/light-simulation.json' with { type: 'json' };
 
 const app = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const data = await mkdtemp(path.join(os.tmpdir(), 'light-connection-ui-'));
@@ -26,7 +27,7 @@ async function check(name, operation) {
 async function openDesktop({ saveFails = false, revokeFails = false } = {}) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 850 } });
   page.on('pageerror', error => errors.push(error.message));
-  await page.addInitScript(({ saveFails, revokeFails, fakeToken }) => {
+  await page.addInitScript(({ saveFails, revokeFails, fakeToken, fixture }) => {
     const state = { calls: [], saveFails, revokeFails };
     window.__lightConnectionTest = state;
     window.__TAURI__ = { core: { invoke: async (command, args) => {
@@ -38,7 +39,7 @@ async function openDesktop({ saveFails = false, revokeFails = false } = {}) {
       }
       if (command !== 'api_request') throw new Error(`Unexpected command ${command}`);
       const responses = {
-        '/projects': { projects: [] }, '/health': { ok: true, ai: { configured: false, model: 'fixture' } },
+        '/light-panel': { snapshot: { ...fixture, mode: 'service', revision: 1 }, preferences: null, sources: {} },
         '/light-access/grants': { principal: 'fixture-principal', token: fakeToken },
         '/light-access/revoke': { principal: 'fixture-principal', revoked: true },
         '/light-access/confirm-publication': { confirmationGrant: 'fixture-publication-confirmation', contentHash: 'fixture-content-hash' },
@@ -49,9 +50,14 @@ async function openDesktop({ saveFails = false, revokeFails = false } = {}) {
       if (!Object.hasOwn(responses, args.path)) throw new Error(`Unexpected path ${args.path}`);
       return { status: 200, data: responses[args.path] };
     } } };
-  }, { saveFails, revokeFails, fakeToken });
+  }, { saveFails, revokeFails, fakeToken, fixture });
   await page.goto(`http://127.0.0.1:${server.address().port}`);
-  await page.getByRole('heading', { name: '让执行方案，有一条清晰的路线。' }).waitFor();
+  await page.getByRole('region', { name: '项目路线面板' }).waitFor();
+  await page.locator('.lp-project').first().waitFor();
+  assert.equal(await page.locator('.workbench, .sidebar, .ai-panel, .lp-demo').count(), 0);
+  assert.ok(!(await calls(page)).some(call => ['/projects', '/health', '/drafts'].includes(call.args?.path)));
+  assert.equal(await page.getByRole('button', { name: '浮窗宿主' }).count(), 1);
+  assert.equal(await page.getByRole('button', { name: '恢复服务' }).count(), 1);
   await page.getByText('Codex 接入', { exact: true }).click();
   await page.getByLabel('接入聊天固定ID').fill('fixture-thread');
   await page.getByLabel('接入工作树路径').fill('G:\\fixture');
