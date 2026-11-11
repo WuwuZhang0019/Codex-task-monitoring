@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-11",
+  "firstBuild": {
+    "general": "四类导航、语言zh-CN、自启动关闭、真实DELL显示器枚举可见",
+    "appearance": "原生Apple智能边框点击后磁盘保存intelligence",
+    "behavior": "set_value修改returnDelay=9，Tab触发保存；UIA focused_element持续报告RootWebArea，不声称焦点细节已验证",
+    "about": "Island Workbench\n·\n设置\n最小化\n关闭\n应用\n常规\n外观\n行为\n关于\nIsland Workbench\n版本 0.1.0\n源代码\ngithub.com/WuwuZhang0019/windows-dynamic-island\nGitHub\n检查更新\n更新暂不可用：自有发布源尚未配置\n开源许可\nGPL-3.0-or-later · © HeyyCzer / Vorssaint · 修改日期：2026-11-11\n上游来源"
+  },
+  "coldRestart": {
+    "windowTitle": "Island Workbench — 设置",
+    "document": "Island Workbench\n·\n设置\n最小化\n关闭\n应用\n常规\n外观\n行为\n关于\n行为\n展开灵动岛\n灵动岛在何时展开。\n￼\n收起灵动岛\n灵动岛在何时收起。固定后（标签栏中的图钉），无论如何都保持展开。\n￼\n全屏时隐藏\n当有游戏、视频或应用全屏运行时隐藏灵动岛。\n￼\n避开全屏应用\n当全屏应用（游戏、视频、演示文稿）可能遮挡灵动岛时，将其移至另一台显示器。\n￼\n返回屏幕居中\n可沿屏幕顶部左右拖动灵动岛。关闭后，灵动岛将停留在拖放位置。\n￼\n返回延迟\n拖动灵动岛后滑动回屏幕中央的等待秒数。\n9\ns"
+  },
+  "limitations": [
+    "原生顶部浮窗未列入sky.list_windows；以设置窗口的相关截图点击浮窗被工具拒绝为非目标窗口，不视为产品验收通过",
+    "原生完整浮窗Tab/Enter/Esc和动效矩阵待核验；浏览器对应检查已通过",
+    "原生四页已查看，未逐一修改24项全部选项；系统自启动未开启，DPI/多屏/安装仍归E",
+    "冷重开通过结束已核实测试进程再启动实现，未声称托盘正常退出通过"
+  ]
+}

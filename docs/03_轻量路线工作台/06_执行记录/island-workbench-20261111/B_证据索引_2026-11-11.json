@@ -1,0 +1,202 @@
+{
+  "date": "2026-11-11",
+  "planKey": "island-workbench-20261111",
+  "stage": "B",
+  "localExecution": "blocked",
+  "acceptance": "pending",
+  "handoffConclusion": "B",
+  "sync": "deferredByAuthorization",
+  "serviceSynced": false,
+  "serviceIdentity": null,
+  "fork": {
+    "path": "G:\\rust\\windows-dynamic-island",
+    "branch": "codex/island-workbench-shell",
+    "commit": "41a0e322055ae4674a6792208e70bc7016ab21f7"
+  },
+  "checks": {
+    "frontendLintFiles": 50,
+    "frontendTestsPassed": 12,
+    "frontendAssertions": 32,
+    "frontendBuild": "passed",
+    "frozenInstall": "passed-no-changes",
+    "clippy": "passed",
+    "rustTestsPassed": 17,
+    "browserChecksPassed": 25,
+    "nativeBuild": "passed-debug-no-bundle",
+    "nativeColdRestart": "returnDelay=9, border=intelligence, language=zh-CN",
+    "originalSettingsUnchanged": true
+  },
+  "pending": [
+    "原生浮窗独立窗口绑定及Tab/Enter/Esc/焦点检查",
+    "原生浮窗两形态完整动效矩阵",
+    "原生保留设置逐项运行核验的剩余条件"
+  ],
+  "limits": [
+    "浏览器设置检查不证明真实多屏或系统毛玻璃效果",
+    "未实际开启系统自启动",
+    "安装版/DPI/多屏按E执行",
+    "自有更新源与发布审计按F执行"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/B_native-final-build.json",
+      "bytes": 188,
+      "sha256": "1f65ca9d75542cf9b9b0feb61f2b9e564bc89906385c3a00aab2ac3daa86dd5a"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/B_runtime-check.json",
+      "bytes": 111,
+      "sha256": "4d2a0b0e6250f87ad3cee87ed9a028d66bdcbe3d08c8844b92fe1ffc8f1e4d0b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/B_原生观察_2026-11-11.json",
+      "bytes": 2015,
+      "sha256": "392e5fa09f1983dd14cb2c8f435294900fbaae75d0f49c1c75ab570cbe43564b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/B_开始门禁回执_2026-11-11.md",
+      "bytes": 3385,
+      "sha256": "83bfb15301e38461b1ee3325a36c9dc8a3cc5f30c5e5ad035dd8f886c660d660"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/B_浏览器证据.json",
+      "bytes": 13780,
+      "sha256": "f9de491e52e3137f7b1b3eed623b51a84ec2f70a1489a4edcc0ac020e6b0e87b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/B_裁剪外壳阶段回执_2026-11-11.md",
+      "bytes": 6748,
+      "sha256": "9a27716a7596dce00a4005475c73f245c9207b1314ad570f954b620cd15fc72b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/about.png",
+      "bytes": 43880,
+      "sha256": "dc59d09f8b09f88baffa7582a6859863f28db1ff998956da908ffcd1ef0bf13f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/appearance.png",
+      "bytes": 76844,
+      "sha256": "ed66d470939d95d1b684a2d9bcc4be1f793c020f09ea432a0dfeaad5be624728"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/attempt02-report.json",
+      "bytes": 11318,
+      "sha256": "a45f5f48cbfe8c9aeeca275f6723cbc4d865c5c9b54d34c7d33cde2f724dd615"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/behavior.png",
+      "bytes": 47332,
+      "sha256": "b1dde26967ec83c0946f6b0c7556a7aa97c0d603ade9cf1c828eb3e4c03f0533"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/dynamic-collapsed-after-unpin.png",
+      "bytes": 124725,
+      "sha256": "cf2d8c195a939f909ffb58876029189d0e6eeb458e7e1c393b81abb0796a8991"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/dynamic-collapsed.png",
+      "bytes": 124725,
+      "sha256": "4f6b2babdb5bcf12caaf5466b637c4be44f8610e44c7817bbcd5ad44c6711015"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/dynamic-escape-collapsed.png",
+      "bytes": 124725,
+      "sha256": "cf2d8c195a939f909ffb58876029189d0e6eeb458e7e1c393b81abb0796a8991"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/dynamic-expanded.png",
+      "bytes": 137837,
+      "sha256": "f177f238d6d7027a7180f0340118f63d1ef90418b3cafe4ac5ca2871ab27c5eb"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/dynamic-hover-transition.png",
+      "bytes": 128522,
+      "sha256": "312a1a833c7e566e74a419950e914259afbecf16826b8032e82817dcc048f49a"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/dynamic-pinned-outside.png",
+      "bytes": 138289,
+      "sha256": "c37e680c46aa546728507208b91553a4061a29d04833d8a69f3ba7bcd44585e4"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/dynamic-rapid-exit-final.png",
+      "bytes": 124725,
+      "sha256": "cf2d8c195a939f909ffb58876029189d0e6eeb458e7e1c393b81abb0796a8991"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/general.png",
+      "bytes": 28589,
+      "sha256": "d3b9335ba7d03613a1e3dc4b9fcbcd24c9ba80d405c043b76d7710a49c6d7320"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/page@5ffc96e65a059d18243b5450f77079e4.webm",
+      "bytes": 2211591,
+      "sha256": "c8fda3e08751ba88af987367390d11129c66c656119f573b95cceb9d5e3cecf7"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/page@77fd06940c009a95d1679836e753f6bb.webm",
+      "bytes": 2515954,
+      "sha256": "41d82f7ca607949a3a37e012ffa680154ddf08478f36b58a25378847ba38a312"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/page@af8d13e22069def985bab891ae68fe31.webm",
+      "bytes": 1505495,
+      "sha256": "8ec7b190034320d6f2257497315298927ef83a091745f856641a8188c8370ab2"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/windows-collapsed-after-unpin.png",
+      "bytes": 126904,
+      "sha256": "ce71340d8d003c80d8f458000b7590ccbfddde7c65f9d435d29dafddda2f7992"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/windows-collapsed.png",
+      "bytes": 126751,
+      "sha256": "fcff85cea85d607cf170076dabfe353a80edd3528e5707f0783d441f8cfec789"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/windows-escape-collapsed.png",
+      "bytes": 126845,
+      "sha256": "23c6cebffce6afa8520017c535a61dc0e85a5429f51907821cb2ba5e5e4d9c81"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/windows-expanded.png",
+      "bytes": 146443,
+      "sha256": "2b40b603d90be50f7f59763c79e0248f2fa608ec4e5a6b9868224942d36ecc73"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/windows-hover-transition.png",
+      "bytes": 132636,
+      "sha256": "fbecd7b32e712f2f8a86dd93a84ef36fe27b53d96a5619f065375168ff9114a6"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/windows-pinned-outside.png",
+      "bytes": 146880,
+      "sha256": "0fd56a7c9c9eaf1a380f9d9fba3b0fd701c7df8d1e401cdf76ff34d8d74e3be8"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/browser/windows-rapid-exit-final.png",
+      "bytes": 126791,
+      "sha256": "d10beba3d95787398145cdb92edaae71f8b864343784f38e6af681399c0818ed"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/native/about-initial.png",
+      "bytes": 32770,
+      "sha256": "8465ba32c8f479d4bd5d25a9c2ae59ccfc8e4a30b441b29816c6f06e51d97107"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/B/native/cold-reopen-behavior.png",
+      "bytes": 45945,
+      "sha256": "716b66ef3ed1102e80486dbfa311f6f0bacb3c532dd391863ac2a06025184f32"
+    },
+    {
+      "path": "app/tests/island-b-shell.mjs",
+      "bytes": 15610,
+      "sha256": "b2cf9cc0e0f96e2cfd8b37721669a05433c776910b31430e0d8f0d3a6d2df762"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/B_前端检查日志_2026-11-11.txt",
+      "bytes": 1323,
+      "sha256": "07e2a21595873f4827f2465e78df9eed5a1ec608b73ded60bcf69e9e70ba4e16"
+    }
+  ]
+}

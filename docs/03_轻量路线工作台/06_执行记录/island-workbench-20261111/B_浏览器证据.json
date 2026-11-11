@@ -1,0 +1,550 @@
+{
+  "date": "2026-11-11",
+  "native": false,
+  "base": "http://127.0.0.1:1420",
+  "executablePath": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "checks": [
+    {
+      "name": "旧浏览器偏好白名单迁移与原值保留",
+      "result": "passed",
+      "details": {
+        "key": "island-workbench-settings-v1",
+        "values": {
+          "app.language": "zh-CN",
+          "appearance.style": "windows",
+          "appearance.border": "intelligence",
+          "island.expandOnHover": false,
+          "island.returnDelay": 9,
+          "shell.configVersion": 1
+        },
+        "all": {
+          "island-workbench-legacy-settings-backup-v1": {
+            "app.language": "zh-CN",
+            "appearance.style": "windows",
+            "appearance.border": "intelligence",
+            "island.expandOnHover": false,
+            "island.returnDelay": 9,
+            "module.clipboard.enabled": true,
+            "module.music.enabled": true,
+            "plugin.bad.enabled": true,
+            "shortcut.module.ask": "Ctrl+Alt+Space",
+            "island.order": [
+              "music"
+            ],
+            "appearance.tabsPosition": "top"
+          },
+          "island-settings": {
+            "app.language": "zh-CN",
+            "appearance.style": "windows",
+            "appearance.border": "intelligence",
+            "island.expandOnHover": false,
+            "island.returnDelay": 9,
+            "module.clipboard.enabled": true,
+            "module.music.enabled": true,
+            "plugin.bad.enabled": true,
+            "shortcut.module.ask": "Ctrl+Alt+Space",
+            "island.order": [
+              "music"
+            ],
+            "appearance.tabsPosition": "top"
+          },
+          "island-workbench-settings-v1": {
+            "app.language": "zh-CN",
+            "appearance.style": "windows",
+            "appearance.border": "intelligence",
+            "island.expandOnHover": false,
+            "island.returnDelay": 9,
+            "shell.configVersion": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "仅四类设置导航且被删页面路由不可达",
+      "result": "passed",
+      "details": {
+        "routeCheck": "源码无被删路由注册；浏览器无导航或iframe",
+        "source": "src/settings/SettingsApp.tsx"
+      }
+    },
+    {
+      "name": "G-01语言选项与保存",
+      "result": "passed"
+    },
+    {
+      "name": "G-02开机自启动只查看未启用系统项",
+      "result": "passed",
+      "details": {
+        "scope": "浏览器不可验证系统启动项；未切换开关"
+      }
+    },
+    {
+      "name": "G-03显示器主屏选项",
+      "result": "passed",
+      "details": {
+        "scope": "浏览器只有主屏；真实枚举和失联回退归原生"
+      }
+    },
+    {
+      "name": "P-01两种形态设置可切换并持久",
+      "result": "passed"
+    },
+    {
+      "name": "P-02所有原边框预设可选",
+      "result": "passed"
+    },
+    {
+      "name": "P-03自定义两端颜色",
+      "result": "passed"
+    },
+    {
+      "name": "P-04边框粗细可选",
+      "result": "passed"
+    },
+    {
+      "name": "P-05渐变流光保存",
+      "result": "passed",
+      "details": true
+    },
+    {
+      "name": "P-06光晕保存",
+      "result": "passed",
+      "details": false
+    },
+    {
+      "name": "P-07毛玻璃四档保存（浏览器预览）",
+      "result": "passed",
+      "details": {
+        "scope": "浏览器预览支持毛玻璃；真实系统支持由原生检查"
+      }
+    },
+    {
+      "name": "P-08静止时钟保存",
+      "result": "passed",
+      "details": false
+    },
+    {
+      "name": "P-09模块图标位置已移除",
+      "result": "passed"
+    },
+    {
+      "name": "P-10隐藏偏好保存与恢复",
+      "result": "passed"
+    },
+    {
+      "name": "B-01旧悬停偏好兼容及新展开选项",
+      "result": "passed"
+    },
+    {
+      "name": "B-02收起选项",
+      "result": "passed"
+    },
+    {
+      "name": "B-03全屏隐藏偏好",
+      "result": "passed",
+      "details": false
+    },
+    {
+      "name": "B-04避让偏好",
+      "result": "passed",
+      "details": true
+    },
+    {
+      "name": "B-05回中禁用联动",
+      "result": "passed"
+    },
+    {
+      "name": "B-06延迟校验、输入焦点、Enter与失焦提交",
+      "result": "passed"
+    },
+    {
+      "name": "I-01—05产品、版本、来源、更新降级、许可证",
+      "result": "passed",
+      "details": {
+        "noUpdateRequestSent": true
+      }
+    },
+    {
+      "name": "浏览器重载保留新命名空间偏好",
+      "result": "passed",
+      "details": {
+        "scope": "仅浏览器localStorage重载，不冒充原生冷重开"
+      }
+    },
+    {
+      "name": "dynamic形态动画、固定、快速进出和Esc",
+      "result": "passed",
+      "details": {
+        "style": "dynamic",
+        "states": [
+          {
+            "name": "collapsed",
+            "geometry": {
+              "x": 565,
+              "y": 0,
+              "width": 150,
+              "height": 8
+            }
+          },
+          {
+            "name": "hover-transition",
+            "geometry": {
+              "x": 488.421875,
+              "y": 0,
+              "width": 303.15625,
+              "height": 93.171875
+            }
+          },
+          {
+            "name": "expanded",
+            "geometry": {
+              "x": 360,
+              "y": 0,
+              "width": 560,
+              "height": 236
+            }
+          },
+          {
+            "name": "pinned-outside",
+            "geometry": {
+              "x": 360,
+              "y": 0,
+              "width": 560,
+              "height": 236
+            }
+          },
+          {
+            "name": "collapsed-after-unpin",
+            "geometry": {
+              "x": 565,
+              "y": 0,
+              "width": 150,
+              "height": 8
+            }
+          },
+          {
+            "name": "rapid-exit-final",
+            "geometry": {
+              "x": 565,
+              "y": 0,
+              "width": 150,
+              "height": 8
+            }
+          },
+          {
+            "name": "escape-collapsed",
+            "geometry": {
+              "x": 565,
+              "y": 0,
+              "width": 150,
+              "height": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "windows形态动画、固定、快速进出和Esc",
+      "result": "passed",
+      "details": {
+        "style": "windows",
+        "states": [
+          {
+            "name": "collapsed",
+            "geometry": {
+              "x": 585,
+              "y": 8,
+              "width": 110,
+              "height": 30
+            }
+          },
+          {
+            "name": "hover-transition",
+            "geometry": {
+              "x": 508.3125,
+              "y": 8,
+              "width": 263.375,
+              "height": 99.53125
+            }
+          },
+          {
+            "name": "expanded",
+            "geometry": {
+              "x": 360,
+              "y": 8,
+              "width": 560,
+              "height": 234
+            }
+          },
+          {
+            "name": "pinned-outside",
+            "geometry": {
+              "x": 360,
+              "y": 8,
+              "width": 560,
+              "height": 234
+            }
+          },
+          {
+            "name": "collapsed-after-unpin",
+            "geometry": {
+              "x": 585,
+              "y": 8,
+              "width": 110,
+              "height": 30
+            }
+          },
+          {
+            "name": "rapid-exit-final",
+            "geometry": {
+              "x": 585,
+              "y": 8,
+              "width": 110,
+              "height": 30
+            }
+          },
+          {
+            "name": "escape-collapsed",
+            "geometry": {
+              "x": 585,
+              "y": 8,
+              "width": 110,
+              "height": 30
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "failures": [],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failedResponses": [],
+  "styles": [
+    {
+      "style": "dynamic",
+      "states": [
+        {
+          "name": "collapsed",
+          "geometry": {
+            "x": 565,
+            "y": 0,
+            "width": 150,
+            "height": 8
+          }
+        },
+        {
+          "name": "hover-transition",
+          "geometry": {
+            "x": 488.421875,
+            "y": 0,
+            "width": 303.15625,
+            "height": 93.171875
+          }
+        },
+        {
+          "name": "expanded",
+          "geometry": {
+            "x": 360,
+            "y": 0,
+            "width": 560,
+            "height": 236
+          }
+        },
+        {
+          "name": "pinned-outside",
+          "geometry": {
+            "x": 360,
+            "y": 0,
+            "width": 560,
+            "height": 236
+          }
+        },
+        {
+          "name": "collapsed-after-unpin",
+          "geometry": {
+            "x": 565,
+            "y": 0,
+            "width": 150,
+            "height": 8
+          }
+        },
+        {
+          "name": "rapid-exit-final",
+          "geometry": {
+            "x": 565,
+            "y": 0,
+            "width": 150,
+            "height": 8
+          }
+        },
+        {
+          "name": "escape-collapsed",
+          "geometry": {
+            "x": 565,
+            "y": 0,
+            "width": 150,
+            "height": 8
+          }
+        }
+      ]
+    },
+    {
+      "style": "windows",
+      "states": [
+        {
+          "name": "collapsed",
+          "geometry": {
+            "x": 585,
+            "y": 8,
+            "width": 110,
+            "height": 30
+          }
+        },
+        {
+          "name": "hover-transition",
+          "geometry": {
+            "x": 508.3125,
+            "y": 8,
+            "width": 263.375,
+            "height": 99.53125
+          }
+        },
+        {
+          "name": "expanded",
+          "geometry": {
+            "x": 360,
+            "y": 8,
+            "width": 560,
+            "height": 234
+          }
+        },
+        {
+          "name": "pinned-outside",
+          "geometry": {
+            "x": 360,
+            "y": 8,
+            "width": 560,
+            "height": 234
+          }
+        },
+        {
+          "name": "collapsed-after-unpin",
+          "geometry": {
+            "x": 585,
+            "y": 8,
+            "width": 110,
+            "height": 30
+          }
+        },
+        {
+          "name": "rapid-exit-final",
+          "geometry": {
+            "x": 585,
+            "y": 8,
+            "width": 110,
+            "height": 30
+          }
+        },
+        {
+          "name": "escape-collapsed",
+          "geometry": {
+            "x": 585,
+            "y": 8,
+            "width": 110,
+            "height": 30
+          }
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "storageKey": "island-workbench-settings-v1",
+    "final": {
+      "island-workbench-legacy-settings-backup-v1": {
+        "app.language": "zh-CN",
+        "appearance.style": "windows",
+        "appearance.border": "intelligence",
+        "island.expandOnHover": false,
+        "island.returnDelay": 9,
+        "module.clipboard.enabled": true,
+        "module.music.enabled": true,
+        "plugin.bad.enabled": true,
+        "shortcut.module.ask": "Ctrl+Alt+Space",
+        "island.order": [
+          "music"
+        ],
+        "appearance.tabsPosition": "top"
+      },
+      "island-settings": {
+        "app.language": "zh-CN",
+        "appearance.style": "windows",
+        "appearance.border": "intelligence",
+        "island.expandOnHover": false,
+        "island.returnDelay": 9,
+        "module.clipboard.enabled": true,
+        "module.music.enabled": true,
+        "plugin.bad.enabled": true,
+        "shortcut.module.ask": "Ctrl+Alt+Space",
+        "island.order": [
+          "music"
+        ],
+        "appearance.tabsPosition": "top"
+      },
+      "island-workbench-settings-v1": {
+        "app.language": "zh-CN",
+        "appearance.style": "windows",
+        "appearance.border": "custom",
+        "island.expandOnHover": false,
+        "island.returnDelay": 6,
+        "island.monitor": "primary",
+        "appearance.customColors": [
+          "#FF453A",
+          "#64D2FF"
+        ],
+        "appearance.borderThickness": 3,
+        "appearance.animateBorder": true,
+        "appearance.glow": false,
+        "appearance.glass": "strong",
+        "appearance.idleClock": false,
+        "island.hidden": false,
+        "island.openOn": "hover",
+        "island.closeOn": "leave",
+        "island.hideInFullscreen": false,
+        "island.avoidMaximized": true,
+        "island.returnToCenter": true,
+        "shell.configVersion": 1
+      }
+    }
+  },
+  "passed": true,
+  "video": "assets/B/browser/page@77fd06940c009a95d1679836e753f6bb.webm",
+  "screenshotRefresh": {
+    "date": "2026-11-11",
+    "reason": "设置页淡入完成后补拍清晰截图，使用最终验收存储状态初始化独立浏览器上下文",
+    "files": [
+      "general.png",
+      "appearance.png",
+      "behavior.png",
+      "about.png"
+    ]
+  },
+  "resourceDiagnostic": {
+    "date": "2026-11-11",
+    "errors": [
+      {
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://127.0.0.1:1420/favicon.ico",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      }
+    ],
+    "conclusion": "单次404来自未提供的favicon.ico；不是模块、插件或更新源请求"
+  }
+}
