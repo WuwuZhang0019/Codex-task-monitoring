@@ -2,7 +2,7 @@
 
 日期：2026-11-11
 
-状态：A/B本地completed/passed，进度2/6；服务登记及同步未发生；C待原生核验，D—F待执行
+状态：A/B/C本地completed/passed，进度3/6；服务登记及同步未发生；D—F待执行
 
 本地方案键 island-workbench-20261111，当前责任聊天01a1ca91-98c4-7101-8620-8380e28df33f。用户已明确授权按Codex/Git直接完成A，同日方案1.1修订取消A服务开始前置，未扩大正式服务写权限。
 
@@ -10,7 +10,7 @@
 |---|---|---|---|
 | A 基线与授权范围 | A-01、A-02、A-03 | completed / passed | deferredByAuthorization，未发业务请求 |
 | B 裁剪外壳 | B-01、B-02、B-03 | completed / passed | deferredByAuthorization，未登记 |
-| C 契约与模拟视图 | C-01、C-02、C-03 | blocked / pending，原生待核验 | deferredByAuthorization，未登记 |
+| C 契约与模拟视图 | C-01、C-02、C-03 | completed / passed | deferredByAuthorization，未登记 |
 | D 真实服务接线 | D-01、D-02、D-03 | pending / pending | 未登记 |
 | E 桌面与恢复验收 | E-01、E-02、E-03 | pending / pending | 未登记 |
 | F 许可与发布交付 | F-01、F-02、F-03 | pending / pending | 未登记 |
@@ -110,3 +110,20 @@ flowchart LR
 ```
 
 完整十八字段见C_契约与模拟视图阶段回执_2026-11-11.md，指纹见C_证据索引_2026-11-11.json。恢复沿用本地执行键及方案1.3授权，有缺陷继续C，通过后再完成；不自动派发D。
+
+
+## C 原定出口复核与完成
+
+日期：2026-11-11
+
+用户要求继续完成C。恢复前业务main/fd2ea58、Fork codex/island-workbench-shell/611684c均干净，二进制指纹不变；41项既有证据、两仓库契约字节及六个A原动画实现全部匹配，前置B有效。沿用方案1.3、本地执行键和责任聊天，完成本地恢复核验及结束；没有正式服务写入或未知提交。
+
+复核确认C出口是版本化契约、模拟场景及与A动画基线对照，既有9项契约、24+5组浏览器及同类动画证据适用。上轮将E原生焦点/用户观感提前作为C强制门禁，属于执行判断加严，现更正，不把工具失败或无用户答复变成已验。原生仍未验，交E按原范围实施，不挪用B反馈。
+
+C-01/C-02/C-03及父C本地completed/passed，进度3/6，交接结论D；服务deferredByAuthorization，真实身份全部留空。D交付前置C满足，但自身授权及开始门禁仍待核对，未派发/未启动。历史blocked/pending记录保留，当前结论以C_完成回执_2026-11-11.md为准。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
+ B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>pending，未派发"] --> E["⑤ E 桌面与恢复验收<br/>pending"] --> F["⑥ F 许可与发布交付<br/>pending"]
+```
