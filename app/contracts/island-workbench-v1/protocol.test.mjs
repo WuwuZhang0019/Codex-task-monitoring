@@ -1,9 +1,10 @@
-// Date: 2026-11-11. Tests load the portable TS contract without service modules.
+// Date: 2026-11-12. Tests load the portable TS contract without service modules.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
 import { build } from 'esbuild';
+import Ajv2020 from 'ajv/dist/2020.js';
 const bundle = await build({ stdin: { contents: "export * from './protocol'; export * from './fixtures';", resolveDir: fileURLToPath(new URL('.', import.meta.url)), loader: 'ts' }, bundle: true, format: 'esm', platform: 'node', write: false });
 const api = await import(`data:text/javascript;base64,${Buffer.from(bundle.outputFiles[0].text).toString('base64')}`);
 const { createScenario, createSnapshot, validateEnvelope, acceptEnvelope, MockWorkbenchClient, scenarios } = api;
@@ -109,4 +110,28 @@ test('existing light simulation snapshot maps without changing fixed ids or stat
   const envelope = createScenario('multi-project'); envelope.snapshot = snapshot;
   const accepted = validateEnvelope(envelope);
   assert.deepEqual(accepted.snapshot, snapshot);
+});
+
+
+test('service-schema nullable original codes map losslessly without synthesizing replacement numbering', async () => {
+  const schema = JSON.parse(await readFile(new URL('../../mcp/contracts/light-v1.json', import.meta.url), 'utf8'));
+  const allowedOriginalCode = new Ajv2020().compile(schema.$defs.step.properties.originalCode);
+  assert.equal(allowedOriginalCode(null), true, 'the service schema explicitly permits a missing original code');
+  const service = structuredClone(createScenario('multi-project'));
+  service.mode = 'service'; service.snapshot.mode = 'service'; service.snapshot.revision = 4;
+  for (const group of ['projects','plans','steps','routes','bindings','executions','supplements']) {
+    for (const entity of service.snapshot[group]) entity.id = `${entity.key}/registered`;
+  }
+  service.snapshot.steps[0].originalCode = null;
+  const original = structuredClone(service.snapshot);
+  const result = validateEnvelope(service);
+  assert.deepEqual(result.snapshot, original);
+  assert.equal(result.snapshot.steps[0].originalCode, null);
+  assert.equal(result.snapshot.steps[0].code, original.steps[0].code);
+  assert.equal(result.snapshot.steps[1].originalCode, original.steps[1].originalCode);
+  for (const invalid of [undefined, 1, {}, false]) {
+    const broken = structuredClone(service);
+    broken.snapshot.steps[0].originalCode = invalid;
+    assert.throws(() => validateEnvelope(broken), /INVALID_WORKBENCH_CONTRACT/);
+  }
 });

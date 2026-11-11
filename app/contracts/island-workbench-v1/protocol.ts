@@ -1,4 +1,4 @@
-// Contract owner: Codex-task-monitoring. Date: 2026-11-11.
+// Contract owner: Codex-task-monitoring. Date: 2026-11-12.
 export const PROTOCOL_VERSION = "island-workbench/1" as const;
 export const SNAPSHOT_VERSION = "light-1.0" as const;
 export type StepStatus = "pending" | "running" | "blocked" | "completed" | "cancelled";
@@ -32,7 +32,7 @@ export interface Step extends Entity {
 	planKey: string;
 	parentKey: string | null;
 	code: string;
-	originalCode: string;
+	originalCode: string | null;
 	title: string;
 	order: number;
 	required: boolean;
@@ -248,7 +248,7 @@ export function validateEnvelope(value: unknown): WorkbenchEnvelope {
 			plans.get(x.planKey)?.projectKey !== x.projectKey ||
 			!text(x.title) ||
 			!text(x.code) ||
-			!text(x.originalCode) ||
+			!nullableText(x.originalCode) ||
 			!Number.isFinite(x.order) ||
 			typeof x.required !== "boolean" ||
 			!statuses.includes(x.status) ||
