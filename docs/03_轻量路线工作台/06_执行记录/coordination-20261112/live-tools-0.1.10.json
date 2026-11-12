@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-12",
+  "entry": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.10\\runtime\\light.mjs",
+  "bridge": {
+    "name": "task-workbench-light-bridge",
+    "version": "0.1.10"
+  },
+  "tools": [
+    "workbench_get_project",
+    "workbench_register_plan",
+    "workbench_revise_plan",
+    "workbench_reserve_execution",
+    "workbench_update_step_status",
+    "workbench_record_supplement",
+    "workbench_bind_context",
+    "workbench_query_event",
+    "workbench_complete_plan",
+    "workbench_get_coordination",
+    "workbench_save_coordination"
+  ],
+  "businessRoutesRead": 0,
+  "businessWrites": 0,
+  "credentialsPrinted": false
+}

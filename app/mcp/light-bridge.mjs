@@ -35,7 +35,7 @@ function failure(code, unknown = false) {
 
 export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000, reloadConfig,
   presenceIntervalMs = 10000, allowOfflineDiscovery = false, appId } = {}) {
-  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.10' }, { capabilities: { tools: {} } });
+  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.11' }, { capabilities: { tools: {} } });
   const session = randomUUID();
   let heartbeatTimer, heartbeatBusy = false;
   // Date: 2026-11-12. Only initialized MCP clients renew presence; a running owner is insufficient.

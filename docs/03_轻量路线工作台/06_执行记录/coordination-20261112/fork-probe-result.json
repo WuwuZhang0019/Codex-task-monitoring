@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"status\":\"created\",\"synchronization\":{\"status\":\"complete\"},\"environment\":{\"type\":\"same-directory\"},\"sourceThreadId\":\"01a1d016-4171-78a2-bdcc-eb44afa94c0d\",\"threadId\":\"01a1d01d-c17a-7f63-99aa-2665c222c152\",\"continuation\":\"The fork retains the source task's history and may include an interrupted active turn. Send a follow-up message to threadId only if the task requires work to continue there.\"}"
+    }
+  ],
+  "isError": false
+}

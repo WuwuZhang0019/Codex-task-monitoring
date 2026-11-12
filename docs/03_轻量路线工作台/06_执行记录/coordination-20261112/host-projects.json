@@ -1,0 +1,20 @@
+[
+  {
+    "projectId": "254b6285-69b2-4ea7-909e-88f37318df3c",
+    "projectKind": "local",
+    "label": "b",
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\beta",
+    "hostId": "local",
+    "hostDisplayName": null,
+    "isGitRepository": true
+  },
+  {
+    "projectId": "ae36fa8c-e7ef-43d7-9491-9544416bd831",
+    "projectKind": "local",
+    "label": "a",
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\alpha",
+    "hostId": "local",
+    "hostDisplayName": null,
+    "isGitRepository": true
+  }
+]

@@ -1,0 +1,293 @@
+{
+  "schemaVersion": "light-1.0",
+  "date": "2026-11-12",
+  "mode": "service",
+  "revision": 11,
+  "generatedAt": "2026-11-12T14:23:43.708Z",
+  "projects": [
+    {
+      "key": "native-isolated/project",
+      "id": "86d55c50-09db-40d3-8de6-6e6df6c5761f",
+      "name": "原生协调隔离验收",
+      "planKeys": [
+        "native-isolated/plan"
+      ],
+      "revision": 11
+    }
+  ],
+  "plans": [
+    {
+      "key": "native-isolated/plan",
+      "id": "2d606ea7-87e8-46e7-b130-401d48e7dde6",
+      "projectKey": "native-isolated/project",
+      "name": "原生协调隔离验收",
+      "stageCount": 2,
+      "stageKeys": [
+        "native-isolated/plan/steps/A",
+        "native-isolated/plan/steps/B"
+      ],
+      "source": {
+        "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\plan.md",
+        "version": "native-isolated-v1",
+        "sha256": "c725f544bf3fc97aeaac6b6b33caa7087bf5ebad9b98798ed4492ff9c0d617bb",
+        "locator": "完整步骤及依赖表",
+        "trust": "declared"
+      },
+      "endConditions": []
+    }
+  ],
+  "steps": [
+    {
+      "key": "native-isolated/plan/steps/A",
+      "id": "aef77fd7-f636-4c5b-8ef0-bc00bbba2e97",
+      "projectKey": "native-isolated/project",
+      "planKey": "native-isolated/plan",
+      "parentKey": null,
+      "code": "A",
+      "originalCode": "A",
+      "sourceLocator": "实施路线与出口/A",
+      "title": "Alpha",
+      "order": 1,
+      "required": true,
+      "dependsOn": [],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "native-isolated/plan/steps/A/exit",
+          "text": "Alpha 标记与目录验证",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "native-alpha-readme"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "native-alpha-readme",
+          "location": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\alpha\\README.md",
+          "deliveryVersion": "106d15d3ce22627cf7465b23bebab1a439837b9f",
+          "method": "只读真实 cwd/Git/固定标记与 SHA256",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "native-isolated/plan/executions/435d7a12-1798-451f-b059-c0956338a0c6",
+      "bindingKey": "native-isolated/plan/bindings/6883e02b-6f32-4d1f-afbf-838e2a262af3",
+      "updatedAt": "2026-11-12T14:11:15.760Z"
+    },
+    {
+      "key": "native-isolated/plan/steps/B",
+      "id": "20b34c7f-08bd-470b-99d9-60922eb59070",
+      "projectKey": "native-isolated/project",
+      "planKey": "native-isolated/plan",
+      "parentKey": null,
+      "code": "B",
+      "originalCode": "B",
+      "sourceLocator": "实施路线与出口/B",
+      "title": "Beta",
+      "order": 2,
+      "required": true,
+      "dependsOn": [
+        "native-isolated/plan/steps/A"
+      ],
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced",
+      "conditions": [
+        {
+          "conditionId": "native-isolated/plan/steps/B/exit",
+          "text": "Beta 标记与目录验证",
+          "required": true,
+          "result": "passed",
+          "evidenceIds": [
+            "native-beta-readme"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "native-beta-readme",
+          "location": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\beta\\README.md",
+          "deliveryVersion": "7d455d8369f070f269983c0714aaa55ff91cc6ee",
+          "method": "只读真实 cwd/Git/固定标记与 SHA256",
+          "result": "passed"
+        }
+      ],
+      "blockers": [],
+      "executionKey": "native-isolated/plan/executions/6c2b2518-ddc3-40f8-9e72-06709fbf80fa",
+      "bindingKey": "native-isolated/plan/bindings/c8c9c752-9330-45c3-8b1a-58fa9e0ccaed",
+      "updatedAt": "2026-11-12T14:19:33.332Z"
+    }
+  ],
+  "routes": [
+    {
+      "key": "native-isolated/plan/routes/1",
+      "id": "3b6c5cda-2ca8-4dd7-80a7-6541e5e1639c",
+      "projectKey": "native-isolated/project",
+      "planKey": "native-isolated/plan",
+      "label": "原生协调隔离验收",
+      "stepKeys": [
+        "native-isolated/plan/steps/A",
+        "native-isolated/plan/steps/B"
+      ],
+      "order": 1,
+      "context": {
+        "sessionGroup": "native-isolated",
+        "threadId": "01a1cfff-1069-70c1-ad3c-aa864d1dfca3",
+        "hostId": "local",
+        "folderId": "ae36fa8c-e7ef-43d7-9491-9544416bd831",
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\alpha",
+        "branch": "codex/coordination-fixture",
+        "head": null,
+        "trust": "declared"
+      },
+      "sourceStepKey": null,
+      "returnStepKey": null
+    }
+  ],
+  "bindings": [
+    {
+      "key": "native-isolated/plan/bindings/6883e02b-6f32-4d1f-afbf-838e2a262af3",
+      "id": "cbcf3231-9cb0-4453-98dd-035df753a0a6",
+      "projectKey": "native-isolated/project",
+      "planKey": "native-isolated/plan",
+      "stepKeys": [
+        "native-isolated/plan/steps/A"
+      ],
+      "bindingRevision": 1,
+      "state": "confirmed",
+      "context": {
+        "sessionGroup": "native-isolated",
+        "threadId": "01a1d016-4171-78a2-bdcc-eb44afa94c0d",
+        "hostId": "local",
+        "folderId": "ae36fa8c-e7ef-43d7-9491-9544416bd831",
+        "worktreeOrdinal": 1,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\alpha",
+        "branch": "codex/coordination-fixture",
+        "head": "106d15d3ce22627cf7465b23bebab1a439837b9f",
+        "trust": "declared"
+      },
+      "confirmationRef": "automatic:65dc5a76-8414-4add-a557-52b10ef2bd36",
+      "revokedAt": null
+    },
+    {
+      "key": "native-isolated/plan/bindings/c8c9c752-9330-45c3-8b1a-58fa9e0ccaed",
+      "id": "3fca1dbf-476c-4a69-bc3e-9d81e8d58c41",
+      "projectKey": "native-isolated/project",
+      "planKey": "native-isolated/plan",
+      "stepKeys": [
+        "native-isolated/plan/steps/B"
+      ],
+      "bindingRevision": 1,
+      "state": "confirmed",
+      "context": {
+        "sessionGroup": "native-isolated",
+        "threadId": "01a1d01c-5860-7340-a0de-84c1dd5378f8",
+        "hostId": "local",
+        "folderId": "254b6285-69b2-4ea7-909e-88f37318df3c",
+        "worktreeOrdinal": 2,
+        "worktreePath": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\beta",
+        "branch": "codex/coordination-fixture",
+        "head": "7d455d8369f070f269983c0714aaa55ff91cc6ee",
+        "trust": "declared"
+      },
+      "confirmationRef": "automatic:e47a8ce9-09e0-489e-904f-54812744775b",
+      "revokedAt": null
+    }
+  ],
+  "executions": [
+    {
+      "key": "native-isolated/plan/executions/435d7a12-1798-451f-b059-c0956338a0c6",
+      "id": "435d7a12-1798-451f-b059-c0956338a0c6",
+      "projectKey": "native-isolated/project",
+      "planKey": "native-isolated/plan",
+      "stepKeys": [
+        "native-isolated/plan/steps/A"
+      ],
+      "bindingKey": "native-isolated/plan/bindings/6883e02b-6f32-4d1f-afbf-838e2a262af3",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-12T14:11:15.465Z",
+      "endedAt": "2026-11-12T14:11:15.760Z",
+      "handoffConclusion": null
+    },
+    {
+      "key": "native-isolated/plan/executions/6c2b2518-ddc3-40f8-9e72-06709fbf80fa",
+      "id": "6c2b2518-ddc3-40f8-9e72-06709fbf80fa",
+      "projectKey": "native-isolated/project",
+      "planKey": "native-isolated/plan",
+      "stepKeys": [
+        "native-isolated/plan/steps/B"
+      ],
+      "bindingKey": "native-isolated/plan/bindings/c8c9c752-9330-45c3-8b1a-58fa9e0ccaed",
+      "outcome": "completedScope",
+      "startedAt": "2026-11-12T14:19:33.052Z",
+      "endedAt": "2026-11-12T14:19:33.332Z",
+      "handoffConclusion": null
+    }
+  ],
+  "supplements": [],
+  "events": [
+    {
+      "eventId": "light/ae60e489870447d7218ff71126c73c6b909e0e7ce8ba66f4c47dd6f9dccc5616/native-isolated/alpha/01a1d016-4171-78a2-bdcc-eb44afa94c0d/start",
+      "stepKey": "native-isolated/plan/steps/A",
+      "executionKey": "native-isolated/plan/executions/435d7a12-1798-451f-b059-c0956338a0c6",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-12T12:00:00+08:00",
+      "receivedAt": "2026-11-12T14:11:15.465Z",
+      "reason": "原生隔离协调验收",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/ae60e489870447d7218ff71126c73c6b909e0e7ce8ba66f4c47dd6f9dccc5616/native-isolated/alpha/01a1d016-4171-78a2-bdcc-eb44afa94c0d/finish",
+      "stepKey": "native-isolated/plan/steps/A",
+      "executionKey": "native-isolated/plan/executions/435d7a12-1798-451f-b059-c0956338a0c6",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-12T12:00:00+08:00",
+      "receivedAt": "2026-11-12T14:11:15.760Z",
+      "reason": "原生隔离协调验收",
+      "evidenceIds": [
+        "native-alpha-readme"
+      ],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/c60cd2d015a4fbcd1c6acc680f7d4c765c41138c7ee11b77a3703bde3592c73b/native-isolated/beta/01a1d01c-5860-7340-a0de-84c1dd5378f8/start",
+      "stepKey": "native-isolated/plan/steps/B",
+      "executionKey": "native-isolated/plan/executions/6c2b2518-ddc3-40f8-9e72-06709fbf80fa",
+      "fromStatus": "pending",
+      "toStatus": "running",
+      "occurredAt": "2026-11-12T12:00:00+08:00",
+      "receivedAt": "2026-11-12T14:19:33.052Z",
+      "reason": "原生隔离协调验收",
+      "evidenceIds": [],
+      "sync": "synced"
+    },
+    {
+      "eventId": "light/c60cd2d015a4fbcd1c6acc680f7d4c765c41138c7ee11b77a3703bde3592c73b/native-isolated/beta/01a1d01c-5860-7340-a0de-84c1dd5378f8/finish",
+      "stepKey": "native-isolated/plan/steps/B",
+      "executionKey": "native-isolated/plan/executions/6c2b2518-ddc3-40f8-9e72-06709fbf80fa",
+      "fromStatus": "running",
+      "toStatus": "completed",
+      "occurredAt": "2026-11-12T12:00:00+08:00",
+      "receivedAt": "2026-11-12T14:19:33.332Z",
+      "reason": "原生隔离协调验收",
+      "evidenceIds": [
+        "native-beta-readme"
+      ],
+      "sync": "synced"
+    }
+  ],
+  "uiPreferences": {
+    "collapsedKeys": [],
+    "selectedStepKey": null,
+    "focusedRouteKey": null,
+    "scrollByProject": {}
+  }
+}

@@ -181,3 +181,12 @@ test('未知发送不重发，明确未提交的证据恢复后复用原键，�
   assert.equal(retried.nativeCall.operationId, staged.nativeCall.operationId);
   assert.equal(options.state.operations.filter(item => item.intent.kind === 'createChat').length, 1);
 });
+test('依赖解除后任务进入后续批次，恢复清单不再把旧缺项报告为当前阻塞', async () => {
+  const state = stateOf(), snapshot = snapshotOf(); await mapped(state, 'design', 's2');
+  planBatch(state, { id: 'waiting', tasks: [task('design', 's2')] }, snapshot);
+  assert.equal(recoveryReport(state).deferred.length, 1);
+  Object.assign(snapshot.steps[0], { status: 'completed', acceptance: 'passed' });
+  planBatch(state, { id: 'successor', tasks: [task('design', 's2')] }, snapshot);
+  assert.equal(recoveryReport(state).deferred.length, 0);
+  assert.equal(state.batches[0].deferred.length, 1, '原批次历史继续保留');
+});

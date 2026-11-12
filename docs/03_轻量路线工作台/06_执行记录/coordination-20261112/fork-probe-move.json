@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"error\":\"confirmation_required\",\"projectId\":\"254b6285-69b2-4ea7-909e-88f37318df3c\",\"missingProjectSources\":[\"G:\\\\rust\\\\Codex-task-monitoring\\\\app\\\\test-results\\\\coordination-native-20261112\\\\alpha\"],\"targetProjectName\":\"b\"}"
+    }
+  ],
+  "isError": true
+}

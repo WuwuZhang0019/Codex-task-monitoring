@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-12",
+  "marker": "COORDINATION_ALPHA_20261112",
+  "threadId": "01a1d016-4171-78a2-bdcc-eb44afa94c0d",
+  "hostId": "local",
+  "hostProjectId": "ae36fa8c-e7ef-43d7-9491-9544416bd831",
+  "projectId": "86d55c50-09db-40d3-8de6-6e6df6c5761f",
+  "planId": "2d606ea7-87e8-46e7-b130-401d48e7dde6",
+  "stepIds": [
+    "aef77fd7-f636-4c5b-8ef0-bc00bbba2e97"
+  ],
+  "executionIds": [
+    "435d7a12-1798-451f-b059-c0956338a0c6"
+  ],
+  "bindingId": "cbcf3231-9cb0-4453-98dd-035df753a0a6",
+  "bindingRevision": 1,
+  "worktreePath": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\alpha",
+  "repositoryRoot": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\alpha",
+  "gitCommonDir": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\alpha\\.git",
+  "branch": "codex/coordination-fixture",
+  "head": "106d15d3ce22627cf7465b23bebab1a439837b9f",
+  "sha256": "587fff362608df2aa86d5254bda06fcb88958085d382b1f06f7abe6ecfcdc820",
+  "handoff": "E",
+  "evidence": "目标聊天完整actor输出与服务完成回读；协调者核验Git/README SHA256",
+  "eventKeys": {
+    "bind": "native-isolated/alpha/01a1d016-4171-78a2-bdcc-eb44afa94c0d/bind",
+    "reserve": "native-isolated/alpha/01a1d016-4171-78a2-bdcc-eb44afa94c0d/reserve",
+    "start": "native-isolated/alpha/01a1d016-4171-78a2-bdcc-eb44afa94c0d/start",
+    "finish": "native-isolated/alpha/01a1d016-4171-78a2-bdcc-eb44afa94c0d/finish"
+  },
+  "serviceVerification": {
+    "endpoint": "http://127.0.0.1:9541",
+    "preflightRevision": 1,
+    "preflightBindings": [],
+    "preflightExecutions": [],
+    "dependencies": [],
+    "finalRevision": 5,
+    "bindingState": "confirmed",
+    "status": "completed",
+    "acceptance": "passed",
+    "sync": "synced",
+    "startedAt": "2026-11-12T14:11:15.465Z",
+    "endedAt": "2026-11-12T14:11:15.760Z",
+    "outcome": "completedScope",
+    "transitions": [
+      "pending -> running",
+      "running -> completed"
+    ],
+    "storedHandoffConclusion": null
+  },
+  "repositoryClean": true,
+  "newCommits": [],
+  "crossChatMessagesSent": false,
+  "remainingAlphaWork": [],
+  "evidenceVerified": true
+}

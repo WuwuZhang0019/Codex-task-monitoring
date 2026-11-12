@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-12",
+  "roots": {
+    "source": "G:\\rust\\Codex-task-monitoring\\plugins\\task-workbench\\skills\\workbench-handoff",
+    "standalone": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff",
+    "pluginSkill": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.10\\skills\\workbench-handoff"
+  },
+  "pluginVersion": "0.1.10",
+  "sourceCommit": "9a9fd5362406df7d2e8c4a73b98e40f233d2306d",
+  "releaseReady": true,
+  "sourceVsStandalone": {
+    "equal": true,
+    "differences": []
+  },
+  "sourceVsPlugin": {
+    "equal": true,
+    "differences": []
+  },
+  "standaloneVsPlugin": {
+    "equal": true,
+    "differences": []
+  },
+  "releaseIntegrity": {
+    "valid": true,
+    "mismatches": [],
+    "unlisted": []
+  },
+  "files": {
+    "source": {
+      "agents/openai.yaml": "82fe8361ec0c2f72228c816ed547791f0f26cdee1b4db3c72c290acda24117e5",
+      "references/context-supplements.md": "440266fb7e2d3fb9fc748661ddfde59143d4703d38149d3bcffb3f475eaeb207",
+      "references/coordination.md": "7b8f28baca5510407053202fffdecd96b4397f6afc867fe32904e0de1bd13234",
+      "references/execution-sync.md": "71eae50624b3dc995f7f8870bbef17d2e43ffb61e6dce5d5c92c117fc53ba6a5",
+      "references/handoff-template.md": "3591521454192d3cd7dc8a7363a05dbe9dcf35a062beb746fb1d455d178af455",
+      "references/handoff-workflow.md": "be114cb0b58d6126ba1178f9056c3dfe28c95012e8947cde67751203d1c3611c",
+      "references/plan-registration.md": "f79574b2eba522febcfc704511052db53ed12dbab4b941b8c150c7ac7773f8b8",
+      "scripts/context-ledger.mjs": "34f6df992820d005f4f7967d3ba8621e767958d03db908404592d847f74c8be7",
+      "scripts/coordination-cli.mjs": "92bdba1d9b35cf965a0bc0fc603f0f9f2004c8a232c5e34a2c19910dbdb0c24c",
+      "scripts/coordination.mjs": "34bc4c936c686af63f2305b477680d8751560de74a36bcbc7f139457d9a5660a",
+      "scripts/normalize-plan.mjs": "fc23febd934230a19570a1d7a7931b1cc0e9374f36439a559c9b2741605caa0b",
+      "SKILL.md": "94599b8f18519fc282dac88c41b136d3b04e93662a90effb8eaac7a561aaaa70"
+    },
+    "standalone": {
+      "agents/openai.yaml": "82fe8361ec0c2f72228c816ed547791f0f26cdee1b4db3c72c290acda24117e5",
+      "references/context-supplements.md": "440266fb7e2d3fb9fc748661ddfde59143d4703d38149d3bcffb3f475eaeb207",
+      "references/coordination.md": "7b8f28baca5510407053202fffdecd96b4397f6afc867fe32904e0de1bd13234",
+      "references/execution-sync.md": "71eae50624b3dc995f7f8870bbef17d2e43ffb61e6dce5d5c92c117fc53ba6a5",
+      "references/handoff-template.md": "3591521454192d3cd7dc8a7363a05dbe9dcf35a062beb746fb1d455d178af455",
+      "references/handoff-workflow.md": "be114cb0b58d6126ba1178f9056c3dfe28c95012e8947cde67751203d1c3611c",
+      "references/plan-registration.md": "f79574b2eba522febcfc704511052db53ed12dbab4b941b8c150c7ac7773f8b8",
+      "scripts/context-ledger.mjs": "34f6df992820d005f4f7967d3ba8621e767958d03db908404592d847f74c8be7",
+      "scripts/coordination-cli.mjs": "92bdba1d9b35cf965a0bc0fc603f0f9f2004c8a232c5e34a2c19910dbdb0c24c",
+      "scripts/coordination.mjs": "34bc4c936c686af63f2305b477680d8751560de74a36bcbc7f139457d9a5660a",
+      "scripts/normalize-plan.mjs": "fc23febd934230a19570a1d7a7931b1cc0e9374f36439a559c9b2741605caa0b",
+      "SKILL.md": "94599b8f18519fc282dac88c41b136d3b04e93662a90effb8eaac7a561aaaa70"
+    },
+    "pluginSkill": {
+      "agents/openai.yaml": "82fe8361ec0c2f72228c816ed547791f0f26cdee1b4db3c72c290acda24117e5",
+      "references/context-supplements.md": "440266fb7e2d3fb9fc748661ddfde59143d4703d38149d3bcffb3f475eaeb207",
+      "references/coordination.md": "7b8f28baca5510407053202fffdecd96b4397f6afc867fe32904e0de1bd13234",
+      "references/execution-sync.md": "71eae50624b3dc995f7f8870bbef17d2e43ffb61e6dce5d5c92c117fc53ba6a5",
+      "references/handoff-template.md": "3591521454192d3cd7dc8a7363a05dbe9dcf35a062beb746fb1d455d178af455",
+      "references/handoff-workflow.md": "be114cb0b58d6126ba1178f9056c3dfe28c95012e8947cde67751203d1c3611c",
+      "references/plan-registration.md": "f79574b2eba522febcfc704511052db53ed12dbab4b941b8c150c7ac7773f8b8",
+      "scripts/context-ledger.mjs": "34f6df992820d005f4f7967d3ba8621e767958d03db908404592d847f74c8be7",
+      "scripts/coordination-cli.mjs": "92bdba1d9b35cf965a0bc0fc603f0f9f2004c8a232c5e34a2c19910dbdb0c24c",
+      "scripts/coordination.mjs": "34bc4c936c686af63f2305b477680d8751560de74a36bcbc7f139457d9a5660a",
+      "scripts/normalize-plan.mjs": "fc23febd934230a19570a1d7a7931b1cc0e9374f36439a559c9b2741605caa0b",
+      "SKILL.md": "94599b8f18519fc282dac88c41b136d3b04e93662a90effb8eaac7a561aaaa70"
+    }
+  },
+  "behavior": {
+    "source": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    },
+    "standalone": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    },
+    "pluginSkill": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    }
+  }
+}

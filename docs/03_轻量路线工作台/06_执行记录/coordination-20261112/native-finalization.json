@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-12",
+  "projectId": "86d55c50-09db-40d3-8de6-6e6df6c5761f",
+  "planId": "2d606ea7-87e8-46e7-b130-401d48e7dde6",
+  "checkpointRevision": 1,
+  "checkpointReplayIdentical": true,
+  "completePlanEvent": "native-isolated/complete-plan",
+  "committedRevision": 11,
+  "statuses": [
+    {
+      "id": "aef77fd7-f636-4c5b-8ef0-bc00bbba2e97",
+      "code": "A",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    },
+    {
+      "id": "20b34c7f-08bd-470b-99d9-60922eb59070",
+      "code": "B",
+      "status": "completed",
+      "acceptance": "passed",
+      "sync": "synced"
+    }
+  ],
+  "recovery": {
+    "coordinator": {
+      "threadId": "01a1cfff-1069-70c1-ad3c-aa864d1dfca3",
+      "hostId": "local"
+    },
+    "authorization": {
+      "mode": "execute",
+      "source": {
+        "threadId": "01a1cfff-1069-70c1-ad3c-aa864d1dfca3",
+        "locator": "2026-11-12 用户原始需求及已添加两个测试项目的回复",
+        "quote": "本次授权修改该Skill及相关工具，完成必要定向验证和文档同步；真实跨项目派发验收使用隔离测试项目"
+      },
+      "permissions": [
+        "createChat",
+        "dispatch",
+        "collect",
+        "continue"
+      ],
+      "lineIds": [
+        "alpha",
+        "beta"
+      ],
+      "stepIds": [
+        "aef77fd7-f636-4c5b-8ef0-bc00bbba2e97",
+        "20b34c7f-08bd-470b-99d9-60922eb59070"
+      ]
+    },
+    "unfinished": [],
+    "unknownOperations": [],
+    "unconfirmedEvents": [],
+    "pendingReceipts": [],
+    "deferred": []
+  },
+  "unknownOperations": 0,
+  "businessRoutesTouched": 0
+}

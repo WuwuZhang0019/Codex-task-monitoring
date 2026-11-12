@@ -1,0 +1,96 @@
+TAP version 13
+# (node:5736) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 协调检查点真实服务保存/回读/冲突/事件查询/冷重开，不修改步骤与绑定
+ok 1 - 协调检查点真实服务保存/回读/冲突/事件查询/冷重开，不修改步骤与绑定
+  ---
+  duration_ms: 1035.3102
+  type: 'test'
+  ...
+# Subtest: 仅核对/生成不保存批次或调用宿主，执行授权不能从生成请求推断
+ok 2 - 仅核对/生成不保存批次或调用宿主，执行授权不能从生成请求推断
+  ---
+  duration_ms: 21.074
+  type: 'test'
+  ...
+# Subtest: 本批仅服务线需要且依赖满足，其他三线不随四项目存在而启动
+ok 3 - 本批仅服务线需要且依赖满足，其他三线不随四项目存在而启动
+  ---
+  duration_ms: 1.2882
+  type: 'test'
+  ...
+# Subtest: 正确项目 local 请求与错误已有工作树能力门禁分别验证
+ok 4 - 正确项目 local 请求与错误已有工作树能力门禁分别验证
+  ---
+  duration_ms: 2.664
+  type: 'test'
+  ...
+# Subtest: 同源目录不同工作树允许独立任务，共享同一目录及合同/缓存写入串行
+ok 5 - 同源目录不同工作树允许独立任务，共享同一目录及合同/缓存写入串行
+  ---
+  duration_ms: 1.5307
+  type: 'test'
+  ...
+# Subtest: 真实 Git 公共仓库与两个工作树分别识别，独立仓库没有误合并
+ok 6 - 真实 Git 公共仓库与两个工作树分别识别，独立仓库没有误合并
+  ---
+  duration_ms: 2125.5548
+  type: 'test'
+  ...
+# Subtest: 创建与派发各一次，上下文错配拦截，重复请求复用原操作
+ok 7 - 创建与派发各一次，上下文错配拦截，重复请求复用原操作
+  ---
+  duration_ms: 1.4422
+  type: 'test'
+  ...
+# Subtest: 创建后派发失败保留聊天，未知响应和中断从磁盘恢复且不重复创建
+ok 8 - 创建后派发失败保留聊天，未知响应和中断从磁盘恢复且不重复创建
+  ---
+  duration_ms: 24.7201
+  type: 'test'
+  ...
+# Subtest: 两段原生调用先落盘，record 保存实际结果，空/错误回执不声称送达
+ok 9 - 两段原生调用先落盘，record 保存实际结果，空/错误回执不声称送达
+  ---
+  duration_ms: 1.5457
+  type: 'test'
+  ...
+# Subtest: 原执行沿用，缺绑定/开始证据时不会由聊天创建或最终文本冒充完成
+ok 10 - 原执行沿用，缺绑定/开始证据时不会由聊天创建或最终文本冒充完成
+  ---
+  duration_ms: 1.3886
+  type: 'test'
+  ...
+# Subtest: 缺少登记集中返回恢复项；授权范围、成功操作历史及批次意图不可偷偷改写
+ok 11 - 缺少登记集中返回恢复项；授权范围、成功操作历史及批次意图不可偷偷改写
+  ---
+  duration_ms: 1.695
+  type: 'test'
+  ...
+# Subtest: 协调接手保留原任务和未确认事件，回报权限不自动扩展到新聊天
+ok 12 - 协调接手保留原任务和未确认事件，回报权限不自动扩展到新聊天
+  ---
+  duration_ms: 0.8524
+  type: 'test'
+  ...
+# Subtest: 未知发送不重发，明确未提交的证据恢复后复用原键，成功部分不能抹除
+ok 13 - 未知发送不重发，明确未提交的证据恢复后复用原键，成功部分不能抹除
+  ---
+  duration_ms: 1.2565
+  type: 'test'
+  ...
+# Subtest: 依赖解除后任务进入后续批次，恢复清单不再把旧缺项报告为当前阻塞
+ok 14 - 依赖解除后任务进入后续批次，恢复清单不再把旧缺项报告为当前阻塞
+  ---
+  duration_ms: 0.9901
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2366.0423

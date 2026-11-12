@@ -343,12 +343,13 @@ export function observeTask(state, batchId, taskId, { snapshot, receipt, cursor,
   return { changed, ...clone(observation) };
 }
 export function recoveryReport(state) {
+  const assignedIds = new Set(state.batches.flatMap(batch => batch.tasks.map(task => task.id)));
   return { coordinator: clone(state.coordinator), authorization: clone(state.authorization),
     unfinished: activeTasks(state).map(task => ({ batchId: state.batches.find(batch => batch.tasks.includes(task)).id, taskId: task.id,
       lineId: task.lineId, state: task.state, threadId: task.threadId, hostId: task.hostId, executionIds: task.executionIds ?? [], cursor: task.cursor ?? null })),
     unknownOperations: state.operations.filter(item => item.resultUnknown || item.status === 'pending').map(clone),
     unconfirmedEvents: clone(state.unconfirmedEvents), pendingReceipts: state.observations.filter(item => item.status === 'receiptReview').map(clone),
-    deferred: state.batches.flatMap(batch => batch.deferred.map(item => ({ batchId: batch.id, ...clone(item) }))) };
+    deferred: state.batches.flatMap(batch => batch.deferred.filter(item => !assignedIds.has(item.task.id)).map(item => ({ batchId: batch.id, ...clone(item) }))) };
 }
 
 // 本地检查点可独立恢复；服务未登记时仍可保存缺项。所有外部调用先保存操作意图。

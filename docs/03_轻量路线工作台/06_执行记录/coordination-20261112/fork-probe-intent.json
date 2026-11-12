@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-12",
+  "operationId": "native-isolated-20261112/fork-existing-and-move",
+  "status": "pending",
+  "sourceThreadId": "01a1d016-4171-78a2-bdcc-eb44afa94c0d",
+  "hostId": "local",
+  "expectedWorktree": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-native-20261112\\alpha",
+  "targetProjectId": "254b6285-69b2-4ea7-909e-88f37318df3c",
+  "purpose": "隔离验证same-directory分叉后归入另一已有项目是否保持实际工作树；不实施业务，不创建工作树"
+}
