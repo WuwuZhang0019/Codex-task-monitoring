@@ -11,7 +11,7 @@ import { agentApps, validAppId } from './light-apps.mjs';
 const git = promisify(execFile);
 const operations = new Set(['read', 'query', 'register', 'revise', 'confirmPublication', 'reserveExecution', 'update',
   'bind', 'proposeBinding', 'confirmBinding', 'revokeBinding', 'takeoverBinding', 'supplement', 'confirmSupplement',
-  'approveSupplementCancellation', 'linkPlan', 'completePlan']);
+  'approveSupplementCancellation', 'linkPlan', 'completePlan', 'coordinate']);
 function requireBody(input, fields) {
   if (!input || typeof input !== 'object' || Array.isArray(input) || input.acknowledged !== true
     || Object.keys(input).some(key => !fields.includes(key))) lightError('INVALID_INPUT', '需要明确确认及受支持字段');

@@ -2,6 +2,7 @@
 import Ajv2020 from 'ajv/dist/2020.js';
 import contract from '../mcp/contracts/light-v1.json' with { type: 'json' };
 import { HttpError } from './validation.mjs';
+import { validateCoordination } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
 
 const schema = structuredClone(contract);
 for (const key of Object.keys(schema).filter(key => key.startsWith('x-'))) delete schema[key];
@@ -159,4 +160,9 @@ export function validateLightStorage(value) {
   if (value === undefined) return;
   if (value.version !== 1 || !value.metadata || !Array.isArray(value.history)) lightError('INVALID_STORAGE', '轻量数据版本或历史损坏');
   validateLightSnapshot(value.snapshot);
+  for (const checkpoint of value.metadata.coordinations ?? []) {
+    validateCoordination(checkpoint.state);
+    if (checkpoint.id !== checkpoint.state.id || checkpoint.projectId !== checkpoint.state.projectId
+      || checkpoint.planId !== checkpoint.state.planId || !Number.isSafeInteger(checkpoint.revision) || checkpoint.revision < 1) lightError('INVALID_STORAGE', '协调检查点损坏');
+  }
 }

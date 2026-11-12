@@ -5,6 +5,7 @@ import { requireLightShape, validateLightSnapshot, lightError, transitions, uniq
   requiredConditions, childrenOf, dependenciesOf, waitingFor, planProgress } from './light-model.mjs';
 import { legacyLightStatus } from './light-import.mjs';
 import { touches } from './light-library.mjs';
+import { validateCoordination } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
 
 const now = () => new Date().toISOString();
 const dateOf = value => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(value));
@@ -124,6 +125,31 @@ export function createLightService(persistence, requests, {
     }, () => { permitted(principal, input.projectId, operation, { input }); scope(load().snapshot, input); });
   }
   return {
+    // 日期：2026-11-12。复用项目权限、聚合事务、事件查询和版本冲突处理。
+    readCoordination(principal, input) {
+      permitted(principal, input.projectId, 'read');
+      const value = load(); scope(value.snapshot, input);
+      const checkpoint = value.metadata.coordinations?.find(item => item.projectId === input.projectId
+        && item.planId === input.planId && item.id === input.coordinationId);
+      return { checkpoint: structuredClone(checkpoint ?? null) };
+    },
+    saveCoordination(principal, input) {
+      return commit(principal, 'coordinate', input, (value, project, plan, time) => {
+        value.metadata.coordinations ??= [];
+        const previous = value.metadata.coordinations.find(item => item.projectId === project.id && item.planId === plan.id && item.id === input.coordinationId);
+        if ((previous?.revision ?? 0) !== input.expectedCheckpointRevision) lightError('REVISION_CONFLICT', '协调检查点已更新', 409);
+        try { validateCoordination(input.state, previous?.state); } catch (error) { lightError('INVALID_INPUT', error.message); }
+        if (input.state.projectId !== project.id || input.state.planId !== plan.id || input.state.id !== input.coordinationId) lightError('INVALID_INPUT', '协调身份不匹配');
+        const mappedStepIds = input.state.mappings.flatMap(item => item.mapping.stepIds);
+        const taskStepIds = input.state.batches.flatMap(batch => batch.tasks.flatMap(task => task.stepIds));
+        if ([...mappedStepIds, ...taskStepIds].some(id => !value.snapshot.steps.some(step => step.id === id && step.planKey === plan.key))) lightError('INVALID_INPUT', '协调步骤归属不匹配');
+        const checkpoint = { id: input.coordinationId, projectId: project.id, planId: plan.id,
+          revision: (previous?.revision ?? 0) + 1, state: structuredClone(input.state), updatedAt: time };
+        if (previous) value.metadata.coordinations.splice(value.metadata.coordinations.indexOf(previous), 1, checkpoint);
+        else value.metadata.coordinations.push(checkpoint);
+        return { checkpointRevision: checkpoint.revision };
+      });
+    },
     read(principal, projectId) {
       permitted(principal, projectId, 'read');
       const snapshot = load().snapshot;

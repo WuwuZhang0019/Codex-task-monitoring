@@ -1,5 +1,5 @@
-# 日期：2026-11-10
+# 日期：2026-11-12
 interface:
   display_name: "工作台方案执行与交接"
-  short_description: "规范方案步骤编号、组织会话与工作树、上报执行状态并生成交接指令"
-  default_prompt: "使用 $workbench-handoff 按我提供的方案和授权范围整理路线、执行上报或核对交接。"
+  short_description: "核对交接，或在授权范围内跨项目派发、跟踪并恢复开发线任务"
+  default_prompt: "使用 $workbench-handoff 按我提供的方案选择仅核对/生成或授权协调模式，在授权范围内接入、派发、跟踪并核验回执。"

@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-12",
+  "environment": "独立目录、真实回环HTTP与SDK STDIO，未访问业务项目或供应商",
+  "runs": [
+    {
+      "command": "node --test --test-name-pattern='initialized SDK and real STDIO|two installed-style STDIO' server/light-auto-connection.test.mjs",
+      "exitCode": 0,
+      "tests": 2,
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "command": "node --test mcp/light-owner.test.mjs",
+      "exitCode": 0,
+      "tests": 4,
+      "passed": 4,
+      "failed": 0
+    }
+  ],
+  "skillValidation": "PYTHONUTF8=1 quick_validate.py: Skill is valid!",
+  "fullSuiteRun": false
+}

@@ -148,7 +148,7 @@ test('initialized SDK and real STDIO transports produce Codex status, idle lease
   await stdio.connect(new StdioClientTransport({ command: process.execPath,
     args: [fileURLToPath(new URL('../mcp/light-stdio.mjs', import.meta.url))],
     env: { WORKBENCH_LIGHT_CONFIG: configFile }, stderr: 'pipe' }));
-  assert.equal((await stdio.listTools()).tools.length, 9, 'a fresh installation discovers tools while awaiting the desktop button');
+  assert.equal((await stdio.listTools()).tools.length, 11, 'a fresh installation discovers tools while awaiting the desktop button');
   assert.equal((await status()).connected, false);
   await writeFile(configFile, JSON.stringify({ endpoint, token: grant.token }), { mode: 0o600 });
   await stdio.listTools();
@@ -196,7 +196,7 @@ test('two installed-style STDIO application processes stay connected independent
     await client.connect(new StdioClientTransport({ command: process.execPath,
       args: [process.env.MULTI_APP_BRIDGE_ENTRY ?? fileURLToPath(new URL('../mcp/light-stdio.mjs', import.meta.url))],
       env: { WORKBENCH_LIGHT_APP: appId, WORKBENCH_LIGHT_CONFIG: file }, stderr: 'pipe' }));
-    assert.equal((await client.listTools()).tools.length, 9);
+    assert.equal((await client.listTools()).tools.length, 11);
   }
   const status = grant => post('connection-status', { principal: grant.principal, acknowledged: true });
   assert.equal((await status(grants[0])).connected, true);
@@ -204,6 +204,6 @@ test('two installed-style STDIO application processes stay connected independent
   await post('revoke', { principal: grants[0].principal, acknowledged: true });
   assert.equal((await status(grants[0])).connected, false);
   assert.equal((await status(grants[1])).connected, true);
-  assert.equal((await clients[1].listTools()).tools.length, 9);
+  assert.equal((await clients[1].listTools()).tools.length, 11);
   await assert.rejects(clients[0].listTools(), /OWNER_UNAVAILABLE/);
 });

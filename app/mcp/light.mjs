@@ -25,11 +25,15 @@ const definitions = {
   workbench_record_supplement: { operation: 'supplement', schema: ref('supplementWrite') },
   workbench_bind_context: { operation: 'bind', gate: 'bind', schema: ref('bind') },
   workbench_query_event: { read: true, operation: 'query', schema: object({
-    projectId: string, operation: { enum: ['register', 'revise', 'reserveExecution', 'update', 'supplement', 'bind', 'acceptBinding', 'completePlan'] }, eventId: string,
+    projectId: string, operation: { enum: ['register', 'revise', 'reserveExecution', 'update', 'supplement', 'bind', 'acceptBinding', 'completePlan', 'coordinate'] }, eventId: string,
   }) },
   workbench_complete_plan: { operation: 'completePlan', schema: object({ ...base,
     checks: { type: 'array', items: ref('condition') }, evidence: { type: 'array', items: ref('evidence') },
   }) },
+  // 日期：2026-11-12。协调检查点不授予宿主权限或业务开始许可。
+  workbench_get_coordination: { read: true, operation: 'readCoordination', schema: object({ projectId: string, planId: string, coordinationId: string }) },
+  workbench_save_coordination: { operation: 'saveCoordination', schema: object({ ...base, coordinationId: string,
+    expectedCheckpointRevision: { type: 'integer', minimum: 0 }, state: { type: 'object', additionalProperties: true } }) },
 };
 
 export const lightTools = Object.entries(definitions).map(([name, definition]) => {
@@ -86,6 +90,7 @@ export function createLightHandler({ service, authenticate = () => null, publish
         if (typeof handler !== 'function') throw Object.assign(new Error(), { code: 'UNSUPPORTED_CAPABILITY' });
         result = await handler(principal, definition.operation, structuredClone(args));
       } else if (definition.operation === 'read') result = service.read(principal, args.projectId);
+      else if (definition.operation === 'readCoordination') result = service.readCoordination(principal, args);
       else if (definition.operation === 'query') result = service.query(principal, args.projectId, args.operation, args.eventId);
       else result = await service[definition.operation](principal, structuredClone(args));
       const value = { schemaVersion: 'light-1.0', requestId: result.requestId ?? randomUUID(), status: 'accepted',

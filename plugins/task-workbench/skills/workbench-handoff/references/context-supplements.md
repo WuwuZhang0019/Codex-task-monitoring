@@ -4,6 +4,10 @@
 
 状态：Skill 操作规则
 
+更新日期：2026-11-12
+
+多项目协调读取 [coordination.md](coordination.md)。映射追加记录 `projectSourcePath`、`repositoryRoot`、`gitCommonDir`，分别判断同源不同工作树、同一实际目录和独立仓库。`inspectWorktree` 读取真实 Git 公共目录；不同工作树仍核对共享合同、文件、构建缓存及配套版本。未取得真实聊天身份时保持 `threadId=null`。
+
 ## 固定映射与宿主操作日志
 
 更新日期：2026-11-11

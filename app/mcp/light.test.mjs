@@ -39,7 +39,7 @@ test('D SDK 发现、登记、开始、阻塞恢复、结束、回放冲突、�
     transcript.push({ name, input, response }); return response.structuredContent;
   }
   const listed = await client.listTools();
-  assert.equal(listed.tools.length, 9);
+  assert.equal(listed.tools.length, 11);
   assert.deepEqual(listed.tools.map(tool => tool.name), lightTools.map(tool => tool.name));
   const source = Object.fromEntries(Object.entries(candidate.plans[0].source).filter(([key]) => key !== 'trust'));
   const registration = { schemaVersion: 'light-1.0', expectedRevision: 0,

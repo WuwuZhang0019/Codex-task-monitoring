@@ -1,0 +1,254 @@
+TAP version 13
+# Subtest: D bridge 配置限制为私有回环与独立令牌
+ok 1 - D bridge 配置限制为私有回环与独立令牌
+  ---
+  duration_ms: 40.3551
+  type: 'test'
+  ...
+# Subtest: D bridge 真实 STDIO 发现转发、写入响应丢失后原键查询、拒绝重定向及断线脱敏
+ok 2 - D bridge 真实 STDIO 发现转发、写入响应丢失后原键查询、拒绝重定向及断线脱敏
+  ---
+  duration_ms: 889.9366
+  type: 'test'
+  ...
+# Subtest: D bridge 写请求超时保持未知且没有自动重试
+ok 3 - D bridge 写请求超时保持未知且没有自动重试
+  ---
+  duration_ms: 273.2098
+  type: 'test'
+  ...
+# Subtest: D bridge 缺少配置启动失败且诊断隐藏私有路径
+ok 4 - D bridge 缺少配置启动失败且诊断隐藏私有路径
+  ---
+  duration_ms: 714.6198
+  type: 'test'
+  ...
+# Subtest: D bridge 同一连接跟随dataDir所有者端口与generation变化，显式停止拒绝连接
+ok 5 - D bridge 同一连接跟随dataDir所有者端口与generation变化，显式停止拒绝连接
+  ---
+  duration_ms: 31.6671
+  type: 'test'
+  ...
+# Subtest: E 同一STDIO进程在原生授权轮换后读取新受控配置，配置失效不沿用旧令牌
+ok 6 - E 同一STDIO进程在原生授权轮换后读取新受控配置，配置失效不沿用旧令牌
+  ---
+  duration_ms: 702.9469
+  type: 'test'
+  ...
+# (node:51616) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 协调检查点真实服务保存/回读/冲突/事件查询/冷重开，不修改步骤与绑定
+ok 7 - 协调检查点真实服务保存/回读/冲突/事件查询/冷重开，不修改步骤与绑定
+  ---
+  duration_ms: 1292.6693
+  type: 'test'
+  ...
+# (node:52776) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: E 显式接手保留executionId，旧新责任唯一，迟到结果持久待核对
+ok 8 - E 显式接手保留executionId，旧新责任唯一，迟到结果持久待核对
+  ---
+  duration_ms: 3474.6144
+  type: 'test'
+  ...
+# Subtest: E 接手必须核对原责任全部范围及未结束执行，确认意图不能偷换
+ok 9 - E 接手必须核对原责任全部范围及未结束执行，确认意图不能偷换
+  ---
+  duration_ms: 2924.2737
+  type: 'test'
+  ...
+# Subtest: E 重叠责任拒绝，未认证确认、错误目录和分支不生效
+ok 10 - E 重叠责任拒绝，未认证确认、错误目录和分支不生效
+  ---
+  duration_ms: 2002.2923
+  type: 'test'
+  ...
+# Subtest: D SDK 发现、登记、开始、阻塞恢复、结束、回放冲突、授权与重启查询
+ok 11 - D SDK 发现、登记、开始、阻塞恢复、结束、回放冲突、授权与重启查询
+  ---
+  duration_ms: 408.439
+  type: 'test'
+  ...
+# Subtest: D 默认拒绝认证，未知内部异常脱敏
+ok 12 - D 默认拒绝认证，未知内部异常脱敏
+  ---
+  duration_ms: 2.756
+  type: 'test'
+  ...
+# Subtest: D 不同认证会话不能使用已确认责任绑定，拒绝后版本不变
+ok 13 - D 不同认证会话不能使用已确认责任绑定，拒绝后版本不变
+  ---
+  duration_ms: 266.3529
+  type: 'test'
+  ...
+# Subtest: D 绑定提议和确认分别授权，提议权限不能撤销责任绑定
+ok 14 - D 绑定提议和确认分别授权，提议权限不能撤销责任绑定
+  ---
+  duration_ms: 117.8804
+  type: 'test'
+  ...
+# Subtest: D 执行预留身份绑定主体，旧无作用域预留不能创建新执行
+ok 15 - D 执行预留身份绑定主体，旧无作用域预留不能创建新执行
+  ---
+  duration_ms: 264.9747
+  type: 'test'
+  ...
+# Subtest: D 绑定撤销后已提交事件仍先回放，新事件拒绝，旧执行历史继续可读
+ok 16 - D 绑定撤销后已提交事件仍先回放，新事件拒绝，旧执行历史继续可读
+  ---
+  duration_ms: 178.3467
+  type: 'test'
+  ...
+# Subtest: D 发布查询返回完整工具请求语义，旧直接领域登记查询仍可用
+ok 17 - D 发布查询返回完整工具请求语义，旧直接领域登记查询仍可用
+  ---
+  duration_ms: 143.4092
+  type: 'test'
+  ...
+# Subtest: D 新更新核验真实执行上下文，已提交回放优先于再次核验
+ok 18 - D 新更新核验真实执行上下文，已提交回放优先于再次核验
+  ---
+  duration_ms: 148.421
+  type: 'test'
+  ...
+# Subtest: 仅核对/生成不保存批次或调用宿主，执行授权不能从生成请求推断
+ok 19 - 仅核对/生成不保存批次或调用宿主，执行授权不能从生成请求推断
+  ---
+  duration_ms: 27.2147
+  type: 'test'
+  ...
+# Subtest: 本批仅服务线需要且依赖满足，其他三线不随四项目存在而启动
+ok 20 - 本批仅服务线需要且依赖满足，其他三线不随四项目存在而启动
+  ---
+  duration_ms: 1.7799
+  type: 'test'
+  ...
+# Subtest: 正确项目 local 请求与错误已有工作树能力门禁分别验证
+ok 21 - 正确项目 local 请求与错误已有工作树能力门禁分别验证
+  ---
+  duration_ms: 3.0763
+  type: 'test'
+  ...
+# Subtest: 同源目录不同工作树允许独立任务，共享同一目录及合同/缓存写入串行
+ok 22 - 同源目录不同工作树允许独立任务，共享同一目录及合同/缓存写入串行
+  ---
+  duration_ms: 2.3868
+  type: 'test'
+  ...
+# Subtest: 真实 Git 公共仓库与两个工作树分别识别，独立仓库没有误合并
+ok 23 - 真实 Git 公共仓库与两个工作树分别识别，独立仓库没有误合并
+  ---
+  duration_ms: 2620
+  type: 'test'
+  ...
+# Subtest: 创建与派发各一次，上下文错配拦截，重复请求复用原操作
+ok 24 - 创建与派发各一次，上下文错配拦截，重复请求复用原操作
+  ---
+  duration_ms: 2.0683
+  type: 'test'
+  ...
+# Subtest: 创建后派发失败保留聊天，未知响应和中断从磁盘恢复且不重复创建
+ok 25 - 创建后派发失败保留聊天，未知响应和中断从磁盘恢复且不重复创建
+  ---
+  duration_ms: 33.6329
+  type: 'test'
+  ...
+# Subtest: 两段原生调用先落盘，record 保存实际结果，空/错误回执不声称送达
+ok 26 - 两段原生调用先落盘，record 保存实际结果，空/错误回执不声称送达
+  ---
+  duration_ms: 2.5882
+  type: 'test'
+  ...
+# Subtest: 原执行沿用，缺绑定/开始证据时不会由聊天创建或最终文本冒充完成
+ok 27 - 原执行沿用，缺绑定/开始证据时不会由聊天创建或最终文本冒充完成
+  ---
+  duration_ms: 1.8047
+  type: 'test'
+  ...
+# Subtest: 缺少登记集中返回恢复项；授权范围、成功操作历史及批次意图不可偷偷改写
+ok 28 - 缺少登记集中返回恢复项；授权范围、成功操作历史及批次意图不可偷偷改写
+  ---
+  duration_ms: 1.7086
+  type: 'test'
+  ...
+# Subtest: 协调接手保留原任务和未确认事件，回报权限不自动扩展到新聊天
+ok 29 - 协调接手保留原任务和未确认事件，回报权限不自动扩展到新聊天
+  ---
+  duration_ms: 0.8995
+  type: 'test'
+  ...
+# Subtest: 未知发送不重发，明确未提交的证据恢复后复用原键，成功部分不能抹除
+ok 30 - 未知发送不重发，明确未提交的证据恢复后复用原键，成功部分不能抹除
+  ---
+  duration_ms: 1.6789
+  type: 'test'
+  ...
+# Subtest: E 任意旧编号、依赖及Mermaid精确改写，内容与普通列表保留
+ok 31 - E 任意旧编号、依赖及Mermaid精确改写，内容与普通列表保留
+  ---
+  duration_ms: 27.8544
+  type: 'test'
+  ...
+# Subtest: E 已登记stepId与编号保持，插入使用锚点后缀并保留显式顺序
+ok 32 - E 已登记stepId与编号保持，插入使用锚点后缀并保留显式顺序
+  ---
+  duration_ms: 1.5913
+  type: 'test'
+  ...
+# Subtest: E 原编号重复按父作用域区分，超过Z仍可分配
+ok 33 - E 原编号重复按父作用域区分，超过Z仍可分配
+  ---
+  duration_ms: 1.6099
+  type: 'test'
+  ...
+# Subtest: E 模糊身份、缺失依赖、循环、重叠引用及并发来源变化拒绝
+ok 34 - E 模糊身份、缺失依赖、循环、重叠引用及并发来源变化拒绝
+  ---
+  duration_ms: 1.2967
+  type: 'test'
+  ...
+# Subtest: E 文件写回前重检来源，并发修改保留用户内容
+ok 35 - E 文件写回前重检来源，并发修改保留用户内容
+  ---
+  duration_ms: 26.6589
+  type: 'test'
+  ...
+# Subtest: E 规范化产物可登记为冻结契约候选，未保存不捏造服务ID
+ok 36 - E 规范化产物可登记为冻结契约候选，未保存不捏造服务ID
+  ---
+  duration_ms: 53.8319
+  type: 'test'
+  ...
+# Subtest: E 单文件夹、多工作树、超过九序号、同名会话及标题切换保持固定身份
+ok 37 - E 单文件夹、多工作树、超过九序号、同名会话及标题切换保持固定身份
+  ---
+  duration_ms: 0.7771
+  type: 'test'
+  ...
+# Subtest: E 宿主创建、改名与移动失败重试复用operationId和固定目标
+ok 38 - E 宿主创建、改名与移动失败重试复用operationId和固定目标
+  ---
+  duration_ms: 1.349
+  type: 'test'
+  ...
+# Subtest: E 掉响应创建先查询原operationId，恢复固定目标后不重复创建
+ok 39 - E 掉响应创建先查询原operationId，恢复固定目标后不重复创建
+  ---
+  duration_ms: 0.7996
+  type: 'test'
+  ...
+# Subtest: E 实际工作树与错误目录分支分别核验
+ok 40 - E 实际工作树与错误目录分支分别核验
+  ---
+  duration_ms: 1263.144
+  type: 'test'
+  ...
+1..40
+# tests 40
+# suites 0
+# pass 40
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9290.1831

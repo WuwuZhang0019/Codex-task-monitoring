@@ -108,7 +108,7 @@ test('D 所有者 HTTP 与真实 STDIO 登记、绑定、可靠状态、撤销�
   assert.match(access.token, /^[a-f0-9]{64,}$/i);
   await startBridge(access.token);
   const tools = await client.listTools();
-  assert.equal(tools.tools.length, 9);
+  assert.equal(tools.tools.length, 11);
   assert.equal((await privateRequest('/api/light-access/grants', {
     projectKeys: ['unauthorized'], threadId, hostId, worktreeRoots: [worktree], acknowledged: true,
   }, access.token)).status, 403, 'MCP 凭据不能签发授权');
