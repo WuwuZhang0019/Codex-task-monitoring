@@ -40,7 +40,7 @@ try {
         if (command === 'get_autostart') return false;
         if (command === 'island_agent_connections') {
           if (window.__connection.state === 'unavailable') throw Error('OWNER_UNAVAILABLE');
-          return window.__connection.state === 'empty' ? [] : [{ ...window.__connection, appId:'codex',name:'Codex' },...(window.__extraApps ?? [])];
+          return window.__connection.state === 'empty' ? [] : [{ ...window.__connection, appId:'codex',name:'Codex' },{appId:'dsh',name:'dsh',state:'disabled',enabled:false},...(window.__extraApps ?? [])];
         }
         if (command === 'island_agent_set_connection') {
           window.__connectionCalls.push({ command, args });
@@ -68,6 +68,8 @@ try {
   assert.equal(await page.getByText('GLM-5.3',{exact:true}).count(),0);
   assert.equal(await page.locator('[data-workbench-connection=claude-code]').count(),0);
   assert.equal(await page.getByText('Zcode',{exact:true}).count(),1);
+  assert.equal(await page.locator('[data-workbench-connection]').first().getAttribute('data-workbench-connection'),'codex');
+  assert.equal(await page.locator('[data-workbench-connection=dsh]').count(),0);
   const cols=await page.locator('.mcp-connection-list').evaluate(el=>getComputedStyle(el).gridTemplateColumns);
   assert.equal(cols.split(' ').length,2);
   await page.locator('[data-workbench-connection="claude-desktop"] button').click();
