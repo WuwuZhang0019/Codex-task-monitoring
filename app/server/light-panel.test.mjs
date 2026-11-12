@@ -6,6 +6,16 @@ import os from 'node:os';
 import path from 'node:path';
 import {createServer,HttpError} from './index.mjs';
 import {prepareLightPlan} from './light-import.mjs';
+import { bindingApplications } from './light-panel.mjs';
+import { digest } from './receipts.mjs';
+
+test('application ownership reconciles historical confirmation grants without guessing unknown tasks', () => {
+ const grants = { legacy: { kind:'lightAccess' }, claude: { kind:'lightAccess',appId:'claude-code' },
+   confirmation: { kind:'lightBindingConfirmation',principal:'legacy' } };
+ const bindings = [{key:'old',confirmationRef:`grant:${digest('confirmation')}`},
+   {key:'automatic',confirmationRef:'automatic:claude'}, {key:'proposed',confirmationRef:null}, {key:'unknown',confirmationRef:'other'}];
+ assert.deepEqual(bindingApplications(bindings,grants,{proposed:'claude'}),{old:'codex',automatic:'claude-code',proposed:'claude-code'});
+});
 
 test('private panel shares committed snapshot, verifies source, persists preferences without business revision',async()=>{
  const root=await mkdtemp(path.join(os.tmpdir(),'light-f-panel-'));

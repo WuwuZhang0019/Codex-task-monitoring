@@ -3,6 +3,22 @@ import { readFile, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { HttpError } from './validation.mjs';
 import { validAppId } from './light-apps.mjs';
+import { digest } from './receipts.mjs';
+
+// Date: 2026-11-12. Old confirmed grants retain trustworthy ownership without changing historical tasks.
+export function bindingApplications(bindings, grants, owners = {}) {
+  const confirmations = new Map(Object.entries(grants).filter(([, value]) => value.kind === 'lightBindingConfirmation')
+    .map(([id, value]) => [digest(id), value.principal]));
+  const result = {};
+  for (const binding of bindings) {
+    const principal = owners[binding.key] ?? binding.confirmationRef?.match(/^automatic:(.+)$/)?.[1]
+      ?? confirmations.get(binding.confirmationRef?.match(/^grant:(.+)$/)?.[1]);
+    const grant = grants[principal];
+    const app = grant?.kind === 'lightAccess' ? grant.appId ?? 'codex' : null;
+    if (validAppId(app)) result[binding.key] = app;
+  }
+  return result;
+}
 
 export function createLightPanel(persistence, { connections = () => [] } = {}) {
   const cache = new Map();
@@ -37,13 +53,7 @@ export function createLightPanel(persistence, { connections = () => [] } = {}) {
       }
       const grants = persistence.read('grants');
       const owners = persistence.read('light')?.metadata.bindingOwners ?? {};
-      const bindingApps = {};
-      for (const binding of snapshot.bindings) {
-        const principal = owners[binding.key] ?? binding.confirmationRef?.match(/^automatic:(.+)$/)?.[1];
-        const grant = grants[principal];
-        const app = grant?.kind === 'lightAccess' ? grant.appId ?? 'codex' : null;
-        if (validAppId(app)) bindingApps[binding.key] = app;
-      }
+      const bindingApps = bindingApplications(snapshot.bindings, grants, owners);
       return { date: '2026-11-12', snapshot, sources, preferences: persistence.read('lightPanelPreferences') ?? null,
         agentApps: connections(), bindingApps,
         library: persistence.read('lightLibrary') ?? { version: 1, archived: [] }, librarySupported: true,
