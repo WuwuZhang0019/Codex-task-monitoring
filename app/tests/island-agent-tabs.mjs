@@ -40,7 +40,7 @@ try {
       metadata: { currentWindow: { label: 'island' }, currentWebview: { label: 'island' } },
       transformCallback: () => 1, unregisterCallback: () => {},
       invoke: async (cmd) => {
-        if (cmd === 'get_settings') return { 'app.language':'zh-CN','shell.configVersion':1,'appearance.style':'windows','island.openOn':'click' };
+        if (cmd === 'get_settings') return { 'app.language':'zh-CN','shell.configVersion':1,'appearance.style':'windows','island.openOn':'click','island.closeOn':'clickOutside' };
         if (cmd === 'island_workbench_read') return window.__agentPanel;
         if (cmd === 'glass_supported') return true;
         if (cmd === 'is_fullscreen_active') return false;
@@ -55,7 +55,7 @@ try {
   const tabs = page.locator('[data-agent-app-tabs]');
   await tabs.waitFor();
   await page.waitForTimeout(500);
-  assert.equal(await tabs.getByRole('button').count(), 4);
+  assert.equal(await tabs.getByRole('button').count(), 2);
   assert.equal(await tabs.locator('[data-agent-filter="all"], [data-agent-filter="unassigned"]').count(), 0);
   assert.equal(await tabs.locator('[data-connected="true"]').count(), 2);
   assert.ok(!(await page.locator('[data-island-controls]').innerText()).includes('任务岛'));
@@ -71,9 +71,12 @@ try {
   await page.screenshot({ path: path.join(output, 'codex-filter.png') });
   await tabs.locator('[data-agent-filter="claude-code"]').click(); await page.waitForTimeout(350);
   assert.equal(await cards.count(), 1);
-  await tabs.locator('[data-agent-filter="workbuddy"]').click();
-  await page.getByText('此应用暂无关联任务').waitFor();
-  await tabs.locator('[data-agent-filter="workbuddy"]').click(); await page.waitForTimeout(350);
+  assert.equal(await tabs.locator('[data-agent-filter="workbuddy"], [data-agent-filter="dsh"]').count(),0);
+  assert.match(await tabs.locator('[data-agent-filter="codex"] img').getAttribute('src'),/openai.svg/);
+  assert.match(await tabs.locator('[data-agent-filter="claude-code"] img').getAttribute('src'),/claude-color.svg/);
+  await tabs.locator('[data-agent-filter="claude-code"]').click(); await page.waitForTimeout(350);
+
+  await page.waitForFunction(expected => document.querySelectorAll(".wb-route-card").length === expected, total);
   assert.equal(await cards.count(), total);
   assert.equal(await tabs.locator('[aria-pressed="true"]').count(), 0);
   report.checks.push('Only real applications have pills; clicking the selected app again restores all tasks including unassigned history');
@@ -84,3 +87,6 @@ try {
   await writeFile(path.join(output,'browser.json'),JSON.stringify(report,null,2)+'\n','utf8');
   console.log(JSON.stringify(report));
 }
+
+
+
