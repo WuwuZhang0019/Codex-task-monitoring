@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-12",
+  "environment": "Edge production UI with controlled native-command substitute; no native authorization issued",
+  "checks": [
+    "Gray button connects; yellow button has an animated perimeter and can cancel; reduced-motion disables animation",
+    "A single universal instruction button replaces all application-specific setup buttons",
+    "Generic instructions can be reused for new applications; completion updates the connection automatically",
+    "Polling shows the connected state after a live lease is reported",
+    "Interrupted connection is red and retries; green button disconnects with one click",
+    "Opening settings is read-only; unavailable service never appears connected",
+    "One reusable instruction button; arbitrary application names appear dynamically",
+    "Compact rows show four distinct colors; all 93 locally bundled icons render and Chinese aliases are searchable"
+  ],
+  "errors": [],
+  "passed": true
+}

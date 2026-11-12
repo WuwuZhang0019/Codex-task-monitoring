@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-12",
+  "shellCommit": "4e034cb",
+  "executable": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\release\\dynamic-island.exe",
+  "sha256": "0DD4F123519842D38B052B2632B068BC443E208B9162D9D7A8BEB7EF84BE1519",
+  "processIds": [
+    51656
+  ],
+  "snapshotRevision": 159,
+  "snapshotSha256": "df1e3879060d3663d22b2c5f3e0828be2e0ecd2f4622d784a762c8b72c04cb5e",
+  "snapshotUnchanged": true
+}

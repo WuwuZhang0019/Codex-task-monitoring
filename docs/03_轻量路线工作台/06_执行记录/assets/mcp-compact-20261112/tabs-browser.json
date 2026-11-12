@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-12",
+  "environment": "Edge UI with controlled native panel substitute",
+  "checks": [
+    "Original-style pills above panel, title removed, two independent live dots",
+    "Only real applications have pills; clicking the selected app again restores all tasks including unassigned history"
+  ],
+  "pageErrors": [],
+  "passed": true
+}

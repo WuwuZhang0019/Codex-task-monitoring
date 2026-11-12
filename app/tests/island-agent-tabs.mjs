@@ -55,7 +55,8 @@ try {
   const tabs = page.locator('[data-agent-app-tabs]');
   await tabs.waitFor();
   await page.waitForTimeout(500);
-  assert.equal(await tabs.getByRole('button').count(), 6);
+  assert.equal(await tabs.getByRole('button').count(), 4);
+  assert.equal(await tabs.locator('[data-agent-filter="all"], [data-agent-filter="unassigned"]').count(), 0);
   assert.equal(await tabs.locator('[data-connected="true"]').count(), 2);
   assert.ok(!(await page.locator('[data-island-controls]').innerText()).includes('任务岛'));
   const header = await page.locator('[data-agent-panel-header]').boundingBox(), list = await page.locator('[data-workbench-routes]').boundingBox();
@@ -72,11 +73,10 @@ try {
   assert.equal(await cards.count(), 1);
   await tabs.locator('[data-agent-filter="workbuddy"]').click();
   await page.getByText('此应用暂无关联任务').waitFor();
-  await tabs.locator('[data-agent-filter="unassigned"]').click(); await page.waitForTimeout(350);
-  assert.equal(await cards.count(), total - 2);
-  await tabs.locator('[data-agent-filter="all"]').click(); await page.waitForTimeout(350);
+  await tabs.locator('[data-agent-filter="workbuddy"]').click(); await page.waitForTimeout(350);
   assert.equal(await cards.count(), total);
-  report.checks.push('Application filters use trusted associations; unassigned history and all tasks remain reachable');
+  assert.equal(await tabs.locator('[aria-pressed="true"]').count(), 0);
+  report.checks.push('Only real applications have pills; clicking the selected app again restores all tasks including unassigned history');
   assert.deepEqual(report.pageErrors, []);
   report.passed = true;
 } finally {
