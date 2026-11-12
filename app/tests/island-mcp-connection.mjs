@@ -29,6 +29,8 @@ try {
   await page.addInitScript(() => {
     window.__connection = { state: 'disabled', enabled: false };
     window.__connectionCalls = [];
+    window.__onboardingCopies = [];
+    Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.__copiedInstruction=text;}}});
     window.__TAURI_INTERNALS__ = {
       metadata: { currentWindow: { label: 'settings' }, currentWebview: { label: 'settings' } },
       transformCallback: () => 1,
@@ -46,6 +48,10 @@ try {
           window.__connection = args.enabled ? { state: 'waiting', enabled: true, automatic: true } : { state: 'disabled', enabled: false };
           return { ...window.__connection, appId: args.appId };
         }
+        if (command === 'island_agent_onboarding_instructions') {
+          window.__onboardingCopies.push(args.appId);
+          return `请为当前 ${args.appId} 完成任务岛接入。先 --describe 安装配置，完成后 --complete 自动开启连接，无需回来点击。`;
+        }
         if (command === 'plugin:event|listen') return 1;
         return null;
       },
@@ -60,18 +66,22 @@ try {
   assert.equal(await card.getByRole('button').count(), 1);
   await page.waitForTimeout(350); // Let the existing page/navigation transition settle before visual evidence.
   await page.screenshot({ path: path.join(output, 'disabled.png') });
-  report.checks.push('No IDs, paths, JSON, or confirmation checkboxes; one connection button');
-  await card.getByRole('button', { name: '连接 Codex', exact: true }).click();
-  await card.getByText('等待 Codex 接入', { exact: true }).waitFor();
-  assert.equal(await page.evaluate(() => window.__connectionCalls[0].args.enabled), true);
-  report.checks.push('One click enables automatic connection and honestly waits for Codex');
+  report.checks.push('All four applications offer an instruction button, without technical fields or manual connect buttons');
+  assert.equal(await page.getByRole('button',{name:'复制接入指令',exact:true}).count(),4);
+  await card.getByRole('button', { name: '复制接入指令', exact: true }).click();
+  assert.match(await page.evaluate(()=>window.__copiedInstruction),/codex.*接入/);
+  assert.match(await page.evaluate(()=>window.__copiedInstruction),/--complete 自动开启连接/);
+  assert.equal(await page.evaluate(()=>window.__connectionCalls.length),0,'copy does not prematurely enable the connection');
+  await page.evaluate(()=>{window.__connection={state:'waiting',enabled:true,automatic:true};});
+  await card.getByText('等待 Codex 接入', { exact: true }).waitFor({timeout:6000});
+  report.checks.push('Copied instructions are app-specific; external helper completion appears without a manual connection click');
   await page.evaluate(() => { window.__connection = { state: 'connected', enabled: true, automatic: true }; });
   await card.getByText('已连接 Codex', { exact: true }).waitFor({ timeout: 6000 });
   await page.screenshot({ path: path.join(output, 'connected.png') });
   report.checks.push('Polling shows the connected state after a live lease is reported');
   await page.evaluate(() => { window.__connection = { state: 'disconnected', enabled: true, automatic: true }; });
   await card.getByText('连接已中断', { exact: true }).waitFor({ timeout: 6000 });
-  await card.getByRole('button', { name: '关闭自动连接' }).click();
+  await card.getByRole('button', { name: '断开连接' }).click();
   await card.getByText('尚未连接 Codex', { exact: true }).waitFor();
   assert.equal(await page.evaluate(() => window.__connectionCalls.at(-1).args.enabled), false);
   report.checks.push('Lost connection is visible and one click disables/revokes the connection');
@@ -79,6 +89,7 @@ try {
   await page.locator('nav').getByText('MCP', { exact: true }).click();
   await card.getByText('尚未连接 Codex', { exact: true }).waitFor();
   assert.equal(await page.evaluate(() => window.__connectionCalls.length), 0, 'opening settings never issues a grant');
+  assert.equal(await page.evaluate(()=>window.__onboardingCopies.length),0,'opening settings does not mint an installation request');
   await page.evaluate(() => { window.__connection = { state: 'unavailable' }; });
   await card.getByText('连接服务暂不可用', { exact: true }).waitFor({ timeout: 6000 });
   report.checks.push('Opening settings is read-only; unavailable service never appears connected');

@@ -8,6 +8,7 @@ import {createLightOutbox} from './light-outbox.mjs';
 import {createLightPublication} from './light-publication.mjs';
 import {createLightMcp,createLightHandler} from '../mcp/light.mjs';
 import {createLightAccess} from './light-access.mjs';
+import { createLightOnboarding } from './light-onboarding.mjs';
 import {createLightPanel} from './light-panel.mjs';
 import {createLightLibrary} from './light-library.mjs';
 import http from 'node:http';
@@ -147,6 +148,7 @@ async function createOwnedServer(options) {
   const business = createBusiness(persistence,requests,models);
   if (options.lightAccessEnabled && typeof options.authorize !== 'function') throw new Error('LIGHT_PRIVATE_AUTH_REQUIRED');
   const lightAccess = options.lightAccessEnabled ? createLightAccess(persistence, options.lightPresence) : null;
+  const lightOnboarding = options.lightAccessEnabled ? createLightOnboarding(persistence) : null;
   const lightAuthorize = options.lightAuthorize ?? lightAccess?.authorize;
   const light = createLightService(persistence, requests, {
     authorize: lightAuthorize,
@@ -172,7 +174,10 @@ async function createOwnedServer(options) {
       if (options.authorize) await options.authorize(req, pathname);
       const method = req.method;
       // MCP 的业务失败由协议层包装，必须在领域事务提交/回滚之后包装。
-      if (pathname === '/api/light-mcp' && lightAccess) {
+      if (pathname === '/api/light-onboarding' && lightOnboarding) {
+        if (method !== 'POST' || req.headers.origin !== undefined || req.url !== pathname) throw new HttpError(403, 'FORBIDDEN');
+        respond(200, await lightOnboarding.redeem(await jsonBody(req)));
+      } else if (pathname === '/api/light-mcp' && lightAccess) {
         const principal = lightAccess.authenticate(req);
         if (!principal) throw new HttpError(403, 'FORBIDDEN');
         lightAccess.touch(principal, req.headers);
@@ -208,6 +213,7 @@ async function createOwnedServer(options) {
       if (pathname.startsWith('/api/light-access/') && lightAccess) {
         if (method !== 'POST') throw new HttpError(405, '不支持的请求方法');
         const body = await jsonBody(req);
+        if (pathname === '/api/light-access/prepare-onboarding') return respond(200, await lightOnboarding.prepare(body));
         if (pathname === '/api/light-access/connect') return respond(200, await lightAccess.connect(body));
         if (pathname === '/api/light-access/connection-status') return respond(200, lightAccess.connectionStatus(body));
         if (pathname === '/api/light-access/grants') return respond(200, await lightAccess.issue(body));

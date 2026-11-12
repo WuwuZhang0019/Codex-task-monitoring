@@ -19,7 +19,7 @@ let shuttingDown = false;
 function authorize(req, pathname) {
   if (shuttingDown) throw new HttpError(503, 'STOPPED');
   // 插件凭据由轻量授权表校验，桌面会话令牌仍只开放私有 UI。
-  if (pathname === '/api/light-mcp') return;
+  if (pathname === '/api/light-mcp' || pathname === '/api/light-onboarding') return;
   const actual = Buffer.from(req.headers.authorization ?? '');
   const duplicates = req.rawHeaders.filter((v, i) => i % 2 === 0 && v.toLowerCase() === 'authorization').length;
   const manager = actual.length === expected.length && timingSafeEqual(actual, expected);

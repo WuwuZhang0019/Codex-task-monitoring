@@ -157,6 +157,8 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
         const grants = persistence.read('grants'), grant = grantFor(input.principal);
         if (!grant) lightError('NOT_FOUND', '授权不存在', 404);
         grants[input.principal] = { ...grant, revokedAt: new Date().toISOString() };
+        for (const [key, pending] of Object.entries(grants)) if (pending.kind === 'lightOnboarding'
+          && pending.appId === (grant.appId ?? 'codex')) grants[key] = { ...pending, revokedAt: new Date().toISOString() };
         persistence.write('grants', grants);
         return { principal: input.principal, revoked: true };
       });

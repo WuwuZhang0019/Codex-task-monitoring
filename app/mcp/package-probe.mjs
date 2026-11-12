@@ -31,6 +31,9 @@ const buildResult = await build({
   banner: { js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" },
 });
 const { licenses, count: packageCount } = await bundledLicenses(buildResult.metafile);
+await build({ entryPoints: [path.join(appDir, 'mcp/onboard.mjs')], outfile: path.join(pluginDir, 'runtime/onboard.mjs'),
+  bundle: true, format: 'esm', platform: 'node', target: 'node22',
+  banner: { js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" } });
 await writeFile(path.join(pluginDir, 'THIRD-PARTY-NOTICES.txt'), `日期：${generatedDate}\n\n${licenses.join('\n\n---\n\n')}\n`, 'utf8');
 await mkdir(path.join(destination, '.agents/plugins'), { recursive: true });
 await writeFile(path.join(destination, '.agents/plugins/marketplace.json'), JSON.stringify({
