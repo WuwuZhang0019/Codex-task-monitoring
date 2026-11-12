@@ -300,3 +300,18 @@ flowchart LR
  B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>本地completed/passed"]
  D --> E["⑤ E 桌面与恢复验收<br/>本地completed/passed，进度5/6"] --> F["⑥ F 许可与发布交付<br/>pending，待自身授权及开始条件"]
 ```
+
+## F 执行准备与本地授权
+
+日期：2026-11-12
+
+用户明确选择“允许 F 本地执行、Git 留证，服务恢复后同步”，已写入方案1.8。E原定出口已完成，本次结论D（可进入既定下一站），A—E本地5/6，F保持pending/pending、准备完成未开始。完整入口见F_待执行指令_2026-11-12.md；本轮未开展F审计、产品修改、构建、打包或公开发布，未创建执行聊天。
+
+业务准备基线main/7655daf37a8626f995a3fa6b8ced8fb8681abc37、工作区干净。Fork读取Permission denied，实际版本/权限及并行改动交执行聊天核对。E固定77574bf对应BA112BB5…安装版，后续分类/图标提交未包含；F必须建立最终源码与二进制对应并按差异回归。本路线服务身份仍空，deferredByAuthorization，未发送业务请求，无未知提交；不借旧A—G或D测试身份。实际开始时再记责任聊天和稳定本地执行键。公开发布不在本次授权范围。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
+ B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>本地completed/passed"]
+ D --> E["⑤ E 桌面与恢复验收<br/>本地completed/passed，进度5/6"] --> F["⑥ F 许可与发布交付<br/>pending，本地授权及准备完成未开始"]
+```
