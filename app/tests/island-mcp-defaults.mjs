@@ -60,10 +60,12 @@ try {
   await page.goto(`${base}/#settings`);
   await page.locator('nav').getByText('MCP', { exact: true }).click();
   await page.locator('[data-workbench-connection="codex"]').waitFor();
-  assert.equal(await page.locator('[data-workbench-connection]').count(),28);
+  assert.equal(await page.locator('[data-workbench-connection]').count(),15);
   assert.equal(await page.getByRole('button',{name:/备用图标/}).count(),0);
   assert.match(await page.locator('[data-workbench-connection=codex] img').getAttribute('src'),/openai.svg/);
   assert.match(await page.locator('[data-workbench-connection=claude-code] img').getAttribute('src'),/claude-color.svg/);
+  assert.equal(await page.getByText('Kimi-K3',{exact:true}).count(),0);
+  assert.equal(await page.getByText('GLM-5.3',{exact:true}).count(),0);
   const cols=await page.locator('.mcp-connection-list').evaluate(el=>getComputedStyle(el).gridTemplateColumns);
   assert.equal(cols.split(' ').length,2);
   await page.locator('[data-workbench-connection="claude-code"] button').click();
@@ -71,11 +73,11 @@ try {
   assert.match(await page.evaluate(()=>window.__copiedInstruction),/当前应用/);
   await page.evaluate(()=>{window.__connection={state:'connected',enabled:true};window.__extraApps=[{appId:'new-agent',name:'全新 Agent',state:'connected',enabled:true}];});
   await page.locator('[data-workbench-connection="new-agent"]').waitFor({timeout:6000});
-  assert.equal(await page.locator('[data-workbench-connection]').count(),29);
+  assert.equal(await page.locator('[data-workbench-connection]').count(),16);
   await page.locator('[data-workbench-connection="codex"] [data-connection-tone="connected"]').waitFor();
   await page.waitForTimeout(350);
   await page.screenshot({path:path.join(output,'two-column-defaults.png')});
-  report.checks.push('28 suggested applications in two columns; no icon library; unregistered shortcuts copy instructions without issuing grants; live and arbitrary applications merge dynamically');
+  report.checks.push('15 agent applications in two columns; no icon library; unregistered shortcuts copy instructions without issuing grants; live and arbitrary applications merge dynamically');
   assert.deepEqual(report.errors, []);
   report.passed = true;
 } finally {
