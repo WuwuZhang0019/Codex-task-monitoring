@@ -53,8 +53,10 @@ test('panel credential permits only exact snapshot and preference routes and rot
     });
     assert.equal((await request('/api/light-panel')).status, 200);
     assert.equal((await request('/api/light-panel/preferences', 'PUT', { 'Content-Type': 'application/json' })).status, 200);
-    for (const route of ['/api/health', '/api/projects', '/api/light-access/grants', '/api/light-mcp', '/api/light-panel?other=1']) {
+    for (const route of ['/api/health', '/api/projects', '/api/light-access/grants', '/api/light-mcp', '/api/light-panel?other=1',
+      '/api/light-library/archive', '/api/light-library/restore', '/api/light-library/delete']) {
       assert.equal((await request(route)).status, 403, route);
+      if (route.startsWith('/api/light-library/')) assert.equal((await request(route, 'POST')).status, 403, route);
     }
     assert.equal((await request('/api/light-panel', 'POST')).status, 403);
     assert.equal((await request('/api/light-panel', 'GET', { Origin: 'http://localhost' })).status, 403);

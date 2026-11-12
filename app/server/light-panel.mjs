@@ -34,7 +34,8 @@ export function createLightPanel(persistence) {
         }
         sources[plan.key] = cache.get(key) ?? null;
       }
-      return { date: '2026-11-11', snapshot, sources, preferences: persistence.read('lightPanelPreferences') ?? null,
+      return { date: '2026-11-12', snapshot, sources, preferences: persistence.read('lightPanelPreferences') ?? null,
+        library: persistence.read('lightLibrary') ?? { version: 1, archived: [] }, librarySupported: true,
         capabilities: { threadJump: false, reason: '当前宿主未提供聊天跳转；可复制固定 ID，在 Codex 中查找' } };
     },
     save(value) { const checked = preferences(value); return persistence.run(() => { persistence.write('lightPanelPreferences', checked); return { saved: true }; }); },

@@ -4,6 +4,7 @@ import { digest } from './receipts.mjs';
 import { requireLightShape, validateLightSnapshot, lightError, transitions, unique,
   requiredConditions, childrenOf, dependenciesOf, waitingFor, planProgress } from './light-model.mjs';
 import { legacyLightStatus } from './light-import.mjs';
+import { touches } from './light-library.mjs';
 
 const now = () => new Date().toISOString();
 const dateOf = value => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(value));
@@ -82,6 +83,7 @@ export function createLightService(persistence, requests, {
 } = {}) {
   function permitted(principal, projectId, operation, details = {}) {
     if (!principal || authorize(principal, projectId, operation, details) !== true) lightError('FORBIDDEN', '适配层未授予当前作用域', 403);
+    if (touches(details.input, new Set(persistence.read('lightDeletedKeys') ?? []))) lightError('DELETED_TASK', '此任务已删除，旧请求不能重新写入', 410);
   }
   function load() { return persistence.read('light') ?? empty(); }
   function scope(snapshot, input) {
@@ -197,6 +199,13 @@ export function createLightService(persistence, requests, {
         if (candidate.plans.length !== 1 || candidate.plans[0].key !== plan.key || candidate.projects[0]?.key !== project.key) lightError('INVALID_INPUT', '修订归属不匹配');
         const previous = value.snapshot.steps.filter(item => item.planKey === plan.key);
         if (previous.some(item => !candidate.steps.some(step => step.key === item.key))) lightError('HISTORY_REQUIRED', '删除步骤必须保留原身份及取消记录');
+        const archivedKeys = new Set((persistence.read('lightLibrary')?.archived ?? []).map(item => item.key));
+        for (const route of value.snapshot.routes.filter(item => item.planKey === plan.key && archivedKeys.has(item.key))) {
+          const replacement = candidate.routes.find(item => item.key === route.key);
+          if (!replacement || digest(replacement.stepKeys) !== digest(route.stepKeys)) {
+            lightError('ARCHIVED_TASK', '请先恢复归档路线，再调整其结构', 409);
+          }
+        }
         for (const step of candidate.steps) {
           const old = previous.find(item => item.key === step.key);
           if (old && ['code', 'originalCode', 'parentKey'].some(key => old[key] !== step[key])) lightError('HISTORY_REQUIRED', '已登记步骤身份映射不可重写');
