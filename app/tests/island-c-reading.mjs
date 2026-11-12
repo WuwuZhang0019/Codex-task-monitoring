@@ -11,7 +11,7 @@ const page = await context.newPage();
 const report = { date: process.env.ISLAND_TEST_DATE || new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date()), checks: [], errors: [] };
 page.on('pageerror', e => report.errors.push(e.message));
 try {
- await page.goto('http://127.0.0.1:1420/?workbench=simulation', { waitUntil: 'networkidle' });
+ await page.goto(`${process.env.ISLAND_BROWSER_URL || 'http://127.0.0.1:1420'}/?workbench=simulation`, { waitUntil: 'networkidle' });
  const shell = page.locator('[data-hit]').first();
  await shell.click(); await page.waitForTimeout(900);
  await page.screenshot({ path: `${out}/windows-intelligence-comparison.png` });
@@ -22,35 +22,37 @@ try {
  report.checks.push('独立长路线样例60阶段');
  await select.selectOption('deep-branch');
  assert.equal(await page.locator('[data-project-key]').count(), 1);
- assert.equal(await page.locator('[data-linked-plan]').count(), 1);
  for (let level = 1; level <= 4; level++) {
-  await page.locator('[data-linked-plan]').click();
-  assert.match(await page.locator('[data-workbench-detail]').innerText(), new RegExp(`sim/plan/branch/${level}/step/1`));
-  if (level < 4) await page.locator(`[data-step-key="sim/plan/branch/${level}/step/2"]`).click();
+  const step = page.locator(`[data-step-key="sim/plan/branch/${level}/step/1"]`);
+  await step.click();
+  assert.equal(await step.getAttribute('aria-pressed'), 'true');
  }
- report.checks.push('四层关联分支实际导航');
+ assert.equal(await page.locator('[data-workbench-detail]').count(), 0);
+ report.checks.push('四层分支直接选择且无详情栏');
  await select.selectOption('multi-project');
  await page.getByRole('button', { name: '定位当前', exact: true }).click();
- const input = page.locator('[data-workbench-detail] input').first();
- await input.focus(); await page.mouse.move(10, 750); await page.waitForTimeout(1500);
- assert.ok((await shell.boundingBox()).height > 300);
- assert.equal(await page.evaluate(() => document.activeElement?.tagName), 'INPUT');
- report.checks.push('详情输入焦点期间移出保持展开');
- await page.locator('[data-workbench-detail]').evaluate(e => { e.scrollTop = 220; });
- const detailScroll = await page.locator('[data-workbench-detail]').evaluate(e => e.scrollTop);
+ const current = page.locator('[data-step-key="sim/plan/main/step/3"]');
+ await current.focus(); await page.keyboard.press('Enter');
+ assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('data-step-key')), 'sim/plan/main/step/3');
+ report.checks.push('路线节点可通过键盘选择');
  const lanes = page.locator('[data-route-key="sim/plan/long/route/1"]');
  await lanes.evaluate(e => { e.scrollLeft = 600; });
  const horizontal = await lanes.evaluate(e => e.scrollLeft);
  await page.keyboard.press('Escape'); await page.waitForTimeout(800);
  await shell.click(); await page.waitForTimeout(1000);
- assert.equal(await page.locator('[data-workbench-detail]').evaluate(e => e.scrollTop), detailScroll);
+ assert.equal(await current.getAttribute('aria-pressed'), 'true');
  assert.equal(await lanes.evaluate(e => e.scrollLeft), horizontal);
- report.checks.push('收起再开保留详情纵滚及路线横滚');
- await page.setViewportSize({ width: 600, height: 700 }); await page.waitForTimeout(800);
- const box = await shell.boundingBox(); assert.ok(box.width <= 560 && box.x >= 0);
- assert.ok(await page.locator('[data-workbench-detail]').isVisible());
- report.checks.push('600px窄窗口不超出外壳边界');
- await page.screenshot({ path: `${out}/narrow.png` });
+ report.checks.push('收起再开保留节点选择及路线横滚');
+ for (const width of [600, 400]) {
+  await page.setViewportSize({ width, height: 700 }); await page.waitForTimeout(800);
+  const box = await shell.boundingBox(); assert.ok(box.width <= width - 40 && box.x >= 0);
+  const main = await page.locator('.wb-main').boundingBox();
+  const routes = await page.locator('[data-workbench-routes]').boundingBox();
+  assert.ok(Math.abs(main.width - routes.width) < 2);
+  assert.equal(await page.locator('[data-workbench-detail]').count(), 0);
+  report.checks.push(`${width}px窄窗口路线用满宽度且无详情栏`);
+  await page.screenshot({ path: `${out}/narrow-${width}.png` });
+ }
  assert.equal(report.errors.length, 0);
  report.passed = true;
 } catch (e) { report.passed = false; report.error = String(e.stack); process.exitCode = 1; }

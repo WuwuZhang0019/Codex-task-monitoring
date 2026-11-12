@@ -182,12 +182,7 @@ test('island D standalone→STDIO update→scoped panel, preferences and generat
         if (fault === 'unauthorized') throw Error('FORBIDDEN');
         if (fault === 'offline') throw Error('OWNER_UNAVAILABLE');
         const panelValue = await panelRead();
-        // Display-only long-detail variant. It never changes the service project,
-        // its business state or persisted native-observation fixture.
-        panelValue.snapshot.steps[1].blockers = Array.from({ length: 20 }, (_, index) => ({
-          blockerId: `display-only/long-detail/${index}`, reason: `阅读恢复显示样例 ${index + 1}`,
-          waitingFor: ['只用于浏览器详情长度，未写入服务'], releaseConditions: ['显示夹具无需业务解除'], resolved: false,
-        }));
+        // Keep the retired sidebar position to check old preference compatibility.
         panelValue.preferences = { ...panelValue.preferences,
           selected: snapshot.steps[1].key, y: { ...panelValue.preferences.y, 'island/detail': 180 } };
         if (fault === 'incompatible') panelValue.snapshot.schemaVersion = 'unsupported-test-version';
@@ -220,13 +215,11 @@ test('island D standalone→STDIO update→scoped panel, preferences and generat
       await page.locator('[data-connection="ready"]').waitFor();
       assert.match(await page.locator('[data-workbench]').innerText(), /真实服务/);
       assert.match(await page.locator('[data-workbench]').innerText(), /灵动岛D隔离服务项目/);
-      assert.ok((await page.locator('[data-workbench-detail]').innerText()).includes(snapshot.steps[1].id));
       assert.equal(await page.locator('[data-step-key]').count(), 2);
-      await page.waitForFunction(() => Math.abs(document.querySelector('[data-workbench-detail]').scrollTop - 180) <= 2);
-      check('首次离线后重连恢复第二阶段选择及长详情阅读位置', {
-        displayVariant: 'browser-only long-detail blockers + preferences y override; service business snapshot unchanged',
-        expectedDetailTop: 180, actualDetailTop: await page.locator('[data-workbench-detail]').evaluate(node => node.scrollTop),
-      });
+      const selected = page.locator(`[data-step-key="${snapshot.steps[1].key}"]`);
+      assert.equal(await selected.getAttribute('aria-pressed'), 'true');
+      assert.equal(await page.locator('[data-workbench-detail]').count(), 0);
+      check('首次离线后重连恢复第二阶段选择，旧详情偏好不恢复侧栏');
       check('真实STDIO项目在新外壳service视图显示，身份和running状态一致', { native: false, transport: 'Playwright exposed binding to real scoped panel HTTP' });
       for (const connection of ['unauthorized', 'incompatible', 'offline']) {
         fault = connection;
