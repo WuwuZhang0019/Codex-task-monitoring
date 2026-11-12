@@ -2,7 +2,7 @@
 import {createHash} from 'node:crypto';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
-import {realpath} from 'node:fs/promises';
+import {realpath,stat,lstat} from 'node:fs/promises';
 import path from 'node:path';
 const git=promisify(execFile);
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
@@ -21,8 +21,27 @@ export async function inspectWorktree(directory,expectedBranch){
  const common=await realpath(path.resolve(actual,await run(['rev-parse','--git-common-dir'])));
  return {worktreePath:actual,repositoryRoot:path.dirname(common),gitCommonDir:common,branch,head:await run(['rev-parse','HEAD'])};
 }
+// 日期：2026-11-13。普通目录不要求 Git；仓库检查失败不能降级为普通目录。
+export async function inspectWorkspace(directory){
+ requireValue(path.isAbsolute(directory),'ABSOLUTE_WORKTREE_REQUIRED');
+ const actual=await realpath(directory);requireValue((await stat(actual)).isDirectory(),'WORKSPACE_DIRECTORY_REQUIRED');
+ try{return await inspectWorktree(actual);}
+ catch(error){
+  const noRepository=error.code===128&&/^fatal: not a git repository(?:\s|\()/m.test(error.stderr??'');
+  if(!noRepository&&!(error.code==='ENOENT'&&error.path==='git'))throw error;
+  // Git 不可用或没有仓库时仍排除祖先中的 Git 元数据，防止绕过工作树检查。
+  for(let current=actual;;current=path.dirname(current)){
+   try{await lstat(path.join(current,'.git'));throw new Error('GIT_WORKSPACE_VERIFICATION_REQUIRED');}
+   catch(metadataError){if(metadataError.code!=='ENOENT')throw metadataError;}
+   try{if((await stat(path.join(current,'HEAD'))).isFile()&&(await stat(path.join(current,'objects'))).isDirectory())throw new Error('GIT_WORKSPACE_VERIFICATION_REQUIRED');}
+   catch(metadataError){if(metadataError.code!=='ENOENT')throw metadataError;}
+   if(path.dirname(current)===current)break;
+  }
+  return {worktreePath:actual,repositoryRoot:null,gitCommonDir:null,branch:null,head:null};
+ }
+}
 export function recordMapping(ledger,mapping){
- requireValue(mapping.planKey&&mapping.threadId&&mapping.hostId&&mapping.stepKeys?.length&&mapping.worktreePath&&mapping.branch,'FIXED_MAPPING_REQUIRED');
+ requireValue(mapping.planKey&&mapping.threadId&&mapping.hostId&&mapping.stepKeys?.length&&mapping.worktreePath&&(mapping.branch===null||typeof mapping.branch==='string'&&mapping.branch.trim()),'FIXED_MAPPING_REQUIRED');
  const key=hash([mapping.planKey,mapping.hostId,mapping.threadId]);const previous=ledger.mappings?.find(m=>m.key===key);
  ledger.mappings??=[];if(previous){ledger.mappingHistory??=[];if(hash(previous.mapping)!==hash(mapping))ledger.mappingHistory.push(structuredClone(previous));previous.mapping=structuredClone(mapping);}else ledger.mappings.push({key,mapping:structuredClone(mapping)});
  return ledger.mappings.find(m=>m.key===key);

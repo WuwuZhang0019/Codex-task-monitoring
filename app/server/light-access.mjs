@@ -2,13 +2,11 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { realpath } from 'node:fs/promises';
 import path from 'node:path';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
+import { inspectWorkspace } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/context-ledger.mjs';
 import { digest } from './receipts.mjs';
 import { lightError, requireLightShape } from './light-model.mjs';
 import { agentApps, validAppId } from './light-apps.mjs';
 
-const git = promisify(execFile);
 const operations = new Set(['read', 'query', 'register', 'revise', 'confirmPublication', 'reserveExecution', 'update',
   'bind', 'proposeBinding', 'confirmBinding', 'revokeBinding', 'takeoverBinding', 'supplement', 'confirmSupplement',
   'approveSupplementCancellation', 'linkPlan', 'completePlan', 'coordinate']);
@@ -60,17 +58,15 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
     try {
       const actual = await realpath(context.worktreePath);
       if (!grant.automatic && !grant.worktreeRoots.some(root => contained(root, actual))) lightError('FORBIDDEN', '实际路径超出授权', 403);
-      const options = { cwd: actual, timeout: 5000, windowsHide: true, maxBuffer: 1024 * 1024 };
-      const top = (await git('git', ['rev-parse', '--show-toplevel'], options)).stdout.trim();
-      const branch = (await git('git', ['symbolic-ref', '--quiet', '--short', 'HEAD'], options)).stdout.trim();
-      const head = (await git('git', ['rev-parse', 'HEAD'], options)).stdout.trim();
-      if (!samePath(await realpath(top), actual) || context.branch !== branch || checkHead && context.head && context.head !== head) {
-        lightError('STALE_BINDING', '实际 Git 工作树或版本与提案不同', 409);
+      const { branch, head } = await inspectWorkspace(actual);
+      if (context.branch !== branch || branch === null && (context.head !== null || !samePath(path.resolve(context.worktreePath), actual))
+        || checkHead && context.head && context.head !== head) {
+        lightError('STALE_BINDING', '实际目录、Git 分支或版本与提案不同', 409);
       }
       return { path: actual, branch, head };
     } catch (error) {
       if (error.code === 'FORBIDDEN' || error.code === 'STALE_BINDING') throw error;
-      lightError('STALE_BINDING', 'Git 工作树核验失败', 409);
+      lightError('STALE_BINDING', '项目目录或 Git 工作树核验失败', 409);
     }
   }
   return {

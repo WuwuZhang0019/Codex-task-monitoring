@@ -54,7 +54,7 @@ export const lightTools = Object.entries(definitions).map(([name, definition]) =
   }
   collect(inputSchema);
   inputSchema.$defs = Object.fromEntries([...needed].map(key => [key, inputSchema.$defs[key]]));
-  const bindingHelp = name === 'workbench_bind_context' ? ' Automatic desktop mode verifies Git and returns state=confirmed from propose; reuse that binding directly. For takeover, confirm with confirmationGrant=null. Legacy scoped grants still require confirmation.' : '';
+  const bindingHelp = name === 'workbench_bind_context' ? ' Automatic desktop mode verifies the project directory (and Git when present) and returns state=confirmed from propose; reuse that binding directly. For a non-Git directory use branch=null and head=null; no git init is needed. For takeover, confirm with confirmationGrant=null. Legacy scoped grants still require confirmation.' : '';
   return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.${bindingHelp}`, inputSchema,
     annotations: { readOnlyHint: !!definition.read, destructiveHint: !definition.read, idempotentHint: true, openWorldHint: false } };
 });

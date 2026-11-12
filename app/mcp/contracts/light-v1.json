@@ -202,8 +202,11 @@
           "minLength": 1
         },
         "branch": {
-          "type": "string",
-          "minLength": 1
+          "description": "Git branch, or null for a verified non-Git project directory; head must also be null in that case.",
+          "anyOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "null" }
+          ]
         },
         "head": {
           "anyOf": [
