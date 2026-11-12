@@ -74,6 +74,12 @@ try {
   const listBox=await page.locator('.mcp-connection-list').boundingBox();
   assert.ok(copyBox.height>=50);
   assert.ok(Math.abs(copyBox.x+copyBox.width/2-listBox.x-listBox.width/2)<2);
+  const copyButton=page.getByRole('button',{name:'复制接入指令',exact:true});
+  await page.mouse.move(10,10);
+  await page.waitForTimeout(550);
+  assert.equal(await copyButton.evaluate(el=>getComputedStyle(el,'::after').transform),'matrix(0, 0, 0, 0, 0, 0)');
+  await copyButton.hover(); await page.waitForTimeout(550);
+  assert.equal(await copyButton.evaluate(el=>getComputedStyle(el,'::after').transform),'matrix(4, 0, 0, 4, 0, 0)');
   const cols=await page.locator('.mcp-connection-list').evaluate(el=>getComputedStyle(el).gridTemplateColumns);
   assert.equal(cols.split(' ').length,2);
   await page.locator('[data-workbench-connection="claude-desktop"] button').click();
