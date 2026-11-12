@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-12",
+  "sameLength": true,
+  "differenceCount": 3,
+  "differences": [
+    {
+      "offset": 14209032,
+      "source": 85,
+      "installed": 78
+    },
+    {
+      "offset": 14209033,
+      "source": 78,
+      "installed": 83
+    },
+    {
+      "offset": 14209034,
+      "source": 75,
+      "installed": 83
+    }
+  ],
+  "explanation": "NSIS patches the Tauri bundle kind marker; verify exact bytes, not equal full hash"
+}

@@ -1,0 +1,248 @@
+{
+  "date": "2026-11-12",
+  "native": false,
+  "formalProject": false,
+  "environment": "隔离临时Git及数据根，实际standalone owner子进程、STDIO MCP与受限HTTP面板",
+  "checks": [
+    {
+      "name": "独立所有者与重复显式启动附着同一PID",
+      "result": "passed",
+      "lifetime": "standalone"
+    },
+    {
+      "name": "真实STDIO登记/绑定/状态上报与最小面板完整快照一致",
+      "result": "passed",
+      "revision": 5,
+      "stepId": "67090f9c-4ee3-44d0-85a9-b6b522014778",
+      "status": "running"
+    },
+    {
+      "name": "面板偏好保存回读且不递增业务revision",
+      "result": "passed",
+      "revision": 5
+    },
+    {
+      "name": "面板令牌拒绝业务、签发授权、MCP、非白名单方法/查询及Origin",
+      "result": "passed"
+    },
+    {
+      "name": "原scope/event查询与重放幂等，无记录保持unknown",
+      "result": "passed"
+    },
+    {
+      "name": "停止可识别、generation重发现、旧凭据拒绝、MCP原配置和偏好恢复",
+      "result": "passed"
+    },
+    {
+      "name": "STDIO诊断无凭据",
+      "result": "passed"
+    }
+  ],
+  "snapshot": {
+    "schemaVersion": "light-1.0",
+    "date": "2026-11-12",
+    "mode": "service",
+    "revision": 5,
+    "generatedAt": "2026-11-12T01:10:19.566Z",
+    "projects": [
+      {
+        "key": "island-d-integration/project",
+        "id": "7d453c0b-940c-467b-b397-b6b1c853db98",
+        "name": "灵动岛D隔离服务项目",
+        "planKeys": [
+          "island-d-integration/plan"
+        ],
+        "revision": 5
+      }
+    ],
+    "plans": [
+      {
+        "key": "island-d-integration/plan",
+        "id": "6381f030-d447-4c00-8e78-af0fcb12990b",
+        "projectKey": "island-d-integration/project",
+        "name": "灵动岛D隔离服务项目",
+        "stageCount": 2,
+        "stageKeys": [
+          "island-d-integration/plan/steps/A",
+          "island-d-integration/plan/steps/B"
+        ],
+        "source": {
+          "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E-service-temp\\island-d-service-qHjR7y\\source.md",
+          "version": "island-D-isolated-v1",
+          "sha256": "55104eac7b83f6ad0f6c664bb665347bb8a421ea3438804dccdf0fdcae8ce4d6",
+          "locator": "完整步骤及依赖表",
+          "trust": "declared"
+        },
+        "endConditions": []
+      }
+    ],
+    "steps": [
+      {
+        "key": "island-d-integration/plan/steps/A",
+        "id": "67090f9c-4ee3-44d0-85a9-b6b522014778",
+        "projectKey": "island-d-integration/project",
+        "planKey": "island-d-integration/plan",
+        "parentKey": null,
+        "code": "A",
+        "originalCode": "A",
+        "sourceLocator": "实施路线与出口/A",
+        "title": "接线",
+        "order": 1,
+        "required": true,
+        "dependsOn": [],
+        "status": "running",
+        "acceptance": "pending",
+        "sync": "synced",
+        "conditions": [
+          {
+            "conditionId": "island-d-integration/plan/steps/A/exit",
+            "text": "快照一致且偏好持久",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": "island-d-integration/plan/executions/9a0bc888-2656-4fdf-bfeb-357e3cb2a09f",
+        "bindingKey": "island-d-integration/plan/bindings/6a0c9195-4802-4249-86ab-37ada481ad0f",
+        "updatedAt": "2026-11-12T01:10:19.566Z"
+      },
+      {
+        "key": "island-d-integration/plan/steps/B",
+        "id": "e600f8b3-15b1-4748-9602-fd5cb7e150c6",
+        "projectKey": "island-d-integration/project",
+        "planKey": "island-d-integration/plan",
+        "parentKey": null,
+        "code": "B",
+        "originalCode": "B",
+        "sourceLocator": "实施路线与出口/B",
+        "title": "恢复",
+        "order": 2,
+        "required": true,
+        "dependsOn": [
+          "island-d-integration/plan/steps/A"
+        ],
+        "status": "pending",
+        "acceptance": "pending",
+        "sync": "pendingSync",
+        "conditions": [
+          {
+            "conditionId": "island-d-integration/plan/steps/B/exit",
+            "text": "离线后恢复保存的选择",
+            "required": true,
+            "result": "pending",
+            "evidenceIds": []
+          }
+        ],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-12T00:00:00+08:00"
+      }
+    ],
+    "routes": [
+      {
+        "key": "island-d-integration/plan/routes/1",
+        "id": "184219ea-fc64-4e65-890a-66176c1b1c95",
+        "projectKey": "island-d-integration/project",
+        "planKey": "island-d-integration/plan",
+        "label": "灵动岛D隔离服务项目",
+        "stepKeys": [
+          "island-d-integration/plan/steps/A",
+          "island-d-integration/plan/steps/B"
+        ],
+        "order": 1,
+        "context": {
+          "sessionGroup": "D",
+          "threadId": "8c14b3e0-f58d-4e0a-bd76-32a08e262ecf",
+          "hostId": "local",
+          "folderId": null,
+          "worktreeOrdinal": 1,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E-service-temp\\island-d-service-qHjR7y\\worktree",
+          "branch": "main",
+          "head": "6902ea57d159a751a45a6b5c44eee3a9048b860f",
+          "trust": "declared"
+        },
+        "sourceStepKey": null,
+        "returnStepKey": null
+      }
+    ],
+    "bindings": [
+      {
+        "key": "island-d-integration/plan/bindings/6a0c9195-4802-4249-86ab-37ada481ad0f",
+        "id": "537576de-84b9-4a7b-a759-3dc4c4fe4731",
+        "projectKey": "island-d-integration/project",
+        "planKey": "island-d-integration/plan",
+        "stepKeys": [
+          "island-d-integration/plan/steps/A"
+        ],
+        "bindingRevision": 2,
+        "state": "confirmed",
+        "context": {
+          "sessionGroup": "D",
+          "threadId": "8c14b3e0-f58d-4e0a-bd76-32a08e262ecf",
+          "hostId": "local",
+          "folderId": null,
+          "worktreeOrdinal": 1,
+          "worktreePath": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E-service-temp\\island-d-service-qHjR7y\\worktree",
+          "branch": "main",
+          "head": "6902ea57d159a751a45a6b5c44eee3a9048b860f",
+          "trust": "declared"
+        },
+        "confirmationRef": "grant:d2b3c790cb44198094cd006147bdeb260f822ec5338a22a4e0a364f9f54036a1",
+        "revokedAt": null
+      }
+    ],
+    "executions": [
+      {
+        "key": "island-d-integration/plan/executions/9a0bc888-2656-4fdf-bfeb-357e3cb2a09f",
+        "id": "9a0bc888-2656-4fdf-bfeb-357e3cb2a09f",
+        "projectKey": "island-d-integration/project",
+        "planKey": "island-d-integration/plan",
+        "stepKeys": [
+          "island-d-integration/plan/steps/A"
+        ],
+        "bindingKey": "island-d-integration/plan/bindings/6a0c9195-4802-4249-86ab-37ada481ad0f",
+        "outcome": "running",
+        "startedAt": "2026-11-12T01:10:19.566Z",
+        "endedAt": null,
+        "handoffConclusion": null
+      }
+    ],
+    "supplements": [],
+    "events": [
+      {
+        "eventId": "light/bf891658621895a13f766e77a7bd7245cc89067da221bbf26447142fc1c81693/island-D/start",
+        "stepKey": "island-d-integration/plan/steps/A",
+        "executionKey": "island-d-integration/plan/executions/9a0bc888-2656-4fdf-bfeb-357e3cb2a09f",
+        "fromStatus": "pending",
+        "toStatus": "running",
+        "occurredAt": "2026-11-12T00:00:00+08:00",
+        "receivedAt": "2026-11-12T01:10:19.566Z",
+        "reason": "灵动岛D独立服务隔离接线验收",
+        "evidenceIds": [],
+        "sync": "synced"
+      }
+    ],
+    "uiPreferences": {
+      "collapsedKeys": [],
+      "selectedStepKey": null,
+      "focusedRouteKey": null,
+      "scrollByProject": {}
+    }
+  },
+  "preferences": {
+    "collapsed": [],
+    "selected": "island-d-integration/plan/steps/B",
+    "focus": [],
+    "scroll": {
+      "island-d-integration/plan": 45
+    },
+    "y": {
+      "all": 99
+    }
+  },
+  "diagnostics": ""
+}

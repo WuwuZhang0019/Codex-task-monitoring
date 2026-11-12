@@ -1,0 +1,357 @@
+{
+  "date": "2026-11-12",
+  "planKey": "island-workbench-20261111",
+  "stage": "E",
+  "localStatus": "blocked",
+  "acceptance": "pending",
+  "handoffConclusion": "A",
+  "sync": "deferredByAuthorization",
+  "serviceIdentity": null,
+  "serviceSynced": false,
+  "forkCommit": "77574bfe7f0b561b092165ed824da0d56cc3e66f",
+  "businessStartCommit": "e99fbe494d57394e2928c4f4fcab2d76670fcdf1",
+  "latestUserFeedback": "收起和展开都与原项目效果不同",
+  "scopeLimit": "diagnostic and partial acceptance; not a glass fix; not E complete",
+  "artifacts": [
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_实现与验证_2026-11-12.md",
+      "bytes": 9314,
+      "sha256": "f510bb07703731112e5275421edba3c8a456675393f1307fd14f25b07a71fa08"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_阶段回执_2026-11-12.md",
+      "bytes": 4633,
+      "sha256": "50e2d40cd967e33963e51019e2db16799ec5dd6ee3db6d1a05a16de15b08d8ca"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/display-125_2026-11-12.png",
+      "bytes": 69365,
+      "sha256": "deb43ce3d7fa25e7125caf56774689562f4358a4655f9d37299e180e0faaacbe"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/display-150_2026-11-12.png",
+      "bytes": 65866,
+      "sha256": "c5af94229801a44ddb897f62f842375c91b5182914dad8325d3148748565c3fb"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/display-restored-125_2026-11-12.png",
+      "bytes": 47037,
+      "sha256": "686e35ec0bfc202412c5e5b5b0fde982d339b99dbff75810bec9490c0dbc806e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/E_D前置核验_2026-11-12.json",
+      "bytes": 15296,
+      "sha256": "c5d609c9017f0749c98e1c2ababc608cf56c676af9c57f1666eed6a3580c2b48"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/final-installed-restoration_2026-11-12.json",
+      "bytes": 668,
+      "sha256": "96ac8c4da51e1d401e17375b3120b4a2cd60dadff05874873600f996cdac5bd5"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-build-and-install-review_2026-11-12.json",
+      "bytes": 2668,
+      "sha256": "7cd98000055831af7a2f3c71e86c5473a79280613d4fa42388e21412d1844eee"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-build_2026-11-12.log",
+      "bytes": 674,
+      "sha256": "49187aa9bf617447c32698346edd9fac94b7dfd6e5dde5e2a870d1b2f2f0bfbc"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-bun-test_2026-11-12.log",
+      "bytes": 2648,
+      "sha256": "761eb48e4f36fbd12e727e63b2b726f15448ca56aee7fe452c558597dab4be03"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-clippy_2026-11-12.log",
+      "bytes": 73,
+      "sha256": "e32700ea1d04280ffa255398026b591fe192e92c05cef8e935c96d37b5264c2a"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-lint_2026-11-12.log",
+      "bytes": 82,
+      "sha256": "61b31f6fc7681ef9d8a597d157dfc250b4f9c31a6d5a96d60cf6a3044c35c4bf"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-nsis-build_2026-11-12.log",
+      "bytes": 3702,
+      "sha256": "b701313fe934228a88e6b93ad843e57eb017142a7f512e5e3f0bb8030fb441c4"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-nsis-upgrade-build_2026-11-12.log",
+      "bytes": 3409,
+      "sha256": "31c29e35ed4ef1e29d4e88b7d7b67c672d5880938c5372ca7f4e09905a293f67"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-rust-test_2026-11-12.log",
+      "bytes": 2602,
+      "sha256": "c0599d16c5fd6836fe4219a87df79eb1b6de2c293987781be6c2d1e797443388"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/fork-upgrade-package_2026-11-12.json",
+      "bytes": 1922,
+      "sha256": "d6e6f5ee6291f379b090c09516f6f8010148839abf565ee65a0040b9a29cf11e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/glass-hook-probe/command-path-audit.json",
+      "bytes": 6551,
+      "sha256": "6908b5710f3a4f8428fa6da2bcf377b98ac8ae449094c44b8398bce5ddc07bf7"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/glass-hook-probe/probe_2026-11-12.mjs",
+      "bytes": 5298,
+      "sha256": "bfdac1ad1b922dee79611d5b2835d2da386101e38afe31209e62756a696c234b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/glass-hook-probe/report.json",
+      "bytes": 2761,
+      "sha256": "66c8efa3eae06e5ccebe7ccca4ab150c51607817648ddc1fec061ac84fbee1e9"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/glass-hook-probe/supported-false.png",
+      "bytes": 2275,
+      "sha256": "e2cab8e6a84102b883604e08ce32b05610a29225aa3fe31a166a6c4044128e4f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/glass-hook-probe/supported-true.png",
+      "bytes": 2226,
+      "sha256": "26b0e5ef6427df6c1012cdfde08c8c41f6207cc691095e7f6d9aeb919fd4f841"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/installation-before_2026-11-12.json",
+      "bytes": 537,
+      "sha256": "7c057b777c9480d0a966464b2503d4e7042fe05bcc468d5f865f95027c1adfa4"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/installation-result_2026-11-12.json",
+      "bytes": 458,
+      "sha256": "035dd1eebdf78cc95fbb7719e2f918b8d819bc739eef85aaeee258a38fdfc585"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/installed-binary-comparison_2026-11-12.json",
+      "bytes": 463,
+      "sha256": "0bd29eba12df4d194d3caadbb64ca038c1c3162a8c6222c994f6782b01dbd002"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/installed-general-125_2026-11-12.png",
+      "bytes": 29679,
+      "sha256": "1e4e1d54b75a28cc81743da9425488c5c4b418f32c9d3df8a7f56cfed6bffff8"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/installed-recovery_2026-11-12.json",
+      "bytes": 4778,
+      "sha256": "9cae8b272a44c782e1359a60991574b28841a17a9f999f46024633bbd0347d9b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/isolated-service-recovery/island-d-service.json",
+      "bytes": 8159,
+      "sha256": "89c6c8cc2f57a33f1b976465b77d5b93a6a54d56dace7cf86d0319a6307f82a4"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/isolated-service-recovery/test-output-elevated.log",
+      "bytes": 399,
+      "sha256": "e1fb8c62f3bd626c92ee9ca9bc3bf3bff9b17e2046017139cfc2dddce3ee1658"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/isolated-service-recovery/test-output.log",
+      "bytes": 1110,
+      "sha256": "017994530f3d26db9071ac8c7217dde44f410894cb2314440b3c9ae55c366c6d"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/native-observations_2026-11-12.json",
+      "bytes": 1229,
+      "sha256": "d891f2289232c4bbdb012dfc377489908455cfd5da739c7e9931e802e1867d7f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/original-installed-reference_2026-11-12.json",
+      "bytes": 550,
+      "sha256": "ad8521cf715f5d16dc6bdaa5b1bd649f1451e322aed5ae818015bf12b23390c2"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/original-project-comparison_2026-11-12.json",
+      "bytes": 3106,
+      "sha256": "73bc920054e632bce0209cfa50dfb3c43aae2cdde7642965372b5b51283c915f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-asset-build_2026-11-12.json",
+      "bytes": 1166,
+      "sha256": "e6cbfa526dbade4b6293abcf7b98f0d21cf009025b6098caf659656ca637195f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-asset-clippy_2026-11-12.log",
+      "bytes": 152,
+      "sha256": "6e9f4721d9bae2431d1556deebcc95c616eb9a7adee58643bd3b507ea6d658ed"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-asset-failed_2026-11-12.log",
+      "bytes": 563,
+      "sha256": "a38641d133b245274fa22709c1496aece5cde16e42a8748bb27b56602ef5216f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-asset-nsis_2026-11-12.log",
+      "bytes": 1702,
+      "sha256": "4e9ae648b8781c1b6cf98098741459e2f667c1c26882f8721ae190fe94019a49"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-asset-test_2026-11-12.log",
+      "bytes": 2681,
+      "sha256": "c3e552e328f5d09bbce8c2b68e185792e2c8646a82a29c6aa303352ecb30ac75"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-build_2026-11-12.json",
+      "bytes": 1224,
+      "sha256": "2dbdcc62e6a5d62a8b1c7a4d77931ccbc721809eade475956969d13add9d7881"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-clippy_2026-11-12.log",
+      "bytes": 152,
+      "sha256": "e968ac1f093d89a12773ce129ad7b3e22ab2df4a7983724c9f1eef36a1f1bdb2"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-failed_2026-11-12.log",
+      "bytes": 468,
+      "sha256": "2895d4e007e8918b377e984bd49872b1021ecc1583820670de352efe778d1014"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-final-build_2026-11-12.json",
+      "bytes": 1219,
+      "sha256": "908f9ec2125d364e940322c262186f088f0cd633ca17b0389982b14b74aa4582"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-final-clippy_2026-11-12.log",
+      "bytes": 152,
+      "sha256": "1037bd75f7f7ccc8f441928c4af0f52d412854000ef5baedf16ae580b0d9963a"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-final-native_2026-11-12.log",
+      "bytes": 659,
+      "sha256": "6144e4433f1dc697db5d1e62e2be040735f7f66ae71582e14eebb66f0e00e574"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-final-nsis_2026-11-12.log",
+      "bytes": 1702,
+      "sha256": "cd151ec1e67b6108761cd4ef97e17a277ec9db24d068ce3b610eddc72d2d947c"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-final-test_2026-11-12.log",
+      "bytes": 2681,
+      "sha256": "1c9fcf2b64a8305ccc43ac7c8fedb620334b3082a8e183359dee6e44d31aa51e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-nsis_2026-11-12.log",
+      "bytes": 1702,
+      "sha256": "0a2c4b49f3214efea4beb30523484ce7ad7cb28849f0070a693239e9d54aef01"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-background-test_2026-11-12.log",
+      "bytes": 2681,
+      "sha256": "2b4ba5dab998ef03b766b3b80e067206d53c5fa870391d88d95c96d8aeb2bf8e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-composite-before_2026-11-12.png",
+      "bytes": 23522,
+      "sha256": "af373a43cdc2cdbca22de8b536f3c33c0a46e01b0d666eb265f54558fdea624b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-diagnostic-build_2026-11-12.json",
+      "bytes": 1335,
+      "sha256": "09873ffee227e3c4cd6bfc5e4f05533b276983971f433ebb0e521d7e2e31ebf7"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-diagnostic-clippy-final_2026-11-12.log",
+      "bytes": 6338,
+      "sha256": "9768809615a5d8adf91dd6f8d2423e1caf6234c37ffdc737e6e16fb8fde5e27f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-diagnostic-clippy-wrong-toolchain_2026-11-12.log",
+      "bytes": 1639,
+      "sha256": "fa675e3e3aa2e399f9ef6924568d676949f403a6ae72156a7a01d4132cae0071"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-diagnostic-clippy_2026-11-12.log",
+      "bytes": 9336,
+      "sha256": "65133af6975464f5996575490354678b72510e2b9b7228cecd2753f426397467"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-diagnostic-nsis_2026-11-12.log",
+      "bytes": 12316,
+      "sha256": "8dc57f73d3c19209c0d69e578a4d9ab889e813578999b2f56bc1e5c52feaf91e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-diagnostic-test_2026-11-12.log",
+      "bytes": 7094,
+      "sha256": "741981343713a5148d3bf8928931d97d347d5ed34e5e053fe37dbde79f3b5bcd"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-layer-clippy_2026-11-12.log",
+      "bytes": 152,
+      "sha256": "1e9fd619de77f34e641a5acf5ebbc06f34bb0208df8fc44d4e6bb6647742d763"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-layer-diagnostic-build_2026-11-12.json",
+      "bytes": 958,
+      "sha256": "450ada0887fba0a462dd68c679abe92767bb9d6749ca2492022e1d37a0d89630"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-layer-native_2026-11-12.log",
+      "bytes": 657,
+      "sha256": "a425108840702cba0442f734f341173275329fcfd3ef3e53dec4ba58abe390ce"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-layer-nsis_2026-11-12.log",
+      "bytes": 1702,
+      "sha256": "7974a0ff6fbb6eb085587505e2fdf783b7786781a402740cedf36b73da760f67"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-layer-test_2026-11-12.log",
+      "bytes": 2847,
+      "sha256": "b5f9f7e1833051005552ef522d833edd9b572a87bd79667bd49866d32f6130ed"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-layer-visible_2026-11-12.png",
+      "bytes": 24968,
+      "sha256": "b493860888b3c343d99fb2ad55ff8eae0462d0b9a663fac0e8eafd4162ce314b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-native-150_2026-11-12.log",
+      "bytes": 563,
+      "sha256": "3940fed1bb4cdb5d0d4f8e2992f48f7d31fb2d220a4c5145f32869f0d74dec66"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-restored-build_2026-11-12.json",
+      "bytes": 978,
+      "sha256": "9c428a6da35762fc8b082581615058181d50a42bc56c3f7c5db29756bfcb2c77"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-restored-clippy_2026-11-12.log",
+      "bytes": 152,
+      "sha256": "b9e3ab576e390899628fdaaea4744491c31241510022082d5c7b86ad3fe6201a"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-restored-lint_2026-11-12.log",
+      "bytes": 83,
+      "sha256": "219b92ddd60212e42036e0ed9278677a061d71bcda9504957348b4ad7d6cdf63"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-restored-nsis_2026-11-12.log",
+      "bytes": 1702,
+      "sha256": "2452809c239fc750e8037c166a16f558a5459b76a1c690658d47f4622a11a7c4"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-restored-test_2026-11-12.log",
+      "bytes": 2681,
+      "sha256": "0f7b1d51bac4eac1fb34f8aa59f9a9b1b40a474e89ad76cea0621f1053721e49"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-stripe-blur_2026-11-12.png",
+      "bytes": 37267,
+      "sha256": "8e716bdc9b5a7deae605b524b90f006a303063c74036250199c03a8fd3eac965"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/r01-stripe-observation_2026-11-12.json",
+      "bytes": 825,
+      "sha256": "2fb690b6d2ec4c0995d65275d57d4c2dfd9c2568b200fa3e6b104268491bd68e"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-12",
+  "path": "F:\\Dynamic Island\\dynamic-island.exe",
+  "version": "0.5.0",
+  "bytes": 9150464,
+  "sha256": "6ea9359de18944939f1a0b4005d0462722307d8b595c6aba77fd3561238daf41",
+  "launched": false,
+  "matchingSourceBuildProven": false,
+  "visualReferenceReviewed": [
+    "docs/screenshots/look-windows-aurora.png",
+    "docs/screenshots/settings-appearance.png"
+  ],
+  "limitation": "repo example images are not same-background frosted-glass comparison; user rejects both compact and expanded current appearance"
+}

@@ -1,0 +1,22 @@
+{
+  "sourceModified": "src-tauri/src/glass.rs diagnostics only; not committed",
+  "checks": {
+    "frontendBuild": "passed; via beforeBuildCommand",
+    "clippy": "passed",
+    "nsisBuild": "exit0",
+    "rustTests": "28 passed",
+    "lint": "passed;61 files"
+  },
+  "date": "2026-11-12",
+  "installedOrLaunched": false,
+  "package": {
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\r01-restored-setup.exe",
+    "sha256": "fbc7e9d69f127a3856d500337a0a40a9727cc028df7cfd5d0079bccefdf9b2cb",
+    "bytes": 5073494
+  },
+  "note": "Original backdrop behavior remains unless debug exact ISLAND_GLASS_DIAGNOSTICS=solid explicitly enables temporary layer probe; source left for root review.",
+  "sourceHead": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "scope": "E R01 restored ordinary debug package without background fixture",
+  "temporaryBackgroundAssetAbsentFromDist": true,
+  "temporaryBackgroundSourceRemoved": true
+}

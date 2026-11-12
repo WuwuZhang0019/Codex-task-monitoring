@@ -1,0 +1,195 @@
+{
+  "date": "2026-11-12",
+  "scope": "read-only glass frontend/native command registration audit",
+  "nativeControlled": false,
+  "productCodeModified": false,
+  "commandsRegistered": {
+    "glass_supported": true,
+    "set_glass_level": true,
+    "set_glass_shapes": true
+  },
+  "commandsPresentInCurrentDist": {
+    "glass_supported": true,
+    "set_glass_level": true,
+    "set_glass_shapes": true
+  },
+  "tauriConfigRemoveUnusedCommands": true,
+  "buildScriptDeclaresAppCommandAcl": false,
+  "tauriMacroEvidence": {
+    "source": "C:\\Users\\Zyf\\.cargo\\registry\\src\\rsproxy.cn-e3de039b2554c837\\tauri-macros-2.7.4\\src\\command\\handler.rs",
+    "sha256": "72da148204423b20dea1cb2bc88c9c69e915d2bf715624c032c64b3668e53843",
+    "rule": "filter_unused_commands returns without removing any application command when plugin_name.is_none() && !allowed_commands.has_app_acl",
+    "rulePresent": true
+  },
+  "builtAclManifests": [
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\build\\dynamic-island-235d95dc068c6635\\out\\acl-manifests.json",
+      "keys": [
+        "autostart",
+        "core",
+        "core:app",
+        "core:event",
+        "core:image",
+        "core:menu",
+        "core:path",
+        "core:resources",
+        "core:tray",
+        "core:webview",
+        "core:window",
+        "updater"
+      ],
+      "hasApplicationAcl": false
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\build\\dynamic-island-45b382703a054a2e\\out\\acl-manifests.json",
+      "keys": [
+        "autostart",
+        "core",
+        "core:app",
+        "core:event",
+        "core:image",
+        "core:menu",
+        "core:path",
+        "core:resources",
+        "core:tray",
+        "core:webview",
+        "core:window",
+        "updater"
+      ],
+      "hasApplicationAcl": false
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\build\\dynamic-island-ab7a73457e8a822e\\out\\acl-manifests.json",
+      "keys": [
+        "autostart",
+        "core",
+        "core:app",
+        "core:event",
+        "core:image",
+        "core:menu",
+        "core:path",
+        "core:resources",
+        "core:tray",
+        "core:webview",
+        "core:window",
+        "updater"
+      ],
+      "hasApplicationAcl": false
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\build\\dynamic-island-b4013065d1b16fe2\\out\\acl-manifests.json",
+      "keys": [
+        "autostart",
+        "core",
+        "core:app",
+        "core:event",
+        "core:image",
+        "core:menu",
+        "core:path",
+        "core:resources",
+        "core:tray",
+        "core:webview",
+        "core:window",
+        "updater"
+      ],
+      "hasApplicationAcl": false
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\build\\dynamic-island-d7d75767a100af6c\\out\\acl-manifests.json",
+      "keys": [
+        "autostart",
+        "core",
+        "core:app",
+        "core:event",
+        "core:image",
+        "core:menu",
+        "core:path",
+        "core:resources",
+        "core:tray",
+        "core:webview",
+        "core:window",
+        "global-shortcut",
+        "updater"
+      ],
+      "hasApplicationAcl": false
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\build\\dynamic-island-e19fb323078d3dcb\\out\\acl-manifests.json",
+      "keys": [
+        "autostart",
+        "core",
+        "core:app",
+        "core:event",
+        "core:image",
+        "core:menu",
+        "core:path",
+        "core:resources",
+        "core:tray",
+        "core:webview",
+        "core:window",
+        "global-shortcut",
+        "updater"
+      ],
+      "hasApplicationAcl": false
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\build\\dynamic-island-f27828bb4e5d6e74\\out\\acl-manifests.json",
+      "keys": [
+        "autostart",
+        "core",
+        "core:app",
+        "core:event",
+        "core:image",
+        "core:menu",
+        "core:path",
+        "core:resources",
+        "core:tray",
+        "core:webview",
+        "core:window",
+        "updater"
+      ],
+      "hasApplicationAcl": false
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\build\\dynamic-island-f48970ef92066f16\\out\\acl-manifests.json",
+      "keys": [
+        "autostart",
+        "core",
+        "core:app",
+        "core:event",
+        "core:image",
+        "core:menu",
+        "core:path",
+        "core:resources",
+        "core:tray",
+        "core:webview",
+        "core:window",
+        "updater"
+      ],
+      "hasApplicationAcl": false
+    }
+  ],
+  "inference": "No application ACL is declared; the three glass commands are application commands explicitly registered. The current removeUnusedCommands and core-only capabilities are not evidence of glass-command removal. Native instrumentation is still needed to confirm installed runtime IPC success.",
+  "frontendFlow": [
+    "useGlassSupported invokes glass_supported once; rejection catches false and disables glass without reporting error",
+    "supported && level !== off sets --island to rgb(0 0 0 / 0.55)",
+    "enabled effect invokes set_glass_level with current level",
+    "RAF measures data-glass elements with 3 direct data-glass-probe children and invokes set_glass_shapes; repeated identical shapes deduplicate",
+    "disabled cleanup removes --island and sends empty shapes"
+  ],
+  "isolatedHookProbe": {
+    "report": "report.json",
+    "passed": true,
+    "cases": 2,
+    "supportsTrue": "strong produced computed rgba(0,0,0,0.55), native set_glass_level(strong), and 320x100 rect shape translated (120,70)",
+    "supportsFalse": "solid black baseline; no set_glass_level/shapes",
+    "offAfterEnabled": "solid black restored and shapes [] sent",
+    "nativeBlurProven": false
+  },
+  "limits": [
+    "Mocked Tauri invoke validates actual hook control flow, CSS and measurement, not installed application IPC",
+    "No Windows compositor, actual opacity/blur or original native window was tested",
+    "No formal service or business data access",
+    "Earlier isolated harness setup attempts had syntax/import errors and a Vite dependency scan hang; final esbuild harness completed without page errors"
+  ]
+}

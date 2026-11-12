@@ -1,0 +1,348 @@
+{
+  "date": "2026-11-12",
+  "planKey": "island-workbench-20261111",
+  "stage": "E",
+  "scope": "read-only D prerequisite audit and isolated D service recovery rerun",
+  "auditor": "Codex subagent e_evidence_audit",
+  "businessHeadAtAudit": "e99fbe494d57394e2928c4f4fcab2d76670fcdf1",
+  "businessEvidenceCommit": "f3229d49c5b76fc47878d13fb145dd35cd2a785f",
+  "forkEvidenceCommit": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "dArtifactCheck": {
+    "total": 45,
+    "passed": 45,
+    "entries": [
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/business-checks_2026-11-12.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/desktop-tests.log",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/fork-native-checks_2026-11-12.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-native-observation_2026-11-12.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-readonly.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-finish_2026-11-12.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-progress_2026-11-12.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-readonly.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-attempts.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-browser-failed.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-browser-failed.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-native-test-root.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-service-browser.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/island-d-service.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-collapsed.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-empty.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-expanded.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-incompatible.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-offline.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-pinned.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-reopened.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-stale.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-transition.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/dynamic-unauthorized.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/narrow.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/page@b18f29e504d40a0b2e16837bee5627a1.webm",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/page@e60a3bce4e7d52f053546f354d2c5192.webm",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/reading-report.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/report.json",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-collapsed.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-empty.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-expanded.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-incompatible.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-intelligence-comparison.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-offline.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-pinned.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-reopened.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-stale.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-transition.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/simulation-regression/windows-unauthorized.png",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_完成回执_2026-11-12.md",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_实现与验证_2026-11-12.md",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_独立服务与新壳连接说明_2026-11-12.md",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_续接核对_2026-11-12.md",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      },
+      {
+        "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_阶段回执_2026-11-12.md",
+        "exists": true,
+        "bytesMatch": true,
+        "sha256Match": true
+      }
+    ]
+  },
+  "committedChangesSinceDEvidence": [
+    "docs/03_轻量路线工作台/00_执行入口/02_灵动岛外壳接入可执行方案_2026-11-11.md",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_完成回执_2026-11-12.md",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_实现与验证_2026-11-12.md",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_独立服务与新壳连接说明_2026-11-12.md",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_证据索引_2026-11-12.json",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_阶段回执_2026-11-12.md",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_待执行指令_2026-11-12.md",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/fork-native-checks_2026-11-12.json",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-native-observation_2026-11-12.json",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-finish_2026-11-12.json",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/D/formal-target-progress_2026-11-12.json",
+    "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/workbench-sync.md"
+  ],
+  "productSourceDrift": false,
+  "prerequisiteConclusion": "D completed/passed evidence remains applicable; only documentation and evidence changed since business evidence commit",
+  "dFormalTest": {
+    "ended": true,
+    "outcome": "cancelled",
+    "globalRevision": 156,
+    "projectRevision": 7,
+    "scope": "mock-twenty-20261111/project",
+    "isRouteIdentity": false,
+    "mustNotReuseForE": true
+  },
+  "isolatedServiceRerun": {
+    "command": "node --test app/tests/island-d-service.test.mjs",
+    "firstAttempt": {
+      "result": "failed",
+      "error": "SERVICE_START_TIMEOUT: inspect service-runtime.log",
+      "environment": "restricted sandbox",
+      "evidence": "isolated-service-recovery/test-output.log"
+    },
+    "secondAttempt": {
+      "result": "passed",
+      "environment": "normal permission escalation; workspace-isolated temp root",
+      "tests": 1,
+      "checks": 7,
+      "evidence": "isolated-service-recovery/island-d-service.json",
+      "log": "isolated-service-recovery/test-output-elevated.log"
+    },
+    "browserPortionExecuted": false,
+    "native": false,
+    "formalProject": false,
+    "desktopControlled": false,
+    "formalDataReadOrWritten": false,
+    "cleanup": "test t.after closes STDIO, stops only isolated dataDir owner and removes mkdtemp root; KEEP_NATIVE_ROOT not enabled"
+  },
+  "reuseBoundaries": [
+    "D service lifecycle, scoped panel, preferences, idempotent original-event recovery and generation restart are reusable base evidence",
+    "B retained settings browser matrix and representative native persistence do not prove E installation or full native matrix",
+    "C long-route and animation baseline do not prove native focus, hit testing, DPI or fullscreen",
+    "D user confirmation covers task status/progress consistency only, not E overall visual acceptance"
+  ],
+  "pendingEConditions": [
+    "installed build source/version/SHA256 and install/upgrade/uninstall preservation",
+    "real system 125% and 150% DPI, fullscreen/focus/transparency hit testing and both styles",
+    "cold reopen, settings/reading preference restore and rollback without overwriting business data",
+    "overall user visual confirmation",
+    "multi-monitor must remain pending if unavailable; no claim of pass"
+  ],
+  "rollbackLimitation": "old UI deleted; verify supported shell/config/adapter rollback and preserve any unmet original criterion; never restore old database over new events"
+}

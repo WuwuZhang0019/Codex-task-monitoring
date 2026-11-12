@@ -225,3 +225,43 @@ flowchart LR
  A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
  B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>本地completed/passed"] --> E["⑤ E 桌面与恢复验收<br/>pending，准备完成未开始"] --> F["⑥ F 许可与发布交付<br/>pending"]
 ```
+
+
+## E 本地执行开始
+
+日期：2026-11-12
+
+用户发送E完整待执行文件并授权实施。依据方案1.7核对后，E-01—E-03本地running/pending，责任聊天01a1cd39-6646-7520-9565-ba7696f597cf，host local；set_thread_title已返回成功，标题“⑤ 灵动岛工作台 / E 桌面与恢复验收”。本地执行键island-workbench-20261111/local/E-20261112-01。业务main/e99fbe494d57394e2928c4f4fcab2d76670fcdf1、Fork codex/island-workbench-shell/02823f6158d44622d4aeeed2b43e7be9c18b8180均干净，Fork只读审批后核实。独立核对D索引45/45指纹匹配，业务D至当前仅文档/证据变化，D原出口仍有效。
+
+本路线服务deferredByAuthorization，projectId/planId/stepId/executionId/bindingId/revision均为空，未发送业务请求，无未知提交。D测试执行已经取消，不沿用其正式身份。桌面清点未发现当前运行的dynamic-island进程或已注册安装版，开始构建E所需安装验收产物；不把debug历史产物作为安装版结果。F未派发未开始。
+
+
+## E 安装恢复与R01毛玻璃反馈
+
+日期：2026-11-12
+
+NSIS debug安装成功，安装后exe5b1ec47d…，与源exe只差3字节UNK/NSS包类型标记。实测冷重开、同源码验收版本0.1.0→0.1.1→0.1.0、卸载保留数据和重装均exit0，外壳设置/正式aggregate/上游配置指纹全过程不变。0.1.1仅外部version覆盖用于安装机制，不是历史业务兼容或公开发行。隔离服务7项恢复检查通过；基础Fork lint/build/Bun24/Rust28/clippy通过。正式服务由显式独立入口启动，原生只读及阅读偏好，未创建业务事件。
+
+当前系统仅显示器2启用，125%/2560×1440已在Windows设置观察，150%未执行；后续显示设置激活超时/捕获得到底层前景画面，不把该图当目标证据。透明浮窗不在可操作窗口列表，设置窗口可观察。用户对实际安装版明确反馈“未正常显示毛玻璃效果”，E-03未通过；本轮R01为原验收必要修复，首次交付不计修复轮次。appearance.glass=strong，系统EnableTransparency=1，初查排除工作台整层不透明背景，原生模糊链路待诊断。E仍本地running/pending，进度4/6，不将安装机制通过当E完成。所有服务身份仍空、deferredByAuthorization，无未知业务提交；F未启动。
+
+
+## E R01当前核验与等待
+
+日期：2026-11-12
+
+E安装/冷重开/同源码版本升退/卸载保留/重装已实测，正式业务及原版设置指纹始终不变。实际系统125%→150%→125%与原生scale1.5/1.25、窗口几何已留证；完整交互DPI矩阵仍待验，多屏未启用不记通过。原项目完整源链路无遗漏，Strong原生API成功、同层绿色可见。第三次受控条纹背景真实启动成功（前两次夹具失败保留），胶囊内条纹平滑、背景行std1.626，对照未覆盖条纹std126.448，证明收起胶囊实际模糊生效；不据此推翻用户整体否定或代替展开面板确认。
+
+临时夹具已从源码/构建清理，正常0.1.0包最终安装成功、单实例已稳定运行，所有诊断开关关闭；exe BA112BB5…，设置与业务保留。外壳77574bf只增加安全显式诊断，不冒充修复。用户已被询问展开是否仍异常，等待具体视觉范围及最终观感；当前E blocked/pending、进度4/6，交接结论A（本站未完成），责任聊天/本地执行键不变，服务deferredByAuthorization，未发正式业务写入、无未知提交，F未启动。继续条件为用户明确异常位置/预期后按原范围恢复修复或复核，原生未验事项继续保留。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
+ B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>本地completed/passed"] --> E["⑤ E 桌面与恢复验收<br/>blocked/pending，等待视觉异常定位"] --> F["⑥ F 许可与发布交付<br/>pending，未派发"]
+```
+
+
+### E 最新用户判定
+
+日期：2026-11-12
+
+用户明确“收起和展开都与原项目效果不同”，两种状态均未通过，不再只等待展开定位。已只读定位本机原版F:\Dynamic Island\dynamic-island.exe、0.5.0并存指纹；未证明其与固定源码构建完全对应，仓库截图也不是同背景毛玻璃对照。E继续blocked/pending、结论A，等待原版实际视觉目标后继续原范围修复，不能以受控模糊在运行代替观感等价。完整十八字段见E_阶段回执_2026-11-12.md，F未启动。

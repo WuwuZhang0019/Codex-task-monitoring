@@ -1,3 +1,10 @@
 # 日期：2026-11-11。冻结验收证据按原始字节保存，避免 Windows checkout 换行转换改变 SHA256。
 docs/03_轻量路线工作台/06_执行记录/G*.json -text
 docs/03_轻量路线工作台/06_执行记录/G_完成回执*.md -text
+
+# 日期：2026-11-12。E 原始证据及回执按原字节冻结，保持索引 SHA256。
+docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# 日期：2026-11-12。原始命令日志保留工具输出末尾空行，按二进制证据展示，内容不归一化。
+docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/**/*.log binary

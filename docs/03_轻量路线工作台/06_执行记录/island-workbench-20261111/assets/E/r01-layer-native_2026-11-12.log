@@ -1,0 +1,6 @@
+glass diagnostics: setup succeeded; native scene created
+glass diagnostics: SOLID layer probe; bright green brush; native clip and z-order unchanged
+glass diagnostics: set_level Strong; scale=1.25; deviation=30; result=Ok(())
+glass diagnostics: first apply; visible=true; scale=1.25; input_shapes=1; physical_shapes=1; rect=(0,0,2560,800)
+glass diagnostics: first apply SetWindowPos result=Ok(())
+glass diagnostics: first apply windows; glass_visible=true; island_visible=true; glass_rect=RECT { left: 0, top: 0, right: 2560, bottom: 800 }; glass_rect_result=Ok(()); island_rect=RECT { left: 0, top: 0, right: 2560, bottom: 800 }; island_rect_result=Ok(())

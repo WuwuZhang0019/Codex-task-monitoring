@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-12",
+  "scope": "E-01/E-03",
+  "systemScaleObserved": "125%",
+  "resolutionObserved": "2560x1440",
+  "displayMode": "only display 2 active; no extended multi-monitor test",
+  "installedSettingsObserved": true,
+  "settingsPages": [
+    "general",
+    "appearance",
+    "behavior",
+    "workbench",
+    "about"
+  ],
+  "glassPreference": "strong",
+  "systemTransparencyEnabled": true,
+  "userFeedback": "未正常显示毛玻璃效果",
+  "acceptance": "failed; E remains incomplete",
+  "dpi150": "actual Windows UI selected 150%; native scale1.5 rect2560x960; full interaction matrix still pending",
+  "computerUseLimit": "transparent island not returned as targetable window; no foreground-app screenshot accepted as display/native proof",
+  "scaleRestored": "actual Windows UI restored125%, native scale1.25 rect2560x800",
+  "solidLayerProbe": "visible green through compact island; restored normal mode afterwards",
+  "rootCause": "not confirmed; compact blur visibly works but visual parity with actual original is not established",
+  "latestUserFeedback": "收起和展开都与原项目效果不同",
+  "currentAcceptance": "not passed; await actual original visual comparison"
+}

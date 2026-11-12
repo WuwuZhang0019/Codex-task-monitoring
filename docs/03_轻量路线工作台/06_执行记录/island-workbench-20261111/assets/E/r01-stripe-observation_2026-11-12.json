@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-12",
+  "native": true,
+  "mode": "actual installed debug, original Strong blur path, static native foreground fixture behind island",
+  "cssScale": 1.25,
+  "insideCapsuleRow38": {
+    "mean": 59.5,
+    "stddev": 1.6263882958533886,
+    "min": 49.666666666666664,
+    "max": 66.0
+  },
+  "uncoveredStripeRow80": {
+    "mean": 124.53125,
+    "stddev": 126.44795974406823,
+    "min": 0.0,
+    "max": 255.0
+  },
+  "observation": "Visible source stripes disappear inside capsule while remaining sharp outside; compact glass responds to high contrast actual background. This is not whole E or expanded visual acceptance.",
+  "sourceCrop": "r01-stripe-blur_2026-11-12.png",
+  "normalRestoration": "completed; final-installed-restoration_2026-11-12.json; no fixture assets or diagnostic env"
+}

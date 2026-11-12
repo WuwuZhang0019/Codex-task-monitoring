@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-12",
+  "native": false,
+  "formalProject": false,
+  "method": "actual useGlass.ts hook with mocked __TAURI_INTERNALS__.invoke, isolated DOM probes; not Windows compositor evidence",
+  "cases": [
+    {
+      "supported": true,
+      "result": "passed",
+      "initial": {
+        "tint": "rgb(0 0 0 / 0.55)",
+        "background": "rgba(0, 0, 0, 0.55)",
+        "calls": [
+          {
+            "cmd": "glass_supported",
+            "args": {}
+          },
+          {
+            "cmd": "set_glass_level",
+            "args": {
+              "level": "strong"
+            }
+          },
+          {
+            "cmd": "set_glass_shapes",
+            "args": {
+              "shapes": [
+                {
+                  "width": 320,
+                  "height": 100,
+                  "radiusTop": 18,
+                  "radiusBottom": 18,
+                  "kind": "rect",
+                  "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    120,
+                    70
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "off": {
+        "tint": "",
+        "background": "rgb(0, 0, 0)",
+        "calls": [
+          {
+            "cmd": "glass_supported",
+            "args": {}
+          },
+          {
+            "cmd": "set_glass_level",
+            "args": {
+              "level": "strong"
+            }
+          },
+          {
+            "cmd": "set_glass_shapes",
+            "args": {
+              "shapes": [
+                {
+                  "width": 320,
+                  "height": 100,
+                  "radiusTop": 18,
+                  "radiusBottom": 18,
+                  "kind": "rect",
+                  "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    120,
+                    70
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "cmd": "set_glass_shapes",
+            "args": {
+              "shapes": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "supported": false,
+      "result": "passed",
+      "initial": {
+        "tint": "",
+        "background": "rgb(0, 0, 0)",
+        "calls": [
+          {
+            "cmd": "glass_supported",
+            "args": {}
+          }
+        ]
+      },
+      "off": {
+        "tint": "",
+        "background": "rgb(0, 0, 0)",
+        "calls": [
+          {
+            "cmd": "glass_supported",
+            "args": {}
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "useGlassSha256": "f092fd67f26963bbca84db93a0397bbe0e55c8f0a9387e6bc6e30898636cf17b"
+}

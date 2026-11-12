@@ -1,0 +1,32 @@
+{
+  "clippy": "passed",
+  "sourceHead": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "scope": "E R01 temporary native contrast background fixture",
+  "limitation": "Temporary controlled contrast background; must remove from final product, not an acceptance or blur fix by itself.",
+  "environment": "ISLAND_GLASS_BACKGROUND=1 exact value and debug_assertions only",
+  "date": "2026-11-12",
+  "window": {
+    "topmost": false,
+    "ipc": false,
+    "title": "E Glass Background",
+    "businessReads": false,
+    "label": "glass-diagnostic-background",
+    "content": "data URL static HTML; black/white 5 CSS-px vertical stripes, bottom red/blue blocks",
+    "externalLinks": false,
+    "transparent": false,
+    "script": false,
+    "fullscreen": true
+  },
+  "sourceModified": [
+    "src-tauri/src/glass.rs diagnostics",
+    "src-tauri/src/lib.rs debug-only fixture"
+  ],
+  "nsisBuild": "exit0",
+  "installedOrLaunched": false,
+  "rustTests": "28 passed",
+  "package": {
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\r01-background-setup.exe",
+    "bytes": 5082788,
+    "sha256": "6c770cc56cbf04e4603ba78837d8709c37d3af8d4bc477aa1f84625379d1533e"
+  }
+}

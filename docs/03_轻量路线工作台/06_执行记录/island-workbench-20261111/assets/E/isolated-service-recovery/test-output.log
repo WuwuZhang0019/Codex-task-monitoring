@@ -1,0 +1,22 @@
+(node:41756) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ island D standalone→STDIO update→scoped panel, preferences and generation recovery (11381.1476ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12011.0085
+
+✖ failing tests:
+
+test at app\tests\island-d-service.test.mjs:16:1
+✖ island D standalone→STDIO update→scoped panel, preferences and generation recovery (11381.1476ms)
+  Error: SERVICE_START_TIMEOUT: inspect service-runtime.log
+      at startService (file:///G:/rust/Codex-task-monitoring/app/desktop/service.mjs:36:9)
+      at async start (file:///G:/rust/Codex-task-monitoring/app/tests/island-d-service.test.mjs:48:14)
+      at async TestContext.<anonymous> (file:///G:/rust/Codex-task-monitoring/app/tests/island-d-service.test.mjs:71:3)
+      at async Test.run (node:internal/test_runner/test:1116:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3)

@@ -1,0 +1,36 @@
+   Compiling dynamic-island v0.1.0 (G:\rust\windows-dynamic-island\src-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.25s
+     Running unittests src\lib.rs (target\debug\deps\dynamic_island_lib-99ab91c504094207.exe)
+
+running 28 tests
+test glass::tests::levels_blur_more_as_they_go_up ... ok
+test glass::tests::shapes_parse_from_the_frontend ... ok
+test glass::tests::transform_moves_to_physical_px ... ok
+test memory::tests::island_config_uses_the_shared_browser_args ... ok
+test memory::tests::keeps_wry_default_args ... ok
+test glass::tests::skewed_bounds_cover_the_slanted_corners ... ok
+test glass::tests::sprite_covers_all_shapes_plus_the_blur_margin ... ok
+test glass::tests::empty_or_flat_shapes_are_dropped ... ok
+test store::tests::manifest_matches_the_code ... ok
+test glass::tests::radii_are_clamped_to_half_the_short_side ... ok
+test workbench::tests::caller_window_is_exact ... ok
+test settings::tests::unavailable_directory_has_no_fallback_write_target ... ok
+test workbench_connection::tests::settings_and_explicit_ack_are_mandatory_and_scope_rejects_injected_fields ... ok
+test settings::tests::backup_failure_does_not_create_migrated_settings ... ok
+test settings::tests::backup_failure_keeps_loaded_settings_read_only ... ok
+test settings::tests::restart_keeps_new_preferences_and_does_not_repeat_import ... ok
+test settings::tests::migration_backs_up_input_and_ignores_removed_features ... ok
+test settings::tests::unreadable_or_future_configuration_stays_read_only ... ok
+test workbench::tests::native_http_attaches_private_credential_to_only_fixed_read_and_preference_paths ... ok
+test settings::tests::failed_save_preserves_memory_and_successful_save_replaces_complete_file ... ok
+test workbench::tests::discovery_rejects_remote_origin_mismatch_and_stop ... ok
+test workbench::tests::native_http_denial_redirect_and_generation_changes_fail_closed ... ok
+test workbench_connection::tests::server_errors_are_unknown_and_explicit_client_errors_are_rejected ... ok
+test workbench_connection::tests::binding_confirmation_preserves_exact_input_only_in_private_file ... ok
+test workbench_connection::tests::failed_config_save_revokes_the_new_grant_and_restores_original_connection ... ok
+test workbench_connection::tests::grant_saves_private_token_and_backup_but_returns_only_safe_metadata ... ok
+test workbench_connection::tests::malformed_success_is_unknown_and_does_not_replace_original_config ... ok
+test workbench_connection::tests::failed_config_restore_still_attempts_and_restores_metadata ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+

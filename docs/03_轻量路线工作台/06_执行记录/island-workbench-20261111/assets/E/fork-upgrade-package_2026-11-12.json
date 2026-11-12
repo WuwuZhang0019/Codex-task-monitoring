@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-12",
+  "scope": "E-02 same-source installer mechanism upgrade and downgrade",
+  "sourceHead": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "override": {
+    "version": "0.1.1"
+  },
+  "command": "bun tauri build --debug --bundles nsis --no-sign --config G:/rust/Codex-task-monitoring/app/test-results/island-E/packages/e-upgrade-0.1.1.config.json",
+  "exitCode": 0,
+  "artifacts": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\dynamic-island-0.1.0.exe",
+      "bytes": 19657216,
+      "sha256": "0a01520a40612c643b557345967ab68d32e80070b17fa2a6fdfd6b150b361b39"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\dynamic-island-0.1.1.exe",
+      "bytes": 19657216,
+      "sha256": "1354f3207f4998d592c5d38d4a521f5d874b67126633a3265603aebf52bbf792"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\e-upgrade-0.1.1.config.json",
+      "bytes": 28,
+      "sha256": "2a4f151334ac4251e65ea4372500f7c7e659419dbc10aabbb69c67849403b958"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\Island Workbench_0.1.0_x64-setup.exe",
+      "bytes": 5071122,
+      "sha256": "7901ae313df877292253fe5a63632ba7c54d2e9f85c6983c8566669cc12d2835"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\Island Workbench_0.1.1_x64-setup.exe",
+      "bytes": 5070751,
+      "sha256": "3cb823d1d88d729195575d7d936f03835478485875e1bd1ef8633d2606463355"
+    }
+  ],
+  "sourceAndLockfilesUnchanged": true,
+  "installedOrLaunchedByBuilder": false,
+  "limitation": "0.1.1 is an E-only version override from the same source; this tests installer mechanics, not compatibility with an independently developed historical version or a public release."
+}

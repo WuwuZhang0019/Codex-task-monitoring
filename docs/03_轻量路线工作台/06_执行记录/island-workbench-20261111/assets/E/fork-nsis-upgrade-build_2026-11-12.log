@@ -1,0 +1,37 @@
+$ tauri build --debug --bundles nsis --no-sign --config "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\e-upgrade-0.1.1.config.json"
+        Warn --no-sign flag detected: Signing will be skipped.
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `bun run build`
+$ tsc -b && vite build
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2604 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                        0.40 kB │ gzip:   0.27 kB
+dist/assets/Island-BU0bn9qt.css        9.02 kB │ gzip:   2.27 kB
+dist/assets/index-DtH9Es6j.css        49.68 kB │ gzip:   8.43 kB
+dist/assets/Island-BZ1RskZB.js       110.50 kB │ gzip:  31.65 kB │ map:   206.38 kB
+dist/assets/SettingsApp-D7SJeFtl.js  169.73 kB │ gzip:  42.48 kB │ map:   533.04 kB
+dist/assets/index-DkHu8wpi.js        680.47 kB │ gzip: 131.82 kB │ map: 1,157.29 kB
+dist/assets/Rim-ijMUSQjM.js          692.29 kB │ gzip: 184.36 kB │ map: 1,231.34 kB
+
+✓ built in 968ms
+   Compiling tauri v2.12.5
+   Compiling tauri-plugin-updater v2.14.1
+   Compiling tauri-plugin-autostart v2.7.0
+   Compiling dynamic-island v0.1.0 (G:\rust\windows-dynamic-island\src-tauri)
+Removed unused commands from app: app_show, app_hide, exit, fetch_data_store_identifiers, remove_data_store, default_window_icon, set_app_theme, set_dock_visibility
+Removed unused commands from webview: create_webview_window, create_webview, webview_close, set_webview_size, set_webview_position, set_webview_focus, set_webview_auto_resize, set_webview_background_color, set_webview_zoom, webview_hide, webview_show, print, clear_all_browsing_data, reparent
+Removed unused commands from window: create, set_resizable, set_title, show, hide, destroy, set_content_protected, set_size, set_min_size, set_max_size, set_position, set_size_constraints, set_focus, set_focusable, set_enabled, set_background_color, set_theme, center, request_user_attention, set_maximizable, set_minimizable, set_closable, maximize, unmaximize, unminimize, set_decorations, set_shadow, set_effects, set_always_on_top, set_always_on_bottom, set_fullscreen, set_fullscreen_on_monitor, set_simple_fullscreen, set_skip_taskbar, set_cursor_grab, set_cursor_visible, set_cursor_icon, set_cursor_position, set_ignore_cursor_events, start_resize_dragging, set_badge_count, set_badge_label, set_progress_bar, set_overlay_icon, set_icon, set_visible_on_all_workspaces, set_title_bar_style, toggle_maximize
+   Compiling tauri-plugin-single-instance v2.5.5
+Removed unused commands from autostart: enable, disable, is_enabled
+Removed unused commands from updater: check, download, install, download_and_install
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 10.93s
+       Built application at: G:\rust\windows-dynamic-island\src-tauri\target\debug\dynamic-island.exe
+        Info Patching G:\rust\windows-dynamic-island\src-tauri\target\debug\dynamic-island.exe with bundle type information: nsis
+        Info Target: x64
+     Running makensis to produce G:\rust\windows-dynamic-island\src-tauri\target\debug\bundle\nsis\Island Workbench_0.1.1_x64-setup.exe
+    Finished 1 bundle at:
+        G:\rust\windows-dynamic-island\src-tauri\target\debug\bundle\nsis\Island Workbench_0.1.1_x64-setup.exe (4.84 MiB)
+

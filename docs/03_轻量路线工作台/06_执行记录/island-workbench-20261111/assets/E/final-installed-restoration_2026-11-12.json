@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-12",
+  "exitCode": 0,
+  "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\\dynamic-island.exe",
+  "installedHash": "BA112BB56C228DA9B7922EBA3E30DFF58C4E16D42EB61BB5B6347C4131C5736E",
+  "fileVersion": "0.1.0",
+  "backgroundFixtureInDist": false,
+  "normalModeRunning": true,
+  "businessHash": "DCED6CD1DA27F9B8A6FDFB10A178947839B5DA51981C00346C1CEA044636607A",
+  "upstreamHash": "D4714CA047BE193AF915F8357A3D1E3077E4A054F64D41CFD8C4FB29DA9B4BCF",
+  "systemScale": "restored125% observed in Settings; native diagnostic scale1.25",
+  "diagnosticEnvEnabled": false,
+  "backgroundEnvEnabled": false
+}

@@ -1,0 +1,26 @@
+{
+  "sourceModified": "src-tauri/src/glass.rs only; not committed",
+  "launchedOrInstalled": false,
+  "initialFailure": "Default rustc1.88 from repository root rejected dependencies; corrected explicit +1.98; wrong-toolchain log preserved",
+  "scope": "E R01 temporary glass diagnostics",
+  "buildResult": "debug NSIS exit0",
+  "testResult": "28 Rust tests passed",
+  "package": {
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\r01-diagnostic-setup.exe",
+    "bytes": 5071483,
+    "sha256": "7cd13f6f268b5d33e42da71a27e79652b64cdac9b4bb956a5d9fb1d5019f1fdb"
+  },
+  "diagnostics": [
+    "setup scene success/failure",
+    "set_level and brush result",
+    "first visible nonempty apply scale and shape count",
+    "first outline error only",
+    "first SetWindowPos and both HWND visibility/rect results"
+  ],
+  "sourceHead": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "environmentGate": "ISLAND_GLASS_DIAGNOSTICS",
+  "limitation": "Diagnostic API success is not proof of visual blur; capture runtime stderr and user/native visual evidence separately.",
+  "date": "2026-11-12",
+  "finalClippy": "passed; src-tauri directory; cargo clippy -- -D warnings; exit0;56.17s",
+  "temporarySourceDisposition": "left uncommitted for root decision; no additional fix attempted"
+}

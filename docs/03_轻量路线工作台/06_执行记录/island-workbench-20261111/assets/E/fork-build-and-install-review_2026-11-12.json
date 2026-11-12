@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-12",
+  "scope": "island-workbench-20261111/E-02",
+  "forkHead": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "bunVersion": "1.4.4",
+  "checks": {
+    "debugNsis": "passed;tauri build --debug --bundles nsis --no-sign",
+    "bunTests": "24 passed;85 assertions",
+    "lint": "passed; 61 files",
+    "build": "passed",
+    "rustTests": "28 passed",
+    "clippy": "passed"
+  },
+  "artifacts": [
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\bundle\\nsis\\Island Workbench_0.1.0_x64-setup.exe",
+      "bytes": 5071122,
+      "sha256": "7901ae313df877292253fe5a63632ba7c54d2e9f85c6983c8566669cc12d2835"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\dynamic-island.exe",
+      "bytes": 19657216,
+      "sha256": "0a01520a40612c643b557345967ab68d32e80070b17fa2a6fdfd6b150b361b39"
+    },
+    {
+      "path": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\debug\\nsis\\x64\\installer.nsi",
+      "bytes": 32889,
+      "sha256": "f4e890fd3b57fc8e35062b45e26d0ced86f804f800540a85af9a5964fa25f31f"
+    }
+  ],
+  "installed": false,
+  "appLaunched": false,
+  "formalDataTouched": false,
+  "config": {
+    "identifier": "com.wuwuzhang0019.islandworkbench",
+    "productName": "Island Workbench",
+    "version": "0.1.0",
+    "updateConfigured": false,
+    "updateEndpoints": [],
+    "nsisHooks": "empty; no upstream cleanup",
+    "appConfig": "APPDATA/com.wuwuzhang0019.islandworkbench",
+    "businessRoot": "LOCALAPPDATA/com.codextaskmonitor.workbench/data",
+    "privateGrantRoot": "USERPROFILE/.codex/task-workbench-light"
+  },
+  "staticFindings": [
+    "NSIS /S without /R does not launch the app; /NS skips shortcuts; /D must be last and unquoted per NSIS semantics.",
+    "Uninstall only removes app binary/uninstaller and product-specific registry/shortcuts; app data removal optional and limited to APPDATA/BUNDLEID and LOCALAPPDATA/BUNDLEID.",
+    "Release first launch auto-enables product autostart and writes marker; debug build skips that behavior.",
+    "Settings migration is whitelist-only with original backup, future/corrupt versions remain read-only; Rust tests use temporary directories.",
+    "MSIX manifest/release workflow still contain upstream product text, notification capability; F audit remains pending."
+  ],
+  "limitations": [
+    "No installer execution, cold-start, upgrade/downgrade or uninstall test was run by this agent.",
+    "Existing settings unit tests exercise isolated migration/restart/read-only/save-failure behavior; they do not prove installer or native UI acceptance."
+  ]
+}

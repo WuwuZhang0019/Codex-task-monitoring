@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-12",
+  "scope": "E-02 installation mechanism; same source test-only 0.1.1, not historical schema compatibility",
+  "records": [
+    {
+      "step": "before",
+      "observation": {
+        "fileVersion": "0.1.0",
+        "exeHash": "5B1EC47D7D625EAD897BC97A0C116CA5F7BE48E21D6366F66AC44B3E54C0EC46",
+        "registry": [
+          {
+            "DisplayVersion": "0.1.0",
+            "InstallLocation": "\"G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\""
+          }
+        ],
+        "fingerprints": {
+          "shell": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+          "business": "DCED6CD1DA27F9B8A6FDFB10A178947839B5DA51981C00346C1CEA044636607A",
+          "upstream": "D4714CA047BE193AF915F8357A3D1E3077E4A054F64D41CFD8C4FB29DA9B4BCF"
+        }
+      }
+    },
+    {
+      "step": "cold-reopen",
+      "running": true,
+      "observation": {
+        "fileVersion": "0.1.0",
+        "exeHash": "5B1EC47D7D625EAD897BC97A0C116CA5F7BE48E21D6366F66AC44B3E54C0EC46",
+        "registry": [
+          {
+            "DisplayVersion": "0.1.0",
+            "InstallLocation": "\"G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\""
+          }
+        ],
+        "fingerprints": {
+          "shell": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+          "business": "DCED6CD1DA27F9B8A6FDFB10A178947839B5DA51981C00346C1CEA044636607A",
+          "upstream": "D4714CA047BE193AF915F8357A3D1E3077E4A054F64D41CFD8C4FB29DA9B4BCF"
+        }
+      }
+    },
+    {
+      "step": "install-0.1.1",
+      "exitCode": 0,
+      "running": true,
+      "observation": {
+        "fileVersion": "0.1.1",
+        "exeHash": "FF361B6866B60851AB1C18B2753B095618876192DCB98228A785A49ADFB34397",
+        "registry": [
+          {
+            "DisplayVersion": "0.1.1",
+            "InstallLocation": "\"G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\""
+          }
+        ],
+        "fingerprints": {
+          "shell": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+          "business": "DCED6CD1DA27F9B8A6FDFB10A178947839B5DA51981C00346C1CEA044636607A",
+          "upstream": "D4714CA047BE193AF915F8357A3D1E3077E4A054F64D41CFD8C4FB29DA9B4BCF"
+        }
+      }
+    },
+    {
+      "step": "install-0.1.0",
+      "exitCode": 0,
+      "running": true,
+      "observation": {
+        "fileVersion": "0.1.0",
+        "exeHash": "5B1EC47D7D625EAD897BC97A0C116CA5F7BE48E21D6366F66AC44B3E54C0EC46",
+        "registry": [
+          {
+            "DisplayVersion": "0.1.0",
+            "InstallLocation": "\"G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\""
+          }
+        ],
+        "fingerprints": {
+          "shell": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+          "business": "DCED6CD1DA27F9B8A6FDFB10A178947839B5DA51981C00346C1CEA044636607A",
+          "upstream": "D4714CA047BE193AF915F8357A3D1E3077E4A054F64D41CFD8C4FB29DA9B4BCF"
+        }
+      }
+    },
+    {
+      "step": "before-uninstall",
+      "uninstaller": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\\uninstall.exe",
+      "fingerprints": {
+        "shell": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+        "business": "DCED6CD1DA27F9B8A6FDFB10A178947839B5DA51981C00346C1CEA044636607A",
+        "upstream": "D4714CA047BE193AF915F8357A3D1E3077E4A054F64D41CFD8C4FB29DA9B4BCF"
+      }
+    },
+    {
+      "step": "uninstall-keep-data",
+      "exitCode": 0,
+      "exeRemoved": true,
+      "fingerprints": {
+        "shell": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+        "business": "DCED6CD1DA27F9B8A6FDFB10A178947839B5DA51981C00346C1CEA044636607A",
+        "upstream": "D4714CA047BE193AF915F8357A3D1E3077E4A054F64D41CFD8C4FB29DA9B4BCF"
+      }
+    },
+    {
+      "step": "restore-0.1.0",
+      "exitCode": 0,
+      "observation": {
+        "fileVersion": "0.1.0",
+        "exeHash": "5B1EC47D7D625EAD897BC97A0C116CA5F7BE48E21D6366F66AC44B3E54C0EC46",
+        "registry": [
+          {
+            "DisplayVersion": "0.1.0",
+            "InstallLocation": "\"G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\""
+          }
+        ],
+        "fingerprints": {
+          "shell": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+          "business": "DCED6CD1DA27F9B8A6FDFB10A178947839B5DA51981C00346C1CEA044636607A",
+          "upstream": "D4714CA047BE193AF915F8357A3D1E3077E4A054F64D41CFD8C4FB29DA9B4BCF"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-12",
+  "originalCommit": "e286d9045746837bf1960e0d13b7ed572b8d9e50",
+  "deliveredCommit": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "scope": "fixed original project source and complete integration path; not visual original app execution",
+  "files": [
+    {
+      "path": "src-tauri/src/glass.rs",
+      "originalBlob": "7f8796b63c9deb54f6de3eb8d264cc0f83e50d6e",
+      "deliveredBlob": "7f8796b63c9deb54f6de3eb8d264cc0f83e50d6e",
+      "identical": true
+    },
+    {
+      "path": "src-tauri/src/display.rs",
+      "originalBlob": "106508eb8ffd7a3403b5f45bff61179878292e19",
+      "deliveredBlob": "106508eb8ffd7a3403b5f45bff61179878292e19",
+      "identical": true
+    },
+    {
+      "path": "src-tauri/src/memory.rs",
+      "originalBlob": "a03de3f4f40eed92a208b5fd0b14261cbd5e57b2",
+      "deliveredBlob": "a03de3f4f40eed92a208b5fd0b14261cbd5e57b2",
+      "identical": true
+    },
+    {
+      "path": "src-tauri/app.manifest",
+      "originalBlob": "7e1ef0a0f50c26b8f12e0a5f96fce718727c3e5f",
+      "deliveredBlob": "7e1ef0a0f50c26b8f12e0a5f96fce718727c3e5f",
+      "identical": true
+    },
+    {
+      "path": "src/core/useGlass.ts",
+      "originalBlob": "00a7508e22bf29dadf3a9e54c92d391c7523d6b2",
+      "deliveredBlob": "00a7508e22bf29dadf3a9e54c92d391c7523d6b2",
+      "identical": true
+    },
+    {
+      "path": "src/components/island/Surface.tsx",
+      "originalBlob": "cc4f9910c924032fd1e8bf6968371ce6d4620941",
+      "deliveredBlob": "cc4f9910c924032fd1e8bf6968371ce6d4620941",
+      "identical": true
+    },
+    {
+      "path": "src/components/island/Rim.tsx",
+      "originalBlob": "805d5f552854b16ad2b7ddebfe0f72415bc4044e",
+      "deliveredBlob": "805d5f552854b16ad2b7ddebfe0f72415bc4044e",
+      "identical": true
+    },
+    {
+      "path": "src/styles.css",
+      "originalBlob": "10ff0031156bf773199dd8e1189285701db7eba3",
+      "deliveredBlob": "10ff0031156bf773199dd8e1189285701db7eba3",
+      "identical": true
+    }
+  ],
+  "integrationReview": [
+    "lib.rs retains glass setup order and command registration",
+    "window.rs ensure_topmost calls glass::restack",
+    "removed file_drop hook only registers OLE drag/drop; plugin frame guard only protects frame navigation",
+    "Tauri/tao/wry/WebView2/windows composition versions unchanged"
+  ],
+  "limitations": [
+    "Source equality does not prove visual effect",
+    "Original full app not started; no removed collectors restored",
+    "Current temporary diagnostic edits recorded separately"
+  ],
+  "liveDiagnostics": [
+    "scene creation succeeds",
+    "Strong brush setup succeeds at scale1.5 and deviation36",
+    "nonempty shape and outline applied; window positioning succeeds",
+    "island and glass visible, identical physical rect0,0,2560,960"
+  ],
+  "rootCause": "not confirmed; compact blur visibly works but visual parity with actual original is not established",
+  "latestUserFeedback": "收起和展开都与原项目效果不同",
+  "currentAcceptance": "not passed; await actual original visual comparison"
+}

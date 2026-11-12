@@ -1,0 +1,23 @@
+{
+  "environment": "ISLAND_GLASS_BACKGROUND=1 and debug_assertions only",
+  "sourceHead": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "scope": "E R01 temporary native background fixture local asset correction",
+  "limitation": "Build success does not establish fixture startup or blur rendering. Remove temporary fixture from final product.",
+  "package": {
+    "bytes": 5079669,
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\r01-background-asset-setup.exe",
+    "sha256": "0c5a55958946c0a7e7b1c1e6a98a02aa7d63ddf1411b73dea1e4b8360fae4011"
+  },
+  "runtime": "not run by builder; root must verify installed result",
+  "nsisBuild": "exit0",
+  "rustTests": "28 passed",
+  "clippy": "passed",
+  "previousRuntimeFailure": "data URL fixture failed setup because webview-data-url feature is not enabled",
+  "date": "2026-11-12",
+  "correction": "WebviewUrl::App(glass-diagnostic-background.html); no new data URL feature",
+  "sourceModified": [
+    "src-tauri/src/glass.rs diagnostics",
+    "src-tauri/src/lib.rs debug-only fixture",
+    "public/glass-diagnostic-background.html temporary static asset"
+  ]
+}

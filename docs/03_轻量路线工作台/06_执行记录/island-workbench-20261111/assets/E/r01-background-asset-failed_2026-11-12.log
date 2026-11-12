@@ -1,0 +1,5 @@
+
+thread 'main' (40160) panicked at C:\Users\Zyf\.cargo\registry\src\rsproxy.cn-e3de039b2554c837\tauri-2.12.5\src\app.rs:1444:11:
+Failed to setup app: error encountered during setup hook: runtime error: failed to create webview: WebView2 error: WindowsError(Error { code: HRESULT(0x8007139F), message: "组或资源的状态不是执行请求操作的正确状态。" })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+[1112/094621.431:ERROR:ui\gfx\win\window_impl.cc:172] Failed to unregister class Chrome_WidgetWin_0. Error = 1412

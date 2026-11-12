@@ -1,0 +1,18 @@
+{
+  "sourceHead": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "sourceModified": "src-tauri/src/glass.rs only; not committed",
+  "clippy": "passed; src-tauri directory; 2.50s",
+  "installedOrLaunched": false,
+  "environment": "ISLAND_GLASS_DIAGNOSTICS=solid exact value and debug_assertions only",
+  "nsisBuild": "exit0",
+  "rustTests": "28 passed",
+  "behavior": "Replace native sprite brush with opaque bright green ARGB(255,0,255,0), retaining original shape/clip/z-order. Other values retain original backdrop/blur path.",
+  "package": {
+    "bytes": 5074924,
+    "sha256": "e4321cda2d5480927da86cd2e5a0658f5970f9bab0bdca60ec663faca6093c04",
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\r01-layer-diagnostic-setup.exe"
+  },
+  "limitation": "Layer visibility is diagnostic only, not a blur fix or acceptance proof.",
+  "scope": "E R01 temporary composition-layer probe",
+  "date": "2026-11-12"
+}

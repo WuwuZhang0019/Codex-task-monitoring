@@ -1,0 +1,21 @@
+{
+  "clippy": "passed",
+  "rustTests": "28 passed",
+  "cleanup": "verified lib.rs delta consisted solely of temporary fixture block and restored HEAD bytes; removed only newly added public/glass-diagnostic-background.html; glass.rs diagnostics retained",
+  "date": "2026-11-12",
+  "runtime": "not run by builder; root to verify",
+  "package": {
+    "sha256": "1e1bfe1aff4cf68a64c65de10a9546dcf7ce67bf4477d53d92b3c192e6926650",
+    "bytes": 5076771,
+    "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\packages\\r01-background-final-setup.exe"
+  },
+  "correction": "Clone AppHandle, spawn worker like settings::open, use existing memory::BROWSER_ARGS; fixture errors only eprintln and do not abort setup",
+  "limitation": "Fixture construction failures are separate from the user-reported blur rendering problem.",
+  "previousRuntimeFailures": [
+    "data URL feature absent caused invalid window URL",
+    "local App asset created on setup main thread with mismatched browser args failed WebView creation HRESULT0x8007139F"
+  ],
+  "scope": "E R01 temporary background fixture third build",
+  "sourceHead": "02823f6158d44622d4aeeed2b43e7be9c18b8180",
+  "nsisBuild": "exit0"
+}
