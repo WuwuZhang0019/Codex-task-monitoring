@@ -56,6 +56,7 @@ try {
   await card.getByText('尚未连接 Codex', { exact: true }).waitFor();
   assert.equal(await card.locator('input, textarea').count(), 0);
   assert.equal(await card.getByRole('button').count(), 1);
+  await page.waitForTimeout(350); // Let the existing page/navigation transition settle before visual evidence.
   await page.screenshot({ path: path.join(output, 'disabled.png') });
   report.checks.push('No IDs, paths, JSON, or confirmation checkboxes; one connection button');
   await card.getByRole('button', { name: '连接 Codex', exact: true }).click();
