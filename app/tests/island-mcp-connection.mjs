@@ -36,14 +36,15 @@ try {
       invoke: async (command, args) => {
         if (command === 'get_settings') return { 'app.language': 'zh-CN', 'shell.configVersion': 1 };
         if (command === 'get_autostart') return false;
-        if (command === 'island_workbench_connection_status') {
+        if (command === 'island_agent_connections') {
           if (window.__connection.state === 'unavailable') throw Error('OWNER_UNAVAILABLE');
-          return window.__connection;
+          return [{ ...window.__connection, appId: 'codex' },
+            ...['claude-code', 'dsh', 'workbuddy'].map(appId => ({ appId, state: 'disabled', enabled: false }))];
         }
-        if (command === 'island_workbench_set_connection') {
+        if (command === 'island_agent_set_connection') {
           window.__connectionCalls.push({ command, args });
           window.__connection = args.enabled ? { state: 'waiting', enabled: true, automatic: true } : { state: 'disabled', enabled: false };
-          return window.__connection;
+          return { ...window.__connection, appId: args.appId };
         }
         if (command === 'plugin:event|listen') return 1;
         return null;
@@ -52,7 +53,8 @@ try {
   });
   await page.goto(`${base}/#settings`);
   await page.locator('nav').getByText('MCP', { exact: true }).click();
-  const card = page.locator('[data-workbench-connection]');
+  const card = page.locator('[data-workbench-connection="codex"]');
+  assert.equal(await page.locator('[data-workbench-connection]').count(), 4);
   await card.getByText('尚未连接 Codex', { exact: true }).waitFor();
   assert.equal(await card.locator('input, textarea').count(), 0);
   assert.equal(await card.getByRole('button').count(), 1);

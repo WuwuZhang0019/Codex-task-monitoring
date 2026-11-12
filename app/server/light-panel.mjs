@@ -2,8 +2,9 @@
 import { readFile, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { HttpError } from './validation.mjs';
+import { validAppId } from './light-apps.mjs';
 
-export function createLightPanel(persistence) {
+export function createLightPanel(persistence, { connections = () => [] } = {}) {
   const cache = new Map();
   function preferences(value) {
     const arrays = ['collapsed', 'focus'];
@@ -34,7 +35,17 @@ export function createLightPanel(persistence) {
         }
         sources[plan.key] = cache.get(key) ?? null;
       }
+      const grants = persistence.read('grants');
+      const owners = persistence.read('light')?.metadata.bindingOwners ?? {};
+      const bindingApps = {};
+      for (const binding of snapshot.bindings) {
+        const principal = owners[binding.key] ?? binding.confirmationRef?.match(/^automatic:(.+)$/)?.[1];
+        const grant = grants[principal];
+        const app = grant?.kind === 'lightAccess' ? grant.appId ?? 'codex' : null;
+        if (validAppId(app)) bindingApps[binding.key] = app;
+      }
       return { date: '2026-11-12', snapshot, sources, preferences: persistence.read('lightPanelPreferences') ?? null,
+        agentApps: connections(), bindingApps,
         library: persistence.read('lightLibrary') ?? { version: 1, archived: [] }, librarySupported: true,
         capabilities: { threadJump: false, reason: '当前宿主未提供聊天跳转；可复制固定 ID，在 Codex 中查找' } };
     },

@@ -89,8 +89,40 @@ test('automatic binding verifies real Git, commits once, permits progress, and r
   const start = { ...base('start'), stepId: step.id, executionId: reserved.executionId, bindingId: bound.bindingId,
     bindingRevision: bound.bindingRevision, targetStatus: 'running', evidence: [], checks: [], blocker: null, reopen: null, successorImpact: null };
   await service.update(principal, start);
+  const otherApp = await access.connect({ appId: 'claude-code', acknowledged: true });
+  const ownedBinding = read().bindings.find(item => item.id === bound.bindingId);
+  assert.equal(access.authorize(otherApp.principal, projectId, 'confirmBinding', {
+    binding: { ...ownedBinding, confirmationRef: null }, input: propose,
+  }), false, 'a different app cannot confirm another app proposal before its confirmation reference exists');
+  await assert.rejects(service.update(otherApp.principal, { ...start, eventId: 'other-app-update',
+    expectedRevision: read().projects[0].revision }), /FORBIDDEN/, 'another application cannot overwrite an existing automatic binding');
   await access.revoke({ principal, acknowledged: true });
   await assert.rejects(service.update(principal, { ...start, eventId: 'after-revoke' }), /FORBIDDEN/);
+});
+
+test('multiple application grants have independent live sessions and revocation without leaking credentials into the panel', async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'light-multi-app-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const persistence = await createPersistence(root);
+  const access = createLightAccess(persistence);
+  const codex = await access.connect({ appId: 'codex', acknowledged: true });
+  const claude = await access.connect({ appId: 'claude-code', acknowledged: true });
+  assert.notEqual(codex.token, claude.token);
+  await assert.rejects(async () => access.connect({ appId: '../other', acknowledged: true }), /INVALID_INPUT/);
+  const status = grant => access.connectionStatus({ principal: grant.principal, acknowledged: true });
+  const headers = app => ({ 'x-workbench-app': app, 'x-workbench-client': 'generic-mcp-client', 'x-workbench-session': randomUUID() });
+  access.touch(codex.principal, headers('claude-code'));
+  assert.equal(status(codex).connected, false, 'mismatched app identity cannot renew another app credential');
+  access.touch(codex.principal, headers('codex'));
+  access.touch(claude.principal, headers('claude-code'));
+  assert.equal(status(codex).connected, true); assert.equal(status(claude).connected, true);
+  assert.equal(access.panelConnections().filter(app => app.connected).length, 2);
+  assert.ok(!JSON.stringify(access.panelConnections()).includes(codex.token));
+  await access.revoke({ principal: codex.principal, acknowledged: true });
+  assert.equal(status(codex).connected, false); assert.equal(status(claude).connected, true);
+  const reopened = createLightAccess(persistence);
+  assert.equal(reopened.connectionStatus({ principal: claude.principal, acknowledged: true }).enabled, true);
+  assert.equal(reopened.connectionStatus({ principal: claude.principal, acknowledged: true }).connected, false, 'service restart does not invent live presence');
 });
 
 test('initialized SDK and real STDIO transports produce Codex status, idle leases renew, and close disconnects', { timeout: 15000 }, async t => {
@@ -138,4 +170,40 @@ test('initialized SDK and real STDIO transports produce Codex status, idle lease
   await client.close();
   for (let attempt = 0; attempt < 30 && (await status()).connected; attempt++) await new Promise(resolve => setTimeout(resolve, 10));
   assert.equal((await status()).connected, false);
+});
+
+test('two installed-style STDIO application processes stay connected independently', { timeout: 15000 }, async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'light-two-app-stdio-'));
+  const ownerToken = 'c'.repeat(64), clients = [];
+  const server = await createServer({ dataDir: root, env: {}, lightAccessEnabled: true,
+    authorize(req, pathname) {
+      if (pathname !== '/api/light-mcp' && req.headers.authorization !== `Bearer ${ownerToken}`) throw new HttpError(403, 'FORBIDDEN');
+    } });
+  server.listen(0, '127.0.0.1'); await once(server, 'listening');
+  const endpoint = `http://127.0.0.1:${server.address().port}`;
+  t.after(async () => { await Promise.all(clients.map(client => client.close())); server.closeAllConnections();
+    await new Promise(resolve => server.close(resolve)); await rm(root, { recursive: true, force: true }); });
+  const post = async (route, body) => {
+    const response = await fetch(`${endpoint}/api/light-access/${route}`, { method: 'POST',
+      headers: { Authorization: `Bearer ${ownerToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    assert.equal(response.status, 200); return response.json();
+  };
+  const grants = [];
+  for (const appId of ['codex','claude-code']) {
+    const grant = await post('connect', { appId, acknowledged: true }); grants.push(grant);
+    const file = path.join(root, `${appId}.json`); await writeFile(file, JSON.stringify({ endpoint, token: grant.token }));
+    const client = new Client({ name: 'mcp-host', version: 'fixture' }); clients.push(client);
+    await client.connect(new StdioClientTransport({ command: process.execPath,
+      args: [process.env.MULTI_APP_BRIDGE_ENTRY ?? fileURLToPath(new URL('../mcp/light-stdio.mjs', import.meta.url))],
+      env: { WORKBENCH_LIGHT_APP: appId, WORKBENCH_LIGHT_CONFIG: file }, stderr: 'pipe' }));
+    assert.equal((await client.listTools()).tools.length, 9);
+  }
+  const status = grant => post('connection-status', { principal: grant.principal, acknowledged: true });
+  assert.equal((await status(grants[0])).connected, true);
+  assert.equal((await status(grants[1])).connected, true);
+  await post('revoke', { principal: grants[0].principal, acknowledged: true });
+  assert.equal((await status(grants[0])).connected, false);
+  assert.equal((await status(grants[1])).connected, true);
+  assert.equal((await clients[1].listTools()).tools.length, 9);
+  await assert.rejects(clients[0].listTools(), /OWNER_UNAVAILABLE/);
 });

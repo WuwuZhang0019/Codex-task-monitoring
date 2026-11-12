@@ -267,6 +267,8 @@ export function createLightService(persistence, requests, {
           value.snapshot.bindings.push(binding);
           value.metadata.bindingIntents ??= {};
           value.metadata.bindingIntents[binding.key] = { takeover: structuredClone(input.takeover ?? null) };
+          value.metadata.bindingOwners ??= {};
+          value.metadata.bindingOwners[binding.key] = principal;
           // Date: 2026-11-12. Desktop opt-in allows verified associations without a second user prompt.
           if (!input.takeover && await automaticBinding(principal, structuredClone(binding), structuredClone(input)) === true) {
             binding.state = 'confirmed';

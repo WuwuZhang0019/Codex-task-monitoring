@@ -1,4 +1,13 @@
 // Contract owner: Codex-task-monitoring. Date: 2026-11-12.
+// Date: 2026-11-12. Optional application presentation metadata; light-1.0 business identity remains unchanged.
+export type AppId = "codex" | "claude-code" | "dsh" | "workbuddy";
+export type AgentConnection = {
+	appId: AppId;
+	name: string;
+	enabled: boolean;
+	connected: boolean;
+	lastSeenAt: string | null;
+};
 export const PROTOCOL_VERSION = "island-workbench/1" as const;
 export const SNAPSHOT_VERSION = "light-1.0" as const;
 export type StepStatus = "pending" | "running" | "blocked" | "completed" | "cancelled";
@@ -130,6 +139,8 @@ export interface UnknownOperation {
 	reason: string;
 }
 export interface WorkbenchEnvelope {
+	agentApps?: AgentConnection[];
+	bindingApps?: Record<string, AppId>;
 	protocolVersion: typeof PROTOCOL_VERSION;
 	mode: "simulation" | "service";
 	snapshot: WorkbenchSnapshot | null;
@@ -189,6 +200,26 @@ export function validateEnvelope(value: unknown): WorkbenchEnvelope {
 			!text(e.pendingOperation.reason))
 	)
 		fail("pending operation");
+	if (
+		e.agentApps !== undefined &&
+		(!Array.isArray(e.agentApps) ||
+			e.agentApps.some(
+				(app) =>
+					!object(app) ||
+					!["codex", "claude-code", "dsh", "workbuddy"].includes(app.appId) ||
+					typeof app.name !== "string" ||
+					typeof app.enabled !== "boolean" ||
+					typeof app.connected !== "boolean" ||
+					!nullableText(app.lastSeenAt),
+			))
+	)
+		fail("agent connections");
+	if (
+		e.bindingApps !== undefined &&
+		(!object(e.bindingApps) ||
+			Object.values(e.bindingApps).some((app) => !["codex", "claude-code", "dsh", "workbuddy"].includes(app)))
+	)
+		fail("binding applications");
 	const s = e.snapshot;
 	if (s === null) {
 		if (e.connection.state === "ready") fail("ready requires a snapshot");

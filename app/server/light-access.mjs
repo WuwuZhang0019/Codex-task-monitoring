@@ -6,6 +6,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { digest } from './receipts.mjs';
 import { lightError, requireLightShape } from './light-model.mjs';
+import { agentApps, validAppId } from './light-apps.mjs';
 
 const git = promisify(execFile);
 const operations = new Set(['read', 'query', 'register', 'revise', 'confirmPublication', 'reserveExecution', 'update',
@@ -25,7 +26,7 @@ function withoutConfirmation(input) { const { confirmationGrant, ...body } = inp
 export function createLightAccess(persistence, { now = Date.now, presenceTtlMs = 35000 } = {}) {
   // Date: 2026-11-12. Presence is an expiring MCP-session lease, never a service health flag.
   const presence = new Map();
-  const lastCodexPresence = new Map();
+  const lastClientPresence = new Map();
   function grantFor(principal) {
     const grant = persistence.read('grants')[principal];
     return grant?.kind === 'lightAccess' && !grant.revokedAt ? grant : null;
@@ -40,7 +41,7 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
   function authorize(principal, scope, operation, details = {}) {
     const grant = grantFor(principal);
     const projectKey = persistence.read('light')?.snapshot.projects.find(project => project.id === scope)?.key ?? scope;
-    if (!grant || !grant.automatic && !grant.projectKeys.includes(projectKey) || !operations.has(operation)) return false;
+    if (!grant || (!grant.automatic && !grant.projectKeys.includes(projectKey)) || !operations.has(operation)) return false;
     if (['confirmSupplement', 'approveSupplementCancellation'].includes(operation)) {
       const input = details.input, confirmation = persistence.read('grants')[input?.confirmationGrant];
       if (!confirmation || confirmation.kind !== 'lightSupplementConfirmation' || confirmation.principal !== principal
@@ -48,6 +49,10 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
         || confirmation.contentHash !== digest(withoutConfirmation(input))) return false;
     }
     const context = details.binding?.context ?? details.input?.context;
+    const bindingOwner = details.binding && persistence.read('light')?.metadata.bindingOwners?.[details.binding.key];
+    if (bindingOwner && bindingOwner !== principal) return false;
+    const owner = details.binding?.confirmationRef;
+    if (owner?.startsWith('automatic:') && owner !== `automatic:${principal}`) return false;
     return !context || matches(grant, context);
   }
   async function verifyWorktree(context, grant, checkHead = true) {
@@ -71,16 +76,18 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
   return {
     authorize,
     connect(input) {
-      requireBody(input, ['acknowledged']);
+      requireBody(input, ['acknowledged', 'appId']);
+      if (input.appId !== undefined && !validAppId(input.appId)) lightError('INVALID_INPUT', '应用标识无效');
       return persistence.run(() => {
         const principal = randomUUID(), token = randomBytes(32).toString('hex');
         persistence.write('grants', { ...persistence.read('grants'), [principal]: { kind: 'lightAccess', tokenHash: digest(token),
-          automatic: true, createdAt: new Date(now()).toISOString(), revokedAt: null } });
+          automatic: true, ...(input.appId ? { appId: input.appId } : {}), createdAt: new Date(now()).toISOString(), revokedAt: null } });
         return { principal, token, automatic: true };
       });
     },
     touch(principal, headers) {
-      if (!grantFor(principal)) return;
+      const grant = grantFor(principal);
+      if (!grant || grant.appId && headers['x-workbench-app'] !== grant.appId) return;
       const client = headers['x-workbench-client'], session = headers['x-workbench-session'];
       if (typeof client !== 'string' || !/^[\w .-]{1,100}$/.test(client)
         || typeof session !== 'string' || !/^[a-f0-9-]{36}$/.test(session)) return;
@@ -90,7 +97,7 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
       else {
         if (sessions.size >= 100 && !sessions.has(session)) sessions.delete(sessions.keys().next().value);
         sessions.set(session, { client, seenAt: now() });
-        if (/codex/i.test(client)) lastCodexPresence.set(principal, now());
+        if (grant.appId || /codex/i.test(client)) lastClientPresence.set(principal, now());
       }
       presence.set(principal, sessions);
     },
@@ -99,10 +106,19 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
       const grant = grantFor(input.principal);
       const allSessions = [...(presence.get(input.principal)?.values() ?? [])];
       const sessions = allSessions.filter(value => now() - value.seenAt <= presenceTtlMs);
-      const codex = sessions.filter(value => /codex/i.test(value.client));
-      const lastSeen = lastCodexPresence.get(input.principal) ?? null;
-      return { enabled: !!grant, automatic: grant?.automatic === true, connected: !!grant && codex.length > 0,
+      const online = sessions.filter(value => grant?.appId || /codex/i.test(value.client));
+      const lastSeen = lastClientPresence.get(input.principal) ?? null;
+      return { enabled: !!grant, automatic: grant?.automatic === true, connected: !!grant && online.length > 0,
         mcpConnected: !!grant && sessions.length > 0, lastSeenAt: lastSeen === null ? null : new Date(lastSeen).toISOString() };
+    },
+    panelConnections() {
+      const grants = Object.entries(persistence.read('grants'));
+      return agentApps.map(app => {
+        const values = grants.filter(([, grant]) => grant.kind === 'lightAccess' && (grant.appId ?? 'codex') === app.id)
+          .map(([principal]) => this.connectionStatus({ principal, acknowledged: true }));
+        return { appId: app.id, name: app.name, enabled: values.some(v => v.enabled), connected: values.some(v => v.connected),
+          lastSeenAt: values.map(v => v.lastSeenAt).filter(Boolean).sort().at(-1) ?? null };
+      });
     },
     async automaticBinding(principal, binding, input) {
       const grant = grantFor(principal);

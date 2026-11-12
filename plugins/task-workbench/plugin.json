@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.7",
-  "description": "2026-11-12 任务岛自动连接、Git 核验绑定与执行交接",
+  "version": "0.1.8",
+  "description": "2026-11-12 多应用独立连接、Git 核验绑定与执行交接",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,

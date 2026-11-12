@@ -34,14 +34,14 @@ function failure(code, unknown = false) {
 }
 
 export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000, reloadConfig,
-  presenceIntervalMs = 10000, allowOfflineDiscovery = false } = {}) {
-  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.7' }, { capabilities: { tools: {} } });
+  presenceIntervalMs = 10000, allowOfflineDiscovery = false, appId } = {}) {
+  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.8' }, { capabilities: { tools: {} } });
   const session = randomUUID();
   let heartbeatTimer, heartbeatBusy = false;
   // Date: 2026-11-12. Only initialized MCP clients renew presence; a running owner is insufficient.
   function headers(token, offline = false) {
     const name = server.getClientVersion()?.name;
-    return { Authorization: `Bearer ${token}`, ...(typeof name === 'string' && /^[\w .-]{1,100}$/.test(name)
+    return { Authorization: `Bearer ${token}`, ...(appId ? { 'X-Workbench-App': appId } : {}), ...(typeof name === 'string' && /^[\w .-]{1,100}$/.test(name)
       ? { 'X-Workbench-Client': name, 'X-Workbench-Session': session,
         'X-Workbench-Presence': offline ? 'offline' : 'online' } : {}) };
   }
@@ -60,7 +60,7 @@ export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs
     finally { heartbeatBusy = false; }
   }
   server.oninitialized = () => {
-    if (!/codex/i.test(server.getClientVersion()?.name ?? '')) return;
+    if (!appId && !/codex/i.test(server.getClientVersion()?.name ?? '')) return;
     void heartbeat();
     heartbeatTimer = setInterval(() => { void heartbeat(); }, presenceIntervalMs);
     heartbeatTimer.unref?.();

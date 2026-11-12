@@ -155,7 +155,7 @@ async function createOwnedServer(options) {
     automaticBinding: lightAccess?.automaticBinding,
   });
   const lightOutbox = createLightOutbox(persistence);
-  const lightPanel = createLightPanel(persistence);
+  const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [] });
   const lightLibrary = createLightLibrary(persistence);
   const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
