@@ -13,6 +13,9 @@ REVISION = "a177c1e817204f8ddc0c8993610ca674fc6d9767"
 BASE = f"https://raw.githubusercontent.com/lobehub/lobe-icons/{REVISION}"
 # IDs are upstream identifiers; aliases only affect icon selection, never connection identity.
 CATALOG = """
+openclaw|OpenClaw|
+hermesagent|Hermes|
+pi|Pi|
 openai|OpenAI|ChatGPT,GPT
 codex|Codex|OpenAI Codex
 anthropic|Anthropic|
