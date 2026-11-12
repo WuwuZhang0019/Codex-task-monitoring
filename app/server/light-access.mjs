@@ -22,12 +22,17 @@ function contained(root, target) {
 }
 function withoutConfirmation(input) { const { confirmationGrant, ...body } = input; return body; }
 
-export function createLightAccess(persistence) {
+export function createLightAccess(persistence, { now = Date.now, presenceTtlMs = 35000 } = {}) {
+  // Date: 2026-11-12. Presence is an expiring MCP-session lease, never a service health flag.
+  const presence = new Map();
+  const lastCodexPresence = new Map();
   function grantFor(principal) {
     const grant = persistence.read('grants')[principal];
     return grant?.kind === 'lightAccess' && !grant.revokedAt ? grant : null;
   }
   function matches(grant, context) {
+    if (grant.automatic === true) return context && typeof context.threadId === 'string' && !!context.threadId.trim()
+      && context.hostId === 'local' && typeof context.worktreePath === 'string' && path.isAbsolute(context.worktreePath);
     return context && context.threadId === grant.threadId && context.hostId === grant.hostId
       && typeof context.worktreePath === 'string' && path.isAbsolute(context.worktreePath)
       && grant.worktreeRoots.some(root => contained(root, path.resolve(context.worktreePath)));
@@ -35,7 +40,7 @@ export function createLightAccess(persistence) {
   function authorize(principal, scope, operation, details = {}) {
     const grant = grantFor(principal);
     const projectKey = persistence.read('light')?.snapshot.projects.find(project => project.id === scope)?.key ?? scope;
-    if (!grant || !grant.projectKeys.includes(projectKey) || !operations.has(operation)) return false;
+    if (!grant || !grant.automatic && !grant.projectKeys.includes(projectKey) || !operations.has(operation)) return false;
     if (['confirmSupplement', 'approveSupplementCancellation'].includes(operation)) {
       const input = details.input, confirmation = persistence.read('grants')[input?.confirmationGrant];
       if (!confirmation || confirmation.kind !== 'lightSupplementConfirmation' || confirmation.principal !== principal
@@ -49,7 +54,7 @@ export function createLightAccess(persistence) {
     if (!matches(grant, context)) lightError('FORBIDDEN', '会话及工作树超出授权', 403);
     try {
       const actual = await realpath(context.worktreePath);
-      if (!grant.worktreeRoots.some(root => contained(root, actual))) lightError('FORBIDDEN', '实际路径超出授权', 403);
+      if (!grant.automatic && !grant.worktreeRoots.some(root => contained(root, actual))) lightError('FORBIDDEN', '实际路径超出授权', 403);
       const options = { cwd: actual, timeout: 5000, windowsHide: true, maxBuffer: 1024 * 1024 };
       const top = (await git('git', ['rev-parse', '--show-toplevel'], options)).stdout.trim();
       const branch = (await git('git', ['symbolic-ref', '--quiet', '--short', 'HEAD'], options)).stdout.trim();
@@ -65,6 +70,47 @@ export function createLightAccess(persistence) {
   }
   return {
     authorize,
+    connect(input) {
+      requireBody(input, ['acknowledged']);
+      return persistence.run(() => {
+        const principal = randomUUID(), token = randomBytes(32).toString('hex');
+        persistence.write('grants', { ...persistence.read('grants'), [principal]: { kind: 'lightAccess', tokenHash: digest(token),
+          automatic: true, createdAt: new Date(now()).toISOString(), revokedAt: null } });
+        return { principal, token, automatic: true };
+      });
+    },
+    touch(principal, headers) {
+      if (!grantFor(principal)) return;
+      const client = headers['x-workbench-client'], session = headers['x-workbench-session'];
+      if (typeof client !== 'string' || !/^[\w .-]{1,100}$/.test(client)
+        || typeof session !== 'string' || !/^[a-f0-9-]{36}$/.test(session)) return;
+      const sessions = presence.get(principal) ?? new Map();
+      for (const [id, value] of sessions) if (now() - value.seenAt > presenceTtlMs) sessions.delete(id);
+      if (headers['x-workbench-presence'] === 'offline') sessions.delete(session);
+      else {
+        if (sessions.size >= 100 && !sessions.has(session)) sessions.delete(sessions.keys().next().value);
+        sessions.set(session, { client, seenAt: now() });
+        if (/codex/i.test(client)) lastCodexPresence.set(principal, now());
+      }
+      presence.set(principal, sessions);
+    },
+    connectionStatus(input) {
+      requireBody(input, ['principal', 'acknowledged']);
+      const grant = grantFor(input.principal);
+      const allSessions = [...(presence.get(input.principal)?.values() ?? [])];
+      const sessions = allSessions.filter(value => now() - value.seenAt <= presenceTtlMs);
+      const codex = sessions.filter(value => /codex/i.test(value.client));
+      const lastSeen = lastCodexPresence.get(input.principal) ?? null;
+      return { enabled: !!grant, automatic: grant?.automatic === true, connected: !!grant && codex.length > 0,
+        mcpConnected: !!grant && sessions.length > 0, lastSeenAt: lastSeen === null ? null : new Date(lastSeen).toISOString() };
+    },
+    async automaticBinding(principal, binding, input) {
+      const grant = grantFor(principal);
+      if (grant?.automatic !== true) return false;
+      if (!authorize(principal, input.projectId, 'confirmBinding', { input, binding })) lightError('FORBIDDEN', '自动绑定范围无效', 403);
+      await verifyWorktree(binding.context, grant);
+      return true;
+    },
     authenticate(req) {
       if (req.headers.origin !== undefined || req.rawHeaders.filter((value, index) => index % 2 === 0 && value.toLowerCase() === 'authorization').length !== 1) return null;
       const token = /^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization ?? '')?.[1];
@@ -151,6 +197,10 @@ export function createLightAccess(persistence) {
     },
     async verifyBinding(principal, binding, input) {
       const grant = grantFor(principal), confirmation = persistence.read('grants')[input.confirmationGrant];
+      if (grant?.automatic === true && input.confirmationGrant === null) {
+        await verifyWorktree(binding.context, grant);
+        return true;
+      }
       if (!grant || !confirmation || confirmation.kind !== 'lightBindingConfirmation' || confirmation.principal !== principal
         || confirmation.expiresAt < Date.now() || confirmation.contentHash !== digest(withoutConfirmation(input))) return false;
       await verifyWorktree(binding.context, grant);

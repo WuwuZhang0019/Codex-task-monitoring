@@ -6,8 +6,11 @@ import { createLightBridge, loadLightConfig } from './light-bridge.mjs';
 
 try {
   const file = process.env.WORKBENCH_LIGHT_CONFIG ?? path.join(os.homedir(), '.codex', 'task-workbench-light', 'config.json');
-  const config = await loadLightConfig(file);
-  await createLightBridge(config, { reloadConfig: () => loadLightConfig(file) }).connect(new StdioServerTransport());
+  if (!file || !path.isAbsolute(file)) throw new Error('LIGHT_CONFIG_REQUIRED');
+  let config;
+  try { config = await loadLightConfig(file); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  await createLightBridge(config, { reloadConfig: () => loadLightConfig(file), allowOfflineDiscovery: true }).connect(new StdioServerTransport());
 } catch {
   console.error('Workbench light bridge failed to start. Check the private owner configuration.');
   process.exitCode = 1;

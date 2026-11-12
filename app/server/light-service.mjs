@@ -80,6 +80,7 @@ function invalidateSuccessors(snapshot, origin, reason, time) {
 
 export function createLightService(persistence, requests, {
   authorize = () => false, confirmBinding = () => false, verifyExecutionContext = () => true,
+  automaticBinding = () => false,
 } = {}) {
   function permitted(principal, projectId, operation, details = {}) {
     if (!principal || authorize(principal, projectId, operation, details) !== true) lightError('FORBIDDEN', '适配层未授予当前作用域', 403);
@@ -266,6 +267,11 @@ export function createLightService(persistence, requests, {
           value.snapshot.bindings.push(binding);
           value.metadata.bindingIntents ??= {};
           value.metadata.bindingIntents[binding.key] = { takeover: structuredClone(input.takeover ?? null) };
+          // Date: 2026-11-12. Desktop opt-in allows verified associations without a second user prompt.
+          if (!input.takeover && await automaticBinding(principal, structuredClone(binding), structuredClone(input)) === true) {
+            binding.state = 'confirmed';
+            binding.confirmationRef = `automatic:${principal}`;
+          }
         } else {
           if (!binding || binding.bindingRevision !== input.expectedBindingRevision) lightError('STALE_BINDING', '绑定版本不匹配', 409);
           if (digest(binding.stepKeys) !== digest(steps.map(step => step.key)) || digest(binding.context) !== digest(input.context)) lightError('STALE_BINDING', '绑定提案内容已变化', 409);
@@ -291,7 +297,8 @@ export function createLightService(persistence, requests, {
                 for (const step of value.snapshot.steps.filter(item => execution.stepKeys.includes(item.key))) step.bindingKey = binding.key;
               }
             }
-            binding.state = 'confirmed'; binding.confirmationRef = `grant:${digest(input.confirmationGrant)}`;
+            binding.state = 'confirmed'; binding.confirmationRef = input.confirmationGrant === null
+              ? `automatic:${principal}` : `grant:${digest(input.confirmationGrant)}`;
           } else {
             permitted(principal, input.projectId, 'revokeBinding', { input, binding, steps });
             if (binding.state === 'revoked') lightError('STALE_BINDING', '绑定已撤销', 409);

@@ -50,7 +50,8 @@ export const lightTools = Object.entries(definitions).map(([name, definition]) =
   }
   collect(inputSchema);
   inputSchema.$defs = Object.fromEntries([...needed].map(key => [key, inputSchema.$defs[key]]));
-  return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.`, inputSchema,
+  const bindingHelp = name === 'workbench_bind_context' ? ' Automatic desktop mode verifies Git and returns state=confirmed from propose; reuse that binding directly. For takeover, confirm with confirmationGrant=null. Legacy scoped grants still require confirmation.' : '';
+  return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.${bindingHelp}`, inputSchema,
     annotations: { readOnlyHint: !!definition.read, destructiveHint: !definition.read, idempotentHint: true, openWorldHint: false } };
 });
 const ajv = new Ajv2020({ strict: true, strictRequired: false, strictTypes: false });

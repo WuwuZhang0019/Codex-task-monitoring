@@ -33,18 +33,44 @@ function failure(code, unknown = false) {
   return { isError: true, content: [{ type: 'text', text: JSON.stringify(value) }], structuredContent: value };
 }
 
-export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000, reloadConfig } = {}) {
-  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.6' }, { capabilities: { tools: {} } });
+export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000, reloadConfig,
+  presenceIntervalMs = 10000, allowOfflineDiscovery = false } = {}) {
+  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.7' }, { capabilities: { tools: {} } });
+  const session = randomUUID();
+  let heartbeatTimer, heartbeatBusy = false;
+  // Date: 2026-11-12. Only initialized MCP clients renew presence; a running owner is insufficient.
+  function headers(token, offline = false) {
+    const name = server.getClientVersion()?.name;
+    return { Authorization: `Bearer ${token}`, ...(typeof name === 'string' && /^[\w .-]{1,100}$/.test(name)
+      ? { 'X-Workbench-Client': name, 'X-Workbench-Session': session,
+        'X-Workbench-Presence': offline ? 'offline' : 'online' } : {}) };
+  }
   async function connection() {
     const current = reloadConfig ? await reloadConfig() : config;
     const owner = current.dataDir ? await discoverOwner(current.dataDir) : current;
     return { endpoint: `${owner.endpoint.replace(/\/$/, '')}/api/light-mcp`, token: current.token };
   }
+  async function heartbeat(offline = false) {
+    if (heartbeatBusy && !offline) return;
+    heartbeatBusy = true;
+    try {
+      const current = await connection();
+      await fetch(current.endpoint, { headers: headers(current.token, offline), signal: AbortSignal.timeout(readTimeoutMs), redirect: 'error' });
+    } catch { /* A failed lease expires; it never retries a business write. */ }
+    finally { heartbeatBusy = false; }
+  }
+  server.oninitialized = () => {
+    if (!/codex/i.test(server.getClientVersion()?.name ?? '')) return;
+    void heartbeat();
+    heartbeatTimer = setInterval(() => { void heartbeat(); }, presenceIntervalMs);
+    heartbeatTimer.unref?.();
+  };
+  server.onclose = () => { if (heartbeatTimer) { clearInterval(heartbeatTimer); void heartbeat(true); } };
   const toolsByName = new Map(lightTools.map(tool => [tool.name, tool]));
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     try {
       const current = await connection();
-      const response = await fetch(current.endpoint, { headers: { Authorization: `Bearer ${current.token}` },
+      const response = await fetch(current.endpoint, { headers: headers(current.token),
         signal: AbortSignal.timeout(readTimeoutMs), redirect: 'error' });
       if (!response.ok) throw new Error('OWNER_UNAVAILABLE');
       const result = await response.json();
@@ -52,7 +78,9 @@ export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs
         || new Set(result.tools.map(tool => tool.name)).size !== toolsByName.size
         || result.tools.some(tool => !toolsByName.has(tool.name) || !tool.inputSchema)) throw new Error('OWNER_RESPONSE_INVALID');
       return { tools: result.tools };
-    } catch {
+    } catch (error) {
+      // Date: 2026-11-12. A fresh installation can wait for its first desktop connection in the same MCP session.
+      if (allowOfflineDiscovery && error.code === 'ENOENT') return { tools: structuredClone(lightTools) };
       throw new McpError(ErrorCode.InternalError, 'OWNER_UNAVAILABLE');
     }
   });
@@ -66,7 +94,7 @@ export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs
     try {
       const current = await connection();
       const response = await fetch(current.endpoint, { method: 'POST',
-        headers: { Authorization: `Bearer ${current.token}`, 'Content-Type': 'application/json' }, body,
+        headers: { ...headers(current.token), 'Content-Type': 'application/json' }, body,
         signal: AbortSignal.timeout(readOnly ? readTimeoutMs : writeTimeoutMs), redirect: 'error' });
       if (response.status === 403) return failure('FORBIDDEN');
       if (response.status === 400 || response.status === 413) return failure('INVALID_INPUT');

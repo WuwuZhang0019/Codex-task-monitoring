@@ -146,12 +146,13 @@ async function createOwnedServer(options) {
   const publisher = createPublisher(persistence,requests,drafts,store,models);
   const business = createBusiness(persistence,requests,models);
   if (options.lightAccessEnabled && typeof options.authorize !== 'function') throw new Error('LIGHT_PRIVATE_AUTH_REQUIRED');
-  const lightAccess = options.lightAccessEnabled ? createLightAccess(persistence) : null;
+  const lightAccess = options.lightAccessEnabled ? createLightAccess(persistence, options.lightPresence) : null;
   const lightAuthorize = options.lightAuthorize ?? lightAccess?.authorize;
   const light = createLightService(persistence, requests, {
     authorize: lightAuthorize,
     confirmBinding: options.lightConfirmBinding ?? lightAccess?.verifyBinding,
     verifyExecutionContext: options.lightVerifyExecutionContext ?? lightAccess?.verifyExecutionContext,
+    automaticBinding: lightAccess?.automaticBinding,
   });
   const lightOutbox = createLightOutbox(persistence);
   const lightPanel = createLightPanel(persistence);
@@ -172,7 +173,9 @@ async function createOwnedServer(options) {
       const method = req.method;
       // MCP 的业务失败由协议层包装，必须在领域事务提交/回滚之后包装。
       if (pathname === '/api/light-mcp' && lightAccess) {
-        if (!lightAccess.authenticate(req)) throw new HttpError(403, 'FORBIDDEN');
+        const principal = lightAccess.authenticate(req);
+        if (!principal) throw new HttpError(403, 'FORBIDDEN');
+        lightAccess.touch(principal, req.headers);
         const handler = createLightHandler({
           service: light,
           authenticate: () => lightAccess.authenticate(req),
@@ -205,6 +208,8 @@ async function createOwnedServer(options) {
       if (pathname.startsWith('/api/light-access/') && lightAccess) {
         if (method !== 'POST') throw new HttpError(405, '不支持的请求方法');
         const body = await jsonBody(req);
+        if (pathname === '/api/light-access/connect') return respond(200, await lightAccess.connect(body));
+        if (pathname === '/api/light-access/connection-status') return respond(200, lightAccess.connectionStatus(body));
         if (pathname === '/api/light-access/grants') return respond(200, await lightAccess.issue(body));
         if (pathname === '/api/light-access/revoke') return respond(200, await lightAccess.revoke(body));
         if (pathname === '/api/light-access/confirm-publication') return respond(200, await lightAccess.confirmPublication(lightPublication, body));
