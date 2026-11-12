@@ -1,9 +1,9 @@
 {
   "date": "2026-11-12",
-  "entry": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.10\\runtime\\light.mjs",
+  "entry": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.11\\runtime\\light.mjs",
   "bridge": {
     "name": "task-workbench-light-bridge",
-    "version": "0.1.10"
+    "version": "0.1.11"
   },
   "tools": [
     "workbench_get_project",

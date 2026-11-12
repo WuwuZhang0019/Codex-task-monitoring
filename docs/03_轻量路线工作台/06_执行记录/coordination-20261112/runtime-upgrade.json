@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-12",
+  "entry": "G:\\rust\\Codex-task-monitoring\\app\\desktop\\owner.mjs",
+  "mode": "standalone",
+  "dataDir": "C:\\Users\\Zyf\\AppData\\Local\\com.codextaskmonitor.workbench\\data",
+  "previousGeneration": "df38d4bc-0ea0-4e66-a88e-3af06a9077c9",
+  "currentGeneration": "ca92759a-50eb-41ac-9ed9-ddeaa17ebb16",
+  "currentPid": 60536,
+  "lifecycle": "existing service stop/start, draining accepted requests",
+  "aggregateBeforeSha256": "d01597228ec36d5d1b4b0cbc364689b6f3f0ac0d46f94d4e92a6826035db1cc8",
+  "aggregateAfterSha256": "d01597228ec36d5d1b4b0cbc364689b6f3f0ac0d46f94d4e92a6826035db1cc8",
+  "liveBridgeVersion": "0.1.11",
+  "liveTools": 11,
+  "businessRoutesRead": 0,
+  "businessRouteWrites": 0,
+  "supplierRequests": 0,
+  "isolatedFixtureStopped": true,
+  "isolatedPlaintextConnectionFilesRemoved": true,
+  "testChatsArchived": true
+}

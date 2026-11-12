@@ -3,10 +3,10 @@
   "roots": {
     "source": "G:\\rust\\Codex-task-monitoring\\plugins\\task-workbench\\skills\\workbench-handoff",
     "standalone": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff",
-    "pluginSkill": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.10\\skills\\workbench-handoff"
+    "pluginSkill": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.11\\skills\\workbench-handoff"
   },
-  "pluginVersion": "0.1.10",
-  "sourceCommit": "9a9fd5362406df7d2e8c4a73b98e40f233d2306d",
+  "pluginVersion": "0.1.11",
+  "sourceCommit": "f83c8b85e8eb09a13f0f16b2da7d09ebbeadc733",
   "releaseReady": true,
   "sourceVsStandalone": {
     "equal": true,
@@ -36,7 +36,7 @@
       "references/plan-registration.md": "f79574b2eba522febcfc704511052db53ed12dbab4b941b8c150c7ac7773f8b8",
       "scripts/context-ledger.mjs": "34f6df992820d005f4f7967d3ba8621e767958d03db908404592d847f74c8be7",
       "scripts/coordination-cli.mjs": "92bdba1d9b35cf965a0bc0fc603f0f9f2004c8a232c5e34a2c19910dbdb0c24c",
-      "scripts/coordination.mjs": "34bc4c936c686af63f2305b477680d8751560de74a36bcbc7f139457d9a5660a",
+      "scripts/coordination.mjs": "5766da29b0213dd2e006fcda6b494b59021861f99c863b3d6e5fccad48baafef",
       "scripts/normalize-plan.mjs": "fc23febd934230a19570a1d7a7931b1cc0e9374f36439a559c9b2741605caa0b",
       "SKILL.md": "94599b8f18519fc282dac88c41b136d3b04e93662a90effb8eaac7a561aaaa70"
     },
@@ -50,7 +50,7 @@
       "references/plan-registration.md": "f79574b2eba522febcfc704511052db53ed12dbab4b941b8c150c7ac7773f8b8",
       "scripts/context-ledger.mjs": "34f6df992820d005f4f7967d3ba8621e767958d03db908404592d847f74c8be7",
       "scripts/coordination-cli.mjs": "92bdba1d9b35cf965a0bc0fc603f0f9f2004c8a232c5e34a2c19910dbdb0c24c",
-      "scripts/coordination.mjs": "34bc4c936c686af63f2305b477680d8751560de74a36bcbc7f139457d9a5660a",
+      "scripts/coordination.mjs": "5766da29b0213dd2e006fcda6b494b59021861f99c863b3d6e5fccad48baafef",
       "scripts/normalize-plan.mjs": "fc23febd934230a19570a1d7a7931b1cc0e9374f36439a559c9b2741605caa0b",
       "SKILL.md": "94599b8f18519fc282dac88c41b136d3b04e93662a90effb8eaac7a561aaaa70"
     },
@@ -64,7 +64,7 @@
       "references/plan-registration.md": "f79574b2eba522febcfc704511052db53ed12dbab4b941b8c150c7ac7773f8b8",
       "scripts/context-ledger.mjs": "34f6df992820d005f4f7967d3ba8621e767958d03db908404592d847f74c8be7",
       "scripts/coordination-cli.mjs": "92bdba1d9b35cf965a0bc0fc603f0f9f2004c8a232c5e34a2c19910dbdb0c24c",
-      "scripts/coordination.mjs": "34bc4c936c686af63f2305b477680d8751560de74a36bcbc7f139457d9a5660a",
+      "scripts/coordination.mjs": "5766da29b0213dd2e006fcda6b494b59021861f99c863b3d6e5fccad48baafef",
       "scripts/normalize-plan.mjs": "fc23febd934230a19570a1d7a7931b1cc0e9374f36439a559c9b2741605caa0b",
       "SKILL.md": "94599b8f18519fc282dac88c41b136d3b04e93662a90effb8eaac7a561aaaa70"
     }

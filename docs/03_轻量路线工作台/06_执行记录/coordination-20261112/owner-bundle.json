@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-12",
+  "sourceCommit": "f83c8b85e8eb09a13f0f16b2da7d09ebbeadc733",
+  "entry": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\coordination-release-20261112\\owner\\index.mjs",
+  "sha256": "efac212b51d483cea1623004c3fa91acce41a9ed8c2e8a45658ab1f3f5924f97",
+  "tools": [
+    "workbench_get_project",
+    "workbench_register_plan",
+    "workbench_revise_plan",
+    "workbench_reserve_execution",
+    "workbench_update_step_status",
+    "workbench_record_supplement",
+    "workbench_bind_context",
+    "workbench_query_event",
+    "workbench_complete_plan",
+    "workbench_get_coordination",
+    "workbench_save_coordination"
+  ],
+  "bundledPackages": 8,
+  "nativeDataTouched": false
+}
