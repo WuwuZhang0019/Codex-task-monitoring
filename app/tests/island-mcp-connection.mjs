@@ -94,6 +94,7 @@ try {
   report.checks.push('Opening settings is read-only; unavailable service never appears connected');
   await page.evaluate(()=>{window.__connection={state:'connected',enabled:true};window.__extraApps=[{appId:'new-agent',name:'全新 Agent',state:'connected',enabled:true}];});
   await page.getByText('全新 Agent',{exact:true}).waitFor({timeout:6000});
+  assert.equal(await page.getByRole('alert').count(),0,'recovered connection clears stale service warning');
   assert.equal(await page.getByRole('button',{name:'复制接入指令',exact:true}).count(),1);
   await page.screenshot({path:path.join(output,'dynamic-applications.png')});
   report.checks.push('One reusable instruction button; arbitrary application names appear dynamically');
