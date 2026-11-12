@@ -12,6 +12,10 @@ const app = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const root = path.join(app, 'desktop/resources');
 const generatedDate = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date());
 await mkdir(path.join(root, 'app/desktop'), { recursive: true });
+// 日期：2026-11-12。独立服务资源也携带原创许可与来源，不只携带第三方许可。
+for (const name of ['LICENSE', 'SOURCE.md', 'THIRD-PARTY-NOTICES.txt']) {
+  await copyFile(path.join(app, '..', name), path.join(root, name));
+}
 const nodeVersion = '25.5.0';
 const archiveName = `node-v${nodeVersion}-win-x64.zip`;
 const cache = path.join(app, 'test-results/runtime-download');

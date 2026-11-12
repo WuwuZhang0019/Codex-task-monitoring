@@ -3,6 +3,7 @@ name = "route-workbench-desktop"
 version = "0.2.0"
 description = "Codex task workbench desktop runtime"
 edition = "2021"
+license = "GPL-3.0-or-later"
 
 [lib]
 name = "route_workbench_desktop_lib"
