@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-12",
+  "scope": "island-workbench-20261111/E closeout; read-only state drift audit",
+  "writesPerformed": "Only this sanitized evidence JSON; no business aggregate or upstream settings writes",
+  "aggregate": {
+    "earlierERecordedSha256": "dced6cd1da27f9b8a6fdfb10a178947839b5da51981c00346c1cea044636607a",
+    "configurationRestoreBeforeAndAfterRecordedSha256": "2bf743baa7b545f97145535c388ec0049969502349179b71ddf575d6452f6555",
+    "currentSha256": "2bf743baa7b545f97145535c388ec0049969502349179b71ddf575d6452f6555",
+    "backupCurrentSha256": "2bf743baa7b545f97145535c388ec0049969502349179b71ddf575d6452f6555",
+    "currentBusinessRevision": 156,
+    "DClosureBusinessRevision": 156,
+    "DScopedEntityComparisons": [
+      {
+        "collection": "projects",
+        "baselineCount": 1,
+        "matchedCount": 1,
+        "missingCount": 0,
+        "changedFieldNames": [],
+        "passed": true
+      },
+      {
+        "collection": "plans",
+        "baselineCount": 1,
+        "matchedCount": 1,
+        "missingCount": 0,
+        "changedFieldNames": [],
+        "passed": true
+      },
+      {
+        "collection": "steps",
+        "baselineCount": 20,
+        "matchedCount": 20,
+        "missingCount": 0,
+        "changedFieldNames": [],
+        "passed": true
+      },
+      {
+        "collection": "routes",
+        "baselineCount": 6,
+        "matchedCount": 6,
+        "missingCount": 0,
+        "changedFieldNames": [],
+        "passed": true
+      },
+      {
+        "collection": "bindings",
+        "baselineCount": 1,
+        "matchedCount": 1,
+        "missingCount": 0,
+        "changedFieldNames": [],
+        "passed": true
+      },
+      {
+        "collection": "executions",
+        "baselineCount": 1,
+        "matchedCount": 1,
+        "missingCount": 0,
+        "changedFieldNames": [],
+        "passed": true
+      }
+    ],
+    "readingPreferenceDomain": "lightPanelPreferences",
+    "readingPreferenceKeys": [
+      "collapsed",
+      "focus",
+      "scroll",
+      "selected",
+      "y"
+    ],
+    "interpretation": "Normal UI preference saves can change aggregate file hash without incrementing business revision. D-scoped business entities match the saved formal closure snapshot."
+  },
+  "upstreamSettings": {
+    "migrationBackupSha256": "d4714ca047be193af915f8357a3d1e3077e4a054f64d41cfd8c4fb29da9b4bcf",
+    "currentSha256": "57a5f8996f96c422b511fca14dcccfb7e33b29dd62ebe42674939de6d901ba0d",
+    "changedPreferenceKeys": [
+      "appearance.glass",
+      "island.offset"
+    ],
+    "addedKeyCount": 0,
+    "removedKeyCount": 0,
+    "interpretation": "External preference drift; shell migration reads upstream settings without writing them. Changed preference values are intentionally not recorded."
+  },
+  "fork": {
+    "path": "G:/rust/windows-dynamic-island",
+    "currentCommit": "405f7cef3d9a2838c3cdaf1dd96ebaaee9b0153b",
+    "workingTreeClean": true,
+    "statusShort": "",
+    "earlierInstalledSourceCommit": "77574bfe7f0b561b092165ed824da0d56cc3e66f",
+    "earlierInstalledExeSha256": "ba112bb56c228da9b7922eba3e30dff58c4e16d42eb61bb5b6347c4131c5736e",
+    "laterChanges": "Sidebar category commit a2e021e and capsule-node tray icon commit 405f7ce are later than the BA112 installed baseline; acceptance versions must be distinguished."
+  },
+  "limitations": [
+    "No original DCED6CD1 aggregate byte copy was located, so this audit does not prove that the entire global file hash difference consists only of reading preferences.",
+    "Comparison covers the D-authorized scoped entities and unchanged business revision, not a byte-for-byte global historical comparison.",
+    "The configuration restoration before/after fingerprint equality is valid for that operation; it must not be expanded into a claim that all files stayed unchanged since E began.",
+    "No sensitive raw aggregate, credential, project text, or upstream preference values are copied into this record."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-12",
+  "method": "actual native settings click changed windows to dynamic; stop only exact E installation; restore byte backup; cold start without temporary WebView debug args",
+  "oldPid": 15224,
+  "newPids": [
+    45268
+  ],
+  "installedExeSHA256": "BA112BB56C228DA9B7922EBA3E30DFF58C4E16D42EB61BB5B6347C4131C5736E",
+  "beforeRestoreSHA256": "848BC18E019FA2887ED8603CAFC3BB68EA87058064C0672459F7D295C8B847F1",
+  "backupSHA256": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+  "afterColdStartSHA256": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+  "restoredBytes": true,
+  "style": "windows",
+  "glass": "strong",
+  "hidden": false,
+  "debugPortListenerCount": 0,
+  "runValue": null,
+  "aggregateBeforeSHA256": "2BF743BAA7B545F97145535C388EC0049969502349179B71DDF575D6452F6555",
+  "aggregateAfterSHA256": "2BF743BAA7B545F97145535C388EC0049969502349179B71DDF575D6452F6555",
+  "upstreamSettingsBeforeSHA256": "57A5F8996F96C422B511FCA14DCCCFB7E33B29DD62EBE42674939DE6D901BA0D",
+  "upstreamSettingsAfterSHA256": "57A5F8996F96C422B511FCA14DCCCFB7E33B29DD62EBE42674939DE6D901BA0D",
+  "note": "reading selection is a normal UI preference; no production aggregate restoration or source checkout modification",
+  "passed": true
+}

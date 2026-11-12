@@ -1,0 +1,111 @@
+{
+  "date": "2026-11-12",
+  "cycles": [
+    {
+      "before": {
+        "visibility": "visible",
+        "focus": true,
+        "activeTag": "BUTTON",
+        "activeText": "最近事件 · D专用真实服务接线测试已经结束；取消本次临时测试执行，不代表示例原",
+        "wb": true,
+        "rect": {
+          "x": 123,
+          "y": 8,
+          "width": 860,
+          "height": 524,
+          "top": 8,
+          "right": 983,
+          "bottom": 532,
+          "left": 123
+        }
+      },
+      "after": {
+        "visibility": "visible",
+        "focus": false,
+        "activeTag": "BODY",
+        "activeText": "",
+        "wb": false,
+        "rect": {
+          "x": 348,
+          "y": 8,
+          "width": 410,
+          "height": 38,
+          "top": 8,
+          "right": 758,
+          "bottom": 46,
+          "left": 348
+        }
+      },
+      "reopen": {
+        "visibility": "visible",
+        "focus": false,
+        "activeTag": "BODY",
+        "activeText": "",
+        "wb": true,
+        "rect": {
+          "x": 123,
+          "y": 8,
+          "width": 860,
+          "height": 524,
+          "top": 8,
+          "right": 983,
+          "bottom": 532,
+          "left": 123
+        }
+      }
+    },
+    {
+      "before": {
+        "visibility": "visible",
+        "focus": true,
+        "activeTag": "BUTTON",
+        "activeText": "最近事件 · D专用真实服务接线测试已经结束；取消本次临时测试执行，不代表示例原",
+        "wb": true,
+        "rect": {
+          "x": 123,
+          "y": 8,
+          "width": 860,
+          "height": 524,
+          "top": 8,
+          "right": 983,
+          "bottom": 532,
+          "left": 123
+        }
+      },
+      "after": {
+        "visibility": "visible",
+        "focus": false,
+        "activeTag": "BODY",
+        "activeText": "",
+        "wb": false,
+        "rect": {
+          "x": 348,
+          "y": 8,
+          "width": 410,
+          "height": 38,
+          "top": 8,
+          "right": 758,
+          "bottom": 46,
+          "left": 348
+        }
+      },
+      "reopen": {
+        "visibility": "visible",
+        "focus": false,
+        "activeTag": "BODY",
+        "activeText": "",
+        "wb": true,
+        "rect": {
+          "x": 123,
+          "y": 8,
+          "width": 860,
+          "height": 524,
+          "top": 8,
+          "right": 983,
+          "bottom": 532,
+          "left": 123
+        }
+      }
+    }
+  ]
+}

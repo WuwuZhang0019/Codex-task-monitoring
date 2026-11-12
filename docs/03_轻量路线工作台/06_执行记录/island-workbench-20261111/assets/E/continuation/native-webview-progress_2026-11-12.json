@@ -1,0 +1,243 @@
+{
+  "date": "2026-11-12",
+  "nativeInstalled": true,
+  "installedHash": "BA112BB56C228DA9B7922EBA3E30DFF58C4E16D42EB61BB5B6347C4131C5736E",
+  "transport": "loopback WebView2 CDP; noDefaults=true; real Tauri commands/OS foreground diagnostics; hover bus cases explicitly controlled event, not OS physical mouse",
+  "checks": [
+    {
+      "name": "dynamic: native setting persistence and geometry",
+      "result": "passed",
+      "detail": {
+        "style": "dynamic",
+        "compact": {
+          "x": 348,
+          "y": 0,
+          "width": 410,
+          "height": 38
+        },
+        "expanded": {
+          "x": 123,
+          "y": 0,
+          "width": 860,
+          "height": 526
+        },
+        "glass": "strong unchanged"
+      }
+    },
+    {
+      "name": "dynamic: actual native focus and Enter/Tab/Esc",
+      "result": "passed",
+      "detail": {
+        "focused": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "cursor": {
+            "x": 1853,
+            "y": 4
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "afterEscape": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          },
+          "cursor": {
+            "x": 1853,
+            "y": 4
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "tabTarget": "BUTTON",
+        "selected": "mock-twenty-20261111/plan/steps/A-02"
+      }
+    },
+    {
+      "name": "dynamic: controlled native hover events, pin and unpin",
+      "result": "failed",
+      "error": "page.waitForFunction: Timeout 6000ms exceeded.\n    at open (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:20:105)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:47:24\n    at async check (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:22:47)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:46:2"
+    },
+    {
+      "name": "dynamic: reading selection, scroll, refresh and locate",
+      "result": "failed",
+      "error": "page.waitForFunction: Timeout 6000ms exceeded.\n    at open (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:20:105)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:55:3\n    at async check (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:22:47)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:54:2"
+    },
+    {
+      "name": "windows: native setting persistence and geometry",
+      "result": "passed",
+      "detail": {
+        "style": "windows",
+        "compact": {
+          "x": 348,
+          "y": 8,
+          "width": 410,
+          "height": 38
+        },
+        "expanded": {
+          "x": 123,
+          "y": 8,
+          "width": 860,
+          "height": 524
+        },
+        "glass": "strong unchanged"
+      }
+    },
+    {
+      "name": "windows: actual native focus and Enter/Tab/Esc",
+      "result": "passed",
+      "detail": {
+        "focused": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "cursor": {
+            "x": 1853,
+            "y": 4
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "afterEscape": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          },
+          "cursor": {
+            "x": 1853,
+            "y": 4
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "tabTarget": "BUTTON",
+        "selected": "mock-twenty-20261111/plan/steps/A-02"
+      }
+    },
+    {
+      "name": "windows: controlled native hover events, pin and unpin",
+      "result": "passed",
+      "detail": {
+        "method": "controlled event sent over real native event bus; physical mouse separate",
+        "before": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          },
+          "cursor": {
+            "y": 4,
+            "x": 1853
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "after": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          },
+          "cursor": {
+            "y": 4,
+            "x": 1853
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        }
+      }
+    },
+    {
+      "name": "windows: reading selection, scroll, refresh and locate",
+      "result": "passed",
+      "detail": {
+        "selected": "light-workbench-20261110/A-02",
+        "verticalRestored": 200,
+        "horizontalRestored": 116,
+        "nativeEditableInputs": 0,
+        "detailInput": "read-only product; no editable detail input to test"
+      }
+    },
+    {
+      "name": "actual OS fullscreen detection and hide, then restore",
+      "result": "passed",
+      "detail": {
+        "foreground": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 22807946,
+            "pid": 500,
+            "process": "fullscreen-fixture",
+            "isEInstalled": false
+          },
+          "cursor": {
+            "y": 5,
+            "x": 1854
+          },
+          "underCursor": {
+            "handle": 22807946,
+            "pid": 500,
+            "process": "fullscreen-fixture",
+            "isEInstalled": false
+          }
+        },
+        "fixturePid": 500,
+        "actualNativeFullscreen": true,
+        "restored": true
+      }
+    }
+  ],
+  "errors": [
+    "dynamic: controlled native hover events, pin and unpin",
+    "dynamic: reading selection, scroll, refresh and locate"
+  ],
+  "limitations": [
+    "CDP screenshots are native WebView-only and exclude native glass",
+    "No business step transitions or grants; reading preference writes only",
+    "Physical mouse hover and OS hit testing remain separate"
+  ]
+}

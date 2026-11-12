@@ -1,0 +1,178 @@
+{
+  "date": "2026-11-12",
+  "nativeInstalled": true,
+  "installedHash": "BA112BB56C228DA9B7922EBA3E30DFF58C4E16D42EB61BB5B6347C4131C5736E",
+  "transport": "loopback WebView2 CDP; noDefaults=true; real Tauri commands/OS foreground diagnostics; hover bus cases explicitly controlled event, not OS physical mouse",
+  "checks": [
+    {
+      "name": "dynamic: native setting persistence and geometry",
+      "result": "passed",
+      "detail": {
+        "style": "dynamic",
+        "compact": {
+          "x": 348,
+          "y": 0,
+          "width": 410,
+          "height": 38
+        },
+        "expanded": {
+          "x": 123,
+          "y": 0,
+          "width": 860,
+          "height": 526
+        },
+        "glass": "strong unchanged"
+      }
+    },
+    {
+      "name": "dynamic: actual native focus and Enter/Tab/Esc",
+      "result": "passed",
+      "detail": {
+        "focused": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "cursor": {
+            "x": 1930,
+            "y": 0
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "afterEscape": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          },
+          "cursor": {
+            "x": 1930,
+            "y": 0
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "tabTarget": "BUTTON",
+        "selected": "mock-twenty-20261111/plan/steps/A-02"
+      }
+    },
+    {
+      "name": "dynamic: controlled native hover events, pin and unpin",
+      "result": "failed",
+      "error": "page.waitForFunction: Timeout 30000ms exceeded.\n    at open (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:19:53)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:46:24\n    at async check (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:21:47)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:45:2"
+    },
+    {
+      "name": "dynamic: reading selection, scroll, refresh and locate",
+      "result": "failed",
+      "error": "page.waitForFunction: Timeout 30000ms exceeded.\n    at open (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:19:53)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:54:3\n    at async check (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:21:47)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:53:2"
+    },
+    {
+      "name": "windows: native setting persistence and geometry",
+      "result": "passed",
+      "detail": {
+        "style": "windows",
+        "compact": {
+          "x": 348,
+          "y": 8,
+          "width": 410,
+          "height": 38
+        },
+        "expanded": {
+          "x": 123,
+          "y": 8,
+          "width": 860,
+          "height": 524
+        },
+        "glass": "strong unchanged"
+      }
+    },
+    {
+      "name": "windows: actual native focus and Enter/Tab/Esc",
+      "result": "passed",
+      "detail": {
+        "focused": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "cursor": {
+            "y": 0,
+            "x": 1930
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "afterEscape": {
+          "date": "2026-11-12",
+          "foreground": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          },
+          "cursor": {
+            "y": 0,
+            "x": 1930
+          },
+          "underCursor": {
+            "handle": 199166,
+            "pid": 33580,
+            "process": "ChatGPT",
+            "isEInstalled": false
+          }
+        },
+        "tabTarget": "BUTTON",
+        "selected": "mock-twenty-20261111/plan/steps/A-02"
+      }
+    },
+    {
+      "name": "windows: controlled native hover events, pin and unpin",
+      "result": "failed",
+      "error": "page.waitForFunction: Timeout 30000ms exceeded.\n    at open (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:19:53)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:46:24\n    at async check (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:21:47)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:45:2"
+    },
+    {
+      "name": "windows: reading selection, scroll, refresh and locate",
+      "result": "failed",
+      "error": "page.waitForFunction: Timeout 30000ms exceeded.\n    at open (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:19:53)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:54:3\n    at async check (G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\continuation\\native-ui-acceptance.mjs:21:47)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:53:2"
+    },
+    {
+      "name": "actual OS fullscreen detection and hide, then restore",
+      "result": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:73:56\n    at async check (file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:21:47)\n    at async file:///G:/rust/Codex-task-monitoring/app/test-results/island-E/continuation/native-ui-acceptance.mjs:66:2"
+    }
+  ],
+  "errors": [
+    "dynamic: controlled native hover events, pin and unpin",
+    "dynamic: reading selection, scroll, refresh and locate",
+    "windows: controlled native hover events, pin and unpin",
+    "windows: reading selection, scroll, refresh and locate",
+    "actual OS fullscreen detection and hide, then restore"
+  ],
+  "limitations": [
+    "CDP screenshots are native WebView-only and exclude native glass",
+    "No business step transitions or grants; reading preference writes only",
+    "Physical mouse hover and OS hit testing remain separate"
+  ],
+  "passed": false
+}

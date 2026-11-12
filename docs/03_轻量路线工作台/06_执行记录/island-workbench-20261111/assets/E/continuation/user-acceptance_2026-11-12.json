@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-12",
+  "chatId": "01a1cd39-6646-7520-9565-ba7696f597cf",
+  "stage": "E",
+  "glassAcceptanceEarlier": "毛玻璃观感通过确认",
+  "request": "其余交互已由我自测。由于电脑工具无法操作系统任务栏，请仅补验本次 Island Workbench 托盘的显示／隐藏／退出，并确认当前安装版整体观感和阅读是否符合预期；毛玻璃不用重测。",
+  "answer": "托盘三项正常，整体观感通过",
+  "evidenceType": "explicit user acceptance after real installed UI demonstration and agent native checks",
+  "tray": {"show": "passed", "hide": "passed", "quit": "passed", "method": "user actual desktop feedback; agent could not target OS notification area"},
+  "overallAppearanceAndReading": "passed",
+  "scope": "E accepted 0.1.0 installed BA112 baseline; does not claim F or subsequent parallel source revisions accepted"
+}

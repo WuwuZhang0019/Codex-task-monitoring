@@ -1,0 +1,480 @@
+{
+  "date": "2026-11-12",
+  "nativeInstalled": true,
+  "method": "Sky coordinate click positions actual OS cursor in compact-outside/expanded-inside area; CDP normal click/Esc changes actual shell geometry; only listen to native hover events, no hover event injection",
+  "cycles": [
+    {
+      "expanded": {
+        "x": 123,
+        "y": 8,
+        "width": 860,
+        "height": 524
+      },
+      "events": [
+        {
+          "inside": true,
+          "at": 1794451933750
+        },
+        {
+          "inside": false,
+          "at": 1794451935998
+        }
+      ],
+      "during": {
+        "date": "2026-11-12",
+        "coordinateSpace": "physical pixels; probe thread PMv2",
+        "foreground": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "cursor": {
+          "x": 849,
+          "y": 326
+        },
+        "underCursor": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "island": {
+          "owner": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "left": 0,
+            "right": 2560,
+            "bottom": 800,
+            "top": 0
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": true,
+          "transparent": false
+        },
+        "settings": {
+          "owner": {
+            "handle": 39390414,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "left": 742,
+            "right": 1835,
+            "bottom": 1087,
+            "top": 302
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": false,
+          "transparent": false
+        }
+      },
+      "after": {
+        "date": "2026-11-12",
+        "coordinateSpace": "physical pixels; probe thread PMv2",
+        "foreground": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "cursor": {
+          "x": 849,
+          "y": 326
+        },
+        "underCursor": {
+          "handle": 39390414,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "island": {
+          "owner": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "right": 2560,
+            "bottom": 800,
+            "left": 0,
+            "top": 0
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": true,
+          "transparent": true
+        },
+        "settings": {
+          "owner": {
+            "handle": 39390414,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "right": 1835,
+            "bottom": 1087,
+            "left": 742,
+            "top": 302
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": false,
+          "transparent": false
+        }
+      }
+    },
+    {
+      "expanded": {
+        "x": 123,
+        "y": 8,
+        "width": 860,
+        "height": 524
+      },
+      "events": [
+        {
+          "inside": true,
+          "at": 1794451938690
+        },
+        {
+          "inside": false,
+          "at": 1794451940890
+        }
+      ],
+      "during": {
+        "date": "2026-11-12",
+        "coordinateSpace": "physical pixels; probe thread PMv2",
+        "foreground": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "cursor": {
+          "y": 326,
+          "x": 849
+        },
+        "underCursor": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "island": {
+          "owner": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "right": 2560,
+            "left": 0,
+            "top": 0,
+            "bottom": 800
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": true,
+          "transparent": false
+        },
+        "settings": {
+          "owner": {
+            "handle": 39390414,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "right": 1835,
+            "left": 742,
+            "top": 302,
+            "bottom": 1087
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": false,
+          "transparent": false
+        }
+      },
+      "after": {
+        "date": "2026-11-12",
+        "coordinateSpace": "physical pixels; probe thread PMv2",
+        "foreground": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "cursor": {
+          "x": 849,
+          "y": 326
+        },
+        "underCursor": {
+          "handle": 39390414,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "island": {
+          "owner": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "top": 0,
+            "left": 0,
+            "bottom": 800,
+            "right": 2560
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": true,
+          "transparent": true
+        },
+        "settings": {
+          "owner": {
+            "handle": 39390414,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "top": 302,
+            "left": 742,
+            "bottom": 1087,
+            "right": 1835
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": false,
+          "transparent": false
+        }
+      }
+    },
+    {
+      "expanded": {
+        "x": 123,
+        "y": 8,
+        "width": 860,
+        "height": 524
+      },
+      "events": [
+        {
+          "inside": true,
+          "at": 1794451943755
+        },
+        {
+          "inside": false,
+          "at": 1794451946251
+        }
+      ],
+      "during": {
+        "date": "2026-11-12",
+        "coordinateSpace": "physical pixels; probe thread PMv2",
+        "foreground": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "cursor": {
+          "y": 326,
+          "x": 849
+        },
+        "underCursor": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "island": {
+          "owner": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "bottom": 800,
+            "right": 2560
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": true,
+          "transparent": false
+        },
+        "settings": {
+          "owner": {
+            "handle": 39390414,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "left": 742,
+            "top": 302,
+            "bottom": 1087,
+            "right": 1835
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": false,
+          "transparent": false
+        }
+      },
+      "after": {
+        "date": "2026-11-12",
+        "coordinateSpace": "physical pixels; probe thread PMv2",
+        "foreground": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "cursor": {
+          "x": 849,
+          "y": 326
+        },
+        "underCursor": {
+          "handle": 39390414,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "island": {
+          "owner": {
+            "handle": 2428054,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "bottom": 800,
+            "top": 0,
+            "right": 2560,
+            "left": 0
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": true,
+          "transparent": true
+        },
+        "settings": {
+          "owner": {
+            "handle": 39390414,
+            "pid": 15224,
+            "process": "dynamic-island",
+            "isEInstalled": true
+          },
+          "rect": {
+            "bottom": 1087,
+            "top": 302,
+            "right": 1835,
+            "left": 742
+          },
+          "dpi": 120,
+          "visible": true,
+          "topmost": false,
+          "transparent": false
+        }
+      }
+    }
+  ],
+  "before": {
+    "date": "2026-11-12",
+    "coordinateSpace": "physical pixels; probe thread PMv2",
+    "foreground": {
+      "handle": 39390414,
+      "pid": 15224,
+      "process": "dynamic-island",
+      "isEInstalled": true
+    },
+    "cursor": {
+      "x": 849,
+      "y": 326
+    },
+    "underCursor": {
+      "handle": 39390414,
+      "pid": 15224,
+      "process": "dynamic-island",
+      "isEInstalled": true
+    },
+    "island": {
+      "owner": {
+        "handle": 2428054,
+        "pid": 15224,
+        "process": "dynamic-island",
+        "isEInstalled": true
+      },
+      "rect": {
+        "bottom": 800,
+        "top": 0,
+        "left": 0,
+        "right": 2560
+      },
+      "dpi": 120,
+      "visible": true,
+      "topmost": true,
+      "transparent": true
+    },
+    "settings": {
+      "owner": {
+        "handle": 39390414,
+        "pid": 15224,
+        "process": "dynamic-island",
+        "isEInstalled": true
+      },
+      "rect": {
+        "bottom": 1087,
+        "top": 302,
+        "left": 742,
+        "right": 1835
+      },
+      "dpi": 120,
+      "visible": true,
+      "topmost": false,
+      "transparent": false
+    }
+  },
+  "passed": true,
+  "allObserved": [
+    {
+      "inside": true,
+      "at": 1794451933750
+    },
+    {
+      "inside": false,
+      "at": 1794451935998
+    },
+    {
+      "inside": true,
+      "at": 1794451938690
+    },
+    {
+      "inside": false,
+      "at": 1794451940890
+    },
+    {
+      "inside": true,
+      "at": 1794451943755
+    },
+    {
+      "inside": false,
+      "at": 1794451946251
+    }
+  ]
+}

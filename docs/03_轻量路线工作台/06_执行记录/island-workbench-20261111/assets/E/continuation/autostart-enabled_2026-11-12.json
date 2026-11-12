@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-12",
+  "enabledRun": [
+    {
+      "name": "Island Workbench",
+      "value": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\\dynamic-island.exe "
+    }
+  ]
+}

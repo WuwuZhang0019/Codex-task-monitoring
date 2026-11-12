@@ -1,0 +1,74 @@
+{
+  "date": "2026-11-12",
+  "nativeInstalled": true,
+  "style": "dynamic",
+  "checks": [
+    {
+      "name": "native event hover/pin/unpin/rapid transitions",
+      "result": "passed",
+      "before": {
+        "date": "2026-11-12",
+        "foreground": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "cursor": {
+          "x": 1853,
+          "y": 4
+        },
+        "underCursor": {
+          "handle": 199166,
+          "pid": 33580,
+          "process": "ChatGPT",
+          "isEInstalled": false
+        }
+      },
+      "after": {
+        "date": "2026-11-12",
+        "foreground": {
+          "handle": 2428054,
+          "pid": 15224,
+          "process": "dynamic-island",
+          "isEInstalled": true
+        },
+        "cursor": {
+          "y": 4,
+          "x": 1853
+        },
+        "underCursor": {
+          "handle": 199166,
+          "pid": 33580,
+          "process": "ChatGPT",
+          "isEInstalled": false
+        }
+      }
+    },
+    {
+      "name": "selection, scroll/refresh and locate",
+      "result": "passed",
+      "top": 200
+    },
+    {
+      "name": "same-session keyboard Esc/reopen three cycles",
+      "result": "passed",
+      "cycles": [
+        {
+          "collapsedThenReopened": true,
+          "height": 526
+        },
+        {
+          "collapsedThenReopened": true,
+          "height": 526
+        },
+        {
+          "collapsedThenReopened": true,
+          "height": 526
+        }
+      ]
+    }
+  ],
+  "precondition": "fresh native WebView per independent scenario; no product source changes; focus settle before blur; controlled hover is not physical input",
+  "passed": true
+}

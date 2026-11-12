@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-12",
+  "note": "user confirmed real tray display/hide/quit and overall visual acceptance; E process was absent after quit; restarted exact accepted installation normally",
+  "installedPath": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\\dynamic-island.exe",
+  "installedSHA256": "BA112BB56C228DA9B7922EBA3E30DFF58C4E16D42EB61BB5B6347C4131C5736E",
+  "version": "0.1.0",
+  "processCount": 1,
+  "pids": [
+    44304
+  ],
+  "commandLines": [
+    "\"G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\\dynamic-island.exe\" "
+  ],
+  "debugPortListenerCount": 0,
+  "settingsSHA256": "FE2CBCEAB9AFEFBA4EA26AD0C967530E3A93FD532E6F083A2F5FCB74DED1AAA3",
+  "style": "windows",
+  "glass": "strong",
+  "hidden": false,
+  "runValue": null,
+  "temporaryFullscreenFixtureCount": 0,
+  "aggregateSHA256": "2BF743BAA7B545F97145535C388EC0049969502349179B71DDF575D6452F6555",
+  "upstreamSettingsSHA256": "57A5F8996F96C422B511FCA14DCCCFB7E33B29DD62EBE42674939DE6D901BA0D",
+  "passed": true
+}

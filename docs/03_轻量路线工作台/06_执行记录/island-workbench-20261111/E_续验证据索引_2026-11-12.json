@@ -1,0 +1,226 @@
+{
+  "date": "2026-11-12",
+  "planKey": "island-workbench-20261111",
+  "stage": "E",
+  "localStatus": "completed",
+  "acceptance": "passed",
+  "handoffConclusion": "C",
+  "progress": {
+    "completed": 5,
+    "total": 6
+  },
+  "sync": "deferredByAuthorization",
+  "serviceIdentity": null,
+  "serviceSynced": false,
+  "localExecutionKey": "island-workbench-20261111/local/E-20261112-01",
+  "completionKey": "island-workbench-20261111/local/E-20261112-01/complete-20261112",
+  "businessStartCommit": "7bd662f20f6b2902382ca1f1e63889527117c702",
+  "acceptedForkCommit": "77574bfe7f0b561b092165ed824da0d56cc3e66f",
+  "parallelForkCommit": "405f7cef3d9a2838c3cdaf1dd96ebaaee9b0153b",
+  "installedExeSHA256": "ba112bb56c228da9b7922eba3e30dff58c4e16d42eb61bb5b6347c4131c5736e",
+  "protocolVersion": "island-workbench/1",
+  "userFeedback": "托盘三项正常，整体观感通过",
+  "nextStage": {
+    "stage": "F",
+    "status": "pending",
+    "dispatched": false,
+    "requiresOwnAuthorization": true
+  },
+  "limitations": [
+    "Multi-monitor not tested: only one active display",
+    "125% interactions plus actual 150% system/native geometry; not all interaction/DPI combinations",
+    "Old UI was deleted; same-source install version upgrade/downgrade only",
+    "CDP controlled events and physical mouse evidence remain distinct",
+    "Parallel sidebar/tray-icon source revisions are outside accepted BA112 binary"
+  ],
+  "reusedEvidenceIndexes": [
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/D_证据索引_2026-11-12.json",
+      "bytes": 12558,
+      "sha256": "a2440d1b66e0e53663b99dd6fb6cfb98c0182e4a7365888ea70352d1b65996a1",
+      "gitBlobSHA256": "7a70f34d95acbe0e0c42874366ca37e59fb8045b150749696d7d2ce7b71d36a0",
+      "validatedArtifacts": 45,
+      "bytePolicy": "worktree raw SHA and Git blob SHA recorded separately; historical autocrlf is preserved; JSON semantics must match"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_证据索引_2026-11-12.json",
+      "bytes": 18383,
+      "sha256": "faa73c8c38e65a3d000f14d0322c651417738be3ee45581047e3538da6da6459",
+      "gitBlobSHA256": "faa73c8c38e65a3d000f14d0322c651417738be3ee45581047e3538da6da6459",
+      "validatedArtifacts": 69,
+      "bytePolicy": "worktree raw SHA and Git blob SHA recorded separately; historical autocrlf is preserved; JSON semantics must match"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/autostart-enabled_2026-11-12.json",
+      "bytes": 221,
+      "sha256": "7f28a6754ffd9b528b225c42e34dffde8240f2ce3cf2a69d274556e939d55740"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/autostart-on_2026-11-12.png",
+      "bytes": 29918,
+      "sha256": "d2852bc369a122ca0bfc31bfa89d0deb8e4bcca9bca82f00df5847994224fd75"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/autostart-restored_2026-11-12.json",
+      "bytes": 83,
+      "sha256": "f5a4e81a2e7c38e5b390d45dc2ce41cfd6ea246c46a021c782b85cf0b42abeeb"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/configuration-restore_2026-11-12.json",
+      "bytes": 1312,
+      "sha256": "9e2e05619dfc94d12ce935a2374990d1f69adcdcabec6d2c5cfb5106540e4b62"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/dynamic-native-recheck_2026-11-12.json",
+      "bytes": 1737,
+      "sha256": "fdd94072c0073ba4a740cf343b447eefd0420445b235d4c2eb36ceec1b86fbb5"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/dynamic-native-webview_2026-11-12.png",
+      "bytes": 142385,
+      "sha256": "4e9b2d2cd125c2f9122444bc5cab5f8314f50769d8b95621c48416db10a7b016"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/dynamic-recheck_2026-11-12.mjs",
+      "bytes": 4448,
+      "sha256": "ad1376072049a170cb2611ba693c354c93415f17f9adc64433f4111e5bc5265e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/escape-reopen-probe_2026-11-12.json",
+      "bytes": 2482,
+      "sha256": "2a7baaa900b8fd3fbd6fd7b10f3cfab2c71d153b164defe6f26131c45e4f22a1"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/escape-reopen-probe_2026-11-12.mjs",
+      "bytes": 1849,
+      "sha256": "98524ace5ac1b0d4fdce4ceb436351e4a312cff2c1d7f016c2fcc12284881549"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/evidence-validator_2026-11-12.mjs",
+      "bytes": 5590,
+      "sha256": "8aad15ad786058ed5543d2b98b6b4544ba09074a09ec972088b79bcb993973cd"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/final-runtime_2026-11-12.json",
+      "bytes": 1075,
+      "sha256": "89c60346fabaab38a506815f85f280ea2eb52a9ffabbc4971fb9bb45a1194292"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/fullscreen-fixture-build_2026-11-12.json",
+      "bytes": 1277,
+      "sha256": "69c891052b866424c369d7dff6c67b07ac27ad2c3555ffd4eba55cea76adab3f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/fullscreen-fixture_2026-11-12.cs",
+      "bytes": 1732,
+      "sha256": "7e05d2ef9c18bd216ca813a2e104f15a71dad1ea2e79f8dedaa68e50c21eab91"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-point-snapshot_2026-11-12.mjs",
+      "bytes": 1998,
+      "sha256": "2f30cf1f6adcad6a99d3c6dc3fccd2fb21412f6b05d1af0bf723cbfd97f2b4f6"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-ui-acceptance_2026-11-12.mjs",
+      "bytes": 9324,
+      "sha256": "7dcfc9fd9b8b5945a0568c385b662964b71f8720521fd7eb32711d9f1af96269"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-webview-acceptance_2026-11-12.json",
+      "bytes": 7508,
+      "sha256": "66521f8996f1aadd853b6c070828c61ac050e2d49764a7c52d41788bf041c463"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-webview-attempt-1_2026-11-12.json",
+      "bytes": 7364,
+      "sha256": "a15f587f3a4bc6656426ed2634780a52d0a4cab9679ea8da01f642e296867d2e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-webview-progress_2026-11-12.json",
+      "bytes": 7489,
+      "sha256": "389f3f76ab1f0255a4752ef5e5d52ca0394e4e4e64a44f7fc966b515b32abc89"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-before_2026-11-12.json",
+      "bytes": 2368,
+      "sha256": "6d801d649a94b940b67a12875607fccaf278544c06ea02ab2db958e19a6e025b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-on_2026-11-12.json",
+      "bytes": 2364,
+      "sha256": "8d6b91948af2b6199ef693c7bc626e07462418dd2b98e404306d85ac8cbfdc60"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-restored_2026-11-12.json",
+      "bytes": 2370,
+      "sha256": "2bbced915145ba4c9eeaa258054025c0018afe19ba3318a57b0a826b92e5d8ec"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-run-on_2026-11-12.json",
+      "bytes": 180,
+      "sha256": "0ae2d32b6f9b0a0e462531a3fde3010b5e0073e73e57760ec098c18454d1a138"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-run-restored_2026-11-12.json",
+      "bytes": 109,
+      "sha256": "240cb5365e5df0ebb18e14b7a27b95ac3ddecd1efc1fc421da38f4335d30e146"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-hit-test_2026-11-12.json",
+      "bytes": 11067,
+      "sha256": "d6a819fd918fdab5ec158174f1f6358b8e3eb1e63d9beab5c318af71eb9ff466"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-hit-test_2026-11-12.mjs",
+      "bytes": 3113,
+      "sha256": "cf6e92f6f3f036b385caf689ca966b746c18acece9248a6aa3b95b7a4af37f8b"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-hover-enter_2026-11-12.json",
+      "bytes": 2295,
+      "sha256": "424f62b2793dbc1e9b61d13dc279e8de26cf711c3564adc92c6e0f14b546539a"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/read-native-state_2026-11-12.ps1",
+      "bytes": 3417,
+      "sha256": "fc47f76e38a09f2e8e8349c2a77014846188ba516a087f7cc834e5501c6dfd7f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/register-native-hover_2026-11-12.mjs",
+      "bytes": 915,
+      "sha256": "92ca6d6c7cd9c1a31826e12985fe1183acf18917fb16c0971bcfbc055d806a2e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/settings-start_2026-11-12.json",
+      "bytes": 145,
+      "sha256": "d99b97d7b822f29bb2f0103409293b7f09be6c18e20fa9715a275297f6da17f3"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/state-drift-audit_2026-11-12.json",
+      "bytes": 4055,
+      "sha256": "1135419b0d94cc05429f8e2be5e5612f8d274f59016e527cc1e2bbf1004c956e"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/user-acceptance_2026-11-12.json",
+      "bytes": 893,
+      "sha256": "40941295f36b75afcd2aa2a87b0b0ed193ba3953db4b3ff285accd72eafc2526"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/windows-native-webview_2026-11-12.png",
+      "bytes": 167557,
+      "sha256": "4d5cf5c621b6e12b437fe26b2c2a20a954fefe97474748ed4077f87b5406966f"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_续验记录_2026-11-12.md",
+      "bytes": 8744,
+      "sha256": "c788590e93e1e9f1695530ff4bf7ecc7d786113dd64cd84d7653460e8bbaf6c6"
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_完成回执_2026-11-12.md",
+      "bytes": 4661,
+      "sha256": "6842958c1d74131610be558df60793da552fc438785896ae1c789f272d3be8d7"
+    }
+  ]
+}

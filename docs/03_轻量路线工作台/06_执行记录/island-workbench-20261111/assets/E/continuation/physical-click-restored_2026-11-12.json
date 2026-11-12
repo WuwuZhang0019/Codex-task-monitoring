@@ -1,0 +1,124 @@
+{
+  "date": "2026-11-12",
+  "label": "physical-click-restored",
+  "input": "actual screenshot-region Computer Use mouse action; this sampler sends no input",
+  "os": {
+    "date": "2026-11-12",
+    "coordinateSpace": "physical pixels; probe thread PMv2",
+    "foreground": {
+      "handle": 39390414,
+      "pid": 15224,
+      "process": "dynamic-island",
+      "isEInstalled": true
+    },
+    "cursor": {
+      "x": 1732,
+      "y": 575
+    },
+    "underCursor": {
+      "handle": 39390414,
+      "pid": 15224,
+      "process": "dynamic-island",
+      "isEInstalled": true
+    },
+    "island": {
+      "owner": {
+        "handle": 2428054,
+        "pid": 15224,
+        "process": "dynamic-island",
+        "isEInstalled": true
+      },
+      "rect": {
+        "right": 2560,
+        "bottom": 800,
+        "top": 0,
+        "left": 0
+      },
+      "dpi": 120,
+      "visible": true,
+      "topmost": true,
+      "transparent": true
+    },
+    "settings": {
+      "owner": {
+        "handle": 39390414,
+        "pid": 15224,
+        "process": "dynamic-island",
+        "isEInstalled": true
+      },
+      "rect": {
+        "right": 1835,
+        "bottom": 1087,
+        "top": 302,
+        "left": 742
+      },
+      "dpi": 120,
+      "visible": true,
+      "topmost": false,
+      "transparent": false
+    }
+  },
+  "dom": {
+    "hits": [
+      {
+        "x": 348,
+        "y": 8,
+        "width": 410,
+        "height": 38,
+        "top": 8,
+        "right": 758,
+        "bottom": 46,
+        "left": 348
+      }
+    ],
+    "expanded": false,
+    "pinned": false,
+    "nativeHover": [
+      {
+        "inside": true,
+        "at": 1794451933750
+      },
+      {
+        "inside": false,
+        "at": 1794451935998
+      },
+      {
+        "inside": true,
+        "at": 1794451938690
+      },
+      {
+        "inside": false,
+        "at": 1794451940890
+      },
+      {
+        "inside": true,
+        "at": 1794451943755
+      },
+      {
+        "inside": false,
+        "at": 1794451946251
+      },
+      {
+        "inside": true,
+        "at": 1794452130624
+      },
+      {
+        "inside": false,
+        "at": 1794452318554
+      },
+      {
+        "inside": true,
+        "at": 1794452372017
+      },
+      {
+        "inside": false,
+        "at": 1794452601331
+      }
+    ]
+  },
+  "cursorCss": {
+    "x": 1385.6,
+    "y": 460
+  },
+  "pointInHit": false
+}
