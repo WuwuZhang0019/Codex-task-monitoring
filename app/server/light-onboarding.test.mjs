@@ -80,3 +80,25 @@ test('local helper completes setup without owner credentials or manual connectio
  assert.equal((await post('/api/light-onboarding',{ticket:issued.ticket,appId:'claude-code'},{Origin:'http://localhost'})).status,403);
  await assert.rejects(readOnboardingRequest(path.join(root,'outside.json'),{baseDir:base}),/INVALID_REQUEST_PATH/);
 });
+
+// Date: 2026-11-12. Generic requests accept new applications once without a product allowlist.
+test('generic entry registers arbitrary application names and binds each copied request only once',async t=>{
+ const root=await mkdtemp(path.join(os.tmpdir(),'onboarding-generic-'));t.after(()=>rm(root,{recursive:true,force:true}));
+ const persistence=await createPersistence(root),access=createLightAccess(persistence),onboarding=createLightOnboarding(persistence);
+ const first=await onboarding.prepare({acknowledged:true});
+ assert.equal(first.appId,null);
+ await mkdir(path.join(root,'onboarding'));
+ const file=path.join(root,'onboarding',first.requestId+'.json');
+ await writeFile(file,JSON.stringify({date:'2026-11-12',appId:null,ticket:first.ticket,expiresAt:first.expiresAt,dataDir:root}));
+ const chosen=await readOnboardingRequest(file,{baseDir:root,application:'Cursor IDE'});
+ assert.equal(chosen.appName,'Cursor IDE');assert.match(chosen.appId,/^app-[a-f0-9]{16}$/);
+ const codex=await readOnboardingRequest(file,{baseDir:root,application:'Codex'});assert.equal(codex.appId,'codex');
+
+ const registered=await onboarding.redeem({ticket:first.ticket,appId:'app-1234567890abcdef',appName:'Cursor IDE'});
+ assert.equal(registered.appName,'Cursor IDE');
+ await assert.rejects(async()=>onboarding.redeem({ticket:first.ticket,appId:'another-agent',appName:'Another Agent'}),/FORBIDDEN/);
+ const second=await onboarding.prepare({acknowledged:true});
+ await onboarding.redeem({ticket:second.ticket,appId:'another-agent',appName:'另一个 Agent'});
+ assert.deepEqual(access.panelConnections().map(app=>app.name).sort(),['Cursor IDE','另一个 Agent'].sort());
+ assert.ok(!access.panelConnections().some(app=>app.appId==='codex'));
+});

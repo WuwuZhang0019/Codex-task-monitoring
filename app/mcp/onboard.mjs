@@ -2,10 +2,10 @@
 import path from 'node:path';
 import os from 'node:os';
 import { readFile, realpath, stat, writeFile, rename, unlink } from 'node:fs/promises';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import http from 'node:http';
-import { validAppId, agentApps } from '../server/light-apps.mjs';
+import { validAppId, validAppName, agentApps } from '../server/light-apps.mjs';
 import { discoverOwner } from '../desktop/client.mjs';
 import { preparePrivateDirectory } from '../desktop/private-runtime.mjs';
 import { loadLightConfig } from './light-bridge.mjs';
@@ -17,22 +17,30 @@ async function limitedRead(file) {
   if (bytes.length > 32768) throw Error('INVALID_LOCAL_FILE');
   return bytes;
 }
-export async function readOnboardingRequest(file, { baseDir = defaultBase(), now = Date.now } = {}) {
+export async function readOnboardingRequest(file, { baseDir = defaultBase(), now = Date.now, application } = {}) {
   const directory = path.join(baseDir, 'onboarding');
   if (!path.isAbsolute(file) || path.dirname(path.resolve(file)) !== path.resolve(directory)
     || !/^[a-f0-9-]{36}\.json$/.test(path.basename(file))) throw Error('INVALID_REQUEST_PATH');
   const actual = await realpath(file), expected = path.join(await realpath(directory), path.basename(file));
   if (actual.toLowerCase() !== expected.toLowerCase()) throw Error('INVALID_REQUEST_PATH');
   const value = JSON.parse(await limitedRead(file));
-  if (!value || !validAppId(value.appId) || !/^[a-f0-9]{64}$/.test(value.ticket)
+  if (!value || (value.appId !== null && !validAppId(value.appId)) || !/^[a-f0-9]{64}$/.test(value.ticket)
     || typeof value.dataDir !== 'string' || !path.isAbsolute(value.dataDir)
     || !Number.isFinite(Date.parse(value.expiresAt)) || Date.parse(value.expiresAt) <= now()
     || Object.keys(value).some(key => !['date','appId','ticket','expiresAt','dataDir'].includes(key))) throw Error('INVALID_OR_EXPIRED_REQUEST');
-  return { ...value, baseDir };
+  let appId=value.appId, appName=agentApps.find(app=>app.id===appId)?.name ?? appId;
+  if (appId === null) {
+    if (!validAppName(application)) throw Error('APPLICATION_NAME_REQUIRED');
+    appName=application.trim();
+    const normalized=appName.toLowerCase().replace(/[ _]/g,'-');
+    appId=agentApps.find(app=>app.id===normalized || app.name.toLowerCase().replace(/[ _]/g,'-')===normalized)?.id
+      ?? 'app-'+createHash('sha256').update(normalized).digest('hex').slice(0,16);
+  }
+  return { ...value, appId, appName, baseDir };
 }
 export function describeRequest(request) {
   const runtime = path.join(request.baseDir, 'runtime/light.mjs');
-  return { appId: request.appId, application: agentApps.find(app => app.id === request.appId).name,
+  return { appId: request.appId, application: request.appName ?? agentApps.find(app => app.id === request.appId)?.name ?? request.appId,
     expiresAt: request.expiresAt, skillPath: path.join(request.baseDir, 'runtime/skills/workbench-handoff/SKILL.md'),
     mcpConfig: { mcpServers: { 'task-workbench': { type: 'stdio', command: process.execPath, args: [runtime],
       env: { WORKBENCH_LIGHT_APP: request.appId } } } } };
@@ -75,12 +83,12 @@ export async function completeRequest(request) {
       await writeFile(path.join(directory, `onboarding-backup-${randomUUID()}-${files[index]}`), previous[index], { flag:'wx',mode:0o600 });
   }
   const owner = await discoverOwner(request.dataDir);
-  const result = await redeemTicket(owner.endpoint,{ticket:request.ticket,appId:request.appId,...(currentToken?{currentToken}:{})});
+  const result = await redeemTicket(owner.endpoint,{ticket:request.ticket,appId:request.appId,appName:request.appName ?? request.appId,...(currentToken?{currentToken}:{})});
   const current = await discoverOwner(request.dataDir);
   if (current.endpoint !== owner.endpoint || current.ownerGeneration !== owner.ownerGeneration) throw Error('ONBOARDING_RESULT_UNKNOWN');
   if (result.appId !== request.appId || typeof result.principal !== 'string' || !/^[a-f0-9]{64}$/.test(result.token)) throw Error('ONBOARDING_RESULT_UNKNOWN');
   const values = [{dataDir:request.dataDir,token:result.token},
-    {date:request.date,appId:request.appId,principal:result.principal,automatic:true,configPath:path.join(directory,'config.json')}];
+    {date:request.date,appId:request.appId,appName:result.appName ?? request.appName ?? request.appId,principal:result.principal,automatic:true,configPath:path.join(directory,'config.json')}];
   try {
     for (let index = 0; index < files.length; index++) await atomicWrite(path.join(directory,files[index]),JSON.stringify(values[index],null,2));
   } catch {
@@ -98,8 +106,8 @@ export async function completeRequest(request) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const args=process.argv.slice(2), position=args.indexOf('--request');
-    if(position<0 || args.length!==3 || !args.includes('--describe') && !args.includes('--complete')) throw Error('USAGE_REQUEST_DESCRIBE_OR_COMPLETE');
-    const request=await readOnboardingRequest(args[position+1]);
+    if(position<0 || ![3,5].includes(args.length) || !args.includes('--describe') && !args.includes('--complete')) throw Error('USAGE_REQUEST_DESCRIBE_OR_COMPLETE');
+    const request=await readOnboardingRequest(args[position+1],{application:args.includes('--app')?args[args.indexOf('--app')+1]:undefined});
     console.log(JSON.stringify(args.includes('--complete') ? await completeRequest(request) : describeRequest(request),null,2));
   } catch { console.error('任务岛接入未完成。请核对请求有效期、应用配置和本机服务；可重新复制指令，勿在聊天中输出凭据。');process.exitCode=1; }
 }

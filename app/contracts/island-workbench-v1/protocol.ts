@@ -1,6 +1,6 @@
 // Contract owner: Codex-task-monitoring. Date: 2026-11-12.
 // Date: 2026-11-12. Optional application presentation metadata; light-1.0 business identity remains unchanged.
-export type AppId = "codex" | "claude-code" | "dsh" | "workbuddy";
+export type AppId = string;
 export type AgentConnection = {
 	appId: AppId;
 	name: string;
@@ -159,6 +159,8 @@ export interface WorkbenchClient {
 	queryEvent(eventId: string): Promise<EventResult>;
 }
 
+const validAppIdentity = (value: unknown) =>
+	typeof value === "string" && /^[a-z][a-z0-9-]{0,63}$/.test(value) && !["all", "unassigned"].includes(value);
 const object = (x: unknown): x is Record<string, unknown> => x !== null && typeof x === "object" && !Array.isArray(x);
 const fail = (message: string): never => {
 	throw new Error(`INVALID_WORKBENCH_CONTRACT: ${message}`);
@@ -206,7 +208,7 @@ export function validateEnvelope(value: unknown): WorkbenchEnvelope {
 			e.agentApps.some(
 				(app) =>
 					!object(app) ||
-					!["codex", "claude-code", "dsh", "workbuddy"].includes(app.appId) ||
+					!validAppIdentity(app.appId) ||
 					typeof app.name !== "string" ||
 					typeof app.enabled !== "boolean" ||
 					typeof app.connected !== "boolean" ||
@@ -216,8 +218,7 @@ export function validateEnvelope(value: unknown): WorkbenchEnvelope {
 		fail("agent connections");
 	if (
 		e.bindingApps !== undefined &&
-		(!object(e.bindingApps) ||
-			Object.values(e.bindingApps).some((app) => !["codex", "claude-code", "dsh", "workbuddy"].includes(app)))
+		(!object(e.bindingApps) || Object.values(e.bindingApps).some((app) => !validAppIdentity(app)))
 	)
 		fail("binding applications");
 	const s = e.snapshot;

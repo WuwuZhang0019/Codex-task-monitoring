@@ -40,8 +40,7 @@ try {
         if (command === 'get_autostart') return false;
         if (command === 'island_agent_connections') {
           if (window.__connection.state === 'unavailable') throw Error('OWNER_UNAVAILABLE');
-          return [{ ...window.__connection, appId: 'codex' },
-            ...['claude-code', 'dsh', 'workbuddy'].map(appId => ({ appId, state: 'disabled', enabled: false }))];
+          return window.__connection.state === 'empty' ? [] : [{ ...window.__connection, appId:'codex',name:'Codex' },...(window.__extraApps ?? [])];
         }
         if (command === 'island_agent_set_connection') {
           window.__connectionCalls.push({ command, args });
@@ -49,8 +48,8 @@ try {
           return { ...window.__connection, appId: args.appId };
         }
         if (command === 'island_agent_onboarding_instructions') {
-          window.__onboardingCopies.push(args.appId);
-          return `请为当前 ${args.appId} 完成任务岛接入。先 --describe 安装配置，完成后 --complete 自动开启连接，无需回来点击。`;
+          window.__onboardingCopies.push(args?.appId ?? "generic");
+          return `请为当前应用完成任务岛接入。识别实际名称后 --describe 安装配置，完成后 --complete 自动开启连接，无需回来点击。`;
         }
         if (command === 'plugin:event|listen') return 1;
         return null;
@@ -61,20 +60,20 @@ try {
   await page.locator('nav').getByText('MCP', { exact: true }).click();
   const card = page.locator('[data-workbench-connection="codex"]');
   await card.getByText('尚未连接 Codex', { exact: true }).waitFor();
-  assert.equal(await page.locator('[data-workbench-connection]').count(), 4);
+  assert.equal(await page.locator('[data-workbench-connection]').count(), 1);
   assert.equal(await card.locator('input, textarea').count(), 0);
-  assert.equal(await card.getByRole('button').count(), 1);
+  assert.equal(await card.getByRole('button').count(), 0);
   await page.waitForTimeout(350); // Let the existing page/navigation transition settle before visual evidence.
   await page.screenshot({ path: path.join(output, 'disabled.png') });
-  report.checks.push('All four applications offer an instruction button, without technical fields or manual connect buttons');
-  assert.equal(await page.getByRole('button',{name:'复制接入指令',exact:true}).count(),4);
-  await card.getByRole('button', { name: '复制接入指令', exact: true }).click();
-  assert.match(await page.evaluate(()=>window.__copiedInstruction),/codex.*接入/);
+  report.checks.push('A single universal instruction button replaces all application-specific setup buttons');
+  assert.equal(await page.getByRole('button',{name:'复制接入指令',exact:true}).count(),1);
+  await page.getByRole('button', { name: '复制接入指令', exact: true }).click();
+  assert.match(await page.evaluate(()=>window.__copiedInstruction),/当前应用.*接入/);
   assert.match(await page.evaluate(()=>window.__copiedInstruction),/--complete 自动开启连接/);
   assert.equal(await page.evaluate(()=>window.__connectionCalls.length),0,'copy does not prematurely enable the connection');
   await page.evaluate(()=>{window.__connection={state:'waiting',enabled:true,automatic:true};});
   await card.getByText('等待 Codex 接入', { exact: true }).waitFor({timeout:6000});
-  report.checks.push('Copied instructions are app-specific; external helper completion appears without a manual connection click');
+  report.checks.push('Generic instructions can be reused for new applications; completion updates the connection automatically');
   await page.evaluate(() => { window.__connection = { state: 'connected', enabled: true, automatic: true }; });
   await card.getByText('已连接 Codex', { exact: true }).waitFor({ timeout: 6000 });
   await page.screenshot({ path: path.join(output, 'connected.png') });
@@ -91,8 +90,13 @@ try {
   assert.equal(await page.evaluate(() => window.__connectionCalls.length), 0, 'opening settings never issues a grant');
   assert.equal(await page.evaluate(()=>window.__onboardingCopies.length),0,'opening settings does not mint an installation request');
   await page.evaluate(() => { window.__connection = { state: 'unavailable' }; });
-  await card.getByText('连接服务暂不可用', { exact: true }).waitFor({ timeout: 6000 });
+  await page.getByRole('alert').filter({hasText:'连接服务暂不可用'}).waitFor({timeout:6000});
   report.checks.push('Opening settings is read-only; unavailable service never appears connected');
+  await page.evaluate(()=>{window.__connection={state:'connected',enabled:true};window.__extraApps=[{appId:'new-agent',name:'全新 Agent',state:'connected',enabled:true}];});
+  await page.getByText('全新 Agent',{exact:true}).waitFor({timeout:6000});
+  assert.equal(await page.getByRole('button',{name:'复制接入指令',exact:true}).count(),1);
+  await page.screenshot({path:path.join(output,'dynamic-applications.png')});
+  report.checks.push('One reusable instruction button; arbitrary application names appear dynamically');
   assert.deepEqual(report.errors, []);
   report.passed = true;
 } finally {

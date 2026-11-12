@@ -89,7 +89,7 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
       const grant = grantFor(principal);
       if (!grant || grant.appId && headers['x-workbench-app'] !== grant.appId) return;
       const client = headers['x-workbench-client'], session = headers['x-workbench-session'];
-      if (typeof client !== 'string' || !/^[\w .-]{1,100}$/.test(client)
+      if (typeof client !== 'string' || !/^[\x20-\x7e]{1,100}$/.test(client)
         || typeof session !== 'string' || !/^[a-f0-9-]{36}$/.test(session)) return;
       const sessions = presence.get(principal) ?? new Map();
       for (const [id, value] of sessions) if (now() - value.seenAt > presenceTtlMs) sessions.delete(id);
@@ -113,7 +113,12 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
     },
     panelConnections() {
       const grants = Object.entries(persistence.read('grants'));
-      return agentApps.map(app => {
+      const apps = new Map();
+      for (const [, grant] of grants) if (grant.kind === 'lightAccess') {
+        const id = grant.appId ?? 'codex';
+        apps.set(id, { id, name: grant.appName ?? agentApps.find(app => app.id === id)?.name ?? id });
+      }
+      return [...apps.values()].map(app => {
         const values = grants.filter(([, grant]) => grant.kind === 'lightAccess' && (grant.appId ?? 'codex') === app.id)
           .map(([principal]) => this.connectionStatus({ principal, acknowledged: true }));
         return { appId: app.id, name: app.name, enabled: values.some(v => v.enabled), connected: values.some(v => v.connected),
@@ -158,7 +163,7 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
         if (!grant) lightError('NOT_FOUND', '授权不存在', 404);
         grants[input.principal] = { ...grant, revokedAt: new Date().toISOString() };
         for (const [key, pending] of Object.entries(grants)) if (pending.kind === 'lightOnboarding'
-          && pending.appId === (grant.appId ?? 'codex')) grants[key] = { ...pending, revokedAt: new Date().toISOString() };
+          && (pending.appId === null || pending.appId === (grant.appId ?? 'codex'))) grants[key] = { ...pending, revokedAt: new Date().toISOString() };
         persistence.write('grants', grants);
         return { principal: input.principal, revoked: true };
       });
