@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,writeFile,readFile,rm} from 'node:fs/promises';
 import os from 'node:os';
+import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {normalizePlan,sha256,applyNormalizedFile,registrationSnapshot} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/normalize-plan.mjs';
 import {validateLightSnapshot} from '../server/light-model.mjs';
@@ -67,5 +68,14 @@ test('E 掉响应创建先查询原operationId，恢复固定目标后不重复�
  assert.equal((await runHostOperation(ledger,{operationId:'failed-jump',kind:'jump',targetId:'unavailable-chat'},{jump:async()=>{throw Error('TARGET_UNAVAILABLE');}})).status,'failed');
 });
 test('E 实际工作树与错误目录分支分别核验',async()=>{
- const repository=path.resolve(new URL('../../',import.meta.url).pathname.replace(/^\/(\w:)/,'$1'));const info=await inspectWorktree(repository,'main');assert.equal(info.branch,'main');assert.match(info.head,/^[a-f0-9]{40}$/);await assert.rejects(inspectWorktree(repository,'codex/wrong'),/BRANCH_MISMATCH/);await assert.rejects(inspectWorktree(path.join(repository,'app')),/ROOT_MISMATCH/);
+ // 日期：2026-11-12。独立夹具验证分支门禁，不依赖执行者的main或detached构建状态。
+ const repository=await mkdtemp(path.join(os.tmpdir(),'workbench-git-fixture-'));
+ const git=args=>execFileSync('git',args,{cwd:repository,windowsHide:true});
+ try {
+  git(['init','-b','codex/fixture']);git(['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','--allow-empty','-m','fixture']);
+  await writeFile(path.join(repository,'child.txt'),'fixture');
+  const info=await inspectWorktree(repository,'codex/fixture');assert.equal(info.branch,'codex/fixture');assert.match(info.head,/^[a-f0-9]{40}$/);
+  await assert.rejects(inspectWorktree(repository,'codex/wrong'),/BRANCH_MISMATCH/);
+  const child=await mkdtemp(path.join(repository,'child-'));await assert.rejects(inspectWorktree(child),/ROOT_MISMATCH/);
+ } finally {await rm(repository,{recursive:true,force:true});}
 });
