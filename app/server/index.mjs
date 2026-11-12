@@ -159,7 +159,7 @@ async function createOwnedServer(options) {
   const lightOutbox = createLightOutbox(persistence);
   const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [] });
   const lightLibrary = createLightLibrary(persistence);
-  const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize});
+  const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize, automaticPublication:lightAccess?.automaticPublication});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const distDir = options.distDir ?? path.join(APP_DIR, 'dist');
   const server = http.createServer(async (req, res) => {

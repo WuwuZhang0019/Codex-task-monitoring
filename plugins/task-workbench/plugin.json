@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.13",
-  "description": "2026-11-13 支持普通项目目录绑定与执行，保留 Git 分支及多项目协调核验",
+  "version": "0.1.14",
+  "description": "2026-11-13 支持新目录自动登记项目、绑定与执行，保留 Git 及授权核验",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,

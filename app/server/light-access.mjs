@@ -71,6 +71,13 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
   }
   return {
     authorize,
+    // 日期：2026-11-13。已开启自动连接的应用可从 MCP 首次登记，无需桌面私有确认票据。
+    automaticPublication(principal, operation, input) {
+      const grant = grantFor(principal);
+      return grant?.automatic === true && input.confirmationGrant === null
+        && authorize(principal, operation === 'register' ? input.snapshot?.projects[0]?.key : input.projectId,
+          'confirmPublication', { input });
+    },
     connect(input) {
       requireBody(input, ['acknowledged', 'appId']);
       if (input.appId !== undefined && !validAppId(input.appId)) lightError('INVALID_INPUT', '应用标识无效');

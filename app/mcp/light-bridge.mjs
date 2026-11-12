@@ -26,16 +26,16 @@ export async function loadLightConfig(file) {
   return { endpoint: endpoint.origin, token: config.token };
 }
 
-function failure(code, unknown = false) {
+function failure(code, unknown = false, recovery) {
   const value = { schemaVersion: 'light-1.0', requestId: randomUUID(), status: unknown ? 'unknown' : 'rejected',
     error: { code, message: code, retryable: false,
-      recovery: unknown ? 'queryOriginalEventBeforeRetry' : 'checkOwnerAndGrant' } };
+      recovery: recovery ?? (unknown ? 'queryOriginalEventBeforeRetry' : 'checkOwnerAndGrant') } };
   return { isError: true, content: [{ type: 'text', text: JSON.stringify(value) }], structuredContent: value };
 }
 
 export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000, reloadConfig,
   presenceIntervalMs = 10000, allowOfflineDiscovery = false, appId } = {}) {
-  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.12' }, { capabilities: { tools: {} } });
+  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.14' }, { capabilities: { tools: {} } });
   const session = randomUUID();
   let heartbeatTimer, heartbeatBusy = false;
   // Date: 2026-11-12. Only initialized MCP clients renew presence; a running owner is insufficient.
@@ -98,7 +98,8 @@ export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs
         headers: { ...headers(current.token), 'Content-Type': 'application/json' }, body,
         signal: AbortSignal.timeout(readOnly ? readTimeoutMs : writeTimeoutMs), redirect: 'error' });
       if (response.status === 403) return failure('FORBIDDEN');
-      if (response.status === 400 || response.status === 413) return failure('INVALID_INPUT');
+      if (response.status === 400 || response.status === 413) return failure('INVALID_INPUT', false,
+        request.params.name === 'workbench_get_project' ? 'provideProjectIdOrRegisterPlan' : 'checkArgumentsAgainstToolSchema');
       if (!response.ok) throw new Error('OWNER_UNAVAILABLE');
       const result = await response.json();
       if (!Array.isArray(result.content) || !result.structuredContent || typeof result.structuredContent !== 'object') {

@@ -4,6 +4,21 @@
 
 状态：Skill 操作规则
 
+## 首次登记与项目身份恢复
+
+更新日期：2026-11-13
+
+用户明确要求接入并执行时，首次登记属于已有授权范围。工作台项目由登记方案生成，不要求用户先在任务岛建立项目，也不要求先有 Codex 侧栏项目 ID。
+
+1. 读取用户方案和当前目录，按同包 `inspectWorkspace` 获取实际上下文；普通目录的 `branch`、`head` 为 `null`。读取已有本地映射；尚无映射时，用真实目录生成稳定本地 `projectKey`，用方案路径生成稳定 `planKey`，保存到当前目录的工作台同步记录。它们是本地键，不是伪造的服务 ID。
+2. 已有真实 projectId 时回读它；只有本地 projectKey 时，也可将它传给 `workbench_get_project({projectId: projectKey})` 恢复真实 ID。`NOT_FOUND` 表示尚未登记，继续下一步。没有任何身份时跳过读取，不传空 ID、路径或侧栏 ID 冒充服务身份。
+3. 按下文规范化方案，调用导出的 `registrationSnapshot` 生成 `mode: local` 候选，所有服务 ID 及 revision 保持 `null`。构造稳定 `eventId` 和完整来源声明。
+4. 自动连接模式直接调用 `workbench_register_plan`，传 `schemaVersion: light-1.0`、`expectedRevision: 0`、`eventId`、`source`、`occurredAt`、`snapshot`、`confirmationGrant: null`。服务在登记时核验授权、候选与来源，无须访问桌面私有 confirm-publication 接口或读取管理凭据。旧版限范围连接才需要原有确认票据。
+5. 保存成功响应的真实 projectId、planIds，再按真实 projectId 回读取得 stepIds、revision；随后绑定当前会话，取得开始许可，逐步执行并同步。
+6. 结果未知时用原 projectKey 和 eventId 调用 `workbench_query_event` 查询 register，或重放完全相同请求；不得盲目换键重复创建。已有项目使用原身份修订；自动模式的修订也使用 `confirmationGrant: null`。
+
+缺项目 ID 不代表应用没有连接。`INVALID_INPUT` 应先按工具 schema 修正参数或完成首次登记；只有真实工具发现、认证或连接返回相应错误时，才提示用户检查连接。不要因为缺 ID 要求用户回开发仓库或手动配置技术字段。
+
 ## 可执行规范化入口
 
 更新日期：2026-11-11

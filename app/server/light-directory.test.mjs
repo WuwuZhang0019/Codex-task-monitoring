@@ -8,6 +8,7 @@ import { execFileSync } from 'node:child_process';
 import { once } from 'node:events';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { createServer, HttpError } from './index.mjs';
 import { prepareLightPlan } from './light-import.mjs';
 import { createLightBridge } from '../mcp/light-bridge.mjs';
@@ -29,11 +30,19 @@ test('non-Git project binds and completes three sequential steps through MCP, th
     assert.equal(response.status, 200); return response.json();
   };
   const grant = await post('connect', { acknowledged: true });
-  const bridge = createLightBridge({ endpoint, token: grant.token });
+  const installedEntry = process.env.WORKBENCH_DIRECTORY_TEST_ENTRY;
+  const bridge = installedEntry ? null : createLightBridge({ endpoint, token: grant.token });
   const client = new Client({ name: 'codex-directory-test', version: '1' });
-  t.after(async () => { await client.close(); await bridge.close(); server.closeAllConnections();
+  t.after(async () => { await client.close(); await bridge?.close(); server.closeAllConnections();
     await new Promise(resolve => server.close(resolve)); await rm(root, { recursive: true, force: true }); });
-  const [a, b] = InMemoryTransport.createLinkedPair(); await bridge.connect(b); await client.connect(a);
+  if (installedEntry) {
+    const configFile = path.join(root, 'stdio-config.json');
+    await writeFile(configFile, JSON.stringify({ endpoint, token: grant.token }));
+    await client.connect(new StdioClientTransport({ command: process.execPath, args: [installedEntry],
+      env: { WORKBENCH_LIGHT_CONFIG: configFile }, stderr: 'pipe' }));
+  } else {
+    const [a, b] = InMemoryTransport.createLinkedPair(); await bridge.connect(b); await client.connect(a);
+  }
   const call = async (name, args) => (await client.callTool({ name, arguments: args })).structuredContent;
   const accepted = value => { assert.equal(value?.status, 'accepted', JSON.stringify(value)); return value.result; };
   const observed = await inspectWorkspace(workspace);
@@ -46,14 +55,25 @@ test('non-Git project binds and completes three sequential steps through MCP, th
   const source = Object.fromEntries(Object.entries(candidate.plans[0].source).filter(([key]) => key !== 'trust'));
   const registration = { schemaVersion: 'light-1.0', expectedRevision: 0,
     eventId: 'register', source, occurredAt: '2026-11-13T10:00:00+08:00', snapshot: candidate };
-  const publication = await post('confirm-publication', { principal: grant.principal, operation: 'register', input: registration, acknowledged: true });
-  const registered = accepted(await call('workbench_register_plan', { ...registration, confirmationGrant: publication.confirmationGrant }));
+  // 新项目从零经 MCP 登记，不调用私有 confirm-publication，不需要已有项目 ID。
+  const noIdentity = await call('workbench_get_project', {});
+  assert.equal(noIdentity.error.code, 'INVALID_INPUT');
+  assert.equal(noIdentity.error.recovery, 'provideProjectIdOrRegisterPlan');
+  assert.equal((await call('workbench_get_project', { projectId: 'directory/project' })).error.code, 'NOT_FOUND');
+  const registrationRequest = { ...registration, confirmationGrant: null };
+  const mismatched = structuredClone(registrationRequest); mismatched.source.sha256 = '0'.repeat(64); mismatched.eventId = 'mismatched-source';
+  assert.equal((await call('workbench_register_plan', mismatched)).error.code, 'STALE_PLAN');
+  const registered = accepted(await call('workbench_register_plan', registrationRequest));
+  assert.deepEqual(accepted(await call('workbench_register_plan', registrationRequest)), registered);
   const projectId = registered.projectId, planId = registered.planIds[0];
+  assert.equal(accepted(await call('workbench_get_project', { projectId: 'directory/project' })).projects[0].id, projectId);
+  assert.equal(accepted(await call('workbench_query_event', { projectId: 'directory/project', operation: 'register', eventId: 'register' })).state, 'committed');
   let snapshot;
   const read = async () => snapshot = accepted(await call('workbench_get_project', { projectId }));
   await read();
   const base = eventId => ({ schemaVersion: 'light-1.0', projectId, planId, eventId, source,
     expectedRevision: snapshot.projects[0].revision, occurredAt: '2026-11-13T10:00:00+08:00', reason: '普通目录回归' });
+  accepted(await call('workbench_revise_plan', { ...base('revise'), snapshot: candidate, confirmationGrant: null })); await read();
   const propose = { ...base('bind'), action: 'propose', context, stepIds: snapshot.steps.map(s => s.id),
     bindingId: null, expectedBindingRevision: null, confirmationGrant: null };
   const bound = accepted(await call('workbench_bind_context', propose)); assert.equal(bound.state, 'confirmed');

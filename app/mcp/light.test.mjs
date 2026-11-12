@@ -45,6 +45,7 @@ test('D SDK 发现、登记、开始、阻塞恢复、结束、回放冲突、�
   const registration = { schemaVersion: 'light-1.0', expectedRevision: 0,
     eventId: 'register', source, occurredAt: '2026-11-10T23:00:00+08:00', snapshot: candidate };
   assert.equal((await call('workbench_register_plan', { ...registration, confirmationGrant: 'invalid' })).error.code, 'CONFIRMATION_REQUIRED');
+  assert.equal((await call('workbench_register_plan', { ...registration, confirmationGrant: null })).error.code, 'CONFIRMATION_REQUIRED', '旧版限范围模式不能使用自动连接的空票据');
   const confirmation = await publisher.confirm('test-owner', 'register', registration);
   const registered = await call('workbench_register_plan', { ...registration, confirmationGrant: confirmation.confirmationGrant });
   assert.deepEqual(await call('workbench_register_plan', { ...registration, confirmationGrant: confirmation.confirmationGrant }), registered);

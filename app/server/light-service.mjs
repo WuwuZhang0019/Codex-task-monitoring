@@ -153,7 +153,7 @@ export function createLightService(persistence, requests, {
     read(principal, projectId) {
       permitted(principal, projectId, 'read');
       const snapshot = load().snapshot;
-      const project = snapshot.projects.find(item => item.id === projectId);
+      const project = snapshot.projects.find(item => item.id === projectId || item.key === projectId);
       if (!project) lightError('NOT_FOUND', projectId, 404);
       const projectKeys = new Set([project.key]);
       for (const key of projectKeys) {

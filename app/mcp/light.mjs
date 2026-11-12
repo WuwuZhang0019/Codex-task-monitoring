@@ -14,12 +14,12 @@ const base = {
   source: ref('sourceDeclaration'), occurredAt: string, reason: string,
 };
 const definitions = {
-  workbench_get_project: { read: true, operation: 'read', schema: object({ projectId: string }) },
+  workbench_get_project: { read: true, operation: 'read', schema: object({ projectId: { ...string, description: 'A real service project ID or a persisted local projectKey. If none exists yet, register the user plan first; do not pass an empty ID or a Codex sidebar ID.' } }) },
   workbench_register_plan: { operation: 'register', gate: 'publish', schema: object({
     schemaVersion: base.schemaVersion, expectedRevision: { const: 0 }, eventId: string,
-    source: ref('sourceDeclaration'), occurredAt: string, snapshot: ref('snapshot'), confirmationGrant: string,
+    source: ref('sourceDeclaration'), occurredAt: string, snapshot: ref('snapshot'), confirmationGrant: { anyOf: [string, { type: 'null' }] },
   }) },
-  workbench_revise_plan: { operation: 'revise', gate: 'publish', schema: object({ ...base, snapshot: ref('snapshot'), confirmationGrant: string }) },
+  workbench_revise_plan: { operation: 'revise', gate: 'publish', schema: object({ ...base, snapshot: ref('snapshot'), confirmationGrant: { anyOf: [string, { type: 'null' }] } }) },
   workbench_reserve_execution: { operation: 'reserveExecutionId', schema: object(base) },
   workbench_update_step_status: { operation: 'update', schema: ref('update') },
   workbench_record_supplement: { operation: 'supplement', schema: ref('supplementWrite') },
@@ -55,7 +55,8 @@ export const lightTools = Object.entries(definitions).map(([name, definition]) =
   collect(inputSchema);
   inputSchema.$defs = Object.fromEntries([...needed].map(key => [key, inputSchema.$defs[key]]));
   const bindingHelp = name === 'workbench_bind_context' ? ' Automatic desktop mode verifies the project directory (and Git when present) and returns state=confirmed from propose; reuse that binding directly. For a non-Git directory use branch=null and head=null; no git init is needed. For takeover, confirm with confirmationGrant=null. Legacy scoped grants still require confirmation.' : '';
-  return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.${bindingHelp}`, inputSchema,
+  const registrationHelp = ['workbench_register_plan', 'workbench_revise_plan'].includes(name) ? ' Automatic desktop connection accepts confirmationGrant=null without a private desktop confirmation call. For first registration supply a local snapshot with all service IDs null; the response creates projectId and planIds. No existing project ID or Codex sidebar project is needed. Legacy scoped connections require a valid confirmation grant.' : '';
+  return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.${bindingHelp}${registrationHelp}`, inputSchema,
     annotations: { readOnlyHint: !!definition.read, destructiveHint: !definition.read, idempotentHint: true, openWorldHint: false } };
 });
 const ajv = new Ajv2020({ strict: true, strictRequired: false, strictTypes: false });
