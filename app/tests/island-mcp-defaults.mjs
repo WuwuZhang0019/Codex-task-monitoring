@@ -70,6 +70,10 @@ try {
   assert.equal(await page.getByText('Zcode',{exact:true}).count(),1);
   assert.equal(await page.locator('[data-workbench-connection]').first().getAttribute('data-workbench-connection'),'codex');
   assert.equal(await page.locator('[data-workbench-connection=dsh]').count(),0);
+  const copyBox=await page.getByRole('button',{name:'复制接入指令',exact:true}).boundingBox();
+  const listBox=await page.locator('.mcp-connection-list').boundingBox();
+  assert.ok(copyBox.height>=50);
+  assert.ok(Math.abs(copyBox.x+copyBox.width/2-listBox.x-listBox.width/2)<2);
   const cols=await page.locator('.mcp-connection-list').evaluate(el=>getComputedStyle(el).gridTemplateColumns);
   assert.equal(cols.split(' ').length,2);
   await page.locator('[data-workbench-connection="claude-desktop"] button').click();
