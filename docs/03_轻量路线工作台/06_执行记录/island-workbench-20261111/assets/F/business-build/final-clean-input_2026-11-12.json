@@ -1,0 +1,8 @@
+{
+  "date": "2026-11-12",
+  "commit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+  "status": null,
+  "branchMode": "detached",
+  "previousBuildCommit": "54056a2f1cd8b5d8b8b6c8661b76bd201c50170b",
+  "changeScope": "only app/tests/skill-workflow.test.mjs"
+}

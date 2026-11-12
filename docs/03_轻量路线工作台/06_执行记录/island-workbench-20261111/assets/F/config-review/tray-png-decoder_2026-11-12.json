@@ -1,0 +1,11 @@
+{
+  "height": 32,
+  "width": 32,
+  "date": "2026-11-12",
+  "decoder": "System.Drawing.Bitmap",
+  "passed": true,
+  "rightNode": -2104085,
+  "leftNode": -2104085,
+  "transparentCorner": 0,
+  "center": -13184310
+}

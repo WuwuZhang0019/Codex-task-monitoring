@@ -1,0 +1,23 @@
+(node:46556) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ light six-route snapshot, history, preferences and unsent events survive interrupted migration and full backup restore (387.8679ms)
+(node:2652) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ private owner, duplicate writer rejection, drain, stop marker and explicit restart (1632.9495ms)
+✔ OS owner lease released after forced crash (728.0527ms)
+✔ explicit exit waits for an already accepted write before releasing the lease (5042.9449ms)
+✔ legacy directory migration preserves all business files, backup and source (143.1538ms)
+✔ interrupted migration denies startup and supports rollback/retry (75.4311ms)
+(node:39584) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ standalone owner survives launching client exit, attaches without a second writer and explicitly restarts (2819.6485ms)
+✔ panel credential permits only exact snapshot and preference routes and rotates with generation (2549.9239ms)
+✔ standalone start refuses a live desktop-owned service without changing its sessions or discovery (1844.4176ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8424.6897

@@ -1,0 +1,75 @@
+{
+  "checks": {
+    "build": "passed",
+    "browser": "11 passed",
+    "trayPngDecoder": "32x32 transparent, passed",
+    "cargoTests": "--locked --lib 28 passed",
+    "nsis": "not yet executed",
+    "iconVisual": "128x128 PNG visually checked",
+    "lint": "61 files passed",
+    "cargoClippy": "--locked -- -D warnings passed",
+    "trayStatic": "6 passed",
+    "bunTests": "24 passed / 85 assertions"
+  },
+  "date": "2026-11-12",
+  "dirtyFixes": true,
+  "toolchain": {
+    "cargo": "1.98.0",
+    "bun": "1.4.4",
+    "target": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\shell-target",
+    "rustc": "1.98.0"
+  },
+  "sourceHead": "c02fb6ae882946770327297949049b794d09f947",
+  "artifacts": [
+    {
+      "bytes": 515,
+      "path": "src-tauri/app-icon.svg",
+      "sha256": "c8e7f3e8234406a48d18e9d536ba15eb25246db6ce64b5738347f575eb53f14d"
+    },
+    {
+      "bytes": 1956,
+      "path": "src-tauri/tauri.conf.json",
+      "sha256": "bd6ceb66638dfacb378303927a789ece1bb5bbd361da63e7b34ea827460d1141"
+    },
+    {
+      "bytes": 1561,
+      "path": "src/components/icons.tsx",
+      "sha256": "a2a4008eb9689789886a9c9f3119674d6c54bfe30f131a25c432eef277191bd5"
+    },
+    {
+      "bytes": 1992,
+      "path": "src/settings/pages/AboutPage.tsx",
+      "sha256": "b605c31902b34acf4e54fef84419ec868f52be8f92ee0f9a0802e28e6f0752bc"
+    },
+    {
+      "bytes": 819,
+      "path": "src-tauri/icons/task-island/32x32.png",
+      "sha256": "fb6b1140b6193c588a689d9ce34ec63b30e292b99bbd67d787669b3afabafedc"
+    },
+    {
+      "bytes": 3115,
+      "path": "src-tauri/icons/task-island/128x128.png",
+      "sha256": "b1f9b4051e84df9178521d500bf66f32a906d30b845f1a5bc8e8bd608e6f3cd7"
+    },
+    {
+      "bytes": 6105,
+      "path": "src-tauri/icons/task-island/128x128@2x.png",
+      "sha256": "b5df54988e2716737ae4c6f7a488b231c3f2719a2908cffbb4efd41cc9b4cbf7"
+    },
+    {
+      "bytes": 13616,
+      "path": "src-tauri/icons/task-island/icon.ico",
+      "sha256": "e962a41128940fe6e5614c8c8a5023f6a240e4189856d6f45d8b2b582962dfed"
+    },
+    {
+      "bytes": 4335,
+      "path": "SOURCE.md",
+      "sha256": "4f667cd20f4eb791c04858205d11cd43c7e23e57bf49f6a79a658bb02b815ab6"
+    },
+    {
+      "bytes": 3014990,
+      "path": "THIRD-PARTY-NOTICES.txt",
+      "sha256": "e45404c2c0633f16ff05f59428e2c7cb6c483b784e70a8f62cb48f468334ca8d"
+    }
+  ]
+}

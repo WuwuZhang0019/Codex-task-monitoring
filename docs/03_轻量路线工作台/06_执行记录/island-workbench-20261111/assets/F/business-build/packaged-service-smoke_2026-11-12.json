@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-12",
+  "sourceCommit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+  "nodeVersion": "v25.5.0",
+  "dataScope": "isolated new F smoke directory",
+  "commands": [
+    "bundled node.exe desktop/service.mjs start",
+    "bundled service client status/health",
+    "authenticated GET /api/light-panel",
+    "bundled service stop"
+  ],
+  "initialEmpty": true,
+  "checks": [
+    {
+      "check": "cold start",
+      "passed": true,
+      "nodeVersion": "25.5.0"
+    },
+    {
+      "check": "CLI status",
+      "passed": true
+    },
+    {
+      "check": "status health",
+      "passed": true
+    },
+    {
+      "check": "packaged snapshot read",
+      "passed": true,
+      "status": 200,
+      "topLevelKeys": [
+        "date",
+        "snapshot",
+        "sources",
+        "preferences",
+        "capabilities"
+      ],
+      "projects": null
+    },
+    {
+      "check": "stop",
+      "passed": true
+    },
+    {
+      "check": "discovery and credential cleanup",
+      "passed": true,
+      "remaining": []
+    }
+  ],
+  "result": "passed"
+}

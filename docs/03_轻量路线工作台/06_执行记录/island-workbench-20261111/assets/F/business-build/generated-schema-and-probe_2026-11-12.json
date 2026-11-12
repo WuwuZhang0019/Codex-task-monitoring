@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-12",
+  "schemaSha256": "7e6d9998f088a4edaff9cc794139966301ef6d6393b3d5d80579a7a3501613a5",
+  "generatedSchemaIncludesHash": true,
+  "serverBundleIncludesHash": false,
+  "probeManifestSourceCommit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+  "probeManifestReleaseReady": false,
+  "probeManifestDirtySource": "M app/server/business-schema.mjs",
+  "probeManifestIncludedInResourcePackage": false,
+  "resourceReleaseManifestPaths": [],
+  "normalizedLfSchemaSha256": "2c2cb3736557640e5b63806ccd1c31369401604dfb94b23f208f5cf544ed1e71",
+  "serverContainsContractFingerprintExport": false,
+  "serverContainsOldLfSchemaHash": false
+}

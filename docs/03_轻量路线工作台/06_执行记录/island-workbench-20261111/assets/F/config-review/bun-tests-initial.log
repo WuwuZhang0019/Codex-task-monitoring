@@ -1,0 +1,38 @@
+bun test v1.4.4 (38afee6c8)
+
+src\core\settings.test.ts:
+(pass) openTrigger > defaults to hover [0.04ms]
+(pass) openTrigger > keeps the old 'Expand on hover' switch turned off as click [0.02ms]
+(pass) openTrigger > the new setting wins over the old switch [0.02ms]
+(pass) 外壳偏好迁移 > 先备份原配置，只导入保留设置，旧功能不能由配置重新启用 [0.62ms]
+(pass) 外壳偏好迁移 > 已有新配置不被后续原版修改覆盖 [0.07ms]
+(pass) 外壳偏好迁移 > 备份失败不写入新配置 [0.12ms]
+(pass) 外壳偏好迁移 > 既有备份与原版不一致时暂停迁移 [0.03ms]
+(pass) 外壳偏好迁移 > 拒绝损坏、非对象和未来版本，原始值保持不变 [0.13ms]
+(pass) 外壳偏好迁移 > 启动读取失败后保持只读，后续控件操作不覆盖损坏配置 [0.34ms]
+
+src\workbench\service-client.test.ts:
+(pass) native service client > service-schema nullable original codes remain null through native response mapping [8.15ms]
+(pass) native service client > first read errors expose offline without mock fallback, then reconnects [3.05ms]
+(pass) native service client > denial, timeout and incompatible data preserve previous snapshot and success time [5.17ms]
+(pass) native service client > old revision cannot replace newer data [5.74ms]
+(pass) native service client > reading preferences require successful hydration, preserve supplied keys and use narrow command [3.60ms]
+(pass) native service client > saving positions is serialized and failed saves never claim persisted [21.05ms]
+(pass) native service client > query without original principal/project/operation stays unknown without transport calls [0.17ms]
+(pass) native service client > invalid preferences and service identities fail closed [1.36ms]
+(pass) native service client > superseded read failures never replace a newer ready state or block preferences [6.75ms]
+(pass) native service client > superseded old revisions cannot downgrade connection or hydrate stale preferences [3.75ms]
+
+src\components\island\geometry.test.ts:
+(pass) geometry > expanded island keeps the module's size plus the tab bar [0.07ms]
+(pass) geometry > a module taller than the window is clamped so its corners stay visible [0.02ms]
+(pass) geometry > peek has no tab bar and is clamped too [0.02ms]
+
+src\settings\components\WorkbenchConnection.test.ts:
+(pass) binding summary shows the loaded project, session, worktree and exact step count [0.16ms]
+(pass) incomplete or malformed scope has no confirmable summary [0.07ms]
+
+ 24 pass
+ 0 fail
+ 85 expect() calls
+Ran 24 tests across 4 files. [368.00ms]

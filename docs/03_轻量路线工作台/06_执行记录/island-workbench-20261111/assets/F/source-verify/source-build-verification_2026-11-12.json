@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-12",
+  "verification": "minimal corresponding-source ZIP compile completeness",
+  "originalCommit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+  "importCommit": "edb109baf5a095a57b923492443680dffd31e2d1",
+  "sourceStatusTrackedAfterBuild": "M app/server/business-schema.mjs",
+  "independentlyInstalledNodeModules": true,
+  "sourceNodeModulesIsSymlink": false,
+  "commands": [
+    {
+      "command": "npm ci --prefix .",
+      "cwd": "exported business-source/app",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "cwd": "exported business-source/app",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run desktop:resources",
+      "cwd": "exported business-source/app",
+      "exitCode": 0
+    }
+  ],
+  "manifestEntriesVerified": 86,
+  "resourceFileCount": 87,
+  "resourceManifestSha256": "18d5ffd37273c017dd57ac9d86701daf98dcb573426fe16cbfa2b232a9f1cea5",
+  "schemaSha256": "7e6d9998f088a4edaff9cc794139966301ef6d6393b3d5d80579a7a3501613a5",
+  "probeImportCommit": "edb109baf5a095a57b923492443680dffd31e2d1",
+  "probeReleaseReady": false,
+  "probeDirtySource": "M app/server/business-schema.mjs",
+  "nodeVersion": "25.5.0",
+  "nodeDistributionSha256": "4d2773e98d3f35d172478d5101de1f571d851053d2ed67bbe39a5bdeae87d804",
+  "finalServiceZipUnchangedSha256": "5c6c6961f20e5be68442bacb87d3ab4d643552f538319ba865e34d0b78781226",
+  "testsRepeated": false,
+  "sourceZipMissingFiles": false
+}

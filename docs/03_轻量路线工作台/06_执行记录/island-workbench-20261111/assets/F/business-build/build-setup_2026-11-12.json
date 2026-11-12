@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-12",
+  "workspace": "C:\\Users\\Zyf\\.codex\\worktrees\\island-f-business-build\\Codex-task-monitoring",
+  "initialCommit": "cb99f12496a8401ff638dafe1077630d3fa4d7fc",
+  "initialStatus": "clean",
+  "checkoutCommand": "git switch --detach 54056a2",
+  "commit": "54056a2f1cd8b5d8b8b6c8661b76bd201c50170b",
+  "status": null,
+  "node": "v25.5.0",
+  "npm": "11.8.0",
+  "architecture": "AMD64"
+}

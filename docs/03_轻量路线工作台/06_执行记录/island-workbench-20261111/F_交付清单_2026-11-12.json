@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-12",
+  "planKey": "island-workbench-20261111",
+  "stage": "F",
+  "localStatus": "completed",
+  "acceptance": "passed",
+  "localProgress": "6/6",
+  "handoffConclusion": "E",
+  "businessCommit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+  "shellCommit": "94a2d959ee0e04d47813368b1584a74e24e0605f",
+  "protocolVersion": "island-workbench/1",
+  "snapshotSchema": "light-1.0",
+  "serviceIdentity": null,
+  "serviceSynced": false,
+  "sync": "deferredByAuthorization",
+  "publicRelease": false,
+  "installed": false,
+  "buildProfile": "debug / unsigned NSIS; independent Node service",
+  "artifacts": [
+    {
+      "kind": "business-source",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\delivery\\business-source-1e4aa216.zip",
+      "sha256": "ed941f61b5176651e8ea897122ce13fde8878afe7c9c8d3e198a1aa292eb10d3",
+      "bytes": 562725,
+      "sourceCommit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+      "verified": true
+    },
+    {
+      "kind": "task-island-source",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\delivery\\task-island-source-94a2d959.zip",
+      "sha256": "bf0d938f7c569042d391fb3f44c59b223a42216d349052c2659d13c6dce6e6a5",
+      "bytes": 826896,
+      "sourceCommit": "94a2d959ee0e04d47813368b1584a74e24e0605f",
+      "verified": true
+    },
+    {
+      "kind": "business-service",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\delivery\\route-workbench-service-0.1.0-1e4aa21-win-x64.zip",
+      "sha256": "5c6c6961f20e5be68442bacb87d3ab4d643552f538319ba865e34d0b78781226",
+      "bytes": 36001658,
+      "sourceCommit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+      "verified": true
+    },
+    {
+      "sha256": "1f0bc4c0d9d45970a82aa8aab099f630e8b377d7b27a9c6b1e99db3007bdcc54",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\shell-target\\debug\\dynamic-island.exe",
+      "bytes": 19653632,
+      "kind": "shell-native-executable",
+      "sourceCommit": "94a2d959ee0e04d47813368b1584a74e24e0605f",
+      "verified": true
+    },
+    {
+      "sha256": "f40c162c061025db403723c1d15ae14a327bec4f63ad5b13e79df9132c0ff19b",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\delivery\\Task-Island-0.1.0-94a2d959-x64-setup.exe",
+      "bytes": 5135596,
+      "kind": "shell-nsis-installer",
+      "sourceCommit": "94a2d959ee0e04d47813368b1584a74e24e0605f",
+      "verified": true
+    }
+  ],
+  "sourceEntries": [
+    {
+      "kind": "business-source",
+      "count": 172
+    },
+    {
+      "kind": "task-island-source",
+      "count": 201
+    }
+  ],
+  "limitations": [
+    "Multi-monitor not tested",
+    "125% interactions; 150% system/native geometry only",
+    "Same-source install upgrade/downgrade mechanism only",
+    "Old UI deleted; no MSI/MSIX/store release",
+    "New F NSIS was built, not installed or physically user-accepted",
+    "Historical E installed path now D4831E26..., source of drift unconfirmed; historical E evidence remains pinned to BA112...",
+    "No cross-machine bit-for-bit reproducibility claim"
+  ],
+  "evidence": {
+    "business": "assets/F/business-build/business-delivery_2026-11-12.json",
+    "shell": "assets/F/shell-build/shell-clean-build_2026-11-12.json",
+    "sourceVerification": "assets/F/source-verify/source-build-verification_2026-11-12.json"
+  }
+}

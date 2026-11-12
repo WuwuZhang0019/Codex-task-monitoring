@@ -1,0 +1,206 @@
+[
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/autostart-enabled_2026-11-12.json",
+    "expected": "7f28a6754ffd9b528b225c42e34dffde8240f2ce3cf2a69d274556e939d55740",
+    "actual": "7f28a6754ffd9b528b225c42e34dffde8240f2ce3cf2a69d274556e939d55740",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/autostart-on_2026-11-12.png",
+    "expected": "d2852bc369a122ca0bfc31bfa89d0deb8e4bcca9bca82f00df5847994224fd75",
+    "actual": "d2852bc369a122ca0bfc31bfa89d0deb8e4bcca9bca82f00df5847994224fd75",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/autostart-restored_2026-11-12.json",
+    "expected": "f5a4e81a2e7c38e5b390d45dc2ce41cfd6ea246c46a021c782b85cf0b42abeeb",
+    "actual": "f5a4e81a2e7c38e5b390d45dc2ce41cfd6ea246c46a021c782b85cf0b42abeeb",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/configuration-restore_2026-11-12.json",
+    "expected": "9e2e05619dfc94d12ce935a2374990d1f69adcdcabec6d2c5cfb5106540e4b62",
+    "actual": "9e2e05619dfc94d12ce935a2374990d1f69adcdcabec6d2c5cfb5106540e4b62",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/dynamic-native-recheck_2026-11-12.json",
+    "expected": "fdd94072c0073ba4a740cf343b447eefd0420445b235d4c2eb36ceec1b86fbb5",
+    "actual": "fdd94072c0073ba4a740cf343b447eefd0420445b235d4c2eb36ceec1b86fbb5",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/dynamic-native-webview_2026-11-12.png",
+    "expected": "4e9b2d2cd125c2f9122444bc5cab5f8314f50769d8b95621c48416db10a7b016",
+    "actual": "4e9b2d2cd125c2f9122444bc5cab5f8314f50769d8b95621c48416db10a7b016",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/dynamic-recheck_2026-11-12.mjs",
+    "expected": "ad1376072049a170cb2611ba693c354c93415f17f9adc64433f4111e5bc5265e",
+    "actual": "ad1376072049a170cb2611ba693c354c93415f17f9adc64433f4111e5bc5265e",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/escape-reopen-probe_2026-11-12.json",
+    "expected": "2a7baaa900b8fd3fbd6fd7b10f3cfab2c71d153b164defe6f26131c45e4f22a1",
+    "actual": "2a7baaa900b8fd3fbd6fd7b10f3cfab2c71d153b164defe6f26131c45e4f22a1",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/escape-reopen-probe_2026-11-12.mjs",
+    "expected": "98524ace5ac1b0d4fdce4ceb436351e4a312cff2c1d7f016c2fcc12284881549",
+    "actual": "98524ace5ac1b0d4fdce4ceb436351e4a312cff2c1d7f016c2fcc12284881549",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/evidence-validator_2026-11-12.mjs",
+    "expected": "8aad15ad786058ed5543d2b98b6b4544ba09074a09ec972088b79bcb993973cd",
+    "actual": "8aad15ad786058ed5543d2b98b6b4544ba09074a09ec972088b79bcb993973cd",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/final-runtime_2026-11-12.json",
+    "expected": "89c60346fabaab38a506815f85f280ea2eb52a9ffabbc4971fb9bb45a1194292",
+    "actual": "89c60346fabaab38a506815f85f280ea2eb52a9ffabbc4971fb9bb45a1194292",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/fullscreen-fixture-build_2026-11-12.json",
+    "expected": "69c891052b866424c369d7dff6c67b07ac27ad2c3555ffd4eba55cea76adab3f",
+    "actual": "69c891052b866424c369d7dff6c67b07ac27ad2c3555ffd4eba55cea76adab3f",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/fullscreen-fixture_2026-11-12.cs",
+    "expected": "7e05d2ef9c18bd216ca813a2e104f15a71dad1ea2e79f8dedaa68e50c21eab91",
+    "actual": "7e05d2ef9c18bd216ca813a2e104f15a71dad1ea2e79f8dedaa68e50c21eab91",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-point-snapshot_2026-11-12.mjs",
+    "expected": "2f30cf1f6adcad6a99d3c6dc3fccd2fb21412f6b05d1af0bf723cbfd97f2b4f6",
+    "actual": "2f30cf1f6adcad6a99d3c6dc3fccd2fb21412f6b05d1af0bf723cbfd97f2b4f6",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-ui-acceptance_2026-11-12.mjs",
+    "expected": "7dcfc9fd9b8b5945a0568c385b662964b71f8720521fd7eb32711d9f1af96269",
+    "actual": "7dcfc9fd9b8b5945a0568c385b662964b71f8720521fd7eb32711d9f1af96269",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-webview-acceptance_2026-11-12.json",
+    "expected": "66521f8996f1aadd853b6c070828c61ac050e2d49764a7c52d41788bf041c463",
+    "actual": "66521f8996f1aadd853b6c070828c61ac050e2d49764a7c52d41788bf041c463",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-webview-attempt-1_2026-11-12.json",
+    "expected": "a15f587f3a4bc6656426ed2634780a52d0a4cab9679ea8da01f642e296867d2e",
+    "actual": "a15f587f3a4bc6656426ed2634780a52d0a4cab9679ea8da01f642e296867d2e",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/native-webview-progress_2026-11-12.json",
+    "expected": "389f3f76ab1f0255a4752ef5e5d52ca0394e4e4e64a44f7fc966b515b32abc89",
+    "actual": "389f3f76ab1f0255a4752ef5e5d52ca0394e4e4e64a44f7fc966b515b32abc89",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-before_2026-11-12.json",
+    "expected": "6d801d649a94b940b67a12875607fccaf278544c06ea02ab2db958e19a6e025b",
+    "actual": "6d801d649a94b940b67a12875607fccaf278544c06ea02ab2db958e19a6e025b",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-on_2026-11-12.json",
+    "expected": "8d6b91948af2b6199ef693c7bc626e07462418dd2b98e404306d85ac8cbfdc60",
+    "actual": "8d6b91948af2b6199ef693c7bc626e07462418dd2b98e404306d85ac8cbfdc60",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-restored_2026-11-12.json",
+    "expected": "2bbced915145ba4c9eeaa258054025c0018afe19ba3318a57b0a826b92e5d8ec",
+    "actual": "2bbced915145ba4c9eeaa258054025c0018afe19ba3318a57b0a826b92e5d8ec",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-run-on_2026-11-12.json",
+    "expected": "0ae2d32b6f9b0a0e462531a3fde3010b5e0073e73e57760ec098c18454d1a138",
+    "actual": "0ae2d32b6f9b0a0e462531a3fde3010b5e0073e73e57760ec098c18454d1a138",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-click-run-restored_2026-11-12.json",
+    "expected": "240cb5365e5df0ebb18e14b7a27b95ac3ddecd1efc1fc421da38f4335d30e146",
+    "actual": "240cb5365e5df0ebb18e14b7a27b95ac3ddecd1efc1fc421da38f4335d30e146",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-hit-test_2026-11-12.json",
+    "expected": "d6a819fd918fdab5ec158174f1f6358b8e3eb1e63d9beab5c318af71eb9ff466",
+    "actual": "d6a819fd918fdab5ec158174f1f6358b8e3eb1e63d9beab5c318af71eb9ff466",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-hit-test_2026-11-12.mjs",
+    "expected": "cf6e92f6f3f036b385caf689ca966b746c18acece9248a6aa3b95b7a4af37f8b",
+    "actual": "cf6e92f6f3f036b385caf689ca966b746c18acece9248a6aa3b95b7a4af37f8b",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/physical-hover-enter_2026-11-12.json",
+    "expected": "424f62b2793dbc1e9b61d13dc279e8de26cf711c3564adc92c6e0f14b546539a",
+    "actual": "424f62b2793dbc1e9b61d13dc279e8de26cf711c3564adc92c6e0f14b546539a",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/read-native-state_2026-11-12.ps1",
+    "expected": "fc47f76e38a09f2e8e8349c2a77014846188ba516a087f7cc834e5501c6dfd7f",
+    "actual": "fc47f76e38a09f2e8e8349c2a77014846188ba516a087f7cc834e5501c6dfd7f",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/register-native-hover_2026-11-12.mjs",
+    "expected": "92ca6d6c7cd9c1a31826e12985fe1183acf18917fb16c0971bcfbc055d806a2e",
+    "actual": "92ca6d6c7cd9c1a31826e12985fe1183acf18917fb16c0971bcfbc055d806a2e",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/settings-start_2026-11-12.json",
+    "expected": "d99b97d7b822f29bb2f0103409293b7f09be6c18e20fa9715a275297f6da17f3",
+    "actual": "d99b97d7b822f29bb2f0103409293b7f09be6c18e20fa9715a275297f6da17f3",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/state-drift-audit_2026-11-12.json",
+    "expected": "1135419b0d94cc05429f8e2be5e5612f8d274f59016e527cc1e2bbf1004c956e",
+    "actual": "1135419b0d94cc05429f8e2be5e5612f8d274f59016e527cc1e2bbf1004c956e",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/user-acceptance_2026-11-12.json",
+    "expected": "40941295f36b75afcd2aa2a87b0b0ed193ba3953db4b3ff285accd72eafc2526",
+    "actual": "40941295f36b75afcd2aa2a87b0b0ed193ba3953db4b3ff285accd72eafc2526",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/continuation/windows-native-webview_2026-11-12.png",
+    "expected": "4d5cf5c621b6e12b437fe26b2c2a20a954fefe97474748ed4077f87b5406966f",
+    "actual": "4d5cf5c621b6e12b437fe26b2c2a20a954fefe97474748ed4077f87b5406966f",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_续验记录_2026-11-12.md",
+    "expected": "c788590e93e1e9f1695530ff4bf7ecc7d786113dd64cd84d7653460e8bbaf6c6",
+    "actual": "c788590e93e1e9f1695530ff4bf7ecc7d786113dd64cd84d7653460e8bbaf6c6",
+    "match": true
+  },
+  {
+    "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_完成回执_2026-11-12.md",
+    "expected": "6842958c1d74131610be558df60793da552fc438785896ae1c789f272d3be8d7",
+    "actual": "6842958c1d74131610be558df60793da552fc438785896ae1c789f272d3be8d7",
+    "match": true
+  }
+]

@@ -1,0 +1,34 @@
+
+> route-workbench@0.1.0 test:skill
+> node --test tests/skill-workflow.test.mjs
+
+✔ E 任意旧编号、依赖及Mermaid精确改写，内容与普通列表保留 (19.2367ms)
+✔ E 已登记stepId与编号保持，插入使用锚点后缀并保留显式顺序 (0.9161ms)
+✔ E 原编号重复按父作用域区分，超过Z仍可分配 (0.9182ms)
+✔ E 模糊身份、缺失依赖、循环、重叠引用及并发来源变化拒绝 (0.9336ms)
+✔ E 文件写回前重检来源，并发修改保留用户内容 (19.3985ms)
+✔ E 规范化产物可登记为冻结契约候选，未保存不捏造服务ID (38.9888ms)
+✔ E 单文件夹、多工作树、超过九序号、同名会话及标题切换保持固定身份 (0.6812ms)
+✔ E 宿主创建、改名与移动失败重试复用operationId和固定目标 (0.8939ms)
+✔ E 掉响应创建先查询原operationId，恢复固定目标后不重复创建 (0.5029ms)
+✖ E 实际工作树与错误目录分支分别核验 (210.0321ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 532.7132
+
+✖ failing tests:
+
+test at tests\skill-workflow.test.mjs:69:1
+✖ E 实际工作树与错误目录分支分别核验 (210.0321ms)
+  Error: WORKTREE_BRANCH_MISMATCH
+      at requireValue (file:///C:/Users/Zyf/.codex/worktrees/island-f-business-build/Codex-task-monitoring/plugins/task-workbench/skills/workbench-handoff/scripts/context-ledger.mjs:10:40)
+      at inspectWorktree (file:///C:/Users/Zyf/.codex/worktrees/island-f-business-build/Codex-task-monitoring/plugins/task-workbench/skills/workbench-handoff/scripts/context-ledger.mjs:20:70)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///C:/Users/Zyf/.codex/worktrees/island-f-business-build/Codex-task-monitoring/app/tests/skill-workflow.test.mjs:70:112)
+      at async Test.run (node:internal/test_runner/test:1116:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:786:7)

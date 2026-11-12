@@ -1,0 +1,5 @@
+
+> route-workbench@0.1.0 desktop:resources
+> node desktop/prepare-resources.mjs
+
+Runtime resources prepared, Node 25.5.0

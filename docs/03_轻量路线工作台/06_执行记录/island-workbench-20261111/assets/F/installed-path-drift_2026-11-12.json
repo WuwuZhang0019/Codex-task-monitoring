@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-12",
+  "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-E\\installed-shell\\dynamic-island.exe",
+  "sha256": "D4831E26FCBEE64EDE5E08C56FFED159BCEFB6A3D54CAF010A376FDA2DEE2618",
+  "bytes": 19667456,
+  "lastWriteTime": "2026-11-12T11:46:38.6683600+08:00",
+  "productName": "任务岛",
+  "fileVersion": "0.1.0",
+  "expectedE": "BA112BB56C228DA9B7922EBA3E30DFF58C4E16D42EB61BB5B6347C4131C5736E",
+  "matchesHistoricalE": false,
+  "fInstalled": false
+}

@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-12",
+  "checkedAgainst": "77574bfe7f0b561b092165ed824da0d56cc3e66f",
+  "checks": [
+    {
+      "name": "左键与菜单原动作分支与E一致",
+      "result": "passed"
+    },
+    {
+      "name": "显示隐藏配置处理与E一致",
+      "result": "passed"
+    },
+    {
+      "name": "灰化及45%透明度算法与E一致",
+      "result": "passed"
+    },
+    {
+      "name": "托盘初始化明确加载新图标",
+      "result": "passed"
+    },
+    {
+      "name": "隐藏状态选择同图标灰化分支",
+      "result": "passed"
+    },
+    {
+      "name": "嵌入PNG签名尺寸有效",
+      "result": "passed"
+    }
+  ],
+  "passed": true,
+  "limitation": "静态来源及PNG头核对；未声称新包系统托盘物理操作通过"
+}

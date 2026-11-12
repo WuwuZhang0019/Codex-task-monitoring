@@ -8,3 +8,10 @@ docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/E_* -tex
 
 # 日期：2026-11-12。原始命令日志保留工具输出末尾空行，按二进制证据展示，内容不归一化。
 docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/E/**/*.log binary
+
+# 日期：2026-11-12。F 原始证据按字节冻结；原样第三方许可保留其格式，不改写空白。
+docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/**/*.log binary
+docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/**/*.txt -whitespace
+THIRD-PARTY-NOTICES.txt -whitespace
+app/dist/THIRD-PARTY-NOTICES.txt -whitespace

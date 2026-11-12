@@ -1,0 +1,63 @@
+{
+  "profile": "debug",
+  "date": "2026-11-12",
+  "sourceCommit": "94a2d959ee0e04d47813368b1584a74e24e0605f",
+  "bundles": "nsis",
+  "checks": {
+    "frozenInstall": "63 packages passed",
+    "bunTests": "24 passed / 85 assertions",
+    "build": "passed",
+    "lint": "61 files passed",
+    "nsis": "exit0",
+    "browserBeforeDebugBuild": "11 passed",
+    "sevenZip": "not installed; used generated NSIS file directives and copied resources",
+    "browserDebugFinal": "11 passed / 0 pageerror / screenshots inspected"
+  },
+  "artifacts": [
+    {
+      "sha256": "1f0bc4c0d9d45970a82aa8aab099f630e8b377d7b27a9c6b1e99db3007bdcc54",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\shell-target\\debug\\dynamic-island.exe",
+      "bytes": 19653632
+    },
+    {
+      "sha256": "f40c162c061025db403723c1d15ae14a327bec4f63ad5b13e79df9132c0ff19b",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\delivery\\Task-Island-0.1.0-94a2d959-x64-setup.exe",
+      "bytes": 5135596
+    },
+    {
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\shell-target\\debug\\licenses\\LICENSE",
+      "bytes": 35149
+    },
+    {
+      "sha256": "4f667cd20f4eb791c04858205d11cd43c7e23e57bf49f6a79a658bb02b815ab6",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\shell-target\\debug\\licenses\\SOURCE.md",
+      "bytes": 4335
+    },
+    {
+      "sha256": "b0f31a5751ce5117326bb707bc9463a5483849f57844318e1d60109e79506f3a",
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\shell-target\\debug\\licenses\\THIRD-PARTY-NOTICES.txt",
+      "bytes": 3013977
+    }
+  ],
+  "checkout": "C:\\Users\\Zyf\\.codex\\worktrees\\island-f-shell-build\\windows-dynamic-island",
+  "installed": false,
+  "signatures": [
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\delivery\\Task-Island-0.1.0-94a2d959-x64-setup.exe",
+      "status": "NotSigned"
+    },
+    {
+      "path": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\shell-target\\debug\\dynamic-island.exe",
+      "status": "NotSigned"
+    }
+  ],
+  "installIdentity": {
+    "version": "0.1.0",
+    "installMode": "currentUser",
+    "identifier": "com.wuwuzhang0019.islandworkbench",
+    "productName": "任务岛",
+    "updaterConfigured": false
+  },
+  "gitStatusAfter": "clean; only ignored node_modules/dist/generated build caches created"
+}

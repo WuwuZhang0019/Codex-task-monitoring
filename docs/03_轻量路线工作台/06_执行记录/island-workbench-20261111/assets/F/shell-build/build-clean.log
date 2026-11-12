@@ -1,0 +1,15 @@
+$ tsc -b && vite build
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2604 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                        0.39 kB │ gzip:   0.28 kB
+dist/assets/Island-DisboRK7.css        7.47 kB │ gzip:   2.08 kB
+dist/assets/index-DL6LAo9Z.css        39.03 kB │ gzip:   7.87 kB
+dist/assets/Island-DLay5D5Q.js        53.04 kB │ gzip:  19.03 kB
+dist/assets/SettingsApp-vIe-0chS.js   65.61 kB │ gzip:  22.77 kB
+dist/assets/index-C0eCWTML.js        242.65 kB │ gzip:  75.37 kB
+dist/assets/Rim-DBaTmC17.js          310.67 kB │ gzip: 104.11 kB
+
+✓ built in 1.43s

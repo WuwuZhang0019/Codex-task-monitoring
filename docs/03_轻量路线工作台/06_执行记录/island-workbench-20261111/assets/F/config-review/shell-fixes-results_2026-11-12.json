@@ -1,0 +1,56 @@
+{
+  "artifacts": [
+    {
+      "bytes": 515,
+      "path": "src-tauri/app-icon.svg",
+      "sha256": "c8e7f3e8234406a48d18e9d536ba15eb25246db6ce64b5738347f575eb53f14d"
+    },
+    {
+      "bytes": 1956,
+      "path": "src-tauri/tauri.conf.json",
+      "sha256": "bd6ceb66638dfacb378303927a789ece1bb5bbd361da63e7b34ea827460d1141"
+    },
+    {
+      "bytes": 1561,
+      "path": "src/components/icons.tsx",
+      "sha256": "a2a4008eb9689789886a9c9f3119674d6c54bfe30f131a25c432eef277191bd5"
+    },
+    {
+      "bytes": 1984,
+      "path": "src/settings/pages/AboutPage.tsx",
+      "sha256": "b3036840d41c94376fdd7d863da1007f22f6bf7424e1e75ea69e8c978c88020e"
+    },
+    {
+      "bytes": 819,
+      "path": "src-tauri/icons/task-island/32x32.png",
+      "sha256": "fb6b1140b6193c588a689d9ce34ec63b30e292b99bbd67d787669b3afabafedc"
+    },
+    {
+      "bytes": 3115,
+      "path": "src-tauri/icons/task-island/128x128.png",
+      "sha256": "b1f9b4051e84df9178521d500bf66f32a906d30b845f1a5bc8e8bd608e6f3cd7"
+    },
+    {
+      "bytes": 6105,
+      "path": "src-tauri/icons/task-island/128x128@2x.png",
+      "sha256": "b5df54988e2716737ae4c6f7a488b231c3f2719a2908cffbb4efd41cc9b4cbf7"
+    },
+    {
+      "bytes": 13616,
+      "path": "src-tauri/icons/task-island/icon.ico",
+      "sha256": "e962a41128940fe6e5614c8c8a5023f6a240e4189856d6f45d8b2b582962dfed"
+    }
+  ],
+  "date": "2026-11-12",
+  "sourceHead": "c02fb6ae882946770327297949049b794d09f947",
+  "checks": {
+    "build": "passed",
+    "nsis": "not executed by config agent",
+    "iconVisual": "128x128 actual PNG visually checked",
+    "lint": "61 files passed",
+    "cargoClippy": "not executed by config agent",
+    "bunTests": "24 passed / 85 assertions",
+    "cargoTests": "not executed by config agent"
+  },
+  "dirtyFixes": true
+}

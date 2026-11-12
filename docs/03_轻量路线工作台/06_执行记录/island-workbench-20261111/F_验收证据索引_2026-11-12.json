@@ -1,0 +1,784 @@
+{
+  "date": "2026-11-12",
+  "planKey": "island-workbench-20261111",
+  "stage": "F",
+  "localStatus": "completed",
+  "acceptance": "passed",
+  "progress": {
+    "completed": 6,
+    "total": 6
+  },
+  "handoffConclusion": "E",
+  "localExecutionKey": "island-workbench-20261111/local/F-20261112-01",
+  "completionKey": "island-workbench-20261111/local/F-20261112-01/complete-20261112",
+  "responsibleThread": "01a1cdcb-fc4c-7580-96c9-b2979497b072",
+  "serviceIdentity": null,
+  "sync": "deferredByAuthorization",
+  "serviceSynced": false,
+  "publicRelease": false,
+  "businessCommit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+  "shellCommit": "94a2d959ee0e04d47813368b1584a74e24e0605f",
+  "protocolVersion": "island-workbench/1",
+  "skillSource": {
+    "package": "task-workbench/0.1.6",
+    "visibility": "explicitly invoked by user; source read and execution workflow applied",
+    "files": [
+      {
+        "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.6\\skills\\workbench-handoff\\SKILL.md",
+        "sha256": "5d17f0d02c755ee9e9a461459295651e1be9839f419d3a383e65483445c97d75"
+      },
+      {
+        "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.6\\skills\\workbench-handoff\\references\\execution-sync.md",
+        "sha256": "c086e7f790490f9e2d8dc95cd90fb837d97ad18f669a6950712e96d710b72539"
+      },
+      {
+        "path": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.6\\skills\\workbench-handoff\\references\\handoff-template.md",
+        "sha256": "a2ee2f68ce48afa5060aca5da808ef5e9b2d4fa3093e29b6a2b59a6bd483cdeb"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "E prerequisite original artifact hashes",
+      "result": "passed",
+      "count": 34
+    },
+    {
+      "name": "business service/MCP + domain + Skill",
+      "result": "passed",
+      "count": 155
+    },
+    {
+      "name": "desktop isolated lifecycle/recovery",
+      "result": "passed",
+      "count": 9
+    },
+    {
+      "name": "packaged Node service smoke",
+      "result": "passed",
+      "count": 6
+    },
+    {
+      "name": "shell Bun tests/assertions",
+      "result": "passed",
+      "tests": 24,
+      "assertions": 85
+    },
+    {
+      "name": "shell Rust lib",
+      "result": "passed",
+      "count": 28
+    },
+    {
+      "name": "shell lint/build/clippy/clean NSIS",
+      "result": "passed"
+    },
+    {
+      "name": "browser delivery delta",
+      "result": "passed",
+      "count": 11
+    },
+    {
+      "name": "tray branches/PNG static checks",
+      "result": "passed",
+      "count": 6
+    },
+    {
+      "name": "minimum business source ZIP build",
+      "result": "passed"
+    },
+    {
+      "name": "independent final source/manifest review",
+      "result": "passed",
+      "details": "all five artifact hashes; three ZIP integrity; 149 business and 177 shell source files; required imports/resources complete"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-audit/audit-business-bundles_2026-11-12.mjs",
+      "bytes": 3510,
+      "sha256": "3463d2c29c3f0c070847af8ae33dcdc36859a76211920ccfd5025f91bfb4e257",
+      "gitBlobSHA256": "3463d2c29c3f0c070847af8ae33dcdc36859a76211920ccfd5025f91bfb4e257",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-audit/audit-business-licenses_2026-11-12.py",
+      "bytes": 4243,
+      "sha256": "6f359d6a828aaa6415e6fa73c6090079d38e34d178a8d3c34ef38b91c577d179",
+      "gitBlobSHA256": "6f359d6a828aaa6415e6fa73c6090079d38e34d178a8d3c34ef38b91c577d179",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-audit/business-bundle-packages_2026-11-12.json",
+      "bytes": 37181,
+      "sha256": "ed58fd41f77ef0e9440904f23edfe36fc89e66bf771929a192412a670b8bb993",
+      "gitBlobSHA256": "ed58fd41f77ef0e9440904f23edfe36fc89e66bf771929a192412a670b8bb993",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-audit/business-license-inventory_2026-11-12.json",
+      "bytes": 621768,
+      "sha256": "dc1d443c53f6a79d92beb5af821b8813c40992915c3445e0ac8fb0bf19d0de25",
+      "gitBlobSHA256": "dc1d443c53f6a79d92beb5af821b8813c40992915c3445e0ac8fb0bf19d0de25",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-audit/BUSINESS-THIRD-PARTY-NOTICES_2026-11-12.txt",
+      "bytes": 173870,
+      "sha256": "56089bfd92a5d65abc0c17a533125f746bfb45d5ea4b3e98f3d020d4463b3a04",
+      "gitBlobSHA256": "56089bfd92a5d65abc0c17a533125f746bfb45d5ea4b3e98f3d020d4463b3a04",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-audit/cargo-metadata-windows_2026-11-12.json",
+      "bytes": 2400733,
+      "sha256": "69f7537fc16e6330fb8f6eb1da964a01bd32bf47563a5b60afc90fe22c0069fd",
+      "gitBlobSHA256": "69f7537fc16e6330fb8f6eb1da964a01bd32bf47563a5b60afc90fe22c0069fd",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-audit/summary_2026-11-12.json",
+      "bytes": 4612,
+      "sha256": "c3df9841f57c220c58e1e8641e213166c0755753414a749ef0d0c2ad3b1b1ccc",
+      "gitBlobSHA256": "c3df9841f57c220c58e1e8641e213166c0755753414a749ef0d0c2ad3b1b1ccc",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-audit/业务来源与许可审计_2026-11-12.md",
+      "bytes": 5497,
+      "sha256": "1181954ddc9215c8672c05adefea6379d66b79ae2dd620fad91d557fc1be44d5",
+      "gitBlobSHA256": "1181954ddc9215c8672c05adefea6379d66b79ae2dd620fad91d557fc1be44d5",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/build-setup_2026-11-12.json",
+      "bytes": 423,
+      "sha256": "8a210e5b84ed933450338ee0ab5249b27c9d2b2ea3f5367bc3447e968c170abb",
+      "gitBlobSHA256": "8a210e5b84ed933450338ee0ab5249b27c9d2b2ea3f5367bc3447e968c170abb",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/business-delivery_2026-11-12.json",
+      "bytes": 15597,
+      "sha256": "340cd2d6989b8f64541a39e472833e44a3089b3f8ec3fda776f290d5a570297a",
+      "gitBlobSHA256": "340cd2d6989b8f64541a39e472833e44a3089b3f8ec3fda776f290d5a570297a",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/desktop-resources-final_2026-11-12.log",
+      "bytes": 126,
+      "sha256": "d66b9ce4500f12f5604b757a06ba6f1f335f2a90e1df6e2ae3e90200a65837f6",
+      "gitBlobSHA256": "d66b9ce4500f12f5604b757a06ba6f1f335f2a90e1df6e2ae3e90200a65837f6",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/desktop-resources_2026-11-12.log",
+      "bytes": 126,
+      "sha256": "d66b9ce4500f12f5604b757a06ba6f1f335f2a90e1df6e2ae3e90200a65837f6",
+      "gitBlobSHA256": "d66b9ce4500f12f5604b757a06ba6f1f335f2a90e1df6e2ae3e90200a65837f6",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/desktop-tests_2026-11-12.log",
+      "bytes": 1561,
+      "sha256": "28b5c0a3b3769d06281e901b39b0dc72ae7abe1ab802b93cabf2a51c5409ed17",
+      "gitBlobSHA256": "28b5c0a3b3769d06281e901b39b0dc72ae7abe1ab802b93cabf2a51c5409ed17",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/final-clean-input_2026-11-12.json",
+      "bytes": 265,
+      "sha256": "9005b06e16aed5523d2981413307c313c4b3b729ef08736a35e32cf932fce987",
+      "gitBlobSHA256": "9005b06e16aed5523d2981413307c313c4b3b729ef08736a35e32cf932fce987",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/generated-schema-and-probe_2026-11-12.json",
+      "bytes": 663,
+      "sha256": "2262412adbb2fa566b036d6989a49fd8efcd39d5f598ae67215913361e4dbe1d",
+      "gitBlobSHA256": "2262412adbb2fa566b036d6989a49fd8efcd39d5f598ae67215913361e4dbe1d",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/npm-build-final_2026-11-12.log",
+      "bytes": 502,
+      "sha256": "cce54b6b4bf6ce74595396a7f4bb85500caf829a716ee7d2bf52909b28ad15c5",
+      "gitBlobSHA256": "cce54b6b4bf6ce74595396a7f4bb85500caf829a716ee7d2bf52909b28ad15c5",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/npm-build_2026-11-12.log",
+      "bytes": 502,
+      "sha256": "f90c1ec191cce5734168151532db9f37b43d1237a8e1aed23fae3c32ec6fe715",
+      "gitBlobSHA256": "f90c1ec191cce5734168151532db9f37b43d1237a8e1aed23fae3c32ec6fe715",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/npm-ci_2026-11-12.log",
+      "bytes": 249,
+      "sha256": "d2c044af1ce20261a51aa6fecc26c1f4f6107d5ce76f5c6061b272a499d6e93c",
+      "gitBlobSHA256": "d2c044af1ce20261a51aa6fecc26c1f4f6107d5ce76f5c6061b272a499d6e93c",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/npm-test-final_2026-11-12.log",
+      "bytes": 16921,
+      "sha256": "50c2fab99883e0277dc05b9c58d38d9971a1795ca2f600eeffc2f6e5af4cd103",
+      "gitBlobSHA256": "50c2fab99883e0277dc05b9c58d38d9971a1795ca2f600eeffc2f6e5af4cd103",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/npm-test_2026-11-12.log",
+      "bytes": 17623,
+      "sha256": "0b2b019a480a2b2d394f5ae713eae605fcdf5516bbfb6c75d509634743aeca16",
+      "gitBlobSHA256": "0b2b019a480a2b2d394f5ae713eae605fcdf5516bbfb6c75d509634743aeca16",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/package-service_2026-11-12.py",
+      "bytes": 2757,
+      "sha256": "f590a65aaa102794cfddcee356d54c4d810cd73cb2c5e42869aeb2a3bc260835",
+      "gitBlobSHA256": "f590a65aaa102794cfddcee356d54c4d810cd73cb2c5e42869aeb2a3bc260835",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/packaged-service-smoke_2026-11-12.json",
+      "bytes": 1056,
+      "sha256": "d2c13cada7e5534e5953c7961001e31f5edb5ed51d13296c8d4ccfa5b6cc2b64",
+      "gitBlobSHA256": "d2c13cada7e5534e5953c7961001e31f5edb5ed51d13296c8d4ccfa5b6cc2b64",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/post-build-state_2026-11-12.json",
+      "bytes": 1502,
+      "sha256": "9c0b33834c739d4a5ba177c6220624499e037ff1f3ca211328e079c3f809c662",
+      "gitBlobSHA256": "9c0b33834c739d4a5ba177c6220624499e037ff1f3ca211328e079c3f809c662",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/resource-manifest-final_2026-11-12.json",
+      "bytes": 9419,
+      "sha256": "18d5ffd37273c017dd57ac9d86701daf98dcb573426fe16cbfa2b232a9f1cea5",
+      "gitBlobSHA256": "18d5ffd37273c017dd57ac9d86701daf98dcb573426fe16cbfa2b232a9f1cea5",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/skill-tests-branch-recheck_2026-11-12.log",
+      "bytes": 2074,
+      "sha256": "c6c09036ff7c44e76c50ca76bca6799c8cc0bf0ad49ccee5ce8505921c424ba8",
+      "gitBlobSHA256": "c6c09036ff7c44e76c50ca76bca6799c8cc0bf0ad49ccee5ce8505921c424ba8",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/smoke-packaged-service_2026-11-12.mjs",
+      "bytes": 3556,
+      "sha256": "c2c04136c0cb284ed4c1f0bafe57da7909503be7376f80e2fe8aaf3fbfac8c5a",
+      "gitBlobSHA256": "c2c04136c0cb284ed4c1f0bafe57da7909503be7376f80e2fe8aaf3fbfac8c5a",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/business-build/业务干净构建与资源交付_2026-11-12.md",
+      "bytes": 5103,
+      "sha256": "d1704b7dc0758cac37d8c9dce12d99f893d3c545639e3137810dae67695a5a4a",
+      "gitBlobSHA256": "d1704b7dc0758cac37d8c9dce12d99f893d3c545639e3137810dae67695a5a4a",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/apply-shell-delivery-fixes.mjs",
+      "bytes": 3760,
+      "sha256": "6401587b77787372bf1fb65f18514000267d184f9a5a19290e096a075a72e239",
+      "gitBlobSHA256": "6401587b77787372bf1fb65f18514000267d184f9a5a19290e096a075a72e239",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/browser-delivery-regression.mjs",
+      "bytes": 5708,
+      "sha256": "111e38a25478ac5bd50c4d7bf54c6945e6c0e6f6bb7dd0e1e764231965d2bc29",
+      "gitBlobSHA256": "111e38a25478ac5bd50c4d7bf54c6945e6c0e6f6bb7dd0e1e764231965d2bc29",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/browser-initial/about-license-and-logo.png",
+      "bytes": 40823,
+      "sha256": "73c77f4dc3b214c2e4246bbf9a54acdb67cee92b32c860fc58c8daddc0dfed10",
+      "gitBlobSHA256": "73c77f4dc3b214c2e4246bbf9a54acdb67cee92b32c860fc58c8daddc0dfed10",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/browser-initial/browser-regression_2026-11-12.json",
+      "bytes": 1918,
+      "sha256": "5e5187e49594bd2207ae28bc3d4ed88eb1a07404722d969dfa9856db25a39c04",
+      "gitBlobSHA256": "5e5187e49594bd2207ae28bc3d4ed88eb1a07404722d969dfa9856db25a39c04",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/browser-initial/preview-server.log",
+      "bytes": 39,
+      "sha256": "e5bc72c97b22aa938d3a1fb745f9e9a957da1ad56e9cbdeb839bad9888745c73",
+      "gitBlobSHA256": "e5bc72c97b22aa938d3a1fb745f9e9a957da1ad56e9cbdeb839bad9888745c73",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/browser-initial/workbench-category.png",
+      "bytes": 17472,
+      "sha256": "d002f07975bef47a30a0842b147c7b35981426774e618c3fc18a2338c84746b2",
+      "gitBlobSHA256": "d002f07975bef47a30a0842b147c7b35981426774e618c3fc18a2338c84746b2",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/build-final-source.log",
+      "bytes": 674,
+      "sha256": "45d6ee2eeaf2f2e892ee35c99ce7f6e8b5245bb8e94025d1f10d39c8c6fbd0d8",
+      "gitBlobSHA256": "45d6ee2eeaf2f2e892ee35c99ce7f6e8b5245bb8e94025d1f10d39c8c6fbd0d8",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/build-initial.log",
+      "bytes": 674,
+      "sha256": "0c1aa0206556651ae819238734e0d816541bae34064a8bb8cf13425fcb35ff22",
+      "gitBlobSHA256": "0c1aa0206556651ae819238734e0d816541bae34064a8bb8cf13425fcb35ff22",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/bun-tests-final-source.log",
+      "bytes": 2647,
+      "sha256": "bb1c98f299567c7c9ca884fd3d6304eb523e707e7b94ebb4dc4807aebd28d901",
+      "gitBlobSHA256": "bb1c98f299567c7c9ca884fd3d6304eb523e707e7b94ebb4dc4807aebd28d901",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/bun-tests-initial.log",
+      "bytes": 2647,
+      "sha256": "bb594004ca09d89e6edb072e5fd78e384bbcf2fdca7216b3ab4b4defa5ef0ed3",
+      "gitBlobSHA256": "bb594004ca09d89e6edb072e5fd78e384bbcf2fdca7216b3ab4b4defa5ef0ed3",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/cargo-clippy-initial.log",
+      "bytes": 9336,
+      "sha256": "7b29288e2ca269ca3f54b400882ea47d7e49b6909edc91d209cae9ec01d79135",
+      "gitBlobSHA256": "7b29288e2ca269ca3f54b400882ea47d7e49b6909edc91d209cae9ec01d79135",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/cargo-tests-initial.log",
+      "bytes": 7146,
+      "sha256": "a844b5c1e2ab3ecb8361f867a604f8295103dc478af1fb4c16016fbd6cd2c59c",
+      "gitBlobSHA256": "a844b5c1e2ab3ecb8361f867a604f8295103dc478af1fb4c16016fbd6cd2c59c",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/lint-final-source.log",
+      "bytes": 82,
+      "sha256": "983e612f32084677abcc56ab455978a4145be0961944779e731552498ae2b6da",
+      "gitBlobSHA256": "983e612f32084677abcc56ab455978a4145be0961944779e731552498ae2b6da",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/lint-initial.log",
+      "bytes": 83,
+      "sha256": "af5929274eceb0718ee9621b6d2776cfe05c915cf7343af127192dfd46d13f4c",
+      "gitBlobSHA256": "af5929274eceb0718ee9621b6d2776cfe05c915cf7343af127192dfd46d13f4c",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/shell-fixes-final-source_2026-11-12.json",
+      "bytes": 2432,
+      "sha256": "82bd87a14a7c63e6f6c855818e67a1a2bf1fcefea1eb6b489a3977f0f79918ed",
+      "gitBlobSHA256": "82bd87a14a7c63e6f6c855818e67a1a2bf1fcefea1eb6b489a3977f0f79918ed",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/shell-fixes-results_2026-11-12.json",
+      "bytes": 1841,
+      "sha256": "539e40c2ba2a1d86e019a6aa9859cd39d4e6b11679b43383e8b1296931b8ce0e",
+      "gitBlobSHA256": "539e40c2ba2a1d86e019a6aa9859cd39d4e6b11679b43383e8b1296931b8ce0e",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/tray-png-decoder_2026-11-12.json",
+      "bytes": 223,
+      "sha256": "678d4813624adae6f507d79da331dfba405032b7841deb592c68a3f71229997a",
+      "gitBlobSHA256": "678d4813624adae6f507d79da331dfba405032b7841deb592c68a3f71229997a",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/tray-static-regression.mjs",
+      "bytes": 2166,
+      "sha256": "506a780e2bd634fcd004a51b80d062e84b0bae1e330a8de5ad28d3f690d6fb66",
+      "gitBlobSHA256": "506a780e2bd634fcd004a51b80d062e84b0bae1e330a8de5ad28d3f690d6fb66",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/tray-static-regression_2026-11-12.json",
+      "bytes": 771,
+      "sha256": "cc707498ded424858632af8cb7111cafadb3c0a9391ff6a4f06bdc5ae8b13135",
+      "gitBlobSHA256": "cc707498ded424858632af8cb7111cafadb3c0a9391ff6a4f06bdc5ae8b13135",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/config-review/配置及版本差异复核_2026-11-12.md",
+      "bytes": 6242,
+      "sha256": "f5ab1442bc2593ac6413d6475c61bcfb767e1fc392c6bb728b8ad35c288e5ba1",
+      "gitBlobSHA256": "f5ab1442bc2593ac6413d6475c61bcfb767e1fc392c6bb728b8ad35c288e5ba1",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/desktop-retry_2026-11-12.log",
+      "bytes": 1560,
+      "sha256": "93f1e4eba4530c76c2120685e830a58776f6fe4b065dbde122935bb9980b1d79",
+      "gitBlobSHA256": "93f1e4eba4530c76c2120685e830a58776f6fe4b065dbde122935bb9980b1d79",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/E_preflight_2026-11-12.json",
+      "bytes": 11642,
+      "sha256": "93dcac0e2304d36f7a88acc0b0db8226cc20ae0f8486478b31cb4e608b6e3912",
+      "gitBlobSHA256": "93dcac0e2304d36f7a88acc0b0db8226cc20ae0f8486478b31cb4e608b6e3912",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/freeze-evidence_2026-11-12.mjs",
+      "bytes": 3270,
+      "sha256": "2d918bfc3d1e0b132814bb5dca80c6b758a9468503aca7cc609bb7fda530e24b",
+      "gitBlobSHA256": "2d918bfc3d1e0b132814bb5dca80c6b758a9468503aca7cc609bb7fda530e24b",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/installed-path-drift_2026-11-12.json",
+      "bytes": 500,
+      "sha256": "159d32e637db429ac8dc2ef70ca842b7d130e42543b7a655824bb7d589a4e73e",
+      "gitBlobSHA256": "159d32e637db429ac8dc2ef70ca842b7d130e42543b7a655824bb7d589a4e73e",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/package-release_2026-11-12.mjs",
+      "bytes": 3118,
+      "sha256": "306bf3eecf5bb6735a457e4dbc862242c53f6167bf98766a3cd3b6b58a0ffb59",
+      "gitBlobSHA256": "306bf3eecf5bb6735a457e4dbc862242c53f6167bf98766a3cd3b6b58a0ffb59",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/audit-shell.mjs",
+      "bytes": 3938,
+      "sha256": "2a12dcb4f5a9543985dba1d98d452aebe115f6e2451e42222e54bec93cac6805",
+      "gitBlobSHA256": "2a12dcb4f5a9543985dba1d98d452aebe115f6e2451e42222e54bec93cac6805",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/dependency-and-resource-inventory_2026-11-12.json",
+      "bytes": 291402,
+      "sha256": "9be83b20350dc7384e941932141254bc65260a1db1c704073a4b41169ffb86f3",
+      "gitBlobSHA256": "9be83b20350dc7384e941932141254bc65260a1db1c704073a4b41169ffb86f3",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/dependency-license-texts_2026-11-12.txt",
+      "bytes": 2866343,
+      "sha256": "8f5b12142c08ff6ac563f6333b18d86567a969e489e4e27d144bfd3f20d5834f",
+      "gitBlobSHA256": "8f5b12142c08ff6ac563f6333b18d86567a969e489e4e27d144bfd3f20d5834f",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/fetch-license-supplements.mjs",
+      "bytes": 2474,
+      "sha256": "9864530213e7b9e5cad97fb480d90e79df9a36662055b39afb4d75c0233d3ed0",
+      "gitBlobSHA256": "9864530213e7b9e5cad97fb480d90e79df9a36662055b39afb4d75c0233d3ed0",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/finalize-notices.mjs",
+      "bytes": 4770,
+      "sha256": "e47de724aba16a23b2722a6397b91898dbd97050be7ce80a081b2336ad46258a",
+      "gitBlobSHA256": "e47de724aba16a23b2722a6397b91898dbd97050be7ce80a081b2336ad46258a",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/GPL-3.0.txt",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "gitBlobSHA256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements/alloc-stdlib-0.3.0-LICENSE",
+      "bytes": 1483,
+      "sha256": "c0c56f26d9c051cac4d200c34c84e7ae9aaa853e01a982a1df08b09931e518ae",
+      "gitBlobSHA256": "c0c56f26d9c051cac4d200c34c84e7ae9aaa853e01a982a1df08b09931e518ae",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements/defmt-parser-1.0.0-LICENSE-APACHE",
+      "bytes": 10850,
+      "sha256": "8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90",
+      "gitBlobSHA256": "8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements/defmt-parser-1.0.0-LICENSE-MIT",
+      "bytes": 1053,
+      "sha256": "2710a622a896bba67356913d4d0492cab5465f61b2ecce6d880aeb483834fb50",
+      "gitBlobSHA256": "2710a622a896bba67356913d4d0492cab5465f61b2ecce6d880aeb483834fb50",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements/selectors-0.38.0-MPL-2.0.txt",
+      "bytes": 16726,
+      "sha256": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85",
+      "gitBlobSHA256": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements/tauri-plugin-2.7.2-LICENSE-MIT",
+      "bytes": 1090,
+      "sha256": "9dd42ea92cff2ede5cd477cbfcce051b2d0115c0ac7f368ee88cb545055dff1d",
+      "gitBlobSHA256": "9dd42ea92cff2ede5cd477cbfcce051b2d0115c0ac7f368ee88cb545055dff1d",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements/webview2-com-0.39.1-LICENSE",
+      "bytes": 1067,
+      "sha256": "0dcf41516e608bbcb6cdc5229feb7b86fe4a643b85e7df251133c93408fdac73",
+      "gitBlobSHA256": "0dcf41516e608bbcb6cdc5229feb7b86fe4a643b85e7df251133c93408fdac73",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements/webview2-com-macros-0.8.1-LICENSE",
+      "bytes": 1067,
+      "sha256": "0dcf41516e608bbcb6cdc5229feb7b86fe4a643b85e7df251133c93408fdac73",
+      "gitBlobSHA256": "0dcf41516e608bbcb6cdc5229feb7b86fe4a643b85e7df251133c93408fdac73",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements/webview2-com-sys-0.39.1-LICENSE",
+      "bytes": 1067,
+      "sha256": "0dcf41516e608bbcb6cdc5229feb7b86fe4a643b85e7df251133c93408fdac73",
+      "gitBlobSHA256": "0dcf41516e608bbcb6cdc5229feb7b86fe4a643b85e7df251133c93408fdac73",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/license-supplements_2026-11-12.json",
+      "bytes": 13027,
+      "sha256": "6aa6b06207fb5d9af5a637de44619c294401ab168fde7e37d4976585072db4bf",
+      "gitBlobSHA256": "6aa6b06207fb5d9af5a637de44619c294401ab168fde7e37d4976585072db4bf",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/notice-coverage_2026-11-12.json",
+      "bytes": 14077,
+      "sha256": "a1b4643f46379acb2042c490a816a86f28cacdda7bc2f1f2ffd6cfb27b5cdfbe",
+      "gitBlobSHA256": "a1b4643f46379acb2042c490a816a86f28cacdda7bc2f1f2ffd6cfb27b5cdfbe",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/SOURCE.md",
+      "bytes": 4335,
+      "sha256": "4f667cd20f4eb791c04858205d11cd43c7e23e57bf49f6a79a658bb02b815ab6",
+      "gitBlobSHA256": "4f667cd20f4eb791c04858205d11cd43c7e23e57bf49f6a79a658bb02b815ab6",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/THIRD-PARTY-NOTICES.txt",
+      "bytes": 3014990,
+      "sha256": "e45404c2c0633f16ff05f59428e2c7cb6c483b784e70a8f62cb48f468334ca8d",
+      "gitBlobSHA256": "e45404c2c0633f16ff05f59428e2c7cb6c483b784e70a8f62cb48f468334ca8d",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-audit/审计结论_2026-11-12.md",
+      "bytes": 2451,
+      "sha256": "5c892ae792f13fbab995407b9294e7c9e6b6dcdadc9ca151e61d2cec067608c4",
+      "gitBlobSHA256": "5c892ae792f13fbab995407b9294e7c9e6b6dcdadc9ca151e61d2cec067608c4",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/browser/about-license-and-logo.png",
+      "bytes": 40820,
+      "sha256": "95434d951091fdd120da9cb3bdaab0d0410fb36f085a0af501957962993cf343",
+      "gitBlobSHA256": "95434d951091fdd120da9cb3bdaab0d0410fb36f085a0af501957962993cf343",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/browser/browser-regression_2026-11-12.json",
+      "bytes": 1965,
+      "sha256": "0617169f0bd3de12e6983e1536540ef80663be757ab3ce74118fb7b9efe88158",
+      "gitBlobSHA256": "0617169f0bd3de12e6983e1536540ef80663be757ab3ce74118fb7b9efe88158",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/browser/preview-server.log",
+      "bytes": 39,
+      "sha256": "e5bc72c97b22aa938d3a1fb745f9e9a957da1ad56e9cbdeb839bad9888745c73",
+      "gitBlobSHA256": "e5bc72c97b22aa938d3a1fb745f9e9a957da1ad56e9cbdeb839bad9888745c73",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/browser/workbench-category.png",
+      "bytes": 16522,
+      "sha256": "5e7e186138161befe8919450d025a82dad4dae138c70eacc3d66c4d186711212",
+      "gitBlobSHA256": "5e7e186138161befe8919450d025a82dad4dae138c70eacc3d66c4d186711212",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/browser-debug-final/about-license-and-logo.png",
+      "bytes": 40809,
+      "sha256": "b44517a5782de58ed765aec617fb020c53d94208c93fb3e965cb1d39ac28c920",
+      "gitBlobSHA256": "b44517a5782de58ed765aec617fb020c53d94208c93fb3e965cb1d39ac28c920",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/browser-debug-final/browser-regression_2026-11-12.json",
+      "bytes": 1965,
+      "sha256": "0617169f0bd3de12e6983e1536540ef80663be757ab3ce74118fb7b9efe88158",
+      "gitBlobSHA256": "0617169f0bd3de12e6983e1536540ef80663be757ab3ce74118fb7b9efe88158",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/browser-debug-final/preview-server.log",
+      "bytes": 39,
+      "sha256": "e5bc72c97b22aa938d3a1fb745f9e9a957da1ad56e9cbdeb839bad9888745c73",
+      "gitBlobSHA256": "e5bc72c97b22aa938d3a1fb745f9e9a957da1ad56e9cbdeb839bad9888745c73",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/browser-debug-final/workbench-category.png",
+      "bytes": 15162,
+      "sha256": "43e14ee0cc9975d12ee4f7fed148072baedccc98ae60f85ce3e29c1bc538db72",
+      "gitBlobSHA256": "43e14ee0cc9975d12ee4f7fed148072baedccc98ae60f85ce3e29c1bc538db72",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/build-clean.log",
+      "bytes": 674,
+      "sha256": "c1605f6b3a5c866140350d216bb03b6a16145d9a52f9682ce3953d6ec82584e2",
+      "gitBlobSHA256": "c1605f6b3a5c866140350d216bb03b6a16145d9a52f9682ce3953d6ec82584e2",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/bun-install-frozen.log",
+      "bytes": 504,
+      "sha256": "143010e17df2e2c5c6576c6f98bd5ce7b2375e1194701397a51c312388fa52e6",
+      "gitBlobSHA256": "143010e17df2e2c5c6576c6f98bd5ce7b2375e1194701397a51c312388fa52e6",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/bun-tests-clean.log",
+      "bytes": 2647,
+      "sha256": "f4d3707dfcbbacc074aeac44a1bee5d43f52e462368c9a787965ddbbb5d71cb4",
+      "gitBlobSHA256": "f4d3707dfcbbacc074aeac44a1bee5d43f52e462368c9a787965ddbbb5d71cb4",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/installer.nsi",
+      "bytes": 33629,
+      "sha256": "918646ed3a3ec55bac1d5604b372085e2ec80b7cd0d015dff401df00067bea0b",
+      "gitBlobSHA256": "918646ed3a3ec55bac1d5604b372085e2ec80b7cd0d015dff401df00067bea0b",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/lint-clean.log",
+      "bytes": 83,
+      "sha256": "e78f744c143b56c987d871183ed6f935468d9d6580162d2146a42ffe27f3346f",
+      "gitBlobSHA256": "e78f744c143b56c987d871183ed6f935468d9d6580162d2146a42ffe27f3346f",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/nsis-debug-clean.log",
+      "bytes": 3413,
+      "sha256": "82fb3650a1b6ed4ba435621dd40fe1dc2f7a1c142312729c710657c773f9183c",
+      "gitBlobSHA256": "82fb3650a1b6ed4ba435621dd40fe1dc2f7a1c142312729c710657c773f9183c",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/nsis-resource-and-identity-lines_2026-11-12.txt",
+      "bytes": 4202,
+      "sha256": "0700dd848d4c0347fe5cc460c9c58bdeba0e349b8fe9c385eb1f7fa4176cc84b",
+      "gitBlobSHA256": "0700dd848d4c0347fe5cc460c9c58bdeba0e349b8fe9c385eb1f7fa4176cc84b",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/shell-build/shell-clean-build_2026-11-12.json",
+      "bytes": 2593,
+      "sha256": "10f894207c6442959016eb9a9c3485ffda7ed00f2825b25a94d88ea9b240fc27",
+      "gitBlobSHA256": "10f894207c6442959016eb9a9c3485ffda7ed00f2825b25a94d88ea9b240fc27",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-manifest_2026-11-12.json",
+      "bytes": 26007,
+      "sha256": "785911d43e355fa7cf3a265a670e3dfdc0fa39a26f4b6257e1cfc5cd81e1ded8",
+      "gitBlobSHA256": "785911d43e355fa7cf3a265a670e3dfdc0fa39a26f4b6257e1cfc5cd81e1ded8",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/desktop-resources_2026-11-12.log",
+      "bytes": 126,
+      "sha256": "d66b9ce4500f12f5604b757a06ba6f1f335f2a90e1df6e2ae3e90200a65837f6",
+      "gitBlobSHA256": "d66b9ce4500f12f5604b757a06ba6f1f335f2a90e1df6e2ae3e90200a65837f6",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/extract-source_2026-11-12.py",
+      "bytes": 1439,
+      "sha256": "3983fd53aa045ed583e5932658c7f678ff6bb1f923be7e6fa690b7d7dd495e6b",
+      "gitBlobSHA256": "3983fd53aa045ed583e5932658c7f678ff6bb1f923be7e6fa690b7d7dd495e6b",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/npm-build_2026-11-12.log",
+      "bytes": 502,
+      "sha256": "c202db52f2d2cff24613ae7b7351ffff70f9d4c608878378917d5ee80bce4ebf",
+      "gitBlobSHA256": "c202db52f2d2cff24613ae7b7351ffff70f9d4c608878378917d5ee80bce4ebf",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/npm-ci-wrong-cwd_2026-11-12.log",
+      "bytes": 249,
+      "sha256": "779a7e3e9456ba2b753b0261f55efa5ab7e5f5f65609cbc3326ed49ae0d6005a",
+      "gitBlobSHA256": "779a7e3e9456ba2b753b0261f55efa5ab7e5f5f65609cbc3326ed49ae0d6005a",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/npm-ci_2026-11-12.log",
+      "bytes": 249,
+      "sha256": "68d89fb778ffee46ddcf019a6f1f1094097f7198cc08cb32810220e477381f47",
+      "gitBlobSHA256": "68d89fb778ffee46ddcf019a6f1f1094097f7198cc08cb32810220e477381f47",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/source-build-verification_2026-11-12.json",
+      "bytes": 1477,
+      "sha256": "b6106a93a63096a1bc5747a380b7fc0a7585040d3f0c64b64181949fd21719c6",
+      "gitBlobSHA256": "b6106a93a63096a1bc5747a380b7fc0a7585040d3f0c64b64181949fd21719c6",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/source-import_2026-11-12.json",
+      "bytes": 724,
+      "sha256": "22520fd76e467b4f8e71a74fb4cb602066eea6e20c0c672a242377e6c599e703",
+      "gitBlobSHA256": "22520fd76e467b4f8e71a74fb4cb602066eea6e20c0c672a242377e6c599e703",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/verify-source-build_2026-11-12.py",
+      "bytes": 2559,
+      "sha256": "024c634c6827e451067923a2edc2618a9d1f863f2eec8b6e30050cf8fd69843a",
+      "gitBlobSHA256": "024c634c6827e451067923a2edc2618a9d1f863f2eec8b6e30050cf8fd69843a",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/source-verify/对应源码ZIP编译核验_2026-11-12.md",
+      "bytes": 2974,
+      "sha256": "5b72365ab865321432dfa4b415eab3db4ecf5fb15f7a22d0dc163ec9794350c0",
+      "gitBlobSHA256": "5b72365ab865321432dfa4b415eab3db4ecf5fb15f7a22d0dc163ec9794350c0",
+      "stagedBytesMatch": true
+    },
+    {
+      "path": "docs/03_轻量路线工作台/06_执行记录/island-workbench-20261111/assets/F/verify-delivery_2026-11-12.mjs",
+      "bytes": 3126,
+      "sha256": "cdb0676719355b9f444d3c6671055920796deef4e271e8d3bcd67df3a0747c19",
+      "gitBlobSHA256": "cdb0676719355b9f444d3c6671055920796deef4e271e8d3bcd67df3a0747c19",
+      "stagedBytesMatch": true
+    }
+  ]
+}

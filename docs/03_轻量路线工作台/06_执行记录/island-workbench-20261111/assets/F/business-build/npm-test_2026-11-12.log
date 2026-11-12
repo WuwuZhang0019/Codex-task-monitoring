@@ -1,0 +1,241 @@
+
+> route-workbench@0.1.0 test
+> node --test server/*.test.mjs mcp/*.test.mjs && npm run test:domain && npm run test:skill
+
+✔ 九工具合法结构样例与失败响应可校验，修复/阻塞动作互斥 (408.6072ms)
+✔ D bridge 配置限制为私有回环与独立令牌 (279.5591ms)
+✔ D bridge 真实 STDIO 发现转发、写入响应丢失后原键查询、拒绝重定向及断线脱敏 (1268.3582ms)
+✔ D bridge 写请求超时保持未知且没有自动重试 (273.4733ms)
+✔ D bridge 缺少配置启动失败且诊断隐藏私有路径 (834.8547ms)
+✔ D bridge 同一连接跟随dataDir所有者端口与generation变化，显式停止拒绝连接 (34.652ms)
+✔ E 同一STDIO进程在原生授权轮换后读取新受控配置，配置失效不沿用旧令牌 (880.5171ms)
+✔ A-03 本地 A—G 与六个细分快照、稳定历史键及依赖可校验 (93.47ms)
+✔ A-03 五状态 25 对转换与同状态进展规则完整 (0.3644ms)
+✔ A-04 状态事件必填字段、完成证据、阻塞与取消结构 (31.0477ms)
+✔ A-04 绑定、补充事项与保存回执结构 (34.4175ms)
+✔ B-01 明确路线表可读取新总纲，旧完整步骤格式继续兼容 (7.3835ms)
+(node:49896) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ E 显式接手保留executionId，旧新责任唯一，迟到结果持久待核对 (4318.6691ms)
+✔ E 接手必须核对原责任全部范围及未结束执行，确认意图不能偷换 (3285.0896ms)
+✔ E 重叠责任拒绝，未认证确认、错误目录和分支不生效 (2096.6055ms)
+(node:31512) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ D 所有者 HTTP 与真实 STDIO 登记、绑定、可靠状态、撤销及重开 (5849.9686ms)
+▶ D 持久提交标志后故障保持未知，重开按原事件查询并回放一次结果
+  ✔ committed (137.7372ms)
+  ✔ installed (125.3915ms)
+✔ D 持久提交标志后故障保持未知，重开按原事件查询并回放一次结果 (264.2606ms)
+(node:41572) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ E 事项确认绑定精确内容，关联方案完成只解除对应阻塞并保留repairId (6378.5114ms)
+✔ E 必要事项取消须受控确认和明确承接，解除后仍核对来源自身验收 (2289.9383ms)
+✔ E 执行取消与显式返工、阻塞恢复沿用绑定并重检前置 (3598.8226ms)
+✔ D SDK 发现、登记、开始、阻塞恢复、结束、回放冲突、授权与重启查询 (812.6403ms)
+✔ D 默认拒绝认证，未知内部异常脱敏 (4.0162ms)
+(node:44312) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 九工具冻结 schema 全部可编译，拒绝多余权限字段及缺失身份 (438.1531ms)
+✔ 真实 STDIO initialize/list/call、范围、错误输入、凭据、断线与只读性 (1177.3902ms)
+✔ 缺失配置启动失败，诊断不泄露配置及凭据 (624.6156ms)
+✔ 配置较长预算可接收慢响应，超限仍返回明确504且不泄露密钥 (113.1284ms)
+✔ 无效预算拒绝，显式测试覆盖值仍适用，默认预算允许普通响应 (92.7529ms)
+✔ 模型认证 api-key 只发送所选认证头 (38.6305ms)
+✔ 模型认证 bearer 只发送所选认证头 (1.0863ms)
+(node:35412) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ concurrent oversized length and chunked JSON return 413 without writes or connection reset (661.4156ms)
+(node:18656) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ M04 HTTP 开始来源核对、自动关闭、关闭幂等与保存重开 (483.9356ms)
+✔ M03 HTTP 导入、核验、重复幂等、重启历史与失效 (244.5072ms)
+✔ M02 HTTP保存重启、版本追加、归属与迁移边界 (172.5034ms)
+✔ CRUD, exact wire contract, empty project, manual done, isolation and durable restart (158.2081ms)
+✔ concurrent optimistic updates serialize, one wins; failed write does not poison queue (291.632ms)
+✔ malformed graph / contract rejected without mutating storage (133.6735ms)
+▶ corrupt JSON and invalid stored schema fail startup without erasure or backup modification
+  ✔ {broken (77.938ms)
+  ✔ {"version":99,"projects":[]} (79.4622ms)
+  ✔ {"version":1,"projects":[{"id" (79.9338ms)
+✔ corrupt JSON and invalid stored schema fail startup without erasure or backup modification (238.5624ms)
+✔ missing primary with backup is not silently reinitialized (73.5217ms)
+✔ sample is exact original 01 markdown, not a hardcoded approximation (46.833ms)
+✔ no-key AI clearly returns 503 and never calls fetch or writes projects (47.1766ms)
+✔ AI mock uses configured provider only, data-only prompt, codefence support and todo defaults (50.0984ms)
+✔ AI extract rejects malformed schemas / invented excerpts / dependency graphs (71.3115ms)
+✔ summarize validates both sides and stays suggestion-only (82.7211ms)
+▶ AI provider failure, invalid payload, truncation, invalid base and timeout are bounded errors
+  ✔ HTTP401 (41.2806ms)
+  ✔ network (39.4695ms)
+  ✔ invalid envelope (39.6158ms)
+  ✔ truncated (36.2299ms)
+  ✔ oversize (43.94ms)
+  ✔ timeout (73.8721ms)
+✔ AI provider failure, invalid payload, truncation, invalid base and timeout are bounded errors (316.9004ms)
+✔ localhost Host and Origin defenses, no CORS opt-in, Vite proxy allowed (69.466ms)
+✔ static dist works, SPA fallback, traversal and symlink escape are blocked (77.9394ms)
+✔ JSON type, malformed JSON, methods and two-megabyte request cap (63.7132ms)
+✔ loadEnvFile keeps existing process variables, missing env allowed (10.0951ms)
+✔ chunked oversized JSON receives a JSON 413 instead of a reset connection (67.405ms)
+✔ failed filesystem commit leaves previous data intact and subsequent writes still work (95.262ms)
+✔ WORKBENCH_DATA_DIR supports isolated data without a dataDir option (29.8488ms)
+(node:36584) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ private panel shares committed snapshot, verifies source, persists preferences without business revision (390.4837ms)
+✔ D 不同认证会话不能使用已确认责任绑定，拒绝后版本不变 (549.8546ms)
+✔ D 绑定提议和确认分别授权，提议权限不能撤销责任绑定 (226.4335ms)
+✔ D 执行预留身份绑定主体，旧无作用域预留不能创建新执行 (451.8664ms)
+✔ D 绑定撤销后已提交事件仍先回放，新事件拒绝，旧执行历史继续可读 (225.7476ms)
+✔ D 发布查询返回完整工具请求语义，旧直接领域登记查询仍可用 (161.2243ms)
+✔ D 新更新核验真实执行上下文，已提交回放优先于再次核验 (189.6992ms)
+(node:47264) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ B-01/02 固定原文独立副本、稳定映射、缺失重复循环和路线覆盖校验 (83.8208ms)
+✔ B-06 二十步骤六路线通过真实领域入口提交、回读、重启和整体完成 (2824.0157ms)
+✔ B-03 全部 25 对状态实际转换、同状态进展及非法转换 (2806.0301ms)
+✔ B-03 完成条件不可删改、证据修订、显式返工、前置取消及后继影响 (284.8654ms)
+✔ B-05 幂等回放先于版本/绑定、异内容拒绝及并发冲突 (172.5363ms)
+✔ B-05 发送侧响应丢失、重启查询或原请求重放、空缺身份保留 (322.4207ms)
+✔ B-06 聚合故障注入覆盖磁盘失败、准备中断、提交标志后恢复 (135.7673ms)
+✔ B-06 旧库保留、原状态与待核验、repairId、备份恢复及普通启动入口 (181.837ms)
+✔ B-02/03 父阶段继承门禁、必要细分与阶段出口共同聚合，循环拒绝 (387.2147ms)
+✔ B-04 补充事项规划、原 repairId、多个阻塞仅按对应来源解除 (622.3765ms)
+✔ B-02/03 修订保留身份和差异，取消必要步骤需批准替代承接 (319.447ms)
+✔ B-06 子进程在准备与提交标志处退出，重开恢复原子业务、事件和审计 (664.4178ms)
+✔ B-05/06 实际文件目标失败保持旧可读版本，发送并发迟到失败不回退成功 (173.17ms)
+✔ B-02/04/05 三十站规模、项目隔离、跨方案授权闭包及阅读定位持久保存 (237.7688ms)
+✔ 迁移保留原报告，保存重开保留唯一归属、双聊天和方案版本 (87.1089ms)
+✔ 关系文件损坏不重置，备份写入失败保留当前版并可恢复重试 (121.3041ms)
+✔ 暗色可开始与实际绿色开始分开，旧手动状态不冒充新状态 (11.3701ms)
+✔ 报告完成后缺证据转暗色；本站通过红色，后继可开始仍暗色 (5.9815ms)
+✔ 本站完成而范围不符，保持红色并明确偏离，不解锁后继 (3.8377ms)
+✔ 任务与项目自动分别关闭，保存原目标及证据，重复读取不重复关闭 (2.5532ms)
+✔ 证据失效不删除关闭历史，追加待复核且不重复；复验可重闭 (5.5299ms)
+✔ 原始目标缺失不猜测，任务完成不等于项目完成 (11.6464ms)
+✔ 四线交付而集成未完成，四任务可关闭，集成与项目保持开放 (21.9706ms)
+✔ 自动收敛与实际开始持久化、重开一致，普通模型更新不能篡改关闭历史 (447.5673ms)
+(node:37976) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 最新模板按方案原文确定圈号和逐行完整步骤，登记子集不改变方案总数 (46.4887ms)
+✔ A/B/D 限于必要修复、核验或合法后继，独立指令含完整环境、验收和新版回执顺序 (12.1988ms)
+✔ C 等待全部依赖，E 交接与 F 项目有效关闭，无执行指令且结束句固定 (17.4441ms)
+✔ G 保留头尾范围冲突和待决定事项，不生成扩展指令 (2.5728ms)
+✔ 历史关闭后证据失效改为 B，后继不能复用失效依赖；缺原始目标不输出 E/F (16.869ms)
+✔ 身份和方案缺失明确待核实，多个来源不猜测，不改变原文和验收历史 (8.7333ms)
+✔ 站点绑定不能证明方案步骤完整，不将已登记子集冒充方案总步数 (1.2897ms)
+✔ 两个方案版本目标、验收、站点与原文差异可查，缺历史快照不伪称已核验 (4.0035ms)
+✔ 分叉逐边生成 D，回执范围和全部前置分别保留，不将可开始标为已开始 (2.6104ms)
+✔ 分叉部分可开始与部分等待逐边处理，等待边没有执行指令 (6.9896ms)
+✔ HTTP 统一入口拒绝过期预览，快照不可被 PUT 篡改且冷重开保留 (264.4869ms)
+✔ 自述完成不等于通过；证据缺失、版本错误及未知状态均不通过 (23.0637ms)
+✔ 验收失败留在本站 A；回执未决事项阻止通过 (1.7305ms)
+✔ 编号相同但范围不符为 G；措辞不同可匹配；合流等待全部依赖 C→D (5.4938ms)
+✔ 边上未匹配不解锁后继；缺尾部为待核验 B (2.0224ms)
+✔ 多任务分别交付 E，项目未验收不冒充 F (1.7826ms)
+✔ 同文件夹换聊天续接保留历史，异文件夹同名回执隔离 (1.7249ms)
+✔ 重复导入与核验不新增事件；证据失效保留历史并停止解锁 (1.1116ms)
+✔ 方案头或依赖变化使核验失效，旧原文及判断仍保留 (0.558ms)
+✔ 未知后继不得自动扩展路线 (0.5218ms)
+✔ 未受影响的换聊天不失效；核验纠正可再次提交先前相同判断 (1.4904ms)
+✔ 任务终点后来的失败核验不能被旧通过覆盖；跨任务交付可独立结束 (5.2991ms)
+✔ 新版不能掩盖初始项目目标与验收条件 (3.8183ms)
+✔ 换聊天保留任务和站点身份，返回隔离副本 (1.6079ms)
+✔ 拒绝跨文件夹聊天及缺失身份 (0.7326ms)
+✔ 跨任务依赖仍须无环，编号仅在任务内唯一 (0.8988ms)
+✔ 候选和暂停记录与主路线分开，不接受执行中状态或重复身份 (0.7762ms)
+(node:38000) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ U03-K01 原文出处、集中补缺、完整模型、原子发布与全部读取入口 (606.8724ms)
+✔ U03-K01 非法依赖、缺失步骤、出处范围和覆盖映射阻止发布 (537.6294ms)
+✔ U03-K02 修复轮次、中断、原键重试、跨聊续接、重开与原条件回归 (1635.4688ms)
+✔ U03-K03 覆盖、站内细化、新范围、并行冲突与过期建议 (605.8054ms)
+Local workbench request failed: Injected disk failure beforePrepare
+▶ U03-K04 prepared、commit marker、安装快照故障均可恢复且无半项目
+  ✔ beforePrepare (165.5976ms)
+Local workbench request failed: Injected disk failure prepared
+  ✔ prepared (186.8394ms)
+Local workbench request failed: Injected disk failure committed
+  ✔ committed (156.7339ms)
+Local workbench request failed: Injected disk failure installed
+  ✔ installed (169.3024ms)
+✔ U03-K04 prepared、commit marker、安装快照故障均可恢复且无半项目 (679.7716ms)
+Local workbench request failed: EPERM: operation not permitted, rename 'C:\Users\Zyf\AppData\Local\Temp\u03-dgWNXc\transaction.prepared.json.44900295-008e-44a5-ad41-66603c9164d3.tmp' -> 'C:\Users\Zyf\AppData\Local\Temp\u03-dgWNXc\transaction.prepared.json'
+✔ U03-K04 真实文件写入失败、旧数据迁移、全目录备份恢复 (452.9578ms)
+▶ U03-K04 真实子进程在持久化各阶段退出，重开回查同一发布
+  ✔ prepared (876.9115ms)
+  ✔ committed (834.5973ms)
+  ✔ installed (900.6371ms)
+✔ U03-K04 真实子进程在持久化各阶段退出，重开回查同一发布 (2612.9719ms)
+✔ U03-K03 原需求遗漏时全部站点通过仍不能关闭项目 (5.3941ms)
+✔ U03-K01 追加方案版本保护初始目标，旧确认和旧绑定失效 (557.9276ms)
+✔ U03-K01 初始与当前项目目标分别保留，结束条件进入必需验收 (132.2522ms)
+✔ U03-K04 发布响应真实丢失后，查询原键并发重放返回原结果 (137.3627ms)
+✔ U03-K02 同一修复请求重试只记一轮，并发版本只允许一笔写入 (508.5379ms)
+ℹ tests 139
+ℹ suites 0
+ℹ pass 139
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13613.4325
+
+> route-workbench@0.1.0 test:domain
+> tsc src/domain.ts --outDir .test-build --module ESNext --target ES2022 --moduleResolution Bundler --skipLibCheck && node --test tests/domain.test.mjs
+
+✔ linear steps keep one row and flow left to right (0.9823ms)
+✔ same-line forks automatically occupy separate rows and merge back (0.7482ms)
+✔ layout respects unsorted dependencies rather than array order (0.2243ms)
+✔ every station position is distinct within a sixty-step DAG (0.3102ms)
+✔ graph validation rejects duplicate IDs, missing predecessor and cycle (0.2914ms)
+✔ manual done is not considered dependency-ready if an ancestor remains unfinished (0.2183ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126.8528
+
+> route-workbench@0.1.0 test:skill
+> node --test tests/skill-workflow.test.mjs
+
+✔ E 任意旧编号、依赖及Mermaid精确改写，内容与普通列表保留 (19.8842ms)
+✔ E 已登记stepId与编号保持，插入使用锚点后缀并保留显式顺序 (0.9762ms)
+✔ E 原编号重复按父作用域区分，超过Z仍可分配 (1.0095ms)
+✔ E 模糊身份、缺失依赖、循环、重叠引用及并发来源变化拒绝 (0.9905ms)
+✔ E 文件写回前重检来源，并发修改保留用户内容 (18.6837ms)
+✔ E 规范化产物可登记为冻结契约候选，未保存不捏造服务ID (39.8549ms)
+✔ E 单文件夹、多工作树、超过九序号、同名会话及标题切换保持固定身份 (0.7384ms)
+✔ E 宿主创建、改名与移动失败重试复用operationId和固定目标 (0.9527ms)
+✔ E 掉响应创建先查询原operationId，恢复固定目标后不重复创建 (0.542ms)
+✖ E 实际工作树与错误目录分支分别核验 (220.4872ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 544.8137
+
+✖ failing tests:
+
+test at tests\skill-workflow.test.mjs:69:1
+✖ E 实际工作树与错误目录分支分别核验 (220.4872ms)
+  Error: Command failed: git symbolic-ref --quiet --short HEAD
+  
+      at genericNodeError (node:internal/errors:998:15)
+      at wrappedFn (node:internal/errors:543:14)
+      at ChildProcess.exithandler (node:child_process:417:12)
+      at ChildProcess.emit (node:events:508:20)
+      at maybeClose (node:internal/child_process:1084:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:304:5) {
+    code: 1,
+    killed: false,
+    signal: null,
+    cmd: 'git symbolic-ref --quiet --short HEAD',
+    stdout: '',
+    stderr: ''
+  }

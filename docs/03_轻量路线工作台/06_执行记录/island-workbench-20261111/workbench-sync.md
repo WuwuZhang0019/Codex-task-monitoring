@@ -2,7 +2,7 @@
 
 日期：2026-11-11
 
-状态：A/B/C本地completed/passed，进度3/6；服务登记及同步未发生；D—F待执行
+状态：A—F本地completed/passed，进度6/6；服务登记及同步未发生；公开发布未执行；历史时点以下方日期记录区分
 
 本地方案键 island-workbench-20261111，当前责任聊天01a1ca91-98c4-7101-8620-8380e28df33f。用户已明确授权按Codex/Git直接完成A，同日方案1.1修订取消A服务开始前置，未扩大正式服务写权限。
 
@@ -11,9 +11,9 @@
 | A 基线与授权范围 | A-01、A-02、A-03 | completed / passed | deferredByAuthorization，未发业务请求 |
 | B 裁剪外壳 | B-01、B-02、B-03 | completed / passed | deferredByAuthorization，未登记 |
 | C 契约与模拟视图 | C-01、C-02、C-03 | completed / passed | deferredByAuthorization，未登记 |
-| D 真实服务接线 | D-01、D-02、D-03 | pending / pending | 未登记 |
-| E 桌面与恢复验收 | E-01、E-02、E-03 | pending / pending | 未登记 |
-| F 许可与发布交付 | F-01、F-02、F-03 | pending / pending | 未登记 |
+| D 真实服务接线 | D-01、D-02、D-03 | completed / passed | deferredByAuthorization，未登记 |
+| E 桌面与恢复验收 | E-01、E-02、E-03 | completed / passed | deferredByAuthorization，未登记 |
+| F 许可与发布交付 | F-01、F-02、F-03 | completed / passed | deferredByAuthorization，未登记 |
 
 本地记录键 island-workbench-20261111/local/A-20261111-01，仅用于Git资料定位，不是服务executionId或eventId。服务projectId、planId、stepId、executionId、bindingId、bindingRevision、revision、eventId和idempotencyKey均未知/留空。没有已发送但结果未知的业务事件。
 
@@ -314,4 +314,33 @@ flowchart LR
  A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
  B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>本地completed/passed"]
  D --> E["⑤ E 桌面与恢复验收<br/>本地completed/passed，进度5/6"] --> F["⑥ F 许可与发布交付<br/>pending，本地授权及准备完成未开始"]
+```
+
+## F 本地执行开始
+
+日期：2026-11-12
+
+用户发送完整F执行指令，依据方案1.8核对E续验索引34/34字节指纹匹配、E本地completed/passed及既定限制后，本地F-01—F-03进入running/pending。责任聊天01a1cdcb-fc4c-7580-96c9-b2979497b072，宿主改名成功“⑥ 灵动岛工作台 / F 许可与发布交付”。稳定本地执行键island-workbench-20261111/local/F-20261112-01。业务main/cb99f12496a8401ff638dafe1077630d3fa4d7fc、Fork codex/island-workbench-shell/c02fb6ae882946770327297949049b794d09f947开始均干净（Fork经只读审批核对）。已读Fork AGENTS.md；本次用户明确中文、日期及提交格式优先，其余适用检查遵循。
+
+本路线服务身份仍空、deferredByAuthorization，未提交业务事件、无未知提交。不借旧A—G或D测试身份。F审计、配置核对并行开展，子任务不获得公开发布授权。E安装版77574bf与后续Fork提交区分，交付版本待F审计后锁定。
+
+## F 完成本地交付与路线结束
+
+日期：2026-11-12
+
+F-01—F-03本地completed/passed，A—F进度6/6，交接结论E。逻辑执行键island-workbench-20261111/local/F-20261112-01，结束键同键/complete-20261112，责任聊天01a1cdcb-fc4c-7580-96c9-b2979497b072不变。正式服务身份留空，deferredByAuthorization，无业务事件、无未知提交，未公开发布或安装新包。
+
+业务54056a2补许可/资源、1e4aa216修复main硬编码测试夹具，Fork94a2d959补GPL入口、来源、许可资源和自绘安装图标。实际源码及对应产物按F_交付清单_2026-11-12.json核对；服务ZIP、两份源码ZIP、NSIS debug和native exe五项大小与SHA256全部匹配。干净checkout及最小业务源码ZIP构建均通过；业务139+6+10、desktop9、实际资源6项；外壳lint/build/Bun24/Rust28/clippy、浏览器11和NSIS通过。完整十八字段见F_完成回执_2026-11-12.md，历史失败和换行边界见F_实现与验证_2026-11-12.md。
+
+本轮没有覆盖正式安装或数据。旧E安装路径当前文件D4831E26…已不等于历史BA112…或F运行文件1f0bc4c0…，变更来源未确认，已只读留证；旧E验收按固定提交/二进制历史证据适用，不扩充到当前文件。debug/未签名/未安装、既有多屏/DPI/升退及旧UI限制保留。
+
+业务隔离工作树已由宿主归档；外壳构建工作树归档返回“The task's primary checkout cannot be removed.”，因此保留宿主管理的主checkout，不绕过宿主删除。所需包、日志和截图已保存主业务目录，无运行中的测试服务/浏览器。
+
+本任务无下一步执行指令，到此结束。服务同步和公开发布各自等待未来明确授权，不编造后继或已派发状态。
+
+```mermaid
+flowchart LR
+ A["① A 基线与授权范围<br/>本地completed/passed"] --> B["② B 裁剪外壳<br/>本地completed/passed"]
+ B --> C["③ C 契约与模拟视图<br/>本地completed/passed"] --> D["④ D 真实服务接线<br/>本地completed/passed"]
+ D --> E["⑤ E 桌面与恢复验收<br/>本地completed/passed"] --> F["⑥ F 许可与发布交付<br/>本地completed/passed，进度6/6<br/>服务延后同步；未公开发布"]
 ```

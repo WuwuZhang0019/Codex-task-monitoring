@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-12",
+  "checkout": "C:\\Users\\Zyf\\.codex\\worktrees\\island-f-shell-build\\windows-dynamic-island",
+  "mode": "browser preview; no native IPC or formal data writes",
+  "checks": [
+    {
+      "name": "任务岛窗口标题",
+      "result": "passed",
+      "detail": "任务岛"
+    },
+    {
+      "name": "保留五个侧栏入口",
+      "result": "passed",
+      "detail": [
+        "常规",
+        "外观",
+        "行为",
+        "工作台",
+        "关于"
+      ]
+    },
+    {
+      "name": "新增灵动岛分类存在",
+      "result": "passed",
+      "detail": [
+        "应用",
+        "灵动岛"
+      ]
+    },
+    {
+      "name": "分类下工作台入口可达",
+      "result": "passed"
+    },
+    {
+      "name": "关于显示任务岛及产品版本",
+      "result": "passed"
+    },
+    {
+      "name": "许可证及原作者和修改日期",
+      "result": "passed"
+    },
+    {
+      "name": "自有更新未配置明确提示",
+      "result": "passed"
+    },
+    {
+      "name": "独立自绘三节点标识",
+      "result": "passed"
+    },
+    {
+      "name": "许可证链接固定上游提交且noopener",
+      "result": "passed",
+      "detail": {
+        "url": "https://github.com/HeyyCzer/windows-dynamic-island/blob/e286d9045746837bf1960e0d13b7ed572b8d9e50/LICENSE",
+        "target": "_blank",
+        "features": "noopener"
+      }
+    },
+    {
+      "name": "上游与Fork入口各自准确",
+      "result": "passed",
+      "detail": [
+        {
+          "url": "https://github.com/HeyyCzer/windows-dynamic-island",
+          "target": "_blank",
+          "features": "noopener"
+        },
+        {
+          "url": "https://github.com/WuwuZhang0019/windows-dynamic-island",
+          "target": "_blank",
+          "features": "noopener"
+        }
+      ]
+    },
+    {
+      "name": "无页面异常",
+      "result": "passed",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-12",
+  "archive": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\delivery\\business-source-1e4aa216.zip",
+  "sha256": "ed941f61b5176651e8ea897122ce13fde8878afe7c9c8d3e198a1aa292eb10d3",
+  "originalSourceCommit": "1e4aa21678733930d36590a0a67fe6506f51f595",
+  "entries": 172,
+  "extractedRoot": "G:\\rust\\Codex-task-monitoring\\app\\test-results\\island-F\\source-verify\\business-source",
+  "originalGitHistoryIncluded": false,
+  "gitImportPurpose": "local fixture only; import commit must not be presented as original source commit",
+  "importCommit": "edb109baf5a095a57b923492443680dffd31e2d1",
+  "importBranch": "codex/source-import",
+  "sourceStatusBeforeBuild": null
+}
