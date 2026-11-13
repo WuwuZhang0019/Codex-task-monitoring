@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-13",
+  "native": false,
+  "checks": [
+    "windows at 1100px: fork/join, endpoint alignment, size switch and selection",
+    "windows at 820px: fork/join, endpoint alignment, size switch and selection",
+    "windows at 480px: fork/join, endpoint alignment, size switch and selection",
+    "dynamic at 1100px: fork/join, endpoint alignment, size switch and selection",
+    "dynamic at 820px: fork/join, endpoint alignment, size switch and selection",
+    "dynamic at 480px: fork/join, endpoint alignment, size switch and selection"
+  ],
+  "failures": [],
+  "pageErrors": [],
+  "passed": true
+}

@@ -15,3 +15,6 @@ prototypes/top-panel/src-tauri/gen/
 app/src-tauri/target/
 app/src-tauri/gen/
 app/desktop/resources/
+
+# Date: 2026-11-13. Downloaded upstream reference repository.
+.upstream/

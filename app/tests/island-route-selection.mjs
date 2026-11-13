@@ -1,4 +1,4 @@
-// Date: 2026-11-12. Exercise real pointer hit targets before checking the collapsed route.
+// Date: 2026-11-13. Exercise real pointer hit targets before checking the collapsed route.
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -8,14 +8,14 @@ import { chromium } from '@playwright/test';
 const root = process.env.ISLAND_SHELL_ROOT || 'G:/rust/windows-dynamic-island';
 const output = path.resolve(process.env.ISLAND_SELECTION_OUTPUT || 'test-results/route-selection');
 const base = process.env.ISLAND_BROWSER_URL || 'http://localhost:1472';
-const bun = path.resolve('test-results/island-A-tools/node_modules/bun/bin/bun.exe');
+const bun = process.env.BUN_EXECUTABLE || path.resolve('test-results/island-A-tools/node_modules/bun/bin/bun.exe');
 const server = process.env.ISLAND_BROWSER_URL ? null : spawn(bun,
   ['node_modules/vite/bin/vite.js', 'preview', '--port', '1472', '--strictPort'],
   { cwd: root, windowsHide: true, stdio: 'pipe' });
 const logs = [];
 server?.stdout.on('data', chunk => logs.push(String(chunk)));
 server?.stderr.on('data', chunk => logs.push(String(chunk)));
-const report = { date: '2026-11-12', native: false, checks: [], failures: [], pageErrors: [] };
+const report = { date: '2026-11-13', native: false, checks: [], failures: [], pageErrors: [] };
 await mkdir(output, { recursive: true });
 let browser;
 try {
