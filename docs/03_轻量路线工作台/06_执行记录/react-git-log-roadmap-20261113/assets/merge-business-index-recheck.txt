@@ -1,0 +1,44 @@
+日期：2026-11-13
+
+(node:45596) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ M04 HTTP 开始来源核对、自动关闭、关闭幂等与保存重开 (208.7824ms)
+✔ M03 HTTP 导入、核验、重复幂等、重启历史与失效 (138.9518ms)
+✔ M02 HTTP保存重启、版本追加、归属与迁移边界 (98.9827ms)
+✔ CRUD, exact wire contract, empty project, manual done, isolation and durable restart (101.6369ms)
+✔ concurrent optimistic updates serialize, one wins; failed write does not poison queue (162.8821ms)
+✔ malformed graph / contract rejected without mutating storage (74.8258ms)
+▶ corrupt JSON and invalid stored schema fail startup without erasure or backup modification
+  ✔ {broken (45.0733ms)
+  ✔ {"version":99,"projects":[]} (44.2278ms)
+  ✔ {"version":1,"projects":[{"id" (43.6522ms)
+✔ corrupt JSON and invalid stored schema fail startup without erasure or backup modification (133.7363ms)
+✔ missing primary with backup is not silently reinitialized (53.2535ms)
+✔ sample is exact original 01 markdown, not a hardcoded approximation (30.231ms)
+✔ no-key AI clearly returns 503 and never calls fetch or writes projects (30.7729ms)
+✔ AI mock uses configured provider only, data-only prompt, codefence support and todo defaults (31.584ms)
+✔ AI extract rejects malformed schemas / invented excerpts / dependency graphs (39.5045ms)
+✔ summarize validates both sides and stays suggestion-only (48.1364ms)
+▶ AI provider failure, invalid payload, truncation, invalid base and timeout are bounded errors
+  ✔ HTTP401 (25.5089ms)
+  ✔ network (27.5021ms)
+  ✔ invalid envelope (26.1228ms)
+  ✔ truncated (26.6848ms)
+  ✔ oversize (27.6348ms)
+  ✔ timeout (76.5931ms)
+✔ AI provider failure, invalid payload, truncation, invalid base and timeout are bounded errors (253.0318ms)
+✔ localhost Host and Origin defenses, no CORS opt-in, Vite proxy allowed (43.1642ms)
+✔ static dist works, SPA fallback, traversal and symlink escape are blocked (53.0588ms)
+✔ JSON type, malformed JSON, methods and two-megabyte request cap (43.4555ms)
+✔ loadEnvFile keeps existing process variables, missing env allowed (6.0595ms)
+✔ chunked oversized JSON receives a JSON 413 instead of a reset connection (33.3558ms)
+✔ failed filesystem commit leaves previous data intact and subsequent writes still work (53.7969ms)
+✔ WORKBENCH_DATA_DIR supports isolated data without a dataDir option (18.0555ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2257.0127

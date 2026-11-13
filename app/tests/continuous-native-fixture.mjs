@@ -1,5 +1,5 @@
 // 日期：2026-11-13。原生UI与真实HTTP/领域集成夹具；阶段执行器为模拟，不使用正式方案或模型会话。
-import {mkdtemp,writeFile,mkdir} from 'node:fs/promises';
+import {mkdtemp,writeFile,mkdir,access} from 'node:fs/promises';
 import os from 'node:os';import path from 'node:path';import {randomBytes,randomUUID} from 'node:crypto';import {once} from 'node:events';
 import {createServer,HttpError} from '../server/index.mjs';
 import {prepareLightPlan} from '../server/light-import.mjs';
@@ -8,7 +8,7 @@ const root=await mkdtemp(path.join(os.tmpdir(),'task-island-native-')),cwd=path.
 const token=randomBytes(32).toString('hex'),generation=randomUUID();let principal,registered,serial=0;
 const server=await createServer({dataDir:data,env:{},lightAccessEnabled:true,continuousPrincipalProvider:()=>principal,continuousClientFactory:()=>({
  async create(cwd){return{id:'native-fixture-'+(++serial),cwd};},async resume(){},close(){},
- async run(threadId,text,onStarted){await onStarted?.('fixture-turn-'+serial);await new Promise(r=>setTimeout(r,6000));
+ async run(threadId,text,onStarted){await onStarted?.('fixture-turn-'+serial);while(process.env.WORKBENCH_NATIVE_HOLD==='1'){try{await access(path.join(root,'release-stage'));break;}catch{await new Promise(r=>setTimeout(r,100));}}await new Promise(r=>setTimeout(r,1000));
  const service=server.workbench.light,s=service.read(principal,registered.projectId),binding=s.bindings.find(b=>b.context.threadId===threadId&&b.state==='confirmed'),step=s.steps.find(s=>binding.stepKeys.includes(s.key)&&s.status==='running'),execution=s.executions.find(e=>e.key===step.executionKey);const {trust,...source}=s.plans[0].source;
  const proof={evidenceId:'native-proof-'+step.code,location:'fixture://'+step.code,method:'isolated native fixture result',deliveryVersion:'1',result:'passed'};
  await service.update(principal,{schemaVersion:'light-1.0',projectId:registered.projectId,planId:registered.planIds[0],expectedRevision:s.projects[0].revision,eventId:'native-complete-'+step.code,source,occurredAt:new Date().toISOString(),reason:'原生界面夹具通过',stepId:step.id,executionId:execution.id,bindingId:binding.id,bindingRevision:binding.bindingRevision,targetStatus:'completed',evidence:[proof],checks:step.conditions.map(c=>({...c,result:'passed',evidenceIds:[proof.evidenceId]})),blocker:null,reopen:null,successorImpact:null});return{status:'completed'};

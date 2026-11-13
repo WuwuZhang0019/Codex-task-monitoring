@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-13",
+  "native": false,
+  "checks": [
+    "windows: title selects the collapsed route",
+    "windows: graph selects the collapsed route",
+    "windows: station selects the collapsed route",
+    "windows: thumbnail selects the collapsed route",
+    "windows: thumbnail-station selects the collapsed route",
+    "windows: keyboard selects the collapsed route",
+    "dynamic: title selects the collapsed route",
+    "dynamic: graph selects the collapsed route",
+    "dynamic: station selects the collapsed route",
+    "dynamic: thumbnail selects the collapsed route",
+    "dynamic: thumbnail-station selects the collapsed route",
+    "dynamic: keyboard selects the collapsed route"
+  ],
+  "failures": [],
+  "pageErrors": [],
+  "passed": true
+}
