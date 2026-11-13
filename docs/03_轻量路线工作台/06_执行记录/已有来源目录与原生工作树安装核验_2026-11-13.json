@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-13",
+  "version": "0.1.21",
+  "sourceCommit": "0c70b6eaeed9bedb462bb146e3ec085bbfaaad1b",
+  "releaseReady": true,
+  "sourceVsStandalone": {
+    "equal": true,
+    "differences": []
+  },
+  "sourceVsPlugin": {
+    "equal": true,
+    "differences": []
+  },
+  "releaseIntegrity": {
+    "valid": true,
+    "mismatches": [],
+    "unlisted": []
+  },
+  "behavior": {
+    "source": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "publicProjectPreparation": true,
+      "workspaceLink": true,
+      "sharedSourceProject": true,
+      "nativeManagedWorktree": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    },
+    "standalone": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "publicProjectPreparation": true,
+      "workspaceLink": true,
+      "sharedSourceProject": true,
+      "nativeManagedWorktree": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    },
+    "pluginSkill": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "publicProjectPreparation": true,
+      "workspaceLink": true,
+      "sharedSourceProject": true,
+      "nativeManagedWorktree": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    }
+  },
+  "runtime": {
+    "date": "2026-11-13",
+    "sourceCommit": "0c70b6e",
+    "dataDir": "C:\\Users\\Zyf\\AppData\\Local\\com.codextaskmonitor.workbench/data",
+    "before": {
+      "pid": 45668,
+      "generation": "51c50765-d61e-4e99-89e3-240f01a953b4"
+    },
+    "after": {
+      "pid": 27036,
+      "generation": "4d3c2fa3-3ebb-452e-9f64-96bfaed3c9d3"
+    },
+    "serverSha256": "977df7f8b0f867352de3f2778d34f8b86051bef57220045ba4c46b8258fbca77",
+    "runtimeHashMatches": true,
+    "businessStateUnchanged": true,
+    "aggregateBytesUnchanged": true,
+    "rolledBack": false
+  },
+  "sourceReuseDryRun": {
+    "results": [
+      {
+        "lineId": "main",
+        "status": "ready",
+        "hostProjectId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d",
+        "projectSourcePath": "G:\\rust\\Codex-task-monitoring",
+        "worktreePath": "G:\\rust\\Codex-task-monitoring"
+      },
+      {
+        "lineId": "branch",
+        "status": "ready",
+        "hostProjectId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d",
+        "projectSourcePath": "G:\\rust\\Codex-task-monitoring",
+        "worktreePath": null
+      }
+    ],
+    "branchExecutionPath": null,
+    "sourceHostProjectId": "1d6d4cad-e93e-42db-80f3-e59b3fa6e61d",
+    "projectSourcePath": "G:\\rust\\Codex-task-monitoring",
+    "projectOperations": 0
+  },
+  "tests": {
+    "service": 8,
+    "passed": 60,
+    "skill": 52
+  },
+  "nativeTrustPromptTest": "notRun"
+}
