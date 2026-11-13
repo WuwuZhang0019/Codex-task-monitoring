@@ -20,7 +20,7 @@ export function bindingApplications(bindings, grants, owners = {}) {
   return result;
 }
 
-export function createLightPanel(persistence, { connections = () => [] } = {}) {
+export function createLightPanel(persistence, { connections = () => [], continuous = () => [] } = {}) {
   const cache = new Map();
   function preferences(value) {
     const arrays = ['collapsed', 'focus'];
@@ -55,7 +55,7 @@ export function createLightPanel(persistence, { connections = () => [] } = {}) {
       const owners = persistence.read('light')?.metadata.bindingOwners ?? {};
       const bindingApps = bindingApplications(snapshot.bindings, grants, owners);
       return { date: '2026-11-12', snapshot, sources, preferences: persistence.read('lightPanelPreferences') ?? null,
-        agentApps: connections(), bindingApps,
+        agentApps: connections(), bindingApps, continuousRuns:continuous(), continuousSupported:true,
         library: persistence.read('lightLibrary') ?? { version: 1, archived: [] }, librarySupported: true,
         capabilities: { threadJump: false, reason: '当前宿主未提供聊天跳转；可复制固定 ID，在 Codex 中查找' } };
     },

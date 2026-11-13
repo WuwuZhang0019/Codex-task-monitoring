@@ -1,0 +1,65 @@
+// 日期：2026-11-13。仅使用公开 app-server JSON-RPC，不读写 Codex 私有数据库。
+import {spawn,execFileSync} from 'node:child_process';
+import {createInterface} from 'node:readline';
+import path from 'node:path';
+import os from 'node:os';
+import {existsSync} from 'node:fs';
+
+export function codexExecutable(){
+  if(process.env.WORKBENCH_CODEX_BIN)return process.env.WORKBENCH_CODEX_BIN;
+  if(process.platform==='win32'){
+    const file=path.join(process.env.APPDATA??path.join(os.homedir(),'AppData/Roaming'),'npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe');
+    if(existsSync(file))return file;
+    if(process.env.CODEX_APP_RUNTIME_CLI_PATH&&existsSync(process.env.CODEX_APP_RUNTIME_CLI_PATH))return process.env.CODEX_APP_RUNTIME_CLI_PATH;
+    try{
+      const location=execFileSync('powershell.exe',['-NoProfile','-NonInteractive','-Command',"(Get-AppxPackage -Name 'OpenAI.Codex' | Select-Object -First 1).InstallLocation"],{windowsHide:true,encoding:'utf8',timeout:5000,stdio:['ignore','pipe','ignore']}).trim();
+      const bundled=path.join(location,'app/resources/codex.exe');if(location&&existsSync(bundled))return bundled;
+    }catch{/* The PATH fallback also supports unpackaged Codex CLI installs. */}
+  }
+  return 'codex';
+}
+export function sessionEnvironment(environment=process.env){
+  const env={...environment};
+  // A standalone app-server must not inherit another chat's desktop launch identity.
+  for(const key of ['CODEX_WINDOWS_REGISTERED_CORE','CODEX_WINDOWS_SANDBOX_PACKAGE_FAMILY','CODEX_APP_RUNTIME_CLI_PATH','CODEX_SESSION_ID','CODEX_THREAD_ID','CODEX_TOOL_CALL_ID','CODEX_APP_TOOLS_PIPE_PATH','CODEX_INTERNAL_ORIGINATOR_OVERRIDE'])delete env[key];
+  return env;
+}
+export class CodexSessionClient{
+  constructor({executable=codexExecutable(),spawnImpl=spawn,threadConfig}={}){this.executable=executable;this.spawnImpl=spawnImpl;this.threadConfig=threadConfig;this.pending=new Map();this.turns=new Map();this.finished=new Map();this.sequence=0;}
+  async connect(){
+    if(this.child)return;
+    this.child=this.spawnImpl(this.executable,['app-server','--stdio'],{windowsHide:true,env:sessionEnvironment(),stdio:['pipe','pipe','pipe']});
+    this.child.stderr.on('data',()=>{});
+    this.child.on('error',()=>this.fail('CODEX_UNAVAILABLE'));
+    this.child.on('exit',()=>this.fail('CODEX_DISCONNECTED'));
+    createInterface({input:this.child.stdout}).on('line',line=>{try{this.receive(JSON.parse(line));}catch{this.fail('CODEX_PROTOCOL_INVALID');}});
+    await this.request('initialize',{clientInfo:{name:'task_island',title:'任务岛连续执行',version:'0.1.0'}});
+    this.send({method:'initialized',params:{}});
+  }
+  send(value){this.child.stdin.write(JSON.stringify(value)+'\n');}
+  request(method,params){return new Promise((resolve,reject)=>{const id=++this.sequence;const timer=setTimeout(()=>{this.pending.delete(id);reject(Error('CODEX_REQUEST_UNKNOWN'));},30000);this.pending.set(id,{resolve,reject,timer});this.send({id,method,params});});}
+  receive(message){
+    const pending=this.pending.get(message.id);
+    if(pending){clearTimeout(pending.timer);this.pending.delete(message.id);message.error?pending.reject(Error('CODEX_REQUEST_REJECTED: '+message.error.message)):pending.resolve(message.result);return;}
+    if(message.id!==undefined&&message.method){
+      this.send({id:message.id,error:{code:-32000,message:'USER_INTERACTION_REQUIRED: 此请求需要人工处理，连续执行已暂停'}});
+      this.interactionRequired=true;return;
+    }
+    if(message.method==='turn/completed'){
+      const turn=message.params.turn;const key=message.params.threadId+'/'+turn.id;
+      const waiter=this.turns.get(key);if(waiter){this.turns.delete(key);waiter.resolve(turn);}else this.finished.set(key,turn);
+    }
+  }
+  fail(reason){for(const p of this.pending.values()){clearTimeout(p.timer);p.reject(Error(reason));}this.pending.clear();for(const t of this.turns.values())t.reject(Error(reason));this.turns.clear();}
+  async create(cwd,title){await this.connect();const result=await this.request('thread/start',{cwd,...(this.threadConfig?{config:this.threadConfig}:{})});const thread=result.thread;if(!thread?.id||path.resolve(thread.cwd)!==path.resolve(cwd))throw Error('CODEX_THREAD_CONTEXT_MISMATCH');await this.request('thread/name/set',{threadId:thread.id,name:title});return thread;}
+  async resume(threadId){await this.connect();return this.request('thread/resume',{threadId,excludeTurns:true});}
+  async run(threadId,text,onStarted=async()=>{}){
+    this.interactionRequired=false;
+    const result=await this.request('turn/start',{threadId,input:[{type:'text',text,text_elements:[]}]});
+    const turn=result.turn;if(!turn?.id)throw Error('CODEX_TURN_UNKNOWN');await onStarted(turn.id);
+    const key=threadId+'/'+turn.id;
+    if(this.finished.has(key)){const done=this.finished.get(key);this.finished.delete(key);return done;}
+    return new Promise((resolve,reject)=>this.turns.set(key,{resolve,reject}));
+  }
+  close(){this.fail('CODEX_CLOSED');this.child?.stdin.end();this.child?.kill();this.child=null;}
+}

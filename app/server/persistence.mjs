@@ -7,6 +7,7 @@ import { validateDatabase, HttpError } from './validation.mjs';
 import { validateRelationships } from './relationships.mjs';
 import { validateLightStorage } from './light-model.mjs';
 import { validateLightOutbox } from './light-outbox.mjs';
+import { validateContinuous } from './light-continuous.mjs';
 
 async function readJSON(file) {
   try { return JSON.parse(await readFile(file, 'utf8')); }
@@ -34,6 +35,7 @@ function validate(state) {
   validateDatabase(state.projects);
   validateLightStorage(state.light);
   validateLightOutbox(state.lightOutbox);
+  validateContinuous(state.lightContinuous);
   for (const [id, entry] of Object.entries(state.models)) {
     if (!state.projects.projects.some(p => p.id === id) || !Number.isSafeInteger(entry.revision) || entry.revision < 1) throw Error('Invalid aggregate model');
     validateRelationships(entry.model);

@@ -11,6 +11,7 @@ import {createLightAccess} from './light-access.mjs';
 import { createLightOnboarding } from './light-onboarding.mjs';
 import {createLightPanel} from './light-panel.mjs';
 import {createLightLibrary} from './light-library.mjs';
+import {createContinuousRunner} from './light-continuous.mjs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -157,7 +158,9 @@ async function createOwnedServer(options) {
     automaticBinding: lightAccess?.automaticBinding,
   });
   const lightOutbox = createLightOutbox(persistence);
-  const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [] });
+  const continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:options.continuousClientFactory,principalProvider:options.continuousPrincipalProvider}) : null;
+  await continuous?.initialize();
+  const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [], continuous:()=>continuous?.read()??[] });
   const lightLibrary = createLightLibrary(persistence);
   const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize, automaticPublication:lightAccess?.automaticPublication});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
@@ -197,6 +200,10 @@ async function createOwnedServer(options) {
             throw error;
           }
         } else throw new HttpError(405, '不支持的请求方法');
+      } else if (pathname === '/api/light-continuous/change') {
+        if(!continuous || typeof options.authorize!=='function')throw new HttpError(403,'FORBIDDEN');
+        if(method!=='POST')throw new HttpError(405,'不支持的请求方法');
+        respond(200,await continuous.change(await jsonBody(req)));
       } else await persistence.run(async () => {
       if (pathname.startsWith('/api/light-library/')) {
         if (!options.lightAccessEnabled || typeof options.authorize !== 'function') throw new HttpError(403, '需要桌面所有者');
@@ -321,6 +328,7 @@ async function createOwnedServer(options) {
   server.requestTimeout = 30000;
   server.headersTimeout = 10000;
   server.keepAliveTimeout = 5000;
+  server.once('close',()=>continuous?.close());
   return server;
 }
 
