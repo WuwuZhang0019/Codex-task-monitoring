@@ -17,6 +17,22 @@ const context = { sessionGroup: 'D', threadId: 'owner-thread', hostId: 'local', 
 const sourcePath = new URL('../../docs/03_轻量路线工作台/03_测试样例/01_模拟二十步骤与六分支工作树_测试文档_2026-11-10.md', import.meta.url);
 const original = await readFile(sourcePath, 'utf8');
 
+test('starting an existing plan focuses its route once and progress updates preserve a later manual choice', async t => {
+  const f = await fixture(t);
+  const reserved = await f.service.reserveExecutionId('owner', f.base('reserve-focus'));
+  const request = f.update('start-focus', reserved.executionId);
+  await f.service.update('owner', request);
+  const route = f.snapshot().routes.find(route => route.stepKeys.includes(f.step.key));
+  assert.equal(f.persistence.read('lightPanelPreferences').selected, f.step.key);
+  assert.deepEqual(f.persistence.read('lightPanelPreferences').focus, [route.key]);
+  const manual = { collapsed: [], selected: 'manual-selection', focus: ['manual-route'], scroll: {}, y: {} };
+  await f.persistence.run(() => f.persistence.write('lightPanelPreferences', manual));
+  await f.service.update('owner', f.update('progress-focus', reserved.executionId));
+  assert.deepEqual(f.persistence.read('lightPanelPreferences'), manual);
+  await f.service.update('owner', request);
+  assert.deepEqual(f.persistence.read('lightPanelPreferences'), manual);
+});
+
 test('new registration leads the list and selects its first route without changing existing task states or resetting selection on replay', async t => {
   const f = await fixture(t);
   const previousSteps = f.persistence.read('light').snapshot.steps;

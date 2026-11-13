@@ -403,6 +403,23 @@ export function createLightService(persistence, requests, {
           step.conditions = step.conditions.map(item => ({ ...item, result: 'pending', evidenceIds: [] }));
         }
         step.status = target; step.updatedAt = time; step.sync = 'synced'; step.bindingKey = binding.key;
+        // 日期：2026-11-13。实际开始或恢复执行时跟随目标路线，普通进度不抢回手动选择。
+        if (target === 'running' && from !== 'running') {
+          let anchor = step;
+          let route = snapshot.routes.find(item => item.planKey === plan.key && item.stepKeys.includes(anchor.key));
+          const visited = new Set();
+          while (!route && anchor.parentKey && !visited.has(anchor.key)) {
+            visited.add(anchor.key);
+            anchor = snapshot.steps.find(item => item.key === anchor.parentKey) ?? anchor;
+            route = snapshot.routes.find(item => item.planKey === plan.key && item.stepKeys.includes(anchor.key));
+          }
+          if (route) {
+            snapshot.uiPreferences.selectedStepKey = step.key;
+            snapshot.uiPreferences.focusedRouteKey = route.key;
+            const reading = persistence.read('lightPanelPreferences') ?? { collapsed: [], selected: '', focus: [], scroll: {}, y: {} };
+            persistence.write('lightPanelPreferences', { ...reading, selected: step.key, focus: [route.key], y: { ...reading.y, 'island/list': 0 } });
+          }
+        }
         if (execution) {
           step.executionKey = execution.key;
           if (input.reopen) { execution.outcome = 'running'; execution.endedAt = null; }

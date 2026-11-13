@@ -39,7 +39,20 @@ try{
  await page.mouse.click(20,800);
  await page.waitForTimeout(500);
  assert.notEqual(await page.locator('[data-workbench-summary] .wb-mini-route').getAttribute('data-route-key'),'new-route');
+ const execution=structuredClone(newer);execution.revision=3;
+ execution.steps.find(step=>step.key==='new-step').status='running';
+ execution.events.push({eventId:'execution-start',stepKey:'new-step',executionKey:null,reason:'Actual start',occurredAt:'2026-11-13T01:00:00Z',receivedAt:'2026-11-13T01:00:00Z',toStatus:'running'});
+ active=execution;
+ await page.waitForFunction(()=>document.querySelector('[data-workbench-summary] .wb-mini-route')?.getAttribute('data-route-key')==='new-route');
+ await page.locator('[data-hit]').first().click();
+ await page.locator('[data-route-card="sim/plan/main"] .wb-route-body .wb-group-graph').click({position:{x:60,y:35}});
+ await page.mouse.click(20,800);await page.waitForTimeout(500);
+ const fast=structuredClone(execution);fast.revision=4;
+ fast.steps.find(step=>step.key==='new-step').status='completed';
+ fast.events.push({eventId:'fast-new-start',stepKey:'new-step',executionKey:null,reason:'Start before next poll',occurredAt:'2026-11-13T01:00:01Z',receivedAt:'2026-11-13T01:00:01Z',toStatus:'running'});
+ active=fast;
+ await page.waitForFunction(()=>document.querySelector('[data-workbench-summary] .wb-mini-route')?.getAttribute('data-route-key')==='new-route');
  await mkdir('test-results/new-task-focus',{recursive:true});await page.screenshot({path:'test-results/new-task-focus/browser.png'});
- await writeFile('test-results/new-task-focus/report.json',JSON.stringify({date:'2026-11-13',native:false,checks:['collapsed island follows new plan without clicking','new plan is first in expanded list','manual selection survives subsequent polls']},null,2));
- console.log('3 browser checks passed');
+ await writeFile('test-results/new-task-focus/report.json',JSON.stringify({date:'2026-11-13',native:false,checks:['collapsed island follows new plan without clicking','new plan is first in expanded list','manual selection survives subsequent polls','existing plan execution switches collapsed route','fast execution between polls switches route']},null,2));
+ console.log('5 browser checks passed');
 }finally{await browser?.close();server.kill();}

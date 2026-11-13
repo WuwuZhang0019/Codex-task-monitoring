@@ -421,13 +421,15 @@ test('B-02/04/05 三十站规模、项目隔离、跨方案授权闭包及阅读
     focusedRouteKey: f.snapshot().routes[1].key, scrollByProject: { [f.snapshot().projects[0].key]: { x: 4, y: 80 } } };
   await f.call('savePreferences', { ...f.base('preferences'), uiPreferences: preference });
   await f.update('A-01', 'running');
-  assert.deepEqual(f.snapshot().uiPreferences, preference);
+  // 日期：2026-11-13。实际开始执行切换路线，其余阅读偏好保留。
+  const executionPreference = { ...preference, selectedStepKey: f.step('A-01').key, focusedRouteKey: f.snapshot().routes[0].key };
+  assert.deepEqual(f.snapshot().uiPreferences, executionPreference);
   const request = { ...f.base('cross-supplement'), action: 'create', supplementId: null, sourceStepId: f.step('A-01').id,
     title: '跨项目关联', goal: '独立交付', blocksSource: true, status: 'unconfirmed', linkedPlanId: null, repairId: null, evidence: [] };
   const created = await f.call('supplement', request);
   await f.call('supplement', { ...request, ...f.base(), action: 'update', supplementId: created.supplementId, status: 'unplanned' });
   await f.call('supplement', { ...request, ...f.base(), action: 'linkPlan', supplementId: created.supplementId, linkedPlanId: other.planIds[0] });
   assert.equal(f.snapshot().projects.length, 2); assert.equal(f.snapshot().steps.length, 50);
-  await f.restart(); assert.deepEqual(f.snapshot().uiPreferences, preference);
+  await f.restart(); assert.deepEqual(f.snapshot().uiPreferences, executionPreference);
   await f.evidence('B-scale-projects-preferences');
 });
