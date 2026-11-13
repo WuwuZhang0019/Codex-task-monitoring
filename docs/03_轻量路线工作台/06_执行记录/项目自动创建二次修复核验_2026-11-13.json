@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-13",
+  "version": "0.1.20",
+  "sourceCommit": "e183cab27a8f17b89dc37d1bcfc597c457934ce1",
+  "releaseReady": true,
+  "sourceVsStandalone": {
+    "equal": true,
+    "differences": []
+  },
+  "sourceVsPlugin": {
+    "equal": true,
+    "differences": []
+  },
+  "releaseIntegrity": {
+    "valid": true,
+    "mismatches": [],
+    "unlisted": []
+  },
+  "behavior": {
+    "source": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "publicProjectPreparation": true,
+      "workspaceLink": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    },
+    "standalone": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "publicProjectPreparation": true,
+      "workspaceLink": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    },
+    "pluginSkill": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "publicProjectPreparation": true,
+      "workspaceLink": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    }
+  },
+  "publicRegistry": {
+    "date": "2026-11-13",
+    "source": "public app-server project/list limit=100",
+    "nextCursor": null,
+    "projects": [
+      {
+        "id": "01a1d549-2a68-7f20-8353-0b596d7b5e2e",
+        "name": "test-plan03-main",
+        "roots": [
+          {
+            "path": "G:\\rust\\test\\plan03-projects\\test-plan03-main"
+          }
+        ],
+        "metadata": {},
+        "position": 0,
+        "createdAt": 1794579704,
+        "updatedAt": 1794579704,
+        "recencyAt": null
+      },
+      {
+        "id": "01a1d54a-2bb9-7eb0-92d3-184608c93179",
+        "name": "test-plan03-ab",
+        "roots": [
+          {
+            "path": "G:\\rust\\test\\plan03-projects\\test-plan03-ab"
+          }
+        ],
+        "metadata": {},
+        "position": 43,
+        "createdAt": 1794579770,
+        "updatedAt": 1794579770,
+        "recencyAt": null
+      },
+      {
+        "id": "01a1d54d-def4-70c0-b093-695162923f94",
+        "name": "test-plan03-cd",
+        "roots": [
+          {
+            "path": "G:\\rust\\test\\plan03-projects\\test-plan03-cd"
+          }
+        ],
+        "metadata": {},
+        "position": 44,
+        "createdAt": 1794580012,
+        "updatedAt": 1794580012,
+        "recencyAt": null
+      },
+      {
+        "id": "01a1d54d-e843-7eb2-990f-0009c8efaaa9",
+        "name": "test-plan03-gh",
+        "roots": [
+          {
+            "path": "G:\\rust\\test\\plan03-projects\\test-plan03-gh"
+          }
+        ],
+        "metadata": {},
+        "position": 45,
+        "createdAt": 1794580015,
+        "updatedAt": 1794580015,
+        "recencyAt": null
+      }
+    ]
+  },
+  "hostVerification": {
+    "projects": [
+      {
+        "path": "G:\\rust\\test\\plan03-projects\\test-plan03-main",
+        "hostId": "local",
+        "projectId": "3028b10f-71be-4bda-8147-28f7bdeef0cc"
+      }
+    ],
+    "required": 4,
+    "count": 1,
+    "state": "pending"
+  },
+  "stagesStarted": false
+}
