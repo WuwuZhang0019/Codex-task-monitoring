@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-13",
+  "roots": {
+    "source": "G:\\rust\\Codex-task-monitoring\\plugins\\task-workbench\\skills\\workbench-handoff",
+    "standalone": "C:\\Users\\Zyf\\.codex\\skills\\workbench-handoff",
+    "pluginSkill": "C:\\Users\\Zyf\\.codex\\plugins\\cache\\task-workbench-u01-local\\task-workbench\\0.1.18\\skills\\workbench-handoff"
+  },
+  "pluginVersion": "0.1.18",
+  "sourceCommit": "d6fa4970cac618e85ace7cbbf315953ad2506445",
+  "releaseReady": true,
+  "sourceVsStandalone": {
+    "equal": true,
+    "differences": []
+  },
+  "sourceVsPlugin": {
+    "equal": true,
+    "differences": []
+  },
+  "standaloneVsPlugin": {
+    "equal": true,
+    "differences": []
+  },
+  "releaseIntegrity": {
+    "valid": true,
+    "mismatches": [],
+    "unlisted": []
+  },
+  "behavior": {
+    "source": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    },
+    "standalone": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    },
+    "pluginSkill": {
+      "available": true,
+      "generationGate": true,
+      "worktreeGate": true,
+      "hostProjectPreparation": true,
+      "recoveryReadable": true,
+      "nativeDispatch": "notRun"
+    }
+  }
+}
