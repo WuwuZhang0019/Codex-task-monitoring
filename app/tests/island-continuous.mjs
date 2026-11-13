@@ -21,7 +21,7 @@ try{
   if(command==='island_workbench_save_preferences'){preferences=args.value;return {saved:true};}
   if(command==='island_continuous_change'){
    assert.deepEqual(Object.keys(args.value).sort(),['acknowledged','action','expectedRevision','planKey']);assert.equal(args.value.acknowledged,true);assert.equal(args.value.expectedRevision,1);actions.push(args.value.action);
-   runs=[{id:'run',planKey:args.value.planKey,status:args.value.action==='pause'?'paused':'running',stageCode:'B',threadId:'real-chat-from-service',reason:'',completed:1,total:3}];return{saved:true};
+   runs=[{id:'run',planKey:args.value.planKey,status:args.value.action==='pause'?'pausing':'running',stageCode:'B',threadId:'real-chat-from-service',reason:'',completed:1,total:3}];return{saved:true};
   }
   throw Error('Unexpected command '+command);
  });
@@ -36,9 +36,12 @@ try{
  await mkdir('test-results/continuous-button',{recursive:true});await page.screenshot({path:'test-results/continuous-button/off.png'});
  await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('aria-checked')==='true');
  await page.waitForTimeout(500);assert.equal(await button.evaluate(b=>getComputedStyle(b).backgroundColor),'rgb(138, 92, 212)');await page.screenshot({path:'test-results/continuous-button/on.png'});
- await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('data-status')==='paused');
+ await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('data-status')==='pausing');
+ assert.equal(await button.getAttribute('aria-checked'),'false');assert.equal(await button.isDisabled(),true);assert.match(await button.getAttribute('title'),/当前阶段完成后暂停/);
+ await page.waitForTimeout(500);assert.equal(await button.evaluate(b=>getComputedStyle(b).backgroundColor),'rgb(49, 48, 51)');await page.screenshot({path:'test-results/continuous-button/pausing.png'});
+ runs[0].status='paused';await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('data-status')==='paused'&&!document.querySelector('.wb-continuous')?.disabled);
  await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('aria-checked')==='true');
  runs[0].status='completed';await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.disabled);
  assert.deepEqual(actions,['start','pause','resume']);
- await writeFile('test-results/continuous-button/browser-report.json',JSON.stringify({date:'2026-11-13',native:false,actions,checks:['102 by 28 button before archive','fixed Chinese label','start invokes exact native control','pause and resume reflect service state','completed run disables repeated dispatch']},null,2));console.log('5 continuous button browser checks passed');
+ await writeFile('test-results/continuous-button/browser-report.json',JSON.stringify({date:'2026-11-13',native:false,actions,checks:['102 by 28 button before archive','fixed Chinese label','start invokes exact native control','draining stage immediately displays gray off switch and pause hint','pause and resume reflect service state','completed run disables repeated dispatch']},null,2));console.log('6 continuous button browser checks passed');
 }finally{await browser?.close();server.kill();}
