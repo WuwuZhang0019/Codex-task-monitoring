@@ -17,6 +17,8 @@ description: 为轻量路线工作台接入方案、核对进度、生成交接�
 
 ## 选择当前工作
 
+更新日期：2026-11-13。缺少对话中的显式身份时，先实际执行 `node <Skill目录>/scripts/binding-request.mjs --context` 自动读取当前命令环境，不得只读脚本后推断身份不可用。成功后继续原授权绑定与执行，失败时给出实际错误。历史 UNKNOWN_RESULT 按当前项目绑定和执行快照核验，不空键查询，不重复登记。
+
 更新日期：2026-11-13。登记成功后继续回读、生成并校验绑定请求、取得开始许可，再执行步骤。绑定请求由同包 `scripts/binding-request.mjs` 生成，不发送空参数；所有恢复查询必须使用事先保存的非空原事件键。已有登记应复用原 projectId/planId，不因绑定失败再次登记。
 
 更新日期：2026-11-13。登记候选必须由 `registrationSnapshot` 生成，提交前使用已安装插件的 `runtime/validate.mjs` 校验完整请求。INVALID_INPUT 明确拒绝时，读取 `validationErrors` 的字段路径，修正并继续原授权任务，不将中文预设返回值填入服务状态字段。详见登记参考。

@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.16",
-  "description": "2026-11-13 提供完整绑定请求生成、明确工具参数和逐字段校验",
+  "version": "0.1.17",
+  "description": "2026-11-13 自动检查真实会话身份并接续已有方案绑定与执行",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,

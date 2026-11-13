@@ -1,11 +1,22 @@
 // 日期：2026-11-13。重放真实失败请求，校验逐字段反馈及脚本生成候选。
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
+import {readFile,mkdtemp,rm} from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import {validateLightToolArguments,createLightHandler,lightTools} from './light.mjs';
-import {bindingProposal} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/binding-request.mjs';
+import {bindingProposal,executionContext} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/binding-request.mjs';
 import {registrationSnapshot} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/normalize-plan.mjs';
 const failed=JSON.parse(await readFile(new URL('../tests/fixtures/invalid-registration-20261113.json',import.meta.url),'utf8'));
+test('execution context reads the actual command environment and reports distinct missing prerequisites',async t=>{
+ const directory=await mkdtemp(path.join(os.tmpdir(),'binding-identity-'));t.after(()=>rm(directory,{recursive:true,force:true}));
+ const context=await executionContext(directory,{CODEX_THREAD_ID:'fixture-thread'});
+ assert.equal(context.threadId,'fixture-thread');assert.equal(context.hostId,'local');assert.equal(context.branch,null);
+ await assert.rejects(executionContext(directory,{}),/CURRENT_THREAD_ID_REQUIRED/);
+ assert.throws(()=>bindingProposal({mode:'local'},context,{eventId:'bind'}),/SERVICE_SNAPSHOT_REQUIRED/);
+ assert.throws(()=>bindingProposal({mode:'service'},context,{eventId:''}),/NONEMPTY_EVENT_ID_REQUIRED/);
+ assert.throws(()=>bindingProposal({mode:'service'},{...context,threadId:null},{eventId:'bind'}),/CURRENT_THREAD_ID_REQUIRED/);
+});
 test('binding and updates expose concrete fields while retaining strict conditional checks',()=>{
  const tool=lightTools.find(t=>t.name==='workbench_bind_context');
  assert.equal(tool.inputSchema.allOf,undefined);assert.ok(tool.inputSchema.properties.context.properties.threadId);

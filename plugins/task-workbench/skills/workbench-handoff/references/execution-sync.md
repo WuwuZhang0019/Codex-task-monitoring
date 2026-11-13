@@ -6,6 +6,10 @@
 
 ## 开始本次执行
 
+更新日期：2026-11-13。对话中没有显式显示 threadId 不等于身份不可用。必须先在当前执行目录实际运行 `node <Skill目录>/scripts/binding-request.mjs --context`，它会从命令环境 CODEX_THREAD_ID 自动读取真实会话 ID，本地宿主 ID 为 local，并核验目录。不得仅阅读源码后声称宿主没有提供身份，也不要要求用户填写身份。检查成功后必须继续回读已登记项目并生成完整绑定请求，不能结束在身份检查说明。检查失败时报告实际命令、具体错误及输出，再按真实缺项处理。
+
+旧回复中的 UNKNOWN_RESULT 不能无限继承为当前阻塞：先回读原项目最新 bindings、executions。仅在存在已保存的真实 eventId 或未结束执行时按对应恢复流程核验；没有原事件键时不能构造空键查询，更不能把历史自述代替当前服务证据。已登记方案复用原身份，禁止重复登记。
+
 更新日期：2026-11-13。绑定前保存最新 get_project 返回的 snapshot，使用同包 `scripts/binding-request.mjs` 生成完整绑定请求：在真实执行目录运行 `node <Skill目录>/scripts/binding-request.mjs <snapshot.json> <稳定eventId> <bind.json> [planId]`。脚本从当前 CODEX_THREAD_ID 获取真实会话，核验当前目录并使用服务返回的项目、方案、步骤及版本。不要用空对象调用绑定，也不要用空 eventId 查询。调用前用插件 `runtime/validate.mjs workbench_bind_context <bind.json>` 校验，确认有效后保存精确请求再提交；任何执行写入请求均须同样核对完整身份和原事件键。结果未知时查询刚保存的真实 eventId，服务恢复后复用原请求与身份，不能重复登记已成功的方案。
 
 更新日期：2026-11-13
