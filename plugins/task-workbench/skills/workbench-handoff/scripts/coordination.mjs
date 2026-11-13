@@ -208,8 +208,10 @@ export async function prepareHostProject(state, input, checkpoint, { client = ne
     workspaceLink: { status: 'available', evidence: 'official codex://new?path workspace entry; actual opener result checked below' },
   } }, checkpoint, inspect);
   try {
-    if (!staged.action) return staged;
-    const entry = state.operations.find(item => item.operationId === staged.operation.operationId);
+    const entry = state.operations.find(item => item.operationId === staged.operation?.operationId);
+    const recovering = !staged.action && staged.status === 'needsCreation' && entry?.status === 'pending'
+      && !entry.desktopOpen && (entry.publicRequest || entry.publicProjectId);
+    if (!staged.action && !recovering) return staged;
     let cursor, pages = new Set(), matches = [];
     try {
       do {
@@ -223,6 +225,7 @@ export async function prepareHostProject(state, input, checkpoint, { client = ne
       check(matches.length <= 1, 'PUBLIC_PROJECT_AMBIGUOUS');
       let project = matches[0];
       if (!project) {
+        if (recovering) return { ...staged, action: null, operation: clone(entry), next: 'verify-project', reason: 'PUBLIC_PROJECT_RECONCILIATION_REQUIRED' };
         const dialect = /^[a-z]:[\\/]|^\\\\/i.test(staged.worktreePath) ? path.win32 : path.posix;
         entry.publicRequest = { idempotencyKey: entry.operationId, name: dialect.basename(staged.worktreePath), roots: [{ path: staged.worktreePath }] };
         await checkpoint(state);
@@ -235,10 +238,13 @@ export async function prepareHostProject(state, input, checkpoint, { client = ne
       entry.publicEvidence = { id: readback.id, name: readback.name, roots: readback.roots };
       await checkpoint(state);
     } catch (error) {
-      entry.publicError = { code: error.code ?? error.message, resultUnknown: error.resultUnknown ?? false };
+      entry.publicError = { code: error.code ?? error.message, resultUnknown: error.resultUnknown ?? false,
+        ...(error.rpcCode !== undefined ? { rpcCode: error.rpcCode } : {}) };
       await checkpoint(state);
       // 明确不支持公开实验接口可继续官方工作区深链；创建结果未知或身份异常先对账。
-      if (entry.publicRequest || matches.length || !['HOST_PROJECT_REQUEST_REJECTED', 'HOST_PROJECT_EXECUTOR_UNAVAILABLE'].includes(error.code)) {
+      const unsupported = error.code === 'HOST_PROJECT_EXECUTOR_UNAVAILABLE'
+        || error.code === 'HOST_PROJECT_REQUEST_REJECTED' && error.rpcCode === -32601;
+      if (entry.publicRequest || matches.length || !unsupported) {
         return { ...staged, action: null, operation: clone(entry), next: 'verify-project', reason: error.code ?? error.message };
       }
     }

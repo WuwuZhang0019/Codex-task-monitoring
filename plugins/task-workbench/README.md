@@ -6,11 +6,11 @@
 
 0.1.13 支持在用户自己的普通项目文件夹内登记、绑定、执行与同步任务，无须 Git 或插件开发目录。非 Git 绑定使用 `branch: null`、`head: null`，实际目录由服务核验；Git 项目保持根目录、分支及版本检查。分支、合并和多工作树协调仍要求真实 Git 条件。
 
-状态：0.1.19 公开项目协议与官方深链自动准备桌面项目；源码、安装及原生验收分别记录
+状态：0.1.20 公开项目协议与官方深链自动准备桌面项目；源码、安装及原生验收分别记录
 
-0.1.19 的 `prepare-project` 实际调用公开 app-server `project/list`、`project/create`、`project/read`，使用稳定幂等键创建或复用精确目录项目，再通过官方 `codex://new?path=...` 入口让桌面采用该目录。该路径不使用电脑界面自动化，也不要求用户逐目录添加。公开协议返回的 `project.id` 与宿主 `list_projects` 的 `projectId` 是不同身份，必须按宿主和真实目录回读后，经 `verify-project` 才能保存 `hostProjectId` 并 `map`。公开协议成功或深链启动成功仍只记为待核验；超时失联不重复添加。Windows 的 `codex app PATH` 仅打印目录，不作为创建路径。
+0.1.20 的 `prepare-project` 实际调用公开 app-server `project/list`、`project/create`、`project/read`，使用稳定幂等键创建或复用精确目录项目，再通过官方 `codex://new?path=...` 入口让桌面采用该目录。该路径不使用电脑界面自动化，也不要求用户逐目录添加。公开协议返回的 `project.id` 与宿主 `list_projects` 的 `projectId` 是不同身份，必须按宿主和真实目录回读后，经 `verify-project` 才能保存 `hostProjectId` 并 `map`。公开协议成功或深链启动成功仍只记为待核验；超时失联不重复添加。Windows 的 `codex app PATH` 仅打印目录，不作为创建路径。
 
-0.1.18 为多项目协调增加 `projects`、`stage-project` 和 `verify-project`：按真实宿主和目录复用项目，保存稳定意图并核验 ID。该版只提供缺项分流，缺少实际创建实现；0.1.19 补齐公开协议与官方入口。普通登记仍不要求新建侧栏项目，不绕过电脑工具对应用或权限操作的限制。
+0.1.18 为多项目协调增加 `projects`、`stage-project` 和 `verify-project`：按真实宿主和目录复用项目，保存稳定意图并核验 ID。该版只提供缺项分流，缺少实际创建实现；0.1.20 补齐公开协议与官方入口。普通登记仍不要求新建侧栏项目，不绕过电脑工具对应用或权限操作的限制。
 
 0.1.17 提供 `binding-request.mjs --context` 自动检查当前命令环境中的会话 ID、本地宿主及实际目录；缺少 service snapshot、事件键和会话身份分别报错。Skill 要求实际运行检查，不能只阅读脚本后判断缺身份，也不能无限继承历史未知结果。
 

@@ -187,6 +187,35 @@ test('官方深链只包含精确目录，无自动提示词，特殊字符不�
   assert.throws(() => workspaceProjectLink('relative/path'), /ABSOLUTE/);
 });
 
+test('公开列表权限或参数拒绝不尝试其他入口', async () => {
+  for (const rpcCode of [-32000, -32602]) {
+    let opened = false;
+    const result = await prepareHostProject(stateOf(), input(), checkpoint, { inspect,
+      openWorkspace: async () => { opened = true; }, client: {
+        list: async () => { throw Object.assign(Error('denied'), { code: 'HOST_PROJECT_REQUEST_REJECTED', rpcCode }); }, close() {},
+      } });
+    assert.equal(opened, false); assert.equal(result.operation.publicError.rpcCode, rpcCode);
+  }
+});
+
+test('创建丢响应后只读对账成功，接续尚未调用的目录入口且不重发创建', async () => {
+  const state = stateOf(), native = { id: 'persisted-project', roots: [{ path: target.worktreePath }] };
+  let stored = false, creates = 0, opens = 0;
+  const options = { inspect, openWorkspace: async () => { opens++; }, client: {
+    list: async () => ({ data: stored ? [native] : [] }),
+    create: async () => { creates++; stored = true; throw Object.assign(Error('lost'), { code: 'HOST_PROJECT_RESULT_UNKNOWN', resultUnknown: true }); },
+    read: async () => ({ project: native }), close() {},
+  } };
+  await prepareHostProject(state, input(), checkpoint, options);
+  assert.equal(opens, 0);
+  const restored = structuredClone(state);
+  await prepareHostProject(restored, input(), checkpoint, options);
+  assert.equal(creates, 1); assert.equal(opens, 1);
+  assert.equal(restored.operations[0].targetId, null);
+  await prepareHostProject(restored, input(), checkpoint, options);
+  assert.equal(opens, 1);
+});
+
 test('CLI 用真实 Git 目录完成准备、落盘、回读和恢复，不依赖开发仓库路径', async t => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'host-project-test-'));
   t.after(async () => { assert.ok(path.resolve(root).startsWith(path.resolve(os.tmpdir()) + path.sep)); await rm(root, { recursive: true, force: true }); });
