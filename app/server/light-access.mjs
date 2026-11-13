@@ -58,8 +58,11 @@ export function createLightAccess(persistence, { now = Date.now, presenceTtlMs =
     try {
       const actual = await realpath(context.worktreePath);
       if (!grant.automatic && !grant.worktreeRoots.some(root => contained(root, actual))) lightError('FORBIDDEN', '实际路径超出授权', 403);
-      const { branch, head } = await inspectWorkspace(actual);
-      if (context.branch !== branch || branch === null && (context.head !== null || !samePath(path.resolve(context.worktreePath), actual))
+      const { branch, head, gitCommonDir } = await inspectWorkspace(actual);
+      // 日期：2026-11-13。非 Git 无 HEAD；原生 detached 工作树仍需真实起始提交，不将两者混为一类。
+      const detached = branch === null && gitCommonDir !== null;
+      if (context.branch !== branch || branch === null && (!samePath(path.resolve(context.worktreePath), actual)
+          || (detached ? !context.head : context.head !== null))
         || checkHead && context.head && context.head !== head) {
         lightError('STALE_BINDING', '实际目录、Git 分支或版本与提案不同', 409);
       }

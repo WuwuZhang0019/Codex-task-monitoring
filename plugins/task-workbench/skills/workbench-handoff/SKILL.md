@@ -11,7 +11,9 @@ description: 为轻量路线工作台接入方案、核对进度、生成交接�
 
 更新日期：2026-11-13
 
-多项目协调缺少 Codex 侧栏项目时，先按 [自动准备宿主项目](references/coordination.md#自动准备宿主项目)运行 `coordination-cli.mjs prepare-project <检查点.json> <输入.json>`，输入为 `{target,projects:<宿主最新列表数组>}`。优先按宿主和真实目录复用；缺项使用同包 `HostProjectClient` 调用公开 app-server `project/list`、`project/create`、`project/read`，再经官方 `codex://new?path=...` 入口让桌面采用目录，无须电脑 UI 自动化。返回 `pending` / `next: verify-project` 后，实际调用宿主 `list_projects` 回读并运行 `verify-project`，成功后才 `map` 和继续派发。公开 `project.id` 不能当作宿主 `hostProjectId`。没有宿主创建工具或电脑 UI 被禁用，不能单独作为要求用户手动添加的理由；先执行这条公开协议与官方入口路径。Windows `codex app PATH` 仅打印目录，不用作创建路径。普通登记与执行仍不需要另建侧栏项目。
+多开发线默认复用用户已有的来源项目及同一个来源目录，不先克隆多份目录。先按 [来源项目与执行工作树](references/coordination.md#来源项目与执行工作树)运行 `source-targets`，用宿主真实 `sourceHostProjectId` 与本批开发线生成目标。需要额外侧栏归类时显式设 `separateProject:true` 和 `label`，创建的新项目 roots 仍是原来源目录；分支执行使用已授权的原生 `create_thread` worktree 环境，实际目录由宿主返回后核验。不把工作树再次添加为项目，不用同一执行目录切分支代替隔离。已有克隆方案保留为历史，不自动删除、覆盖或迁移。
+
+确需新增侧栏归类时，按 [自动准备宿主项目](references/coordination.md#自动准备宿主项目)运行 `prepare-project`，实际创建后用宿主 `list_projects` 和 `verify-project` 回读；公开 `project.id` 与宿主 `hostProjectId` 分开保存。只请求复用已有项目时不调用创建接口或工作目录深链。来源目录已使用不等于新工作树自动获信任；原生工作树如实回报 accessState，`waitingForTrust` 时等待用户确认，禁止代点或写信任配置；确认后重验同一聊天，不重复创建。
 
 用户要求“接入并执行”且当前项目尚无工作台 ID 时，先按 [首次登记流程](references/plan-registration.md#首次登记与项目身份恢复)建立本地候选并调用 `workbench_register_plan`，不要先用空 projectId 读取，也不要让用户去任务岛手工建立项目。自动连接已开启时登记使用 `confirmationGrant: null`，成功响应会生成真实项目、方案、步骤 ID；随后回读、绑定并开始。Codex 侧栏项目与工作台项目是不同身份，普通测试不需要另外创建侧栏项目。已持有本地 projectKey 时可用它调用 `workbench_get_project` 恢复真实 ID。
 
@@ -47,9 +49,9 @@ A 仅核对/生成：只读资料并输出指令，不创建聊天、发消息�
 
 B 授权协调：用户明确允许按方案在对应项目创建聊天、派发、收集和接续后，读取 [协调流程](references/coordination.md)，在原任务授权范围内持续推进。保存原始人类授权出处，分别记录登记/接入、创建聊天、指定目标派发、收集、回报与接续权限；新工作树、推送、发布及真实供应商调用单独判断。不要每创建一聊或每条既定派发重复确认。
 
-侧栏项目 ID、来源目录、实际仓库、工作树、分支、threadId/hostId 与工作台 projectId/planId/stepId 分别保存。默认复用现有项目和工作树。当前 `create_thread` 的 `local` 使用保存项目的来源目录，schema 没有指定已有工作树路径的参数；来源目录不同于预期工作树时返回能力缺项，不用 `worktree` 偷建新目录，不在提示词里指定路径后声称原生绑定成功。
+侧栏项目 ID、来源目录、实际仓库、工作树、分支或 detached HEAD、threadId/hostId 与工作台 projectId/planId/stepId 分别保存。`local` 使用来源目录；用户明确要求独立工作树时记录 `createWorktree` 权限，使用原生 `worktree` 与已明确的起点 ref。该起点须在来源仓库可解析，缺失时不臆造或自动建立分支。原生创建前执行路径留空，创建后核验同一 Git 公共目录、不同执行根、实际起始 HEAD、访问状态及并发隔离，再派发。现有任意工作树仍无通用指定路径参数，不以提示词换目录冒充原生绑定。
 
-已明确授权在指定项目创建执行聊天时，把既定目标目录添加为宿主项目属于该范围的准备工作；先完成自动准备和真实身份核验，再派发聊天。该授权不扩展为创建新 Git 仓库、新工作树、跨聊天消息或改变访问权限。
+已明确授权在指定项目创建执行聊天时，复用已有来源项目及必要的侧栏归类属于准备工作；用户明确指定分支独立工作树时才增加相应 `createWorktree` 权限。两者均不扩展为创建新 Git 仓库、克隆多份目录、任意分支或改变访问权限；跨聊天消息沿用原有单独授权规则。
 
 协调日志沿用 `context-ledger.mjs` 的操作身份和未知结果规则，`scripts/coordination-cli.mjs` 提供持久检查点及两段原生调用。服务新增 `workbench_get_coordination` / `workbench_save_coordination` 后可保存同一日志，不建立另一个业务执行或调度系统。必须先发现实际工具，旧所有者缺少新接口时保留本地恢复记录并报告同步缺项。
 

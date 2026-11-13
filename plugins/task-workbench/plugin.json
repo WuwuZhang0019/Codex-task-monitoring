@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.20",
-  "description": "2026-11-13 通过公开项目协议和官方深链自动准备桌面项目并核验真实归属",
+  "version": "0.1.21",
+  "description": "2026-11-13 复用已有项目来源目录并以原生独立工作树执行分支",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,

@@ -16,6 +16,8 @@
 
 先核验用户当前项目的实际目录，不要求它是插件开发仓库。普通目录可正常登记方案、绑定会话、开始执行和同步状态：用 `inspectWorkspace` 得到真实路径，`branch: null`、`head: null` 表示已核验的非 Git 目录。Git 检查不适用时记录“不适用”，不能据此拦截普通任务，也不要初始化仓库或编造 `main` 分支。有 Git 时继续核验根目录、分支和 HEAD；Git 分支、工作树及合并任务必须满足真实 Git 条件。以下“目录与分支”在普通目录模式下指真实目录及无 Git 的现场状态。
 
+原生 Git 工作树允许 detached HEAD，此时 `branch: null`、`head: <真实提交哈希>`，不是非 Git。`binding-request --context` 自动保留此区别；服务确认时核验起始提交，执行期间允许在同一 detached 工作树正常提交，不能填造具名分支或将 HEAD 清空。来源项目目录与实际执行工作树分开，绑定引用实际执行目录。
+
 更新日期：2026-11-12
 
 自动连接模式中，普通 `workbench_bind_context` propose 成功并返回 `state: confirmed` 即已完成绑定，直接采用回执版本，不再要求用户确认 ID 或 JSON。接手旧执行仍提交原有 propose/confirm 两个事件，confirm 使用 `confirmationGrant: null`，服务自动核验接手范围和真实 Git 目录分支。旧版限范围授权才需要其原生确认凭据；下文原生绑定确认要求仅适用于旧模式。

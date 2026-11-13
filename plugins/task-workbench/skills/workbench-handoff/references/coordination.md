@@ -32,7 +32,27 @@
 | `fork_thread` | 有 same-directory 分叉能力；会继承历史，项目归属与实际目录需要隔离联验，不能仅凭 schema 宣称其与移项目组合已支持任意业务线 |
 | `move_thread_to_project` | 改项目归属；额外来源目录访问可能要求用户在侧栏移动，不能当作修改执行 cwd 的工具 |
 
-直接创建时，只有已保存项目来源目录与核验过的目标工作树一致才使用 `local`。不同则返回 `HOST_EXISTING_WORKTREE_UNSUPPORTED`，先按下节把目标目录准备成真实宿主项目，或在用户允许接续时复用已核验原聊天。不得通过提示词 `cd` 后把侧栏归属与工作树原生绑定记为成功，不为绕过限制新建工作树。其他可行宿主组合先隔离验证再扩充适配器。
+`local` 仅用于来源目录本身；用户明确要求独立工作树时采用下节原生 `worktree` 模式，不能把来源目录当作实际执行目录。已有任意工作树仍无通用的目标路径参数，返回 `HOST_EXISTING_WORKTREE_UNSUPPORTED` 时保留原归属，不自动把工作树提升为新项目、不用提示词 `cd` 冒充原生绑定。其他宿主组合先隔离验证再扩充适配器。
+
+## 来源项目与执行工作树
+
+日期：2026-11-13
+
+新多线方案先选择用户已经拥有的真实来源项目。默认直接复用该项目；需要多个侧栏项目归类时，它们选择同一个已有来源目录，不先 `git clone` 多份目录。历史已建的克隆和独立项目只作为兼容输入，不自动删除、迁移或改变其信任配置。
+
+运行 `coordination-cli.mjs source-targets <检查点.json> <输入.json>`。输入 `{sourceHostProjectId,hostId?,projects:<宿主列表>,lines:[{lineId,stepIds,execution:{type:'managed-worktree',startingRef:<用户明确起点>},label?,separateProject?}]}`；`hostId` 缺省 local。在来源目录直接执行的 main 线显式使用 `execution:{type:'local'}`。输出目标已携带 `sourceHostProjectId/projectSourcePath`，分支执行的 `worktreePath:null` 表示尚未创建，不能填成来源目录或预先猜测路径。
+
+目标依次交给 `prepare-project`：默认已有项目返回 ready，完全不调用项目创建或目录深链。确实需要额外归类时设 `separateProject:true` 与 `label`，创建 roots 仍指向来源目录；按宿主、名称、来源路径回读确认，不能随意复用同路径的其他归类。新归类 ID 与原来源项目 ID 分别保存。
+
+`map` 输入 `mapping:{lineId,hostProjectId,hostId,projectSourcePath,execution:{type:'managed-worktree',startingRef},stepIds}`。脚本只读检查来源仓库与起点存在，保存 sourceHead、startingRef、startingHead、gitCommonDir；branch/head/worktreePath 在新执行上下文确认前均为空。缺起点、来源错配或原线仍在执行时停止，不在来源目录自动建分支或切分支。
+
+用户明确同意创建独立工作树后，在本任务人类授权中记录 `createWorktree`；不能从 `createChat` 单独推断。`stage` 使用真实 `create_thread` 的 `environment:{type:'worktree',startingState:{type:'branch',branchName:startingRef}}`，不附加 schema 没有的 cwd 参数。创建请求只让执行聊天核验上下文，不开始业务任务。管理式工作树通常随聊天独立，后继新聊天需要新工作树时，用已验收的真实后继起点重新 map；不能假设新聊天复用上一聊天的工作树，或仅凭创建前的分支快照接续遗漏的提交。
+
+回读真实 threadId 后，`verify` 的 observation 额外包含 `accessState:'ready'|'waitingForTrust'|'denied'|'unknown'`。只有 ready 且真实执行根不同于来源根、Git 公共目录相同、起始 HEAD 正确、实际分支为原指定分支或 detached、其他活动任务未占用同一执行目录时，才设置 contextVerified。来源相同不造成目录冲突；实际执行目录相同或同一开发线并发仍拦截。Git 起点创建前变化时需重核，不静默采用新版本。
+
+**新工作树是否再次弹信任框取决于宿主和已有授权，不能承诺免确认。** 来源目录复用并不授权其他新路径。出现实际信任等待时保持原聊天及操作键，不代点、不修改信任配置。若宿主只返回 clientThreadId、还没有可用 threadId，可用 `workspace-wait` 输入 `{batchId,taskId,accessState:'waitingForTrust',evidence:<真实宿主观察>}` 记录等待；该命令不能设置 ready 或批准权限。用户确认、原创建结果可回读后继续 `record` 和 `verify`，不重建聊天。
+
+原生工作树默认可能 detached HEAD，绑定上下文使用 `branch:null,head:<真实提交哈希>`；非 Git 才是二者都 null。服务保留同一工作树和真实提交检查，不伪造分支。此流程不等于原生 UI 免信任验收；官方依据：[Worktrees](https://learn.chatgpt.com/docs/environments/git-worktrees)、[审批与安全](https://learn.chatgpt.com/docs/agent-approvals-security)。
 
 ## 自动准备宿主项目
 
@@ -41,7 +61,7 @@
 仅在任务确实需要分别归属的宿主项目时使用此流程。工作台登记和普通单目录执行不依赖新侧栏项目。已有明确的人类创建执行聊天授权时，添加既定目录为项目属于必要准备，无须让用户逐目录操作；只核对/生成模式不执行添加。
 
 1. 调用宿主 `list_projects` 取得最新实际列表，核验目标目录存在、Git 工作树根及分支。以 `hostId + path` 匹配，不能按项目名称猜测；多项同路径需核对固定 ID。普通非 Git 目录沿用普通执行流程，此多工作树协调脚本仍检查 Git。
-2. 运行 `node '<Skill目录>/scripts/coordination-cli.mjs' prepare-project '<检查点.json>' '<输入.json>'`。输入为 `{target:{lineId,hostId,worktreePath,branch,stepIds,label?,hostProjectId?},projects:<宿主最新列表数组>}`。已有匹配返回真实 `hostProjectId`，可按结果继续；缺项时命令先持久化稳定 `createProject` 操作意图，实际执行公开协议创建与官方桌面入口。
+2. 新路线先按上节从来源项目生成 target，再运行 `node '<Skill目录>/scripts/coordination-cli.mjs' prepare-project '<检查点.json>' '<输入.json>'`，输入 `{target,projects:<宿主最新列表数组>}`。旧 `{lineId,hostId,worktreePath,branch,stepIds}` 目标仅作为已有目录兼容输入，不是克隆生成指令。匹配来源项目返回真实 `hostProjectId`；确需新增归类才保存 `createProject` 意图并执行公开协议。项目 roots 取 `projectSourcePath`，不取尚未创建的执行工作树。
 3. 同包 `scripts/host-project-client.mjs` 导出 `HostProjectClient`，以 `initialize.capabilities.experimentalApi:true` 协商公开 app-server 协议，只使用 `project/list`、`project/create` 和 `project/read`。创建参数为 `{idempotencyKey,name,roots:[{path}],metadata?}`；幂等键由固定操作身份产生，roots 使用已核验的精确目标目录。列出并复用已有公开项目，或创建后回读其 roots；不读写私有库，不启动模型或发送聊天消息，也不把另建执行会话当成原生项目准备。
 4. 公开项目准备后，命令通过官方 `codex://new?path=...` 入口让桌面采用目标目录，路径参数必须正确编码。该步骤不使用电脑 UI 自动化，也不操作认证或权限提示。Windows 的 `codex app PATH` 当前仅打印目录，不会按指定目录创建项目，不能将其退出成功记为添加成功。官方入口说明见 [Commands](https://learn.chatgpt.com/docs/reference/commands)，CLI 平台区别见 [Developer commands](https://learn.chatgpt.com/docs/developer-commands#codex-app)。
 5. `prepare-project` 返回 `pending`、`next: verify-project` 时，公开创建及深链结果都只是准备证据。**公开协议的 `project.id` 与宿主 `list_projects` 返回的 `projectId` 是不同身份，不能混用。** 深链启动成功也不代表侧栏已保存；桌面刷新可能延后，应实际回读宿主列表。运行 `verify-project`，输入 `{operationId,projects:<最新宿主列表>,evidence:<实际调用出处>,hostProjectId?:<已核实的宿主固定ID>}`。只有宿主与目录精确匹配后，操作才可记为 `succeeded`；此 ID 才能作为 `hostProjectId` 执行 `map`。

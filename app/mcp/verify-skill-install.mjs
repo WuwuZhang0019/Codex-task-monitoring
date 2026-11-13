@@ -40,12 +40,21 @@ async function behavior(directory) {
     const prepare = await module.planHostProjects(state, { targets: [target], projects: [],
       capabilities: { computerUse: { status: 'available', evidence: 'isolated installation adapter' } } },
     async directory => ({ worktreePath: directory, repositoryRoot: directory, gitCommonDir: directory + '/.git', head: 'a'.repeat(40), branch: 'main' }));
+    state.authorization.permissions.push('createWorktree');
+    const sourceProjects = [{ projectId: 'source-project', hostId: 'local', path: 'G:\\fixture\\source', label: 'existing', isGitRepository: true }];
+    const sharedTarget = module.sharedSourceTargets({ sourceHostProjectId: 'source-project', projects: sourceProjects,
+      lines: [{ lineId: 'line', stepIds: ['step'], execution: { type: 'managed-worktree', startingRef: 'main' } }] })[0];
+    const sharedMapping = await module.mapLine(state, sharedTarget, sourceProjects,
+      async directory => ({ worktreePath: directory, repositoryRoot: directory, gitCommonDir: directory + '/.git', head: 'a'.repeat(40), branch: 'main' }), async () => 'a'.repeat(40));
+    const managedRequest = module.createRequest(state, { lineId: 'line', stepIds: ['step'], id: 'smoke', spec: { title: 'smoke' } }, sharedMapping, sourceProjects);
     const publicPrepare = await module.planHostProjects(state, { targets: [target], projects: [],
       capabilities: { publicProjects: { status: 'available', evidence: 'isolated public protocol adapter' } } },
     async directory => ({ worktreePath: directory, repositoryRoot: directory, gitCommonDir: directory + '/.git', head: 'a'.repeat(40), branch: 'main' }));
     return { available: true, generationGate, worktreeGate, hostProjectPreparation: prepare.projects[0].action?.route === 'computerUse',
       publicProjectPreparation: publicPrepare.projects[0].action?.route === 'publicAppServer' && typeof module.prepareHostProject === 'function',
       workspaceLink: new URL(module.workspaceProjectLink(target.worktreePath)).searchParams.get('path') === target.worktreePath,
+      sharedSourceProject: sharedMapping.projectSourcePath === sourceProjects[0].path && sharedMapping.worktreePath === null,
+      nativeManagedWorktree: managedRequest.target.projectId === 'source-project' && managedRequest.target.environment.type === 'worktree',
       recoveryReadable: module.recoveryReport(state).unfinished.length === 0,
       nativeDispatch: 'notRun' };
   } catch (error) {

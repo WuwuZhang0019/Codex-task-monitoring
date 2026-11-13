@@ -2,7 +2,7 @@
 import { createHash } from 'node:crypto';
 import { readFile, open, rename, unlink, mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { inspectWorktree, runHostOperation } from './context-ledger.mjs';
+import { inspectWorktree, inspectGitRef, runHostOperation } from './context-ledger.mjs';
 import { HostProjectClient } from './host-project-client.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -35,9 +35,15 @@ export function validateCoordination(state, previous) {
   check(auth.mode !== 'execute' || nonempty(auth.source?.threadId) && nonempty(auth.source?.locator) && nonempty(auth.source?.quote)
     && Array.isArray(auth.lineIds) && Array.isArray(auth.stepIds), 'HUMAN_AUTHORIZATION_SOURCE_REQUIRED');
   for (const key of ['mappings', 'mappingHistory', 'operations', 'batches', 'observations', 'unconfirmedEvents']) check(Array.isArray(state[key]), 'INVALID_COORDINATION_ARRAY');
-  for (const { key, mapping } of state.mappings) check(nonempty(key) && nonempty(mapping?.lineId) && nonempty(mapping.hostId)
-    && nonempty(mapping.hostProjectId) && nonempty(mapping.worktreePath) && nonempty(mapping.repositoryRoot)
-    && nonempty(mapping.gitCommonDir) && nonempty(mapping.branch) && Array.isArray(mapping.stepIds) && mapping.stepIds.length, 'INVALID_LINE_MAPPING');
+  for (const { key, mapping } of state.mappings) {
+    const managed = mapping?.executionMode === 'managed-worktree';
+    check(nonempty(key) && nonempty(mapping?.lineId) && nonempty(mapping.hostId)
+      && nonempty(mapping.hostProjectId) && nonempty(mapping.repositoryRoot) && nonempty(mapping.gitCommonDir)
+      && Array.isArray(mapping.stepIds) && mapping.stepIds.length
+      && (managed ? nonempty(mapping.projectSourcePath) && nonempty(mapping.startingRef) && nonempty(mapping.startingHead)
+        && (mapping.worktreePath === null || nonempty(mapping.worktreePath)) && (mapping.branch === null || nonempty(mapping.branch))
+        : nonempty(mapping.worktreePath) && nonempty(mapping.branch)), 'INVALID_LINE_MAPPING');
+  }
   check(new Set(state.mappings.map(item => item.mapping.lineId)).size === state.mappings.length, 'DUPLICATE_LINE_ID');
   for (const key of ['operations', 'batches']) check(new Set(state[key].map(item => item.operationId ?? item.id)).size === state[key].length, 'DUPLICATE_COORDINATION_ID');
   for (const operation of state.operations) check(nonempty(operation.operationId) && operation.contentHash === fingerprint(operation.intent)
@@ -77,16 +83,27 @@ function authorized(state, permission, task) {
 }
 
 // 显示名和来源目录不作为身份；先用固定项目 ID，再独立核对实际 Git 目录。
-export async function mapLine(state, mapping, projects, inspect = inspectWorktree) {
+export async function mapLine(state, mapping, projects, inspect = inspectWorktree, resolveRef = inspectGitRef) {
   const project = projects.find(item => item.projectId === mapping.hostProjectId && item.hostId === mapping.hostId);
   check(project, 'HOST_PROJECT_NOT_FOUND');
   check(mapping.hostId === 'local' || inspect !== inspectWorktree, 'REMOTE_INSPECTION_ADAPTER_REQUIRED');
-  const actual = await inspect(mapping.worktreePath, mapping.branch);
+  const managed = mapping.execution?.type === 'managed-worktree' || mapping.executionMode === 'managed-worktree';
+  if (managed) check(!activeTasks(state).some(task => task.lineId === mapping.lineId), 'ACTIVE_LINE_REMAP_REQUIRES_REVIEW');
+  const actual = await inspect(managed ? project.path : mapping.worktreePath, managed ? null : mapping.branch);
   check(actual.repositoryRoot && actual.gitCommonDir && actual.head, 'REPOSITORY_EVIDENCE_REQUIRED');
   check(!mapping.repositoryRoot || samePath(mapping.repositoryRoot, actual.repositoryRoot), 'REPOSITORY_ROOT_MISMATCH');
   const value = { ...clone(mapping), ...actual, projectSourcePath: project.path, projectLabel: project.label,
     planKey: mapping.planKey ?? state.planId ?? state.id, stepKeys: mapping.stepKeys ?? mapping.stepIds,
     threadId: mapping.threadId ?? null };
+  if (managed) {
+    check(project.isGitRepository === true, 'SOURCE_GIT_PROJECT_REQUIRED');
+    check(!mapping.projectSourcePath || samePath(mapping.projectSourcePath, actual.worktreePath), 'PROJECT_SOURCE_MISMATCH');
+    const startingRef = mapping.execution?.startingRef ?? mapping.startingRef;
+    check(nonempty(startingRef), 'GIT_STARTING_REF_REQUIRED');
+    Object.assign(value, { executionMode: 'managed-worktree', sourceHead: actual.head, startingRef,
+      startingHead: await resolveRef(actual.worktreePath, startingRef), worktreePath: null, branch: null, head: null,
+      threadId: null, accessState: 'unknown' });
+  }
   check(nonempty(mapping.lineId) && mapping.stepIds?.length, 'LINE_SCOPE_REQUIRED');
   const old = state.mappings.find(item => item.mapping.lineId === mapping.lineId);
   if (old && fingerprint(old.mapping) !== fingerprint(value)) state.mappingHistory.push(clone(old));
@@ -96,26 +113,51 @@ export async function mapLine(state, mapping, projects, inspect = inspectWorktre
 }
 const mappingFor = (state, lineId) => state.mappings.find(item => item.mapping.lineId === lineId)?.mapping;
 
+// 日期：2026-11-13。新路线从已列出的来源项目生成，项目归类和执行工作树分开。
+export function sharedSourceTargets({ sourceHostProjectId, hostId = 'local', projects, lines }) {
+  const source = projects?.find(item => item.projectId === sourceHostProjectId && item.hostId === hostId);
+  check(source?.path && source.isGitRepository === true, 'SOURCE_GIT_PROJECT_REQUIRED');
+  check(Array.isArray(lines) && lines.length && new Set(lines.map(line => line.lineId)).size === lines.length, 'LINE_SCOPE_REQUIRED');
+  return lines.map(line => {
+    check(nonempty(line.lineId) && line.stepIds?.length, 'LINE_SCOPE_REQUIRED');
+    const local = line.execution?.type === 'local';
+    check(local || line.execution?.type === 'managed-worktree' && nonempty(line.execution.startingRef), 'LINE_EXECUTION_MODE_REQUIRED');
+    check(!line.separateProject || nonempty(line.label), 'PROJECT_LABEL_REQUIRED');
+    return { ...clone(line), hostId, sourceHostProjectId, projectSourcePath: source.path,
+      ...(line.separateProject ? {} : { hostProjectId: source.projectId }), worktreePath: local ? source.path : null };
+  });
+}
+
 // 日期：2026-11-13。创建聊天前准备宿主项目；缺少 API 时检查被允许的界面路径。
 // 返回语义操作而非杜撰工具参数；Agent 仍须读取实际工具 schema 或电脑技能。
 export async function planHostProjects(state, { targets, projects, capabilities = {} }, inspect = inspectWorktree) {
   check(Array.isArray(targets) && Array.isArray(projects), 'HOST_PROJECT_INPUT_REQUIRED');
   const results = [];
   for (const target of targets) {
-    check(nonempty(target.lineId) && nonempty(target.hostId) && nonempty(target.worktreePath)
-      && (path.win32.isAbsolute(target.worktreePath) || path.posix.isAbsolute(target.worktreePath))
+    const source = target.sourceHostProjectId ? projects.find(project => project.projectId === target.sourceHostProjectId && project.hostId === target.hostId) : null;
+    const sourcePath = source?.path ?? target.projectSourcePath ?? target.worktreePath;
+    check(nonempty(target.lineId) && nonempty(target.hostId) && nonempty(sourcePath)
+      && (path.win32.isAbsolute(sourcePath) || path.posix.isAbsolute(sourcePath))
       && Array.isArray(target.stepIds) && target.stepIds.length, 'HOST_PROJECT_TARGET_REQUIRED');
     const item = { ...clone(target), status: 'blocked', hostProjectId: null, action: null };
     results.push(item);
+    if (target.sourceHostProjectId && !source) { item.reason = 'SOURCE_PROJECT_NOT_FOUND'; continue; }
+    if (source && target.projectSourcePath && !samePath(source.path, target.projectSourcePath)) { item.reason = 'PROJECT_SOURCE_MISMATCH'; continue; }
     if (target.hostId !== 'local' && inspect === inspectWorktree) { item.reason = 'REMOTE_INSPECTION_ADAPTER_REQUIRED'; continue; }
     let actual;
-    try { actual = await inspect(target.worktreePath, target.branch); }
+    try { actual = await inspect(sourcePath, source || target.projectSourcePath ? null : target.branch); }
     catch (error) { item.reason = 'WORKSPACE_INSPECTION_FAILED'; item.detail = error.message; continue; }
     check(actual.repositoryRoot && actual.gitCommonDir && actual.head, 'REPOSITORY_EVIDENCE_REQUIRED');
-    item.worktreePath = actual.worktreePath;
+    item.projectSourcePath = actual.worktreePath;
+    item.worktreePath = target.execution?.type === 'managed-worktree' ? null : actual.worktreePath;
     const matches = projects.filter(project => project.hostId === target.hostId && nonempty(project.projectId)
       && nonempty(project.path) && samePath(project.path, actual.worktreePath)
-      && (!target.hostProjectId || project.projectId === target.hostProjectId));
+      && (!target.hostProjectId || project.projectId === target.hostProjectId)
+      && (!target.separateProject || project.label === target.label));
+    if (source && !target.separateProject && !target.hostProjectId) {
+      const selected = matches.find(project => project.projectId === source.projectId);
+      if (selected) { item.status = 'ready'; item.hostProjectId = selected.projectId; continue; }
+    }
     if (matches.length > 1) { item.reason = 'HOST_PROJECT_AMBIGUOUS'; item.candidateIds = matches.map(project => project.projectId); continue; }
     if (matches.length === 1) { item.status = 'ready'; item.hostProjectId = matches[0].projectId; continue; }
     if (target.hostProjectId) { item.reason = 'HOST_PROJECT_ID_OR_PATH_MISMATCH'; continue; }
@@ -144,7 +186,8 @@ export async function stageHostProject(state, input, checkpoint, inspect = inspe
   check(typeof checkpoint === 'function', 'DURABLE_CHECKPOINT_REQUIRED');
   const plan = await planHostProjects(state, { ...input, targets: [input.target] }, inspect);
   const item = plan.projects[0];
-  const operationId = `${state.id}/project/${fingerprint([item.hostId, pathKey(item.worktreePath)])}`;
+  const projectPath = item.projectSourcePath ?? item.worktreePath;
+  const operationId = `${state.id}/project/${fingerprint([item.hostId, pathKey(projectPath), ...(input.target.separateProject ? [input.target.lineId] : [])])}`;
   const existing = state.operations.find(entry => entry.operationId === operationId);
   if (item.status === 'ready' && existing) {
     const operation = await verifyHostProject(state, { operationId, projects: input.projects,
@@ -156,7 +199,8 @@ export async function stageHostProject(state, input, checkpoint, inspect = inspe
     return { ...item, operation: clone(existing), action: null, next: 'verify-project' };
   }
   if (item.status !== 'needsCreation') return { ...item, next: item.status === 'ready' ? 'map' : 'resolveCapability', action: null };
-  const operation = { operationId, kind: 'createProject', request: { hostId: item.hostId, path: item.worktreePath },
+  const operation = { operationId, kind: 'createProject', request: { hostId: item.hostId, path: projectPath,
+    ...(input.target.separateProject ? { name: input.target.label } : {}) },
     explicitUserAuthorization: true };
   let staged = false;
   const entry = await runHostOperation(state, operation, { createProject: async () => {
@@ -173,6 +217,7 @@ export async function verifyHostProject(state, { operationId, projects, evidence
   const request = entry.intent.request;
   const matches = projects.filter(project => project.hostId === request.hostId && nonempty(project.projectId)
     && nonempty(project.path) && samePath(project.path, request.path)
+    && (!request.name || project.label === request.name)
     && (!hostProjectId || project.projectId === hostProjectId)
     && (!entry.targetId || project.projectId === entry.targetId));
   check(matches.length === 1, matches.length ? 'HOST_PROJECT_AMBIGUOUS' : 'HOST_PROJECT_NOT_CONFIRMED');
@@ -212,12 +257,14 @@ export async function prepareHostProject(state, input, checkpoint, { client = ne
     const recovering = !staged.action && staged.status === 'needsCreation' && entry?.status === 'pending'
       && !entry.desktopOpen && (entry.publicRequest || entry.publicProjectId);
     if (!staged.action && !recovering) return staged;
+    const projectPath = staged.projectSourcePath ?? staged.worktreePath;
     let cursor, pages = new Set(), matches = [];
     try {
       do {
         const result = await client.list({ ...(cursor ? { cursor } : {}), limit: 100 });
         check(Array.isArray(result.data), 'HOST_PROJECT_PROTOCOL_INVALID');
-        matches.push(...result.data.filter(project => project.roots?.length === 1 && samePath(project.roots[0].path, staged.worktreePath)));
+        matches.push(...result.data.filter(project => project.roots?.length === 1 && samePath(project.roots[0].path, projectPath)
+          && (!input.target.separateProject || project.name === input.target.label)));
         cursor = result.nextCursor;
         check(!cursor || !pages.has(cursor), 'HOST_PROJECT_PAGINATION_INVALID');
         if (cursor) pages.add(cursor);
@@ -226,14 +273,15 @@ export async function prepareHostProject(state, input, checkpoint, { client = ne
       let project = matches[0];
       if (!project) {
         if (recovering) return { ...staged, action: null, operation: clone(entry), next: 'verify-project', reason: 'PUBLIC_PROJECT_RECONCILIATION_REQUIRED' };
-        const dialect = /^[a-z]:[\\/]|^\\\\/i.test(staged.worktreePath) ? path.win32 : path.posix;
-        entry.publicRequest = { idempotencyKey: entry.operationId, name: dialect.basename(staged.worktreePath), roots: [{ path: staged.worktreePath }] };
+        const dialect = /^[a-z]:[\\/]|^\\\\/i.test(projectPath) ? path.win32 : path.posix;
+        entry.publicRequest = { idempotencyKey: entry.operationId, name: entry.intent.request.name ?? dialect.basename(projectPath), roots: [{ path: projectPath }] };
         await checkpoint(state);
         project = (await client.create(entry.publicRequest)).project;
       }
       check(nonempty(project?.id), 'PUBLIC_PROJECT_ID_REQUIRED');
       const readback = (await client.read({ projectId: project.id })).project;
-      check(readback?.id === project.id && readback.roots?.length === 1 && samePath(readback.roots[0].path, staged.worktreePath), 'PUBLIC_PROJECT_CONTEXT_MISMATCH');
+      check(readback?.id === project.id && readback.roots?.length === 1 && samePath(readback.roots[0].path, projectPath)
+        && (!entry.intent.request.name || readback.name === entry.intent.request.name), 'PUBLIC_PROJECT_CONTEXT_MISMATCH');
       entry.publicProjectId = readback.id; // 公开项目 ID 不是宿主 projectId。
       entry.publicEvidence = { id: readback.id, name: readback.name, roots: readback.roots };
       await checkpoint(state);
@@ -248,9 +296,9 @@ export async function prepareHostProject(state, input, checkpoint, { client = ne
         return { ...staged, action: null, operation: clone(entry), next: 'verify-project', reason: error.code ?? error.message };
       }
     }
-    entry.desktopOpen = { state: 'requested', uri: workspaceProjectLink(staged.worktreePath) };
+    entry.desktopOpen = { state: 'requested', uri: workspaceProjectLink(projectPath) };
     await checkpoint(state);
-    try { await openWorkspace(staged.worktreePath); }
+    try { await openWorkspace(projectPath); }
     catch (error) { entry.desktopOpen.error = error.code ?? error.message; }
     await checkpoint(state);
     return { ...staged, action: null, operation: clone(entry), next: 'verify-project',
@@ -286,7 +334,8 @@ function dependencyIssues(state, task, snapshot) {
   return issues;
 }
 function shared(a, b) {
-  if (a.hostId === b.hostId && samePath(a.worktreePath, b.worktreePath)) return 'SHARED_WORKTREE';
+  if (a.hostId === b.hostId && a.lineId && a.lineId === b.lineId) return 'SHARED_DEVELOPMENT_LINE';
+  if (a.hostId === b.hostId && a.worktreePath && b.worktreePath && samePath(a.worktreePath, b.worktreePath)) return 'SHARED_WORKTREE';
   for (const left of a.resources ?? []) for (const right of b.resources ?? []) {
     if (left.key === right.key && (left.mode !== 'read' || right.mode !== 'read')) return `SHARED_RESOURCE:${left.key}`;
   }
@@ -326,6 +375,16 @@ function taskFor(state, batchId, taskId) {
   const task = state.batches.find(item => item.id === batchId)?.tasks.find(item => item.id === taskId);
   check(task, 'DISPATCH_TASK_NOT_FOUND'); return task;
 }
+export function recordWorkspaceWait(state, { batchId, taskId, accessState, evidence }) {
+  const task = taskFor(state, batchId, taskId);
+  check(authorized(state, 'collect', task) && mappingFor(state, task.lineId)?.executionMode === 'managed-worktree'
+    && !['verified', 'cancelled'].includes(task.state)
+    && ['waitingForTrust', 'denied', 'unknown'].includes(accessState) && nonempty(evidence), 'WORKSPACE_WAIT_EVIDENCE_REQUIRED');
+  check(task.threadId || state.operations.some(item => item.operationId === `${state.id}/${task.id}/create`), 'ORIGINAL_OPERATION_EVIDENCE_REQUIRED');
+  task.contextAccess = { state: accessState, evidence };
+  task.state = 'blocked';
+  return { ...clone(task), next: accessState === 'waitingForTrust' ? 'awaitFolderTrust' : 'verifyTarget' };
+}
 export function taskPrompt(state, task, mapping) {
   const spec = task.spec;
   for (const field of ['title', 'goal', 'scope', 'sharedFiles', 'dependencies', 'versions', 'acceptance', 'stopConditions', 'receipt']) check(nonempty(spec[field]), `TASK_SPEC_REQUIRED:${field}`);
@@ -336,7 +395,8 @@ export function taskPrompt(state, task, mapping) {
     `工作台 projectId=${state.projectId}，planId=${state.planId}，stepIds=${task.stepIds.join(', ')}\n`+
     `已发现责任绑定=${JSON.stringify(task.bindings ?? [])}；未结束执行=${JSON.stringify(task.executionIds ?? [])}。这些是核对资料，开始前回读当前版本。\n`+
     `Codex projectId=${mapping.hostProjectId}，hostId=${mapping.hostId}；项目来源=${mapping.projectSourcePath}\n`+
-    `实际仓库=${mapping.repositoryRoot}；工作树=${mapping.worktreePath}；分支=${mapping.branch}；核对时 HEAD=${mapping.head}\n`+
+    `实际仓库=${mapping.repositoryRoot}；工作树=${task.targetEvidence?.worktreePath ?? mapping.worktreePath ?? '等待宿主创建'}；分支=${task.targetEvidence ? task.targetEvidence.branch ?? 'detached HEAD' : mapping.branch ?? '待核验'}；核对时 HEAD=${task.targetEvidence?.head ?? mapping.head ?? '待核验'}\n`+
+    (mapping.executionMode === 'managed-worktree' ? `原生工作树起点=${mapping.startingRef}，起始提交=${mapping.startingHead}。来源项目目录只用于归属，实施限定在核验后的执行工作树；信任确认由宿主决定，禁止代点或写信任配置。\n` : '')+
     Object.entries(spec).map(([key, value]) => `${key}：${value}`).join('\n')+
     `\n实施前读取最新服务快照，核对责任绑定、所有未结束 executionId 与前置验收。沿用未结束执行，必要时显式接手；仅在确认没有原执行后预留新身份。开始请求成功并回读 running 后实施，未知结果先按原 eventId 查询。\n`+
     `执行、验收、同步、交接分别回报；携带 threadId/hostId、bindingId/revision、executionId、事件键、提交与证据，失败说明剩余及恢复动作。\n`+
@@ -345,23 +405,52 @@ export function taskPrompt(state, task, mapping) {
       : `未授予跨聊天回报权限；在本聊天给出回执，由协调聊天读取。\n`);
 }
 
-// 当前宿主只有 local / 新 worktree；local 只能在项目来源恰好是目标工作树时使用。
+// 日期：2026-11-13。项目来源可共用；执行目录由原生 worktree 创建并单独核验。
 export function createRequest(state, task, mapping, projects) {
   check(authorized(state, 'createChat', task), 'CREATE_CHAT_AUTHORIZATION_REQUIRED');
   const project = projects.find(item => item.projectId === mapping.hostProjectId && item.hostId === mapping.hostId);
   check(project, 'HOST_PROJECT_NOT_FOUND');
-  check(project.path && samePath(project.path, mapping.worktreePath), 'HOST_EXISTING_WORKTREE_UNSUPPORTED');
-  return { title: task.spec.title, target: { type: 'project', projectId: project.projectId, environment: { type: 'local' } },
-    prompt: `日期：${state.date}\n隔离的执行上下文核对阶段，尚未许可实施。\n协调任务 ${state.id}/${task.id}；操作键 ${state.id}/${task.id}/create。\n请只读核对并回报当前真实 threadId、hostId、Codex projectId、cwd、Git 工作树根、公共 Git 目录、仓库根、分支和 HEAD。\n预期项目 ${mapping.hostProjectId}，工作树 ${mapping.worktreePath}，分支 ${mapping.branch}。\n本阶段不要修改文件、预留执行身份、启动任务或发送跨聊天消息。协调聊天确认上下文后另行派发完整任务。` };
+  const managed = mapping.executionMode === 'managed-worktree';
+  let environment = { type: 'local' };
+  if (managed) {
+    check(authorized(state, 'createWorktree', task), 'CREATE_WORKTREE_AUTHORIZATION_REQUIRED');
+    check(project.isGitRepository === true && samePath(project.path, mapping.projectSourcePath), 'PROJECT_SOURCE_MISMATCH');
+    check(nonempty(mapping.startingRef) && nonempty(mapping.startingHead), 'GIT_STARTING_REF_REQUIRED');
+    environment = { type: 'worktree', startingState: { type: 'branch', branchName: mapping.startingRef } };
+  } else check(project.path && samePath(project.path, mapping.worktreePath), 'HOST_EXISTING_WORKTREE_UNSUPPORTED');
+  return { title: task.spec.title, target: { type: 'project', projectId: project.projectId, environment },
+    prompt: `日期：${state.date}\n隔离的执行上下文核对阶段，尚未许可实施。\n协调任务 ${state.id}/${task.id}；操作键 ${state.id}/${task.id}/create。\n请只读核对并回报当前真实 threadId、hostId、Codex projectId、cwd、Git 工作树根、公共 Git 目录、仓库根、分支和 HEAD。\n`+
+      (managed ? `预期来源项目 ${mapping.hostProjectId}，来源目录 ${mapping.projectSourcePath}；必须在宿主独立创建的工作树内，起点 ${mapping.startingRef}，起始 HEAD=${mapping.startingHead}。允许如实回报 branch=null 的 detached HEAD，不要切换来源目录的分支。回报 accessState=ready/waitingForTrust/denied/unknown 及实际证据；出现信任弹窗时等待用户确认，不代点、不写信任配置。\n`
+        : `预期项目 ${mapping.hostProjectId}，工作树 ${mapping.worktreePath}，分支 ${mapping.branch}。\n`)+
+      `本阶段不要修改文件、预留执行身份、启动任务或发送跨聊天消息。协调聊天确认上下文后另行派发完整任务。` };
 }
 export async function verifyTarget(state, batchId, taskId, observation, inspect = inspectWorktree) {
   const task = taskFor(state, batchId, taskId), mapping = mappingFor(state, task.lineId);
   check(task.threadId && observation.threadId === task.threadId && observation.hostId === mapping.hostId
     && observation.hostProjectId === mapping.hostProjectId && nonempty(observation.evidence), 'TARGET_IDENTITY_UNCONFIRMED');
-  check(samePath(observation.worktreePath, mapping.worktreePath) && observation.branch === mapping.branch, 'TARGET_WORKTREE_MISMATCH');
+  const managed = mapping.executionMode === 'managed-worktree';
+  if (managed) {
+    check(['ready', 'waitingForTrust', 'denied', 'unknown'].includes(observation.accessState), 'TARGET_ACCESS_STATE_REQUIRED');
+    if (observation.accessState !== 'ready') {
+      task.contextAccess = { state: observation.accessState, evidence: observation.evidence };
+      task.state = 'blocked';
+      return { ...clone(task), reason: observation.accessState === 'waitingForTrust' ? 'WORKSPACE_TRUST_REQUIRED' : 'WORKSPACE_ACCESS_UNCONFIRMED' };
+    }
+    check(nonempty(observation.worktreePath) && !samePath(observation.worktreePath, mapping.projectSourcePath), 'MANAGED_WORKTREE_ISOLATION_REQUIRED');
+    if (task.targetEvidence) check(samePath(observation.worktreePath, task.targetEvidence.worktreePath), 'TARGET_WORKTREE_MISMATCH');
+  } else check(samePath(observation.worktreePath, mapping.worktreePath) && observation.branch === mapping.branch, 'TARGET_WORKTREE_MISMATCH');
   const actual = await inspect(observation.worktreePath, observation.branch);
+  check(actual.branch === observation.branch, 'TARGET_WORKTREE_MISMATCH');
   check(samePath(actual.repositoryRoot, mapping.repositoryRoot) && samePath(actual.gitCommonDir, mapping.gitCommonDir), 'TARGET_REPOSITORY_MISMATCH');
+  if (managed && !task.targetEvidence) {
+    check(actual.head === task.startingHead, 'TARGET_STARTING_HEAD_MISMATCH');
+    check(actual.branch === null || actual.branch === task.startingRef, 'TARGET_BRANCH_MISMATCH');
+  }
+  for (const other of activeTasks(state).filter(item => item !== task && item.targetEvidence)) {
+    check(other.hostId !== task.hostId || !samePath(other.targetEvidence.worktreePath, actual.worktreePath), 'SHARED_WORKTREE');
+  }
   task.targetEvidence = { ...clone(observation), ...actual };
+  if (managed) task.contextAccess = { state: 'ready', evidence: observation.evidence };
   task.state = 'contextVerified';
   const entry = state.mappings.find(item => item.mapping.lineId === task.lineId);
   state.mappingHistory.push(clone(entry));
@@ -430,11 +519,20 @@ export async function reconcileNotSubmitted(state, { operationId, proof, evidenc
   entry.resultUnknown = false; entry.status = 'failed'; entry.reason = 'VERIFIED_NOT_SUBMITTED';
   await checkpoint(state); return clone(entry);
 }
-export async function dispatchTask(state, batchId, taskId, { snapshot, projects, adapter, checkpoint, inspect = inspectWorktree }) {
+export async function dispatchTask(state, batchId, taskId, { snapshot, projects, adapter, checkpoint, inspect = inspectWorktree, resolveRef = inspectGitRef }) {
   const task = taskFor(state, batchId, taskId), mapping = mappingFor(state, task.lineId);
   if (task.state === 'verified') return { state: 'verified', next: 'reviewSuccessors' };
   check(authorized(state, 'dispatch', task) && authorized(state, 'collect', task), 'COORDINATION_AUTHORIZATION_REQUIRED');
   check(typeof checkpoint === 'function', 'DURABLE_CHECKPOINT_REQUIRED');
+  const managed = mapping.executionMode === 'managed-worktree';
+  if (managed && !task.threadId && task.contextAccess?.state === 'waitingForTrust'
+    && !state.operations.some(item => item.operationId === `${state.id}/${task.id}/create` && item.status === 'succeeded')) {
+    return { state: task.state, next: 'awaitFolderTrust', reason: 'WORKSPACE_TRUST_REQUIRED' };
+  }
+  if (managed && task.threadId && task.contextAccess?.state !== 'ready') {
+    return { state: task.state, next: task.contextAccess?.state === 'waitingForTrust' ? 'awaitFolderTrust' : 'verifyTarget',
+      reason: task.contextAccess?.state === 'waitingForTrust' ? 'WORKSPACE_TRUST_REQUIRED' : 'TARGET_IDENTITY_UNCONFIRMED' };
+  }
   if (state.operations.some(item => item.operationId === `${state.id}/${task.id}/dispatch` && item.status === 'succeeded')) {
     if (task.state === 'contextVerified') { task.state = 'delivered'; await checkpoint(state); }
     return { state: task.state, next: 'wait_threads' };
@@ -447,7 +545,17 @@ export async function dispatchTask(state, batchId, taskId, { snapshot, projects,
     const conflict = otherMapping && shared({ ...mapping, resources: task.resources ?? [] }, { ...otherMapping, resources: other.resources ?? [] });
     check(!conflict, conflict ?? 'SHARED_RESOURCE');
   }
-  await inspect(mapping.worktreePath, mapping.branch);
+  if (managed && !task.targetEvidence) {
+    const source = await inspect(mapping.projectSourcePath, null);
+    check(samePath(source.gitCommonDir, mapping.gitCommonDir), 'TARGET_REPOSITORY_MISMATCH');
+    if (!state.operations.some(item => item.operationId === `${state.id}/${task.id}/create`)) {
+      check(await resolveRef(mapping.projectSourcePath, mapping.startingRef) === mapping.startingHead, 'STARTING_REF_CHANGED');
+    }
+  } else {
+    const context = task.targetEvidence ?? mapping;
+    const actual = await inspect(context.worktreePath, context.branch);
+    check(samePath(actual.gitCommonDir, mapping.gitCommonDir) && actual.branch === context.branch, 'TARGET_REPOSITORY_MISMATCH');
+  }
   const steps = scopedSteps(state, task, snapshot);
   const openExecutions = snapshot.executions.filter(item => !item.endedAt && item.stepKeys.some(key => steps.some(step => step.key === key)));
   const owners = snapshot.bindings.filter(item => item.state === 'confirmed' && !item.revokedAt
@@ -461,6 +569,7 @@ export async function dispatchTask(state, batchId, taskId, { snapshot, projects,
     task.threadId = prior; task.executionIds = openExecutions.map(item => item.id);
   }
   if (!task.threadId) {
+    if (managed) { task.startingRef ??= mapping.startingRef; task.startingHead ??= mapping.startingHead; }
     const operation = { operationId: `${state.id}/${task.id}/create`, kind: 'createChat', explicitUserAuthorization: true,
       request: createRequest(state, task, mapping, projects) };
     const entry = await runHostOperation(state, operation, adapter, checkpoint);
@@ -484,10 +593,12 @@ export function observeTask(state, batchId, taskId, { snapshot, receipt, cursor,
   const steps = scopedSteps(state, task, snapshot), mapping = mappingFor(state, task.lineId);
   const bindings = steps.map(step => snapshot.bindings.find(item => item.key === step.bindingKey));
   const executions = steps.map(step => snapshot.executions.find(item => item.key === step.executionKey));
-  const matched = bindings.every(item => item?.state === 'confirmed' && !item.revokedAt
+  const targetContext = task.targetEvidence ?? mapping;
+  const matched = (mapping.executionMode !== 'managed-worktree' || !!task.targetEvidence && task.contextAccess?.state === 'ready')
+    && bindings.every(item => item?.state === 'confirmed' && !item.revokedAt
     && item.context.threadId === task.threadId && item.context.hostId === task.hostId
-    && item.context.folderId === mapping.hostProjectId && item.context.branch === mapping.branch
-    && samePath(item.context.worktreePath, mapping.worktreePath));
+    && item.context.folderId === mapping.hostProjectId && item.context.branch === targetContext.branch
+    && samePath(item.context.worktreePath, targetContext.worktreePath));
   const started = matched && executions.every((item, i) => item?.startedAt && item.bindingKey === bindings[i].key);
   const receiptMatches = receipt?.threadId === task.threadId && receipt?.hostId === task.hostId
     && receipt?.projectId === state.projectId && receipt?.planId === state.planId
@@ -511,7 +622,9 @@ export function recoveryReport(state) {
   const assignedIds = new Set(state.batches.flatMap(batch => batch.tasks.map(task => task.id)));
   return { coordinator: clone(state.coordinator), authorization: clone(state.authorization),
     unfinished: activeTasks(state).map(task => ({ batchId: state.batches.find(batch => batch.tasks.includes(task)).id, taskId: task.id,
-      lineId: task.lineId, state: task.state, threadId: task.threadId, hostId: task.hostId, executionIds: task.executionIds ?? [], cursor: task.cursor ?? null })),
+      lineId: task.lineId, state: task.state, threadId: task.threadId, hostId: task.hostId, executionIds: task.executionIds ?? [], cursor: task.cursor ?? null,
+      contextAccess: task.contextAccess ?? null, projectSourcePath: mappingFor(state, task.lineId)?.projectSourcePath ?? null,
+      worktreePath: task.targetEvidence?.worktreePath ?? null })),
     unknownOperations: state.operations.filter(item => item.resultUnknown || item.status === 'pending').map(clone),
     unconfirmedEvents: clone(state.unconfirmedEvents), pendingReceipts: state.observations.filter(item => item.status === 'receiptReview').map(clone),
     deferred: state.batches.flatMap(batch => batch.deferred.filter(item => !assignedIds.has(item.task.id)).map(item => ({ batchId: batch.id, ...clone(item) }))) };
@@ -535,7 +648,7 @@ export async function withCheckpoint(file, action) {
 }
 export async function coordinationCli(argv = process.argv.slice(2)) {
   const [command, file, inputFile] = argv;
-  check(file, 'USAGE: node coordination-cli.mjs <init|recover|projects|stage-project|prepare-project|verify-project|map|plan|stage|record|reconcile|adopt|verify|observe> <checkpoint.json> [input.json]');
+  check(file, 'USAGE: node coordination-cli.mjs <init|recover|source-targets|projects|stage-project|prepare-project|verify-project|map|plan|stage|record|workspace-wait|reconcile|adopt|verify|observe> <checkpoint.json> [input.json]');
   const input = inputFile ? JSON.parse(await readFile(inputFile, 'utf8')) : null;
   let result;
   if (command === 'init') {
@@ -545,6 +658,7 @@ export async function coordinationCli(argv = process.argv.slice(2)) {
     finally { await handle.close(); }
   } else if (command === 'recover') result = recoveryReport(validateCoordination(JSON.parse(await readFile(file, 'utf8'))));
   else result = await withCheckpoint(file, async (state, checkpoint) => {
+    if (command === 'source-targets') return { date: state.date, targets: sharedSourceTargets(input) };
     if (command === 'projects') return planHostProjects(state, input);
     if (command === 'stage-project') return stageHostProject(state, input, checkpoint);
     if (command === 'prepare-project') return prepareHostProject(state, input, checkpoint);
@@ -553,6 +667,7 @@ export async function coordinationCli(argv = process.argv.slice(2)) {
     if (command === 'plan') return planBatch(state, input.batch, input.snapshot);
     if (command === 'stage') return stageDispatch(state, input.batchId, input.taskId, { ...input, checkpoint });
     if (command === 'record') return recordNativeResult(state, input, checkpoint);
+    if (command === 'workspace-wait') return recordWorkspaceWait(state, input);
     if (command === 'reconcile') return reconcileNotSubmitted(state, input, checkpoint);
     if (command === 'adopt') return adoptCoordination(state, input);
     if (command === 'verify') return verifyTarget(state, input.batchId, input.taskId, input.observation);

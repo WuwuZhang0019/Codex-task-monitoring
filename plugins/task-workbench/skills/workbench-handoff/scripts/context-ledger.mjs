@@ -17,15 +17,25 @@ export async function inspectWorktree(directory,expectedBranch){
  requireValue(path.isAbsolute(directory),'ABSOLUTE_WORKTREE_REQUIRED');const actual=await realpath(directory);const opts={cwd:actual,windowsHide:true,timeout:5000};
  const run=async args=>(await git('git',args,opts)).stdout.trim();const top=await realpath(await run(['rev-parse','--show-toplevel']));
  requireValue((process.platform==='win32'?top.toLowerCase():top)===(process.platform==='win32'?actual.toLowerCase():actual),'WORKTREE_ROOT_MISMATCH');
- const branch=await run(['symbolic-ref','--quiet','--short','HEAD']);requireValue(!expectedBranch||branch===expectedBranch,'WORKTREE_BRANCH_MISMATCH');
+ // 日期：2026-11-13。显式 expectedBranch=null 允许核验原生工作树的 detached HEAD，仍保留真实提交。
+ let branch;
+ try{branch=await run(['symbolic-ref','--quiet','--short','HEAD']);}
+ catch(error){if(expectedBranch===null&&error.code===1)branch=null;else throw error;}
+ requireValue(expectedBranch==null||branch===expectedBranch,'WORKTREE_BRANCH_MISMATCH');
  const common=await realpath(path.resolve(actual,await run(['rev-parse','--git-common-dir'])));
  return {worktreePath:actual,repositoryRoot:path.dirname(common),gitCommonDir:common,branch,head:await run(['rev-parse','HEAD'])};
+}
+export async function inspectGitRef(directory,ref){
+ requireValue(path.isAbsolute(directory)&&typeof ref==='string'&&ref.trim()&&!ref.startsWith('-'),'GIT_STARTING_REF_REQUIRED');
+ const actual=await realpath(directory);
+ const head=(await git('git',['rev-parse','--verify','--end-of-options',ref+'^{commit}'],{cwd:actual,windowsHide:true,timeout:5000})).stdout.trim();
+ requireValue(/^[a-f0-9]{40,64}$/i.test(head),'GIT_STARTING_REF_INVALID');return head;
 }
 // 日期：2026-11-13。普通目录不要求 Git；仓库检查失败不能降级为普通目录。
 export async function inspectWorkspace(directory){
  requireValue(path.isAbsolute(directory),'ABSOLUTE_WORKTREE_REQUIRED');
  const actual=await realpath(directory);requireValue((await stat(actual)).isDirectory(),'WORKSPACE_DIRECTORY_REQUIRED');
- try{return await inspectWorktree(actual);}
+ try{return await inspectWorktree(actual,null);}
  catch(error){
   const noRepository=error.code===128&&/^fatal: not a git repository(?:\s|\()/m.test(error.stderr??'');
   if(!noRepository&&!(error.code==='ENOENT'&&error.path==='git'))throw error;

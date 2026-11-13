@@ -12,7 +12,7 @@
     "build": "node mcp/build-business-schema.mjs && tsc --noEmit && vite build",
     "start": "node server/index.mjs",
     "test": "node --test server/*.test.mjs mcp/*.test.mjs && npm run test:domain && npm run test:skill",
-    "test:skill": "node --test tests/skill-workflow.test.mjs tests/coordination.test.mjs tests/host-project-preparation.test.mjs tests/host-project-client.test.mjs",
+    "test:skill": "node --test tests/skill-workflow.test.mjs tests/coordination.test.mjs tests/host-project-preparation.test.mjs tests/host-project-client.test.mjs tests/shared-projects.test.mjs",
     "test:domain": "tsc src/domain.ts --outDir .test-build --module ESNext --target ES2022 --moduleResolution Bundler --skipLibCheck && node --test tests/domain.test.mjs",
     "test:e2e": "npm run build && node tests/e2e.mjs",
     "tauri": "tauri",
