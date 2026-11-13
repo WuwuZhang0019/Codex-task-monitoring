@@ -20,6 +20,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=()=>ne
   const snapshot=()=>persistence.read('light')?.snapshot;
   const find=id=>state().runs.find(r=>r.id===id);
   async function update(id,fields){if(closed)return;await persistence.run(()=>{const s=state(),r=s.runs.find(r=>r.id===id);if(r){Object.assign(r,fields,{updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
+  async function pauseIfRequested(id,reason){if(closed)return;await persistence.run(()=>{const s=state(),r=s.runs.find(r=>r.id===id);if(r?.status==='pausing'){Object.assign(r,{status:'paused',reason,updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
   function summary(run){const s=snapshot(),stages=s?.steps.filter(x=>x.planKey===run.planKey&&x.parentKey===null&&x.required)??[];return {id:run.id,planKey:run.planKey,status:run.status,stageCode:run.current?.code??null,threadId:run.current?.threadId??null,reason:run.reason??'',completed:stages.filter(x=>stepPassed(s,x)).length,total:stages.length};}
   async function principal(){
     if(principalProvider)return principalProvider();
@@ -75,7 +76,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=()=>ne
     try{
       while(!closed){
         let run=find(id);if(!run||!activeStates.has(run.status))return;
-        if(run.status==='pausing'){await update(id,{status:'paused',reason:'已暂停接续'});return;}
+        if(run.status==='pausing'){await pauseIfRequested(id,'已暂停接续');return;}
         const s=snapshot(),plan=s?.plans.find(p=>p.key===run.planKey);if(!plan)throw Error('PLAN_NOT_FOUND');
         if(plan.source.sha256!==run.sourceHash)throw Error('SOURCE_CHANGED');
         await verifySource(plan);
@@ -116,7 +117,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=()=>ne
           if(ongoing){const binding=s.bindings.find(b=>b.key===ongoing.bindingKey);if(!binding?.context.threadId)throw Error('现有执行缺少真实会话身份');await update(id,{current:{adopted:true,stepId:ongoing.id,stepKey:ongoing.key,code:ongoing.code,threadId:binding.context.threadId}});continue;}
           const step=pending.find(x=>x.status==='pending'&&!waitingFor(s,x).length&&!x.blockers.some(b=>!b.resolved));
           if(!step)throw Error('阶段存在阻塞、取消、未结束执行或未满足前置，需先处理后继续');
-          current=await prepare(run,step,client);if(!current){await update(id,{status:'paused',reason:'已暂停接续'});return;}run=find(id);
+          current=await prepare(run,step,client);if(!current){await pauseIfRequested(id,'已暂停接续');return;}run=find(id);
         }
         const turn=await client.run(current.threadId,prompt(run,current),async turnId=>{current={...current,turnId};await update(id,{current});});
         if(closed)return;
@@ -127,27 +128,27 @@ export function createContinuousRunner(persistence,service,{clientFactory=()=>ne
         if(turn.status!=='completed'||client.interactionRequired)throw Error(client.interactionRequired?'需要人工确认，请处理该阶段会话后继续':'阶段会话失败或被中断');
         if(!stepPassed(latest,step))throw Error('阶段会话已结束，但工作台验收未通过；请在该会话修复后继续');
         await update(id,{current:null});
-        if(find(id).status==='pausing'){await update(id,{status:'paused',reason:'当前阶段已完成，后续阶段已暂停'});return;}
+        if(find(id).status==='pausing'){await pauseIfRequested(id,'当前阶段已完成，后续阶段已暂停');return;}
       }
     }catch(error){if(!closed)await update(id,{status:'blocked',reason:String(error.message).slice(0,600)});}
-    finally{client.close();clients.delete(id);pumps.delete(id);for(const [cwd,owner]of workspaceClaims)if(owner===id)workspaceClaims.delete(cwd);}
+    finally{client.close();clients.delete(id);pumps.delete(id);for(const [cwd,owner]of workspaceClaims)if(owner===id)workspaceClaims.delete(cwd);if(!closed&&find(id)?.status==='running')setTimeout(()=>void pump(id),0);}
   }
   return {
     async initialize(){await persistence.run(()=>{const s=state();for(const r of s.runs)if(activeStates.has(r.status)){r.status='paused';r.reason='服务已重启，请点击继续，复用原阶段会话核验恢复';}persistence.write('lightContinuous',s);});},
     read(){return state().runs.map(summary);},
     async change(input){
-      if(!input||Object.keys(input).some(k=>!['planKey','action','expectedRevision','acknowledged'].includes(k))||input.acknowledged!==true||!['start','pause','resume'].includes(input.action)||typeof input.planKey!=='string')lightError('INVALID_INPUT','连续执行请求无效');
+      if(!input||Object.keys(input).some(k=>!['planKey','action','expectedRevision','acknowledged'].includes(k))||input.acknowledged!==true||!['start','pause','resume'].includes(input.action)||typeof input.planKey!=='string'||!Number.isSafeInteger(input.expectedRevision)||input.expectedRevision<0)lightError('INVALID_INPUT','连续执行请求无效');
       let run;
       await persistence.run(async()=>{
         const snap=snapshot(),plan=snap?.plans.find(p=>p.key===input.planKey),project=snap?.projects.find(p=>p.key===plan?.projectKey);
         if(!plan||!project)lightError('NOT_FOUND','方案不存在');
-        if(project.revision!==input.expectedRevision)lightError('REVISION_CONFLICT','任务已更新，请刷新重试',409);
+        if(input.action!=='pause'&&project.revision!==input.expectedRevision)lightError('REVISION_CONFLICT','任务已更新，请刷新重试',409);
         const s=state();run=s.runs.find(r=>r.planKey===plan.key);
         if(input.action==='pause'){if(run&&activeStates.has(run.status)){run.status=pumps.has(run.id)?'pausing':'paused';run.reason='当前阶段完成后暂停，不再新建后续会话';}}
         else{
           await principal();await verifySource(plan);
           if(!run){run={id:randomUUID(),planKey:plan.key,sourceHash:plan.source.sha256,status:'running',current:null,history:[],createdAt:stamp(),updatedAt:stamp(),reason:''};s.runs.push(run);}
-          else if(!activeStates.has(run.status)&&run.status!=='completed'){run.status='running';run.reason='';}
+          else if(run.status==='pausing'||!activeStates.has(run.status)&&run.status!=='completed'){run.status='running';run.reason='';}
         }
         persistence.write('lightContinuous',s);
       });

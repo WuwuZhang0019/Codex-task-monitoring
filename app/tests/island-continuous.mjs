@@ -36,12 +36,14 @@ try{
  await mkdir('test-results/continuous-button',{recursive:true});await page.screenshot({path:'test-results/continuous-button/off.png'});
  await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('aria-checked')==='true');
  await page.waitForTimeout(500);assert.equal(await button.evaluate(b=>getComputedStyle(b).backgroundColor),'rgb(138, 92, 212)');await page.screenshot({path:'test-results/continuous-button/on.png'});
- await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('data-status')==='pausing');
- assert.equal(await button.getAttribute('aria-checked'),'false');assert.equal(await button.isDisabled(),true);assert.match(await button.getAttribute('title'),/当前阶段完成后暂停/);
+ const press=await button.boundingBox();await page.mouse.move(press.x+45,press.y+14);await page.mouse.down();await page.mouse.move(press.x+55,press.y+14,{steps:4});await page.mouse.up();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('data-status')==='pausing');
+ assert.equal(await button.getAttribute('aria-checked'),'false');assert.equal(await button.isDisabled(),false);assert.match(await button.getAttribute('title'),/当前阶段完成后暂停/);
  await page.waitForTimeout(500);assert.equal(await button.evaluate(b=>getComputedStyle(b).backgroundColor),'rgb(49, 48, 51)');await page.screenshot({path:'test-results/continuous-button/pausing.png'});
+ await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('aria-checked')==='true');
+ await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('data-status')==='pausing');
  runs[0].status='paused';await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('data-status')==='paused'&&!document.querySelector('.wb-continuous')?.disabled);
  await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('aria-checked')==='true');
  runs[0].status='completed';await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.disabled);
- assert.deepEqual(actions,['start','pause','resume']);
+ assert.deepEqual(actions,['start','pause','resume','pause','resume']);
  await writeFile('test-results/continuous-button/browser-report.json',JSON.stringify({date:'2026-11-13',native:false,actions,checks:['102 by 28 button before archive','fixed Chinese label','start invokes exact native control','draining stage immediately displays gray off switch and pause hint','pause and resume reflect service state','completed run disables repeated dispatch']},null,2));console.log('6 continuous button browser checks passed');
 }finally{await browser?.close();server.kill();}

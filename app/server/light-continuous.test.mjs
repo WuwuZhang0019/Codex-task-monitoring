@@ -38,6 +38,26 @@ test('three declared stages create three separate sequential chats and only comp
 test('pause finishes current stage then stops dispatch; resume skips the completed stage',async t=>{
  const f=await fixture(t,{hold:true});await f.change('start');for(let i=0;i<100&&!f.requests.length;i++)await delay(10);await f.change('pause');f.release();await f.until('paused');assert.equal(f.created.length,1);assert.equal(f.snapshot().steps[0].status,'completed');await f.change('resume');await f.until('completed');assert.equal(f.created.length,3);
 });
+test('pause accepts a stale business revision but still requires a nonnegative safe integer',async t=>{
+ const f=await fixture(t,{hold:true});await f.change('start');for(let i=0;i<100&&!f.requests.length;i++)await delay(10);await delay(20);t.after(()=>f.release());
+ for(const revision of [undefined,-1,0.5,'0',Number.MAX_SAFE_INTEGER+1])await assert.rejects(f.runner.change({planKey:'test-plan',action:'pause',expectedRevision:revision,acknowledged:true}),/连续执行请求无效/);
+ const revision=f.snapshot().projects[0].revision;assert.ok(revision>0);await f.runner.change({planKey:'test-plan',action:'pause',expectedRevision:0,acknowledged:true});assert.equal(f.runner.read()[0].status,'pausing');
+ await assert.rejects(f.runner.change({planKey:'test-plan',action:'resume',expectedRevision:0,acknowledged:true}),/任务已更新/);assert.equal(f.runner.read()[0].status,'pausing');
+ f.release();await f.until('paused');assert.equal(f.created.length,1);assert.equal(f.snapshot().steps[1].status,'pending');
+});
+test('a draining stage can be re-enabled then disabled again without creating another chat',async t=>{
+ const f=await fixture(t,{hold:true});await f.change('start');for(let i=0;i<100&&!f.requests.length;i++)await delay(10);await delay(20);t.after(()=>f.release());
+ await f.change('pause');assert.equal(f.runner.read()[0].status,'pausing');await f.change('resume');await delay(30);assert.equal(f.runner.read()[0].status,'running');assert.equal(f.created.length,1);assert.equal(f.requests.length,1);
+ await f.change('pause');f.release();await f.until('paused');assert.equal(f.created.length,1);assert.equal(f.snapshot().steps[0].status,'completed');assert.equal(f.snapshot().steps[1].status,'pending');
+ await f.change('resume');await f.until('completed');assert.equal(f.created.length,3);assert.equal(f.requests.length,3);
+});
+test('resume accepted while the old pump exits is dispatched after that pump releases its slot',async t=>{
+ const f=await fixture(t,{hold:true});await f.change('start');for(let i=0;i<100&&!f.requests.length;i++)await delay(10);await delay(20);t.after(()=>f.release());await f.change('pause');
+ const run=f.p.run.bind(f.p);let releaseExit,pausedCommit;let intercept=true;
+ const paused=new Promise(resolve=>{pausedCommit=resolve;});const exitGate=new Promise(resolve=>{releaseExit=resolve;});t.after(()=>releaseExit());
+ f.p.run=async callback=>{const before=f.runner.read()[0]?.status;const result=await run(callback);if(intercept&&before==='pausing'&&f.runner.read()[0]?.status==='paused'){intercept=false;pausedCommit();await exitGate;}return result;};
+ f.release();await paused;await f.change('resume');await delay(30);assert.equal(f.runner.read()[0].status,'running');assert.equal(f.created.length,1,'旧泵仍持有时不重复启动');releaseExit();await f.until('completed');assert.equal(f.created.length,3);assert.equal(f.requests.length,3);
+});
 test('a completed chat without passed acceptance blocks rather than launching its successor',async t=>{
  const f=await fixture(t,{finish:false});await f.change('start');await f.until('blocked');assert.equal(f.created.length,1);assert.equal(f.snapshot().steps[1].status,'pending');assert.match(f.runner.read()[0].reason,/验收未通过/);
 });
