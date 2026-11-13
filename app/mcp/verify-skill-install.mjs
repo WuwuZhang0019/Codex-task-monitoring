@@ -35,7 +35,12 @@ async function behavior(directory) {
     try { module.createRequest(state, { lineId: 'line', stepIds: ['step'] }, { hostProjectId: 'host-project', hostId: 'local', worktreePath: 'G:\\fixture\\worktree' },
       [{ projectId: 'host-project', hostId: 'local', path: 'G:\\fixture\\source' }]); }
     catch (error) { worktreeGate = error.message === 'HOST_EXISTING_WORKTREE_UNSUPPORTED'; }
-    return { available: true, generationGate, worktreeGate, recoveryReadable: module.recoveryReport(state).unfinished.length === 0,
+    // 日期：2026-11-13。验证安装入口实际包含项目复用与允许的 UI 分流，非原生添加验收。
+    const target = { lineId: 'line', hostId: 'local', worktreePath: 'G:\\fixture\\worktree', branch: 'main', stepIds: ['step'] };
+    const prepare = await module.planHostProjects(state, { targets: [target], projects: [],
+      capabilities: { computerUse: { status: 'available', evidence: 'isolated installation adapter' } } },
+    async directory => ({ worktreePath: directory, repositoryRoot: directory, gitCommonDir: directory + '/.git', head: 'a'.repeat(40), branch: 'main' }));
+    return { available: true, generationGate, worktreeGate, hostProjectPreparation: prepare.projects[0].action?.route === 'computerUse', recoveryReadable: module.recoveryReport(state).unfinished.length === 0,
       nativeDispatch: 'notRun' };
   } catch (error) {
     if (error.code === 'ERR_MODULE_NOT_FOUND') return { available: false, reason: 'COORDINATION_MODULE_NOT_INSTALLED', nativeDispatch: 'notRun' };

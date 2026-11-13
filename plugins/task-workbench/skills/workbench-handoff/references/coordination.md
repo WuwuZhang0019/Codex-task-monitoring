@@ -2,6 +2,8 @@
 
 日期：2026-11-12
 
+更新日期：2026-11-13
+
 状态：协调工具已实现；宿主与安装版本按实际证据判断，不代表任何业务路线已经接入
 
 ## 模式和授权
@@ -30,7 +32,22 @@
 | `fork_thread` | 有 same-directory 分叉能力；会继承历史，项目归属与实际目录需要隔离联验，不能仅凭 schema 宣称其与移项目组合已支持任意业务线 |
 | `move_thread_to_project` | 改项目归属；额外来源目录访问可能要求用户在侧栏移动，不能当作修改执行 cwd 的工具 |
 
-直接创建时，只有已保存项目来源目录与核验过的目标工作树一致才使用 `local`。不同则返回 `HOST_EXISTING_WORKTREE_UNSUPPORTED`，集中给出原生“在现有项目新建聊天并选择指定已有工作树”的恢复动作，或在用户允许接续时复用已核验原聊天。不得通过提示词 `cd` 后把侧栏归属与工作树原生绑定记为成功，不为绕过限制新建工作树。其他可行宿主组合先隔离验证再扩充适配器。
+直接创建时，只有已保存项目来源目录与核验过的目标工作树一致才使用 `local`。不同则返回 `HOST_EXISTING_WORKTREE_UNSUPPORTED`，先按下节把目标目录准备成真实宿主项目，或在用户允许接续时复用已核验原聊天。不得通过提示词 `cd` 后把侧栏归属与工作树原生绑定记为成功，不为绕过限制新建工作树。其他可行宿主组合先隔离验证再扩充适配器。
+
+## 自动准备宿主项目
+
+日期：2026-11-13
+
+仅在任务确实需要分别归属的宿主项目时使用此流程。工作台登记和普通单目录执行不依赖新侧栏项目。已有明确的人类创建执行聊天授权时，添加既定目录为项目属于必要准备，无须让用户逐目录操作；只核对/生成模式不执行添加。
+
+1. 调用 `list_projects` 取得最新实际列表，核验目标目录存在、Git 工作树根及分支。以 `hostId + path` 匹配，不能按项目名称猜测；多项同路径需核对固定 ID。普通非 Git 目录沿用普通执行流程，此多工作树协调脚本仍检查 Git。
+2. 运行 `coordination-cli.mjs projects <检查点.json> <项目准备输入.json>`。输入为 `{targets:[{lineId,hostId,worktreePath,branch,stepIds,label?,hostProjectId?}],projects:<真实列表数组>,capabilities:{createProject:{status,toolName?,evidence},computerUse:{status,evidence}}}`。状态使用 `available`、`unavailable`、`forbidden`、`failed` 或 `unknown`，根据本轮发现和实际错误填写，不能将下面的流程说明当作可用证据。
+3. 已有匹配返回 `ready` 和真实 `hostProjectId`，直接 `map`。缺项时优先实际原生创建工具，读取其 schema 构造请求；没有创建接口，先读当前电脑技能完整规则，再发现实际应用与窗口。只有规则允许、窗口可操作时才将 `computerUse.status` 记为 `available`。禁止操作的应用、认证/权限窗口及远程桌面不能用其他工具绕过。添加的是目录，无须上传文件或复制源码。
+4. 对每个可自动添加的目标运行 `stage-project`，输入 `{target:<单项目目标>,projects,capabilities}`。命令先持久化 `createProject` 意图和稳定 operationId，再返回 `action:{route,toolName?,hostId,path,label,evidence}`。它是语义动作，**不是**原生工具参数；不发送到 `create_thread`，不杜撰 `create_project`。原生路径按实际 schema 调用；界面路径按电脑技能逐次观察、进入添加项目入口、选择精确目录并确认。不要把 `label` 作为目录或项目身份，也不要为美化名称额外新建项目。
+5. 添加后再调用 `list_projects`，运行 `verify-project`，输入 `{operationId,projects:<最新真实列表>,evidence:<调用出处>,hostProjectId?:<已核实的固定ID>}`。脚本要求宿主与目录精确匹配后才保存固定 ID。点击成功、工具返回“完成”、`clientThreadId` 或工作台 ID 都不能替代此回读。成功后用真实 ID 执行 `map`，接续原批次的上下文核对、绑定和开始门禁。
+6. 已 staged 的操作再次运行不重复返回添加动作，恢复先 `verify-project`；列表暂时没有项目不代表尚未提交。能证明原生/界面动作从未调用或明确拒绝未提交时才按原 `reconcile` 流程重试。接口和界面路径之间切换也沿用同一操作键。再次 `stage-project` 时若列表已含目标，提供 `evidence` 以回读收尾。服务检查点可用时，添加前先同步 pending 检查点，冲突方停止操作。
+
+只有确认全部自动化路径不可用、被规则禁止、要求用户原生授权或实际失败后，才给出一次集中人工动作，并说明具体接口缺项、规则出处或真实错误。其他已就绪线继续。不得把“尚未尝试”写成“不可自动化”，也不能为了省去人工动作虚报添加成功。当前受限环境中的界面添加是否通过按实际验收单独记录，不能由规划器测试推断。
 
 ## 确定本批与并发范围
 
@@ -86,6 +103,6 @@ node '<Skill目录>/scripts/coordination-cli.mjs' stage '<检查点.json>' '<派
 
 已成功操作直接复用，成功记录和历史不可删除。请求发出前日志已为 pending；崩溃、掉响应或部分成功恢复时先对账。当前宿主没有按 operationId 查询/去重接口，不能保证服务端恰好一次。用列表、目标历史、请求中的操作标记和固定 ID 查原操作；唯一核实成功后以原真实结果 record，无法确认就保留未知。未找到不等于未提交，不能仅凭列表暂时没有该聊天重建或重发。确认未提交或已拒绝后的安全重试仍复用原操作键和意图，重大修改使用新任务键并保留原记录。
 
-创建成功后绑定/派发失败，保留原 threadId 和恢复动作，从 verify/bind/dispatch 断点续用；未知的 reserve/start/update 先用原事件查询。原生工具不支持时集中列出具体缺项和最少人工动作。测试用隔离项目，业务路线在本次用户授权禁止时始终不触碰。
+创建成功后绑定/派发失败，保留原 threadId 和恢复动作，从 verify/bind/dispatch 断点续用；未知的 reserve/start/update 先用原事件查询。缺少项目创建接口时先执行自动准备宿主项目流程，所有自动化路径受限后才集中列出具体缺项和最少人工动作。测试用隔离项目，业务路线在本次用户授权禁止时始终不触碰。
 
 能够证明原生调用从未发出或宿主明确拒绝且未提交时，`reconcile` 输入 `{operationId,proof:'nativeRequestNotInvoked'|'explicitRejection',evidence}` 记录依据后允许同键重试；有固定目标的部分成功禁止使用此分支。仅列表未查到或超时不能作为此依据。

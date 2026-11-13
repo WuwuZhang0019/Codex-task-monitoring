@@ -92,6 +92,91 @@ export async function mapLine(state, mapping, projects, inspect = inspectWorktre
   return clone(value);
 }
 const mappingFor = (state, lineId) => state.mappings.find(item => item.mapping.lineId === lineId)?.mapping;
+
+// 日期：2026-11-13。创建聊天前准备宿主项目；缺少 API 时检查被允许的界面路径。
+// 返回语义操作而非杜撰工具参数；Agent 仍须读取实际工具 schema 或电脑技能。
+export async function planHostProjects(state, { targets, projects, capabilities = {} }, inspect = inspectWorktree) {
+  check(Array.isArray(targets) && Array.isArray(projects), 'HOST_PROJECT_INPUT_REQUIRED');
+  const results = [];
+  for (const target of targets) {
+    check(nonempty(target.lineId) && nonempty(target.hostId) && nonempty(target.worktreePath)
+      && (path.win32.isAbsolute(target.worktreePath) || path.posix.isAbsolute(target.worktreePath))
+      && Array.isArray(target.stepIds) && target.stepIds.length, 'HOST_PROJECT_TARGET_REQUIRED');
+    const item = { ...clone(target), status: 'blocked', hostProjectId: null, action: null };
+    results.push(item);
+    if (target.hostId !== 'local' && inspect === inspectWorktree) { item.reason = 'REMOTE_INSPECTION_ADAPTER_REQUIRED'; continue; }
+    let actual;
+    try { actual = await inspect(target.worktreePath, target.branch); }
+    catch (error) { item.reason = 'WORKSPACE_INSPECTION_FAILED'; item.detail = error.message; continue; }
+    check(actual.repositoryRoot && actual.gitCommonDir && actual.head, 'REPOSITORY_EVIDENCE_REQUIRED');
+    item.worktreePath = actual.worktreePath;
+    const matches = projects.filter(project => project.hostId === target.hostId && nonempty(project.projectId)
+      && nonempty(project.path) && samePath(project.path, actual.worktreePath)
+      && (!target.hostProjectId || project.projectId === target.hostProjectId));
+    if (matches.length > 1) { item.reason = 'HOST_PROJECT_AMBIGUOUS'; item.candidateIds = matches.map(project => project.projectId); continue; }
+    if (matches.length === 1) { item.status = 'ready'; item.hostProjectId = matches[0].projectId; continue; }
+    if (target.hostProjectId) { item.reason = 'HOST_PROJECT_ID_OR_PATH_MISMATCH'; continue; }
+    if (!authorized(state, 'createChat', target)) { item.reason = 'CREATE_CHAT_AUTHORIZATION_REQUIRED'; continue; }
+    const native = capabilities.createProject, ui = capabilities.computerUse;
+    if (native?.status === 'available' && nonempty(native.toolName) && nonempty(native.evidence)) {
+      item.action = { route: 'native', toolName: native.toolName, evidence: native.evidence };
+    } else if (target.hostId === 'local' && ui?.status === 'available' && nonempty(ui.evidence)) {
+      item.action = { route: 'computerUse', evidence: ui.evidence };
+    } else {
+      item.reason = 'HOST_PROJECT_AUTOMATION_UNAVAILABLE';
+      item.capabilities = clone(capabilities);
+      continue;
+    }
+    item.status = 'needsCreation';
+    Object.assign(item.action, { hostId: target.hostId, path: actual.worktreePath, label: target.label ?? target.lineId });
+  }
+  return { date: state.date, ready: results.every(item => item.status === 'ready'), projects: results };
+}
+
+export async function stageHostProject(state, input, checkpoint, inspect = inspectWorktree) {
+  check(typeof checkpoint === 'function', 'DURABLE_CHECKPOINT_REQUIRED');
+  const plan = await planHostProjects(state, { ...input, targets: [input.target] }, inspect);
+  const item = plan.projects[0];
+  const operationId = `${state.id}/project/${fingerprint([item.hostId, pathKey(item.worktreePath)])}`;
+  const existing = state.operations.find(entry => entry.operationId === operationId);
+  if (item.status === 'ready' && existing) {
+    const operation = await verifyHostProject(state, { operationId, projects: input.projects,
+      hostProjectId: item.hostProjectId, evidence: input.evidence }, checkpoint);
+    return { ...item, operation, next: 'map', action: null };
+  }
+  // 成功/未知操作的原意图不随可用 UI/API 路径变化；恢复先回读，不能换路径重复添加。
+  if (existing && (existing.status === 'succeeded' || existing.resultUnknown || existing.status === 'pending')) {
+    return { ...item, operation: clone(existing), action: null, next: 'verify-project' };
+  }
+  if (item.status !== 'needsCreation') return { ...item, next: item.status === 'ready' ? 'map' : 'resolveCapability', action: null };
+  const operation = { operationId, kind: 'createProject', request: { hostId: item.hostId, path: item.worktreePath },
+    explicitUserAuthorization: true };
+  let staged = false;
+  const entry = await runHostOperation(state, operation, { createProject: async () => {
+    staged = true;
+    throw Object.assign(Error('PROJECT_AUTOMATION_PENDING'), { resultUnknown: true });
+  } }, checkpoint);
+  return { ...item, operation: entry, action: staged ? item.action : null, next: 'verify-project' };
+}
+
+export async function verifyHostProject(state, { operationId, projects, evidence, hostProjectId }, checkpoint) {
+  check(typeof checkpoint === 'function', 'DURABLE_CHECKPOINT_REQUIRED');
+  const entry = state.operations.find(item => item.operationId === operationId);
+  check(entry?.intent.kind === 'createProject' && nonempty(evidence) && Array.isArray(projects), 'HOST_PROJECT_VERIFICATION_REQUIRED');
+  const request = entry.intent.request;
+  const matches = projects.filter(project => project.hostId === request.hostId && nonempty(project.projectId)
+    && nonempty(project.path) && samePath(project.path, request.path)
+    && (!hostProjectId || project.projectId === hostProjectId)
+    && (!entry.targetId || project.projectId === entry.targetId));
+  check(matches.length === 1, matches.length ? 'HOST_PROJECT_AMBIGUOUS' : 'HOST_PROJECT_NOT_CONFIRMED');
+  if (entry.status === 'succeeded') return clone(entry);
+  entry.status = 'succeeded'; entry.resultUnknown = false; entry.targetId = matches[0].projectId;
+  entry.result = { targetId: entry.targetId, hostId: request.hostId, path: matches[0].path, evidence };
+  if (entry.attempts.at(-1)) entry.attempts.at(-1).status = 'succeeded';
+  delete entry.reason;
+  await checkpoint(state);
+  return clone(entry);
+}
 function passed(snapshot, step, seen = new Set()) {
   if (!step || seen.has(step.key)) return false;
   seen.add(step.key);
@@ -370,7 +455,7 @@ export async function withCheckpoint(file, action) {
 }
 export async function coordinationCli(argv = process.argv.slice(2)) {
   const [command, file, inputFile] = argv;
-  check(file, 'USAGE: node coordination-cli.mjs <init|recover|map|plan|stage|record|reconcile|verify|observe> <checkpoint.json> [input.json]');
+  check(file, 'USAGE: node coordination-cli.mjs <init|recover|projects|stage-project|verify-project|map|plan|stage|record|reconcile|adopt|verify|observe> <checkpoint.json> [input.json]');
   const input = inputFile ? JSON.parse(await readFile(inputFile, 'utf8')) : null;
   let result;
   if (command === 'init') {
@@ -380,6 +465,9 @@ export async function coordinationCli(argv = process.argv.slice(2)) {
     finally { await handle.close(); }
   } else if (command === 'recover') result = recoveryReport(validateCoordination(JSON.parse(await readFile(file, 'utf8'))));
   else result = await withCheckpoint(file, async (state, checkpoint) => {
+    if (command === 'projects') return planHostProjects(state, input);
+    if (command === 'stage-project') return stageHostProject(state, input, checkpoint);
+    if (command === 'verify-project') return verifyHostProject(state, input, checkpoint);
     if (command === 'map') return mapLine(state, input.mapping, input.projects);
     if (command === 'plan') return planBatch(state, input.batch, input.snapshot);
     if (command === 'stage') return stageDispatch(state, input.batchId, input.taskId, { ...input, checkpoint });
