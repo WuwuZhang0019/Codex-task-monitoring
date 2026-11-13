@@ -6,6 +6,8 @@
 
 ## 开始本次执行
 
+更新日期：2026-11-13。绑定前保存最新 get_project 返回的 snapshot，使用同包 `scripts/binding-request.mjs` 生成完整绑定请求：在真实执行目录运行 `node <Skill目录>/scripts/binding-request.mjs <snapshot.json> <稳定eventId> <bind.json> [planId]`。脚本从当前 CODEX_THREAD_ID 获取真实会话，核验当前目录并使用服务返回的项目、方案、步骤及版本。不要用空对象调用绑定，也不要用空 eventId 查询。调用前用插件 `runtime/validate.mjs workbench_bind_context <bind.json>` 校验，确认有效后保存精确请求再提交；任何执行写入请求均须同样核对完整身份和原事件键。结果未知时查询刚保存的真实 eventId，服务恢复后复用原请求与身份，不能重复登记已成功的方案。
+
 更新日期：2026-11-13
 
 先核验用户当前项目的实际目录，不要求它是插件开发仓库。普通目录可正常登记方案、绑定会话、开始执行和同步状态：用 `inspectWorkspace` 得到真实路径，`branch: null`、`head: null` 表示已核验的非 Git 目录。Git 检查不适用时记录“不适用”，不能据此拦截普通任务，也不要初始化仓库或编造 `main` 分支。有 Git 时继续核验根目录、分支和 HEAD；Git 分支、工作树及合并任务必须满足真实 Git 条件。以下“目录与分支”在普通目录模式下指真实目录及无 Git 的现场状态。

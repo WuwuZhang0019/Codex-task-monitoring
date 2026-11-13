@@ -2,9 +2,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {validateLightToolArguments,createLightHandler} from './light.mjs';
+import {validateLightToolArguments,createLightHandler,lightTools} from './light.mjs';
+import {bindingProposal} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/binding-request.mjs';
 import {registrationSnapshot} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/normalize-plan.mjs';
 const failed=JSON.parse(await readFile(new URL('../tests/fixtures/invalid-registration-20261113.json',import.meta.url),'utf8'));
+test('binding and updates expose concrete fields while retaining strict conditional checks',()=>{
+ const tool=lightTools.find(t=>t.name==='workbench_bind_context');
+ assert.equal(tool.inputSchema.allOf,undefined);assert.ok(tool.inputSchema.properties.context.properties.threadId);
+ assert.ok(lightTools.find(t=>t.name==='workbench_update_step_status').inputSchema.properties.stepId);
+ const context={sessionGroup:'A',threadId:'real-thread',hostId:'local',folderId:null,worktreeOrdinal:1,worktreePath:'G:\\rust\\test',branch:null,head:null,trust:'declared'};
+ const snapshot={...failed.snapshot,mode:'service',projects:failed.snapshot.projects.map(p=>({...p,id:'project-id',revision:1})),plans:failed.snapshot.plans.map(p=>({...p,id:'plan-id',source:{...p.source,sha256:p.source.sha256.toLowerCase()}})),steps:failed.snapshot.steps.map(s=>({...s,id:s.key+'-id'}))};
+ const proposal=bindingProposal(snapshot,context,{eventId:'bind-event'});
+ assert.deepEqual(validateLightToolArguments('workbench_bind_context',proposal),[]);
+ assert.ok(validateLightToolArguments('workbench_bind_context',{...proposal,confirmationGrant:'incorrect'}).length);
+ assert.ok(validateLightToolArguments('workbench_bind_context',{}).some(e=>e.path==='/eventId'));
+ assert.throws(()=>bindingProposal(snapshot,context,{eventId:''}));
+});
 test('real failed registration reports all invalid field paths without echoing supplied values or executing a write',async()=>{
  const issues=validateLightToolArguments('workbench_register_plan',failed);
  const paths=issues.map(i=>i.path);

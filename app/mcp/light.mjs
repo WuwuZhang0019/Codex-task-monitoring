@@ -36,6 +36,7 @@ const definitions = {
     expectedCheckpointRevision: { type: 'integer', minimum: 0 }, state: { type: 'object', additionalProperties: true } }) },
 };
 
+const validationSchemas = new Map();
 export const lightTools = Object.entries(definitions).map(([name, definition]) => {
   // 根内嵌完整 defs，宿主无需解析外部 URL。
   const inputSchema = { ...structuredClone(definition.schema), $defs: structuredClone(contract.$defs) };
@@ -54,13 +55,19 @@ export const lightTools = Object.entries(definitions).map(([name, definition]) =
   }
   collect(inputSchema);
   inputSchema.$defs = Object.fromEntries([...needed].map(key => [key, inputSchema.$defs[key]]));
+  // Date: 2026-11-13. Keep conditional validation server-side; expose concrete fields to tool hosts.
+  validationSchemas.set(name, structuredClone(inputSchema));
+  delete inputSchema.allOf;
+  if (name === 'workbench_bind_context') inputSchema.properties.context = {
+    ...structuredClone(contract.$defs.context), properties: { ...structuredClone(contract.$defs.context.properties), trust: { const: 'declared' } },
+  };
   const bindingHelp = name === 'workbench_bind_context' ? ' Automatic desktop mode verifies the project directory (and Git when present) and returns state=confirmed from propose; reuse that binding directly. For a non-Git directory use branch=null and head=null; no git init is needed. For takeover, confirm with confirmationGrant=null. Legacy scoped grants still require confirmation.' : '';
   const registrationHelp = ['workbench_register_plan', 'workbench_revise_plan'].includes(name) ? ' Automatic desktop connection accepts confirmationGrant=null without a private desktop confirmation call. For first registration supply a local snapshot with all service IDs null; the response creates projectId and planIds. No existing project ID or Codex sidebar project is needed. Legacy scoped connections require a valid confirmation grant.' : '';
   return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.${bindingHelp}${registrationHelp}`, inputSchema,
     annotations: { readOnlyHint: !!definition.read, destructiveHint: !definition.read, idempotentHint: true, openWorldHint: false } };
 });
 const ajv = new Ajv2020({ allErrors: true, strict: true, strictRequired: false, strictTypes: false });
-const validators = new Map(lightTools.map(tool => [tool.name, ajv.compile(tool.inputSchema)]));
+const validators = new Map([...validationSchemas].map(([name, schema]) => [name, ajv.compile(schema)]));
 // 日期：2026-11-13。仅报告字段路径及约束，不回显请求值或凭据。
 export function validateLightToolArguments(name, args) {
   const validate = validators.get(name);
