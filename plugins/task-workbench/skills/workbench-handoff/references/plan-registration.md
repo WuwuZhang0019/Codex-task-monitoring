@@ -8,6 +8,12 @@
 
 更新日期：2026-11-13
 
+必须调用 `registrationSnapshot` 生成结构化候选，不能手工省略路线字段或把中文结果填入状态字段。初始步骤 `acceptance` 必须为 `pending`，“返回成功”等验收要求放入 `conditions[].text`；`endConditions` 是条件对象数组；`routes[].context` 必须是完整上下文对象；SHA256 使用小写十六进制。
+
+提交前先将完整请求保存为 UTF-8 JSON，用实际插件根目录内的 `runtime/validate.mjs` 离线校验：`node <插件根目录>/runtime/validate.mjs workbench_register_plan <请求.json>`。独立 Skill 使用当前安装插件根目录的该校验器，不依赖开发仓库。只有 `valid: true` 才提交。此命令不连接服务或写入工作台。校验器报告 `validationErrors[].path`、约束与消息时，修复对应字段并重新校验；收到明确拒绝的 INVALID_INPUT 后可修正重试，不因一次参数错误就结束已授权的接入任务。若使用旧插件尚无校验器，读取实际工具 schema 校验并记录能力缺项。
+
+更新日期：2026-11-13
+
 用户明确要求接入并执行时，首次登记属于已有授权范围。工作台项目由登记方案生成，不要求用户先在任务岛建立项目，也不要求先有 Codex 侧栏项目 ID。
 
 1. 读取用户方案和当前目录，按同包 `inspectWorkspace` 获取实际上下文；普通目录的 `branch`、`head` 为 `null`。读取已有本地映射；尚无映射时，用真实目录生成稳定本地 `projectKey`，用方案路径生成稳定 `planKey`，保存到当前目录的工作台同步记录。它们是本地键，不是伪造的服务 ID。

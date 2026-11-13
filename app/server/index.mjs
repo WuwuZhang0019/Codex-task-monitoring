@@ -193,7 +193,7 @@ async function createOwnedServer(options) {
           if (!body || Object.keys(body).some(key => !['name', 'arguments'].includes(key))) throw new HttpError(400, 'INVALID_INPUT');
           try { respond(200, await handler.callTool({ params: body })); }
           catch (error) {
-            if (error.code === -32602) throw new HttpError(400, 'INVALID_INPUT');
+            if (error.code === -32602) return respond(400, { error: 'INVALID_INPUT', validationErrors: error.data?.validationErrors ?? [] });
             throw error;
           }
         } else throw new HttpError(405, '不支持的请求方法');

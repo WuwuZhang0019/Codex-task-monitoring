@@ -4,7 +4,7 @@ import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { ListToolsRequestSchema, CallToolRequestSchema, McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
-import { lightTools } from './light.mjs';
+import { lightTools, validateLightToolArguments } from './light.mjs';
 import { discoverOwner } from '../desktop/client.mjs';
 
 export async function loadLightConfig(file) {
@@ -26,16 +26,17 @@ export async function loadLightConfig(file) {
   return { endpoint: endpoint.origin, token: config.token };
 }
 
-function failure(code, unknown = false, recovery) {
+function failure(code, unknown = false, recovery, validationErrors) {
   const value = { schemaVersion: 'light-1.0', requestId: randomUUID(), status: unknown ? 'unknown' : 'rejected',
     error: { code, message: code, retryable: false,
-      recovery: recovery ?? (unknown ? 'queryOriginalEventBeforeRetry' : 'checkOwnerAndGrant') } };
+      recovery: recovery ?? (unknown ? 'queryOriginalEventBeforeRetry' : 'checkOwnerAndGrant'),
+      ...(validationErrors?.length ? { validationErrors } : {}) } };
   return { isError: true, content: [{ type: 'text', text: JSON.stringify(value) }], structuredContent: value };
 }
 
 export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs = 30000, reloadConfig,
   presenceIntervalMs = 10000, allowOfflineDiscovery = false, appId } = {}) {
-  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.14' }, { capabilities: { tools: {} } });
+  const server = new Server({ name: 'task-workbench-light-bridge', version: '0.1.15' }, { capabilities: { tools: {} } });
   const session = randomUUID();
   let heartbeatTimer, heartbeatBusy = false;
   // Date: 2026-11-12. Only initialized MCP clients renew presence; a running owner is insufficient.
@@ -89,6 +90,8 @@ export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs
     const { name, arguments: args } = request.params;
     const tool = toolsByName.get(name);
     if (!tool) throw new McpError(ErrorCode.InvalidParams, 'Unsupported workbench tool');
+    const issues = validateLightToolArguments(name, args);
+    if (issues.length) return failure('INVALID_INPUT', false, name === 'workbench_get_project' ? 'provideProjectIdOrRegisterPlan' : 'fixValidationErrorsAndRetry', issues);
     const body = JSON.stringify({ name, arguments: args });
     if (Buffer.byteLength(body) > 2 * 1024 * 1024) throw new McpError(ErrorCode.InvalidParams, 'Workbench request exceeds 2MB');
     const readOnly = tool.annotations.readOnlyHint;

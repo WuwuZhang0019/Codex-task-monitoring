@@ -31,6 +31,9 @@ const buildResult = await build({
   banner: { js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" },
 });
 const { licenses, count: packageCount } = await bundledLicenses(buildResult.metafile);
+await build({ entryPoints: [path.join(appDir, 'mcp/validate-input.mjs')], outfile: path.join(runtime, 'validate.mjs'),
+  bundle: true, format: 'esm', platform: 'node', target: 'node22',
+  banner: { js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" } });
 await build({ entryPoints: [path.join(appDir, 'mcp/onboard.mjs')], outfile: path.join(pluginDir, 'runtime/onboard.mjs'),
   bundle: true, format: 'esm', platform: 'node', target: 'node22',
   banner: { js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" } });

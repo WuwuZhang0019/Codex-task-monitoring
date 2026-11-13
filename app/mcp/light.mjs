@@ -59,8 +59,20 @@ export const lightTools = Object.entries(definitions).map(([name, definition]) =
   return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.${bindingHelp}${registrationHelp}`, inputSchema,
     annotations: { readOnlyHint: !!definition.read, destructiveHint: !definition.read, idempotentHint: true, openWorldHint: false } };
 });
-const ajv = new Ajv2020({ strict: true, strictRequired: false, strictTypes: false });
+const ajv = new Ajv2020({ allErrors: true, strict: true, strictRequired: false, strictTypes: false });
 const validators = new Map(lightTools.map(tool => [tool.name, ajv.compile(tool.inputSchema)]));
+// 日期：2026-11-13。仅报告字段路径及约束，不回显请求值或凭据。
+export function validateLightToolArguments(name, args) {
+  const validate = validators.get(name);
+  if (!validate) return [{ path: '/', keyword: 'tool', message: 'Unsupported workbench tool' }];
+  if (Buffer.byteLength(JSON.stringify(args ?? null)) > 2 * 1024 * 1024) return [{ path: '/', keyword: 'maxSize', message: 'Request exceeds 2MB' }];
+  if (!validate(args)) return validate.errors.slice(0, 40).map(error => ({
+    path: error.instancePath + (error.keyword === 'required' ? '/' + error.params.missingProperty : '') || '/',
+    keyword: error.keyword, message: error.message,
+  }));
+  return [ ...(args.snapshot?.plans ?? []).flatMap((plan, i) => plan.source.trust === 'declared' ? [] : [{ path: `/snapshot/plans/${i}/source/trust`, keyword: 'const', message: 'must be declared' }]),
+    ...(args.snapshot?.routes ?? []).flatMap((route, i) => route.context.trust === 'declared' ? [] : [{ path: `/snapshot/routes/${i}/context/trust`, keyword: 'const', message: 'must be declared' }]) ];
+}
 const publicCodes = new Set(['FORBIDDEN', 'NOT_FOUND', 'REVISION_CONFLICT', 'IDEMPOTENCY_CONFLICT', 'INVALID_INPUT',
   'STALE_PLAN', 'STALE_BINDING', 'STALE_EXECUTION', 'INVALID_TRANSITION', 'REOPEN_REQUIRED', 'DEPENDENCY_NOT_READY',
   'BLOCKER_NOT_RESOLVED', 'EVIDENCE_MISMATCH', 'CONFIRMATION_REQUIRED', 'UNSUPPORTED_CAPABILITY', 'RECOVERY_REQUIRED',
@@ -76,10 +88,9 @@ export function createLightHandler({ service, authenticate = () => null, publish
     const { name, arguments: args } = request.params;
     const definition = definitions[name];
     if (!definition || !Object.hasOwn(definitions, name)) throw new McpError(ErrorCode.InvalidParams, 'Unsupported workbench tool');
-    if (Buffer.byteLength(JSON.stringify(args ?? null)) > 2 * 1024 * 1024 || !validators.get(name)(args)
-      || args.snapshot?.plans.some(plan => plan.source.trust !== 'declared')
-      || args.snapshot?.routes.some(route => route.context.trust !== 'declared')) {
-      throw new McpError(ErrorCode.InvalidParams, 'Invalid workbench arguments');
+    const validationErrors = validateLightToolArguments(name, args);
+    if (validationErrors.length) {
+      throw new McpError(ErrorCode.InvalidParams, 'Invalid workbench arguments', { validationErrors });
     }
     let principal;
     try {

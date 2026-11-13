@@ -1,0 +1,152 @@
+{
+  "confirmationGrant": null,
+  "eventId": "test-plan01-register-20261113",
+  "expectedRevision": 0,
+  "occurredAt": "2026-11-13T00:00:00+08:00",
+  "schemaVersion": "light-1.0",
+  "source": {
+    "path": "G:\\rust\\test\\02_返回值测试方案01_三步骤全部成功_2026-11-13.md",
+    "version": "2026-11-13",
+    "sha256": "448F28B032ED0C051357ED831FDB7EDDF0D819F45377686DAF3C7E236C2682A0",
+    "locator": "测试方案 01；A→B→C；原文行 1-30"
+  },
+  "snapshot": {
+    "schemaVersion": "light-1.0",
+    "mode": "local",
+    "revision": null,
+    "date": "2026-11-13",
+    "generatedAt": "2026-11-13T00:00:00+08:00",
+    "projects": [
+      {
+        "key": "test-g-rust-test",
+        "id": null,
+        "name": "返回值测试方案 01",
+        "planKeys": [
+          "test-plan-01"
+        ],
+        "revision": null
+      }
+    ],
+    "plans": [
+      {
+        "key": "test-plan-01",
+        "id": null,
+        "projectKey": "test-g-rust-test",
+        "name": "测试方案 01：三步骤全部成功",
+        "stageCount": 3,
+        "stageKeys": [
+          "A",
+          "B",
+          "C"
+        ],
+        "source": {
+          "path": "G:\\rust\\test\\02_返回值测试方案01_三步骤全部成功_2026-11-13.md",
+          "version": "2026-11-13",
+          "sha256": "448F28B032ED0C051357ED831FDB7EDDF0D819F45377686DAF3C7E236C2682A0",
+          "locator": "A→B→C",
+          "trust": "declared"
+        },
+        "endConditions": [
+          "A、B、C全部成功"
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "key": "A",
+        "id": null,
+        "projectKey": "test-g-rust-test",
+        "planKey": "test-plan-01",
+        "parentKey": null,
+        "code": "A",
+        "originalCode": null,
+        "sourceLocator": "第一步 A",
+        "title": "步骤 A",
+        "order": 1,
+        "required": true,
+        "dependsOn": [],
+        "status": "pending",
+        "acceptance": "成功",
+        "sync": "pendingSync",
+        "conditions": [],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-13T00:00:00+08:00"
+      },
+      {
+        "key": "B",
+        "id": null,
+        "projectKey": "test-g-rust-test",
+        "planKey": "test-plan-01",
+        "parentKey": null,
+        "code": "B",
+        "originalCode": null,
+        "sourceLocator": "第二步 B；开始后等待10秒",
+        "title": "步骤 B（等待10秒）",
+        "order": 2,
+        "required": true,
+        "dependsOn": [
+          "A"
+        ],
+        "status": "pending",
+        "acceptance": "满10秒后成功",
+        "sync": "pendingSync",
+        "conditions": [],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-13T00:00:00+08:00"
+      },
+      {
+        "key": "C",
+        "id": null,
+        "projectKey": "test-g-rust-test",
+        "planKey": "test-plan-01",
+        "parentKey": null,
+        "code": "C",
+        "originalCode": null,
+        "sourceLocator": "第三步 C",
+        "title": "步骤 C",
+        "order": 3,
+        "required": true,
+        "dependsOn": [
+          "B"
+        ],
+        "status": "pending",
+        "acceptance": "成功",
+        "sync": "pendingSync",
+        "conditions": [],
+        "evidence": [],
+        "blockers": [],
+        "executionKey": null,
+        "bindingKey": null,
+        "updatedAt": "2026-11-13T00:00:00+08:00"
+      }
+    ],
+    "routes": [
+      {
+        "key": "test-plan-01/main",
+        "label": "测试方案01 A→B→C",
+        "stepKeys": [
+          "A",
+          "B",
+          "C"
+        ],
+        "context": "同一方案顺序执行"
+      }
+    ],
+    "bindings": [],
+    "executions": [],
+    "supplements": [],
+    "events": [],
+    "uiPreferences": {
+      "collapsedKeys": [],
+      "selectedStepKey": null,
+      "focusedRouteKey": null,
+      "scrollByProject": {}
+    }
+  }
+}
