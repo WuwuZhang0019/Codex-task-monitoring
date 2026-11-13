@@ -17,6 +17,25 @@ const context = { sessionGroup: 'D', threadId: 'owner-thread', hostId: 'local', 
 const sourcePath = new URL('../../docs/03_轻量路线工作台/03_测试样例/01_模拟二十步骤与六分支工作树_测试文档_2026-11-10.md', import.meta.url);
 const original = await readFile(sourcePath, 'utf8');
 
+test('new registration leads the list and selects its first route without changing existing task states or resetting selection on replay', async t => {
+  const f = await fixture(t);
+  const previousSteps = f.persistence.read('light').snapshot.steps;
+  const candidate = prepareLightPlan({ text: original, sourcePath: sourcePath.pathname, version: 'new-focus',
+    projectKey: 'new-focus/project', planKey: 'new-focus/plan', name: 'New focus', date: '2026-11-13', context });
+  const request = { eventId: 'new-focus', expectedRevision: 0, snapshot: candidate };
+  const result = await f.service.register('owner', request);
+  const saved = f.persistence.read('light').snapshot;
+  assert.equal(saved.projects[0].id, result.projectId);
+  assert.equal(saved.plans[0].key, candidate.plans[0].key);
+  assert.equal(saved.routes[0].key, candidate.routes[0].key);
+  assert.equal(saved.uiPreferences.selectedStepKey, candidate.routes[0].stepKeys[0]);
+  assert.equal(f.persistence.read('lightPanelPreferences').selected, candidate.routes[0].stepKeys[0]);
+  assert.deepEqual(saved.steps.filter(step => previousSteps.some(old => old.key === step.key)), previousSteps);
+  await f.persistence.run(() => f.persistence.write('lightPanelPreferences', { collapsed: [], selected: previousSteps[0].key, focus: [], scroll: {}, y: {} }));
+  assert.deepEqual(await f.service.register('owner', request), result);
+  assert.equal(f.persistence.read('lightPanelPreferences').selected, previousSteps[0].key);
+});
+
 async function fixture(t) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'light-security-'));
   t.after(() => rm(root, { recursive: true, force: true }));

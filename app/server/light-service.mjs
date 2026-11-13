@@ -212,9 +212,17 @@ export function createLightService(persistence, requests, {
         const value = load();
         if (input.expectedRevision !== 0 || value.snapshot.projects.some(item => item.key === projectKey)) lightError('REVISION_CONFLICT', '项目已登记，使用修订入口', 409);
         for (const group of entityGroups) {
-          for (const record of candidate[group]) { record.id = randomUUID(); value.snapshot[group].push(record); }
+          for (const record of candidate[group]) record.id = randomUUID();
+          value.snapshot[group] = [...candidate[group], ...value.snapshot[group]];
         }
         const project = candidate.projects[0]; project.revision = 0;
+        // 日期：2026-11-13。新登记方案立即成为默认阅读目标，不改变业务执行状态。
+        const route = candidate.routes[0], firstStep = route?.stepKeys[0] ?? candidate.steps[0]?.key ?? null;
+        value.snapshot.uiPreferences.selectedStepKey = firstStep;
+        value.snapshot.uiPreferences.focusedRouteKey = route?.key ?? null;
+        const reading = persistence.read('lightPanelPreferences') ?? { collapsed: [], selected: '', focus: [], scroll: {}, y: {} };
+        persistence.write('lightPanelPreferences', { ...reading, selected: firstStep ?? '', focus: route ? [route.key] : [],
+          collapsed: reading.collapsed.filter(key => key !== project.key), y: { ...reading.y, 'island/list': 0 } });
         value.metadata[digest(project.key)] = { source: candidate.plans.map(item => item.source), importedAt: now(), legacy: null, replacements: [] };
         return { ...save(value, project, input.eventId, now()), projectId: project.id, planIds: candidate.plans.map(item => item.id) };
       }, () => permitted(principal, projectKey, 'register', { input }));
