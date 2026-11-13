@@ -40,7 +40,13 @@ async function behavior(directory) {
     const prepare = await module.planHostProjects(state, { targets: [target], projects: [],
       capabilities: { computerUse: { status: 'available', evidence: 'isolated installation adapter' } } },
     async directory => ({ worktreePath: directory, repositoryRoot: directory, gitCommonDir: directory + '/.git', head: 'a'.repeat(40), branch: 'main' }));
-    return { available: true, generationGate, worktreeGate, hostProjectPreparation: prepare.projects[0].action?.route === 'computerUse', recoveryReadable: module.recoveryReport(state).unfinished.length === 0,
+    const publicPrepare = await module.planHostProjects(state, { targets: [target], projects: [],
+      capabilities: { publicProjects: { status: 'available', evidence: 'isolated public protocol adapter' } } },
+    async directory => ({ worktreePath: directory, repositoryRoot: directory, gitCommonDir: directory + '/.git', head: 'a'.repeat(40), branch: 'main' }));
+    return { available: true, generationGate, worktreeGate, hostProjectPreparation: prepare.projects[0].action?.route === 'computerUse',
+      publicProjectPreparation: publicPrepare.projects[0].action?.route === 'publicAppServer' && typeof module.prepareHostProject === 'function',
+      workspaceLink: new URL(module.workspaceProjectLink(target.worktreePath)).searchParams.get('path') === target.worktreePath,
+      recoveryReadable: module.recoveryReport(state).unfinished.length === 0,
       nativeDispatch: 'notRun' };
   } catch (error) {
     if (error.code === 'ERR_MODULE_NOT_FOUND') return { available: false, reason: 'COORDINATION_MODULE_NOT_INSTALLED', nativeDispatch: 'notRun' };

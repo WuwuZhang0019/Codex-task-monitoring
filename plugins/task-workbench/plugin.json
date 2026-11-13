@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.18",
-  "description": "2026-11-13 自动准备协调项目并回读核验，接口缺失时检查允许的界面路径",
+  "version": "0.1.19",
+  "description": "2026-11-13 通过公开项目协议和官方深链自动准备桌面项目并核验真实归属",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,

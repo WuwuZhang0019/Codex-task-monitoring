@@ -5,8 +5,9 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import os from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { createCoordination, planHostProjects, stageHostProject, verifyHostProject, validateCoordination,
-  recoveryReport, reconcileNotSubmitted, saveCheckpoint } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
+  recoveryReport, reconcileNotSubmitted, saveCheckpoint, prepareHostProject, workspaceProjectLink, openProjectWorkspace } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
 
 const target = { lineId: 'ab', hostId: 'local', worktreePath: 'G:\\test\\ab', branch: 'codex/ab', stepIds: ['A', 'B'], label: '同名项目' };
 const project = { projectId: 'real-ab', hostId: 'local', path: 'g:/test/AB/', label: '其他名称' };
@@ -124,6 +125,68 @@ test('明确未调用后可安全切换自动化路径重试，未找到不能�
   assert.equal(state.operations.length, 1);
 });
 
+test('公开接口与官方深链自动准备，公开 UUID 不冒充宿主 ID，回读后才能完成', async () => {
+  const state = stateOf(), calls = [], disk = [];
+  const native = { id: 'public-registry-id', name: 'ab', roots: [{ path: target.worktreePath }] };
+  const client = { list: async () => ({ data: [] }), create: async request => {
+    assert.equal(disk.at(-1).operations[0].publicRequest.idempotencyKey, request.idempotencyKey);
+    assert.deepEqual(request.roots, native.roots); calls.push('create'); return { project: native };
+  }, read: async () => ({ project: native }), close() {} };
+  const options = { client, inspect, openWorkspace: async directory => { assert.equal(directory, target.worktreePath); calls.push('open'); } };
+  const save = async value => disk.push(structuredClone(value));
+  const result = await prepareHostProject(state, input(), save, options);
+  assert.deepEqual(calls, ['create', 'open']); assert.equal(result.next, 'verify-project');
+  assert.equal(result.operation.publicProjectId, 'public-registry-id');
+  assert.equal(result.operation.targetId, null); assert.equal(result.operation.status, 'pending');
+  await prepareHostProject(state, input(), save, options); assert.deepEqual(calls, ['create', 'open']);
+  const verified = await verifyHostProject(state, { operationId: result.operation.operationId, projects: [project], evidence: 'actual desktop host list' }, save);
+  assert.equal(verified.targetId, 'real-ab'); assert.notEqual(verified.targetId, native.id);
+});
+
+test('多页复用公开项目不重复创建，身份错配与创建未知不继续打开或重发', async () => {
+  for (const scenario of ['reuse', 'mismatch', 'unknown']) {
+    let reads = 0, creates = 0, opens = 0;
+    const state = stateOf(), native = { id: 'public-id', roots: [{ path: target.worktreePath }] };
+    const options = { inspect, openWorkspace: async () => { opens++; }, client: {
+      list: async () => ({ data: reads++ ? (scenario === 'reuse' ? [native] : []) : [], nextCursor: reads === 1 ? 'page2' : null }),
+      create: async () => { creates++; if (scenario === 'unknown') throw Object.assign(Error('lost'), { code: 'HOST_PROJECT_RESULT_UNKNOWN', resultUnknown: true }); return { project: native }; },
+      read: async () => ({ project: scenario === 'mismatch' ? { ...native, roots: [{ path: 'G:\\wrong' }] } : native }), close() {},
+    } };
+    const result = await prepareHostProject(state, input(), checkpoint, options);
+    assert.equal(opens, scenario === 'reuse' ? 1 : 0); assert.equal(creates, scenario === 'reuse' ? 0 : 1);
+    assert.equal(result.operation.status, 'pending');
+    await prepareHostProject(state, input(), checkpoint, options);
+    assert.equal(opens, scenario === 'reuse' ? 1 : 0); assert.equal(creates, scenario === 'reuse' ? 0 : 1);
+  }
+});
+
+test('公开实验接口缺失仍可使用官方工作区入口，原生宿主项目已存在则无外部操作', async () => {
+  let opens = 0, lists = 0;
+  const options = { inspect, openWorkspace: async () => { opens++; }, client: { list: async () => {
+    lists++; throw Object.assign(Error('Method not found'), { code: 'HOST_PROJECT_REQUEST_REJECTED', rpcCode: -32601 });
+  }, close() {} } };
+  const result = await prepareHostProject(stateOf(), input(), checkpoint, options);
+  assert.equal(opens, 1); assert.equal(result.operation.desktopOpen.state, 'requested');
+  assert.equal(result.operation.targetId, null);
+  assert.equal((await prepareHostProject(stateOf(), input([project]), checkpoint, options)).status, 'ready');
+  assert.equal(lists, 1); assert.equal(opens, 1);
+  const blocked = stateOf(); blocked.authorization.mode = 'inspect';
+  await prepareHostProject(blocked, input(), checkpoint, options); assert.equal(opens, 1);
+});
+
+test('官方深链只包含精确目录，无自动提示词，特殊字符不进入 shell 命令', async () => {
+  const directory = "G:\\测试 空格\\a'&$();#?目录";
+  const uri = workspaceProjectLink(directory), parsed = new URL(uri);
+  assert.equal(parsed.searchParams.get('path'), directory); assert.equal(parsed.searchParams.size, 1);
+  const calls = [];
+  await openProjectWorkspace(directory, async (...args) => { calls.push(args); }, 'win32');
+  assert.equal(calls[0][0], 'powershell.exe');
+  const command = Buffer.from(calls[0][1].at(-1), 'base64').toString('utf16le');
+  assert.equal(command, `Start-Process -FilePath '${uri}' -WindowStyle Hidden`);
+  assert.equal(uri.includes("'"), false); assert.equal(calls[0][2].shell, false);
+  assert.throws(() => workspaceProjectLink('relative/path'), /ABSOLUTE/);
+});
+
 test('CLI 用真实 Git 目录完成准备、落盘、回读和恢复，不依赖开发仓库路径', async t => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'host-project-test-'));
   t.after(async () => { assert.ok(path.resolve(root).startsWith(path.resolve(os.tmpdir()) + path.sep)); await rm(root, { recursive: true, force: true }); });
@@ -132,7 +195,7 @@ test('CLI 用真实 Git 目录完成准备、落盘、回读和恢复，不依�
   const file = path.join(root, 'checkpoint.json'), inputFile = path.join(root, 'input.json');
   await saveCheckpoint(file, stateOf());
   const args = input(); args.target = { ...target, worktreePath: root }; args.targets = [args.target];
-  const cli = path.resolve('plugins/task-workbench/skills/workbench-handoff/scripts/coordination-cli.mjs');
+  const cli = fileURLToPath(new URL('../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination-cli.mjs', import.meta.url));
   const run = async (command, value) => {
     await writeFile(inputFile, JSON.stringify(value));
     return JSON.parse(execFileSync(process.execPath, [cli, command, file, inputFile], { encoding: 'utf8', windowsHide: true }));

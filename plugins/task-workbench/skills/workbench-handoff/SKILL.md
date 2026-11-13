@@ -11,7 +11,7 @@ description: 为轻量路线工作台接入方案、核对进度、生成交接�
 
 更新日期：2026-11-13
 
-多项目协调缺少 Codex 侧栏项目时，先按 [自动准备宿主项目](references/coordination.md#自动准备宿主项目)运行 `coordination-cli.mjs projects`：按真实宿主和目录复用项目，缺项优先调用实际创建工具；没有接口时检查电脑技能是否允许操作目标应用，允许则自动添加文件夹并用 `list_projects` 回读取得真实 ID。没有创建 API 不能单独作为要求用户手动添加的理由。界面自动化不可用、规则禁止或操作实际失败时，记录具体证据后给出最少人工动作；不得绕过电脑技能限制。普通登记与执行仍不需要另建侧栏项目。
+多项目协调缺少 Codex 侧栏项目时，先按 [自动准备宿主项目](references/coordination.md#自动准备宿主项目)运行 `coordination-cli.mjs prepare-project <检查点.json> <输入.json>`，输入为 `{target,projects:<宿主最新列表数组>}`。优先按宿主和真实目录复用；缺项使用同包 `HostProjectClient` 调用公开 app-server `project/list`、`project/create`、`project/read`，再经官方 `codex://new?path=...` 入口让桌面采用目录，无须电脑 UI 自动化。返回 `pending` / `next: verify-project` 后，实际调用宿主 `list_projects` 回读并运行 `verify-project`，成功后才 `map` 和继续派发。公开 `project.id` 不能当作宿主 `hostProjectId`。没有宿主创建工具或电脑 UI 被禁用，不能单独作为要求用户手动添加的理由；先执行这条公开协议与官方入口路径。Windows `codex app PATH` 仅打印目录，不用作创建路径。普通登记与执行仍不需要另建侧栏项目。
 
 用户要求“接入并执行”且当前项目尚无工作台 ID 时，先按 [首次登记流程](references/plan-registration.md#首次登记与项目身份恢复)建立本地候选并调用 `workbench_register_plan`，不要先用空 projectId 读取，也不要让用户去任务岛手工建立项目。自动连接已开启时登记使用 `confirmationGrant: null`，成功响应会生成真实项目、方案、步骤 ID；随后回读、绑定并开始。Codex 侧栏项目与工作台项目是不同身份，普通测试不需要另外创建侧栏项目。已持有本地 projectKey 时可用它调用 `workbench_get_project` 恢复真实 ID。
 

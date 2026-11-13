@@ -3,6 +3,9 @@ import { createHash } from 'node:crypto';
 import { readFile, open, rename, unlink, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { inspectWorktree, runHostOperation } from './context-ledger.mjs';
+import { HostProjectClient } from './host-project-client.mjs';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 
 const clone = value => structuredClone(value);
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
@@ -120,6 +123,10 @@ export async function planHostProjects(state, { targets, projects, capabilities 
     const native = capabilities.createProject, ui = capabilities.computerUse;
     if (native?.status === 'available' && nonempty(native.toolName) && nonempty(native.evidence)) {
       item.action = { route: 'native', toolName: native.toolName, evidence: native.evidence };
+    } else if (target.hostId === 'local' && capabilities.publicProjects?.status === 'available' && nonempty(capabilities.publicProjects.evidence)) {
+      item.action = { route: 'publicAppServer', evidence: capabilities.publicProjects.evidence };
+    } else if (target.hostId === 'local' && capabilities.workspaceLink?.status === 'available' && nonempty(capabilities.workspaceLink.evidence)) {
+      item.action = { route: 'workspaceLink', evidence: capabilities.workspaceLink.evidence };
     } else if (target.hostId === 'local' && ui?.status === 'available' && nonempty(ui.evidence)) {
       item.action = { route: 'computerUse', evidence: ui.evidence };
     } else {
@@ -176,6 +183,73 @@ export async function verifyHostProject(state, { operationId, projects, evidence
   delete entry.reason;
   await checkpoint(state);
   return clone(entry);
+}
+
+// 日期：2026-11-13。公开 OS 深链入口，不发送提示词，不操作电脑 UI。
+export function workspaceProjectLink(directory) {
+  check(nonempty(directory) && (/^[a-z]:[\\/]|^\\\\/i.test(directory) ? path.win32 : path.posix).isAbsolute(directory), 'ABSOLUTE_WORKTREE_REQUIRED');
+  return `codex://new?${new URLSearchParams({ path: directory })}`;
+}
+export async function openProjectWorkspace(directory, run = promisify(execFile), platform = process.platform) {
+  const uri = workspaceProjectLink(directory);
+  const options = { windowsHide: true, shell: false, timeout: 15000 };
+  if (platform === 'win32') {
+    // URI is encoded by URLSearchParams; quote is encoded, so no directory text becomes shell code.
+    const encoded = Buffer.from(`Start-Process -FilePath '${uri}' -WindowStyle Hidden`, 'utf16le').toString('base64');
+    await run('powershell.exe', ['-NoProfile', '-NonInteractive', '-EncodedCommand', encoded], options);
+  } else if (platform === 'darwin') await run('/usr/bin/open', [uri], options);
+  else await run('xdg-open', [uri], options);
+  return { uri, requested: true };
+}
+
+export async function prepareHostProject(state, input, checkpoint, { client = new HostProjectClient(), openWorkspace = openProjectWorkspace, inspect = inspectWorktree } = {}) {
+  // 先核验目录、范围和既有宿主项目；本路径不接受远程目录。
+  const staged = await stageHostProject(state, { ...input, capabilities: {
+    workspaceLink: { status: 'available', evidence: 'official codex://new?path workspace entry; actual opener result checked below' },
+  } }, checkpoint, inspect);
+  try {
+    if (!staged.action) return staged;
+    const entry = state.operations.find(item => item.operationId === staged.operation.operationId);
+    let cursor, pages = new Set(), matches = [];
+    try {
+      do {
+        const result = await client.list({ ...(cursor ? { cursor } : {}), limit: 100 });
+        check(Array.isArray(result.data), 'HOST_PROJECT_PROTOCOL_INVALID');
+        matches.push(...result.data.filter(project => project.roots?.length === 1 && samePath(project.roots[0].path, staged.worktreePath)));
+        cursor = result.nextCursor;
+        check(!cursor || !pages.has(cursor), 'HOST_PROJECT_PAGINATION_INVALID');
+        if (cursor) pages.add(cursor);
+      } while (cursor);
+      check(matches.length <= 1, 'PUBLIC_PROJECT_AMBIGUOUS');
+      let project = matches[0];
+      if (!project) {
+        const dialect = /^[a-z]:[\\/]|^\\\\/i.test(staged.worktreePath) ? path.win32 : path.posix;
+        entry.publicRequest = { idempotencyKey: entry.operationId, name: dialect.basename(staged.worktreePath), roots: [{ path: staged.worktreePath }] };
+        await checkpoint(state);
+        project = (await client.create(entry.publicRequest)).project;
+      }
+      check(nonempty(project?.id), 'PUBLIC_PROJECT_ID_REQUIRED');
+      const readback = (await client.read({ projectId: project.id })).project;
+      check(readback?.id === project.id && readback.roots?.length === 1 && samePath(readback.roots[0].path, staged.worktreePath), 'PUBLIC_PROJECT_CONTEXT_MISMATCH');
+      entry.publicProjectId = readback.id; // 公开项目 ID 不是宿主 projectId。
+      entry.publicEvidence = { id: readback.id, name: readback.name, roots: readback.roots };
+      await checkpoint(state);
+    } catch (error) {
+      entry.publicError = { code: error.code ?? error.message, resultUnknown: error.resultUnknown ?? false };
+      await checkpoint(state);
+      // 明确不支持公开实验接口可继续官方工作区深链；创建结果未知或身份异常先对账。
+      if (entry.publicRequest || matches.length || !['HOST_PROJECT_REQUEST_REJECTED', 'HOST_PROJECT_EXECUTOR_UNAVAILABLE'].includes(error.code)) {
+        return { ...staged, action: null, operation: clone(entry), next: 'verify-project', reason: error.code ?? error.message };
+      }
+    }
+    entry.desktopOpen = { state: 'requested', uri: workspaceProjectLink(staged.worktreePath) };
+    await checkpoint(state);
+    try { await openWorkspace(staged.worktreePath); }
+    catch (error) { entry.desktopOpen.error = error.code ?? error.message; }
+    await checkpoint(state);
+    return { ...staged, action: null, operation: clone(entry), next: 'verify-project',
+      reason: entry.desktopOpen.error ?? 'HOST_PROJECT_READBACK_REQUIRED' };
+  } finally { client.close(); }
 }
 function passed(snapshot, step, seen = new Set()) {
   if (!step || seen.has(step.key)) return false;
@@ -455,7 +529,7 @@ export async function withCheckpoint(file, action) {
 }
 export async function coordinationCli(argv = process.argv.slice(2)) {
   const [command, file, inputFile] = argv;
-  check(file, 'USAGE: node coordination-cli.mjs <init|recover|projects|stage-project|verify-project|map|plan|stage|record|reconcile|adopt|verify|observe> <checkpoint.json> [input.json]');
+  check(file, 'USAGE: node coordination-cli.mjs <init|recover|projects|stage-project|prepare-project|verify-project|map|plan|stage|record|reconcile|adopt|verify|observe> <checkpoint.json> [input.json]');
   const input = inputFile ? JSON.parse(await readFile(inputFile, 'utf8')) : null;
   let result;
   if (command === 'init') {
@@ -467,6 +541,7 @@ export async function coordinationCli(argv = process.argv.slice(2)) {
   else result = await withCheckpoint(file, async (state, checkpoint) => {
     if (command === 'projects') return planHostProjects(state, input);
     if (command === 'stage-project') return stageHostProject(state, input, checkpoint);
+    if (command === 'prepare-project') return prepareHostProject(state, input, checkpoint);
     if (command === 'verify-project') return verifyHostProject(state, input, checkpoint);
     if (command === 'map') return mapLine(state, input.mapping, input.projects);
     if (command === 'plan') return planBatch(state, input.batch, input.snapshot);

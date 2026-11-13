@@ -40,14 +40,17 @@
 
 仅在任务确实需要分别归属的宿主项目时使用此流程。工作台登记和普通单目录执行不依赖新侧栏项目。已有明确的人类创建执行聊天授权时，添加既定目录为项目属于必要准备，无须让用户逐目录操作；只核对/生成模式不执行添加。
 
-1. 调用 `list_projects` 取得最新实际列表，核验目标目录存在、Git 工作树根及分支。以 `hostId + path` 匹配，不能按项目名称猜测；多项同路径需核对固定 ID。普通非 Git 目录沿用普通执行流程，此多工作树协调脚本仍检查 Git。
-2. 运行 `coordination-cli.mjs projects <检查点.json> <项目准备输入.json>`。输入为 `{targets:[{lineId,hostId,worktreePath,branch,stepIds,label?,hostProjectId?}],projects:<真实列表数组>,capabilities:{createProject:{status,toolName?,evidence},computerUse:{status,evidence}}}`。状态使用 `available`、`unavailable`、`forbidden`、`failed` 或 `unknown`，根据本轮发现和实际错误填写，不能将下面的流程说明当作可用证据。
-3. 已有匹配返回 `ready` 和真实 `hostProjectId`，直接 `map`。缺项时优先实际原生创建工具，读取其 schema 构造请求；没有创建接口，先读当前电脑技能完整规则，再发现实际应用与窗口。只有规则允许、窗口可操作时才将 `computerUse.status` 记为 `available`。禁止操作的应用、认证/权限窗口及远程桌面不能用其他工具绕过。添加的是目录，无须上传文件或复制源码。
-4. 对每个可自动添加的目标运行 `stage-project`，输入 `{target:<单项目目标>,projects,capabilities}`。命令先持久化 `createProject` 意图和稳定 operationId，再返回 `action:{route,toolName?,hostId,path,label,evidence}`。它是语义动作，**不是**原生工具参数；不发送到 `create_thread`，不杜撰 `create_project`。原生路径按实际 schema 调用；界面路径按电脑技能逐次观察、进入添加项目入口、选择精确目录并确认。不要把 `label` 作为目录或项目身份，也不要为美化名称额外新建项目。
-5. 添加后再调用 `list_projects`，运行 `verify-project`，输入 `{operationId,projects:<最新真实列表>,evidence:<调用出处>,hostProjectId?:<已核实的固定ID>}`。脚本要求宿主与目录精确匹配后才保存固定 ID。点击成功、工具返回“完成”、`clientThreadId` 或工作台 ID 都不能替代此回读。成功后用真实 ID 执行 `map`，接续原批次的上下文核对、绑定和开始门禁。
-6. 已 staged 的操作再次运行不重复返回添加动作，恢复先 `verify-project`；列表暂时没有项目不代表尚未提交。能证明原生/界面动作从未调用或明确拒绝未提交时才按原 `reconcile` 流程重试。接口和界面路径之间切换也沿用同一操作键。再次 `stage-project` 时若列表已含目标，提供 `evidence` 以回读收尾。服务检查点可用时，添加前先同步 pending 检查点，冲突方停止操作。
+1. 调用宿主 `list_projects` 取得最新实际列表，核验目标目录存在、Git 工作树根及分支。以 `hostId + path` 匹配，不能按项目名称猜测；多项同路径需核对固定 ID。普通非 Git 目录沿用普通执行流程，此多工作树协调脚本仍检查 Git。
+2. 运行 `node '<Skill目录>/scripts/coordination-cli.mjs' prepare-project '<检查点.json>' '<输入.json>'`。输入为 `{target:{lineId,hostId,worktreePath,branch,stepIds,label?,hostProjectId?},projects:<宿主最新列表数组>}`。已有匹配返回真实 `hostProjectId`，可按结果继续；缺项时命令先持久化稳定 `createProject` 操作意图，实际执行公开协议创建与官方桌面入口。
+3. 同包 `scripts/host-project-client.mjs` 导出 `HostProjectClient`，以 `initialize.capabilities.experimentalApi:true` 协商公开 app-server 协议，只使用 `project/list`、`project/create` 和 `project/read`。创建参数为 `{idempotencyKey,name,roots:[{path}],metadata?}`；幂等键由固定操作身份产生，roots 使用已核验的精确目标目录。列出并复用已有公开项目，或创建后回读其 roots；不读写私有库，不启动模型或发送聊天消息，也不把另建执行会话当成原生项目准备。
+4. 公开项目准备后，命令通过官方 `codex://new?path=...` 入口让桌面采用目标目录，路径参数必须正确编码。该步骤不使用电脑 UI 自动化，也不操作认证或权限提示。Windows 的 `codex app PATH` 当前仅打印目录，不会按指定目录创建项目，不能将其退出成功记为添加成功。官方入口说明见 [Commands](https://learn.chatgpt.com/docs/reference/commands)，CLI 平台区别见 [Developer commands](https://learn.chatgpt.com/docs/developer-commands#codex-app)。
+5. `prepare-project` 返回 `pending`、`next: verify-project` 时，公开创建及深链结果都只是准备证据。**公开协议的 `project.id` 与宿主 `list_projects` 返回的 `projectId` 是不同身份，不能混用。** 深链启动成功也不代表侧栏已保存；桌面刷新可能延后，应实际回读宿主列表。运行 `verify-project`，输入 `{operationId,projects:<最新宿主列表>,evidence:<实际调用出处>,hostProjectId?:<已核实的宿主固定ID>}`。只有宿主与目录精确匹配后，操作才可记为 `succeeded`；此 ID 才能作为 `hostProjectId` 执行 `map`。
+6. 继续原批次的聊天上下文核对、服务绑定和开始门禁。公开项目 ID、宿主项目 ID、工作台 projectId 分别保存；不将 `clientThreadId`、显示名称或公开协议成功响应填入错误身份字段。原生项目准备完成不代表任务步骤已经开始或通过。
+7. 超时、失联、深链结果未知或中断后先按原操作记录回读；不能因为列表暂时没有项目就换键重复创建或重复打开目录。未完成的 pending 操作先 `verify-project`，成功部分保留。只有可核实动作从未调用或明确拒绝未提交时，才按原 `reconcile` 流程恢复；稳定幂等键和原意图继续沿用。服务检查点可用时，开始实际添加前先同步 pending 检查点，冲突方停止操作。
 
-只有确认全部自动化路径不可用、被规则禁止、要求用户原生授权或实际失败后，才给出一次集中人工动作，并说明具体接口缺项、规则出处或真实错误。其他已就绪线继续。不得把“尚未尝试”写成“不可自动化”，也不能为了省去人工动作虚报添加成功。当前受限环境中的界面添加是否通过按实际验收单独记录，不能由规划器测试推断。
+`host-project-client.mjs` 另提供 `describe`、`list`、`create <输入.json>`、`read <输入.json>` CLI，返回完整公开协议结果，不替代宿主身份核验。`describe` 说明协议形状，实际可用性以本机协议与调用结果为准。原 `projects`、`stage-project` 可用于能力预检和外部适配器；它们返回的语义 action 不是已完成添加，不能取代 `prepare-project` 的实际执行。
+
+只有确认公开项目协议、官方桌面入口及其他实际可用路径均失败或确实要求用户授权后，才给出一次集中人工动作并附真实错误。宿主 MCP 未列出创建项目工具、电脑技能禁止操作界面，都不能单独证明这条公开程序路径不可用。其他已就绪线继续。不得把“尚未尝试”写成“不可自动化”，也不能为了省去人工动作虚报侧栏添加成功；必须以宿主回读完成验收。
 
 ## 确定本批与并发范围
 
