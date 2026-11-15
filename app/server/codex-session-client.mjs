@@ -47,7 +47,7 @@ export class CodexSessionClient{
   request(method,params){return new Promise((resolve,reject)=>{const id=++this.sequence;const timer=setTimeout(()=>{this.pending.delete(id);reject(clientError('CODEX_REQUEST_UNKNOWN'));},30000);this.pending.set(id,{resolve,reject,timer});this.send({id,method,params});});}
   receive(message){
     const pending=this.pending.get(message.id);
-    if(pending){clearTimeout(pending.timer);this.pending.delete(message.id);message.error?pending.reject(Object.assign(clientError('CODEX_REQUEST_REJECTED','CODEX_REQUEST_REJECTED: '+message.error.message),{rpcCode:message.error.code})):pending.resolve(message.result);return;}
+    if(pending){clearTimeout(pending.timer);this.pending.delete(message.id);message.error?pending.reject(Object.assign(clientError('CODEX_REQUEST_REJECTED','CODEX_REQUEST_REJECTED: '+message.error.message),{rpcCode:message.error.code,rpcMessage:message.error.message})):pending.resolve(message.result);return;}
     if(message.id!==undefined&&message.method){
       this.send({id:message.id,error:{code:-32000,message:'USER_INTERACTION_REQUIRED: 此请求需要人工处理，连续执行已暂停'}});
       this.interactionRequired=true;return;
@@ -59,7 +59,17 @@ export class CodexSessionClient{
   }
   fail(reason){for(const p of this.pending.values()){clearTimeout(p.timer);p.reject(clientError(reason));}this.pending.clear();for(const t of this.turns.values())t.reject(clientError(reason));this.turns.clear();}
   async create(cwd,title){await this.connect();const result=await this.request('thread/start',{cwd,...(this.threadConfig?{config:this.threadConfig}:{})});const thread=result.thread;if(!thread?.id||path.resolve(thread.cwd)!==path.resolve(cwd))throw Error('CODEX_THREAD_CONTEXT_MISMATCH');this.owned.add(thread.id);await this.request('thread/name/set',{threadId:thread.id,name:title});return thread;}
-  async resume(threadId){await this.connect();const response=await this.request('thread/resume',{threadId,excludeTurns:true,...(this.threadConfig?{config:this.threadConfig}:{})});if(response.thread?.id!==threadId)throw clientError('CODEX_THREAD_CONTEXT_MISMATCH');this.owned.add(threadId);return response;}
+  async resume(threadId){
+    await this.connect();
+    let response;
+    try{response=await this.request('thread/resume',{threadId,excludeTurns:true,...(this.threadConfig?{config:this.threadConfig}:{})});}
+    catch(error){
+      // 日期：2026-11-15。其他连接持有写入权时交回桌面路由，不重复接管或当作回合投递失败。
+      if(error.code==='CODEX_REQUEST_REJECTED'&&error.rpcMessage===`thread ${threadId} already has an active writer`)throw clientError('CODEX_THREAD_WRITER_CONFLICT');
+      throw error;
+    }
+    if(response.thread?.id!==threadId)throw clientError('CODEX_THREAD_CONTEXT_MISMATCH');this.owned.add(threadId);return response;
+  }
   async readThread(threadId){
     await this.connect();
     const {thread}=await this.request('thread/read',{threadId,includeTurns:false});
@@ -197,6 +207,16 @@ export class DesktopSessionClient{
       if(!turnId&&latest?.id&&latest.id!==prior?.id){turnId=latest.id;await onStarted(turnId);}
       if(turnId&&latest?.id===turnId&&latest.status!=='inProgress')return latest;
       if(!turnId&&Date.now()-startedAt>=this.startTimeoutMs)throw clientError('CODEX_DELIVERY_UNKNOWN');
+      await new Promise(resolve=>setTimeout(resolve,this.pollMs));
+    }
+    throw clientError('CODEX_CLOSED');
+  }
+  async waitForTurn(threadId,turnId){
+    while(!this.closed){
+      const thread=await this.readThread(threadId),latest=thread.turns.at(-1);
+      if(this.interactionRequired)throw clientError('CODEX_INTERACTION_REQUIRED');
+      if(!turnId||latest?.id!==turnId)throw clientError('CODEX_ACTIVE_TURN_UNKNOWN');
+      if(latest.status!=='inProgress')return latest;
       await new Promise(resolve=>setTimeout(resolve,this.pollMs));
     }
     throw clientError('CODEX_CLOSED');

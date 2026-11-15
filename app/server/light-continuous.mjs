@@ -21,6 +21,17 @@ export function validateContinuous(value){
   if(value===undefined)return;
   if(value?.version!==1||!Array.isArray(value.runs)||value.runs.some(r=>!r.id||!r.planKey||!['running','pausing','paused','blocked','completed'].includes(r.status)||!Array.isArray(r.history)||(r.mode!==undefined&&!modes.has(r.mode))||(r.enabled!==undefined&&typeof r.enabled!=='boolean')))throw Error('INVALID_CONTINUOUS_STATE');
 }
+function stageResumeIssue(s,current){
+  const step=s?.steps.find(x=>x.key===current?.stepKey);
+  if(!step)return Error('原阶段已不存在，请先核对方案与绑定');
+  if(stepPassed(s,step))return null;
+  const blockers=step.blockers.filter(b=>!b.resolved);
+  if(step.status==='blocked'||blockers.length)return Error(`阶段 ${step.code} 尚未解除阻塞：${blockers.map(b=>b.reason).join('；')||'请先核验阻塞并恢复阶段执行'}`);
+  if(step.status!=='running')return Error(`阶段 ${step.code} 当前状态为 ${step.status}，请先核对原执行并取得恢复许可`);
+  const binding=s.bindings.find(b=>b.key===step.bindingKey),execution=s.executions.find(e=>e.key===step.executionKey);
+  if(!binding||binding.state!=='confirmed'||binding.revokedAt||binding.id!==current.bindingId||binding.bindingRevision!==current.bindingRevision||binding.context.threadId!==current.threadId||!execution||execution.id!==current.executionId||execution.bindingKey!==binding.key||execution.endedAt)return Error(`阶段 ${step.code} 的责任绑定或执行身份已变化，请先核对原会话后重试`);
+  return null;
+}
 export function createContinuousRunner(persistence,service,{clientFactory=createSessionClient,principalProvider}={}){
   const clients=new Map(),pumps=new Set(),workspaceClaims=new Map(),notifications=new Map();let closed=false;
   const state=()=>persistence.read('lightContinuous')??{version:1,runs:[]};
@@ -61,7 +72,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     if(mode==='current_thread'&&new Set(ongoing.map(x=>s.bindings.find(b=>b.key===x.bindingKey)?.context.threadId)).size>1)lightError('MULTIPLE_ACTIVE_THREADS','多个会话正在执行，请使用按阶段接续或先处理现有会话',409);
     for(const step of ongoing){const binding=s.bindings.find(b=>b.key===step.bindingKey);if(!binding?.context.threadId)lightError('THREAD_ID_REQUIRED',`阶段 ${step.code} 缺少真实会话身份，请先核对绑定`,409);}
   }
-  async function prepare(run,step,client){
+  async function prepare(run,step,client,restore){
     const s=snapshot(),plan=s.plans.find(p=>p.key===run.planKey);
     await verifySource(plan);
     if(find(run.id).status!=='running')return null;
@@ -72,12 +83,13 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     workspaceClaims.set(cwdKey,run.id);
     // 同目录只启动一条执行线，已有执行需先完成或接手原会话。
     if(s.executions.some(e=>!e.endedAt&&s.bindings.some(b=>b.key===e.bindingKey&&path.resolve(b.context.worktreePath).toLowerCase()===cwd.toLowerCase())))throw Error('WORKSPACE_BUSY');
-    const current={stepId:step.id,stepKey:step.key,code:step.code,threadId:null,creationAttempted:true,turnId:null};
+    const current={stepId:step.id,stepKey:step.key,code:step.code,threadId:null,creationAttempted:true,turnId:null,transport:'owned'};
     let thread;
     if(run.mode==='current_thread'&&run.session){
-      const response=await client.resume(run.session.threadId);thread=response?.thread;
+      const response=await restore(run.session.threadId,run.session.transport??'owned');thread=response?.thread;
       if(thread?.id!==run.session.threadId||!thread.cwd||!samePath(await realpath(thread.cwd),cwd))lightError('THREAD_WORKSPACE_MISMATCH','原会话的实际目录已变化，未派发下一阶段；请核对会话目录或改用按阶段接续',409);
-      current.creationAttempted=false;
+      current.creationAttempted=false;current.transport=response.transport;
+      if(run.session.transport!==response.transport)await update(run.id,{session:{...run.session,transport:response.transport}});
     }else{
       await update(run.id,{current});
       thread=await client.create(cwd,`${plan.name} / ${step.code}：${step.title}`);
@@ -153,6 +165,15 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     if(pumps.has(id)||closed)return;pumps.add(id);
     let client;
     function connection(transport='owned'){if(!client||client.__runnerTransport!==transport){client?.close();client=clientFactory({transport});client.__runnerTransport=transport;clients.set(id,client);}return client;}
+    async function restore(threadId,transport='owned'){
+      let response;
+      try{response=await connection(transport).resume(threadId);}
+      catch(error){
+        if(transport!=='owned'||error.code!=='CODEX_THREAD_WRITER_CONFLICT')throw error;
+        response=await connection('shared').resume(threadId);
+      }
+      return {...response,transport:client.__runnerTransport};
+    }
     try{
       while(!closed){
         let run=find(id);if(!run||!activeStates.has(run.status))return;
@@ -161,7 +182,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         if(plan.source.sha256!==run.sourceHash)throw Error('SOURCE_CHANGED');
         await verifySource(plan);
         const stages=s.steps.filter(x=>x.planKey===plan.key&&x.parentKey===null&&x.required).sort((a,b)=>a.order-b.order);
-        let current=run.current;
+        let current=run.current,observedTurn=null;
         if(current?.delivery?.state==='unknown')lightError('DELIVERY_UNKNOWN','上次通知投递结果未知，请先核对原会话，不能重复发送或派发下一阶段',409);
         if(current?.adopted){
           const step=s.steps.find(x=>x.key===current.stepKey);
@@ -171,7 +192,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
               if(thread.status?.type==='active'||last?.status==='inProgress'){await update(id,{phase:'waiting',reason:'阶段已验收，等待当前会话结束后接续'});await new Promise(resolve=>setTimeout(resolve,1000));continue;}
             }
             const latestRun=find(id);
-            await update(id,{current:null,reason:'',history:[...latestRun.history,{stepKey:current.stepKey,threadId:current.threadId,turnId:current.delivery?.turnId??null,turnStatus:'observed',adopted:true,at:stamp()}]});continue;
+            await update(id,{current:null,reason:'',history:[...latestRun.history,{stepKey:current.stepKey,threadId:current.threadId,turnId:current.delivery?.turnId??null,turnStatus:'observed',adopted:true,transport:run.session?.transport??'shared',at:stamp()}]});continue;
           }
           if(step?.status!=='running')throw Error('原执行阶段需要处理阻塞后继续');
           if(run.mode==='current_thread'){
@@ -188,17 +209,23 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
           if(step&&stepPassed(s,step)){await update(id,{current:null});continue;}
           if(!current.executionId)throw Error('INCOMPLETE_START_REQUIRES_REVIEW');
           if(['sending','unknown'].includes(current.turnDelivery))lightError('DELIVERY_UNKNOWN','阶段启动结果未知，请先核对原会话，避免重复执行',409);
-          const resumed=await connection(run.mode==='current_thread'?run.session?.transport:'owned').resume(current.threadId);
+          const issue=stageResumeIssue(s,current);if(issue)throw issue;
+          const resumed=await restore(current.threadId,current.transport??(run.mode==='current_thread'?run.session?.transport:'owned')??'owned');
           const {cwd}=await workspace(plan,step);
           if(resumed?.thread?.id!==current.threadId||!resumed.thread.cwd||!samePath(await realpath(resumed.thread.cwd),cwd))lightError('THREAD_WORKSPACE_MISMATCH','原会话的实际目录已变化，请核对会话目录后重试',409);
+          current={...current,transport:resumed.transport};
+          await update(id,{current,...(run.mode==='current_thread'&&run.session?.threadId===current.threadId?{session:{...run.session,transport:resumed.transport}}:{})});
+          if(resumed.transport==='shared'&&resumed.thread.status?.type==='active'){
+            observedTurn=resumed.thread.turns?.findLast(t=>t.status==='inProgress');
+            if(!current.turnId||observedTurn?.id!==current.turnId||typeof client.waitForTurn!=='function')lightError('CODEX_THREAD_BUSY','原会话存在其他执行，等待结束后再接续',409);
+          }
         }else{
           connection(run.mode==='current_thread'?run.session?.transport:'owned');
           const pending=stages.filter(x=>!stepPassed(s,x));
           if(!pending.length){
             if(plan.endConditions.some(c=>c.required&&c.result!=='passed')){
               const last=run.history.at(-1)??run.session;if(!last?.threadId)throw Error('方案结束条件尚未验收');
-              if(last.adopted||run.session?.transport==='shared')connection('shared');
-              await client.resume(last.threadId);
+              await restore(last.threadId,last.transport??(last.adopted||run.session?.transport==='shared'?'shared':'owned'));
               const finalTurn=await client.run(last.threadId,`日期：${stamp()}\n所有阶段已通过，用户授权连续执行到整体结束。请回读方案${plan.id}和原文${plan.source.path}，逐项实际核验方案endConditions；不要把阶段通过等同于最终批准。按真实证据调用workbench_complete_plan并回读。如需人工决定则明确报告，不自动代签。复用原项目${base(run,'final').projectId}，不要重新登记。`);
               if(finalTurn.status!=='completed')throw Error('方案最终验收会话未完成');
               const latest=snapshot().plans.find(p=>p.key===plan.key);if(latest.endConditions.some(c=>c.required&&c.result!=='passed'))throw Error('方案结束条件尚未通过，请处理最终验收后继续');
@@ -215,17 +242,23 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
           if(ongoing){const binding=s.bindings.find(b=>b.key===ongoing.bindingKey);if(!binding?.context.threadId)throw Error('现有执行缺少真实会话身份');const current={adopted:true,stepId:ongoing.id,stepKey:ongoing.key,code:ongoing.code,threadId:binding.context.threadId};const fields={current,phase:run.mode==='current_thread'?'notifying':'waiting'};if(run.mode==='current_thread')fields.session={threadId:current.threadId,cwd:await realpath(binding.context.worktreePath),transport:'shared'};await update(id,fields);continue;}
           const step=pending.find(x=>x.status==='pending'&&!waitingFor(s,x).length&&!x.blockers.some(b=>!b.resolved));
           if(!step)throw Error('阶段存在阻塞、取消、未结束执行或未满足前置，需先处理后继续');
-          await update(id,{phase:'dispatching',reason:''});current=await prepare(run,step,client);if(!current){await pauseIfRequested(id,'已暂停接续');return;}run=find(id);
+          await update(id,{phase:'dispatching',reason:''});current=await prepare(run,step,client,restore);if(!current){await pauseIfRequested(id,'已暂停接续');return;}run=find(id);
         }
         await update(id,{phase:'executing',reason:''});
-        current={...current,turnDelivery:'sending'};await update(id,{current});
-        const turn=await client.run(current.threadId,prompt(run,current),async turnId=>{current={...find(id).current,turnId,turnDelivery:'started'};await update(id,{current});if(run.mode!=='current_thread'&&find(id)?.mode==='current_thread')await notifyCurrent(id,client);});
+        let turn;
+        if(observedTurn){
+          await update(id,{phase:'waiting',reason:'已连接原会话，等待当前回合完成后核验'});
+          turn=await client.waitForTurn(current.threadId,current.turnId);
+        }else{
+          current={...current,turnDelivery:'sending'};await update(id,{current});
+          turn=await client.run(current.threadId,prompt(run,current),async turnId=>{current={...find(id).current,turnId,turnDelivery:'started'};await update(id,{current});if(run.mode!=='current_thread'&&find(id)?.mode==='current_thread')await notifyCurrent(id,client);});
+        }
         if(notifications.has(id))await notifications.get(id);
         if(closed)return;
         const latest=snapshot(),step=latest.steps.find(x=>x.key===current.stepKey);
         const after=find(id);
         if(after.current?.delivery?.state==='unknown')lightError('DELIVERY_UNKNOWN','通知投递结果未知，已保留当前阶段身份；请先核对原会话',409);
-        const history=[...after.history,{stepKey:current.stepKey,threadId:current.threadId,turnId:current.turnId,turnStatus:turn.status,at:stamp()}];
+        const history=[...after.history,{stepKey:current.stepKey,threadId:current.threadId,turnId:current.turnId,turnStatus:turn.status,transport:current.transport??client.__runnerTransport,at:stamp()}];
         await update(id,{history});
         if(turn.status!=='completed'||client.interactionRequired)throw Error(client.interactionRequired?'需要人工确认，请处理该阶段会话后继续':'阶段会话失败或被中断');
         if(!stepPassed(latest,step))throw Error('阶段会话已结束，但工作台验收未通过；请在该会话修复后继续');
@@ -236,7 +269,12 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     finally{client?.close();clients.delete(id);pumps.delete(id);for(const [cwd,owner]of workspaceClaims)if(owner===id)workspaceClaims.delete(cwd);if(!closed&&find(id)?.status==='running')setTimeout(()=>void pump(id),0);}
   }
   return {
-    async initialize(){await persistence.run(()=>{const s=state();for(const r of s.runs){r.mode??='stages';r.enabled=enabled(r);if(activeStates.has(r.status)){r.status='paused';r.enabled=false;r.phase=null;r.reason='服务已重启，请点击继续，复用原阶段会话核验恢复';}if(r.current?.delivery?.state==='sending')r.current.delivery.state='unknown';}persistence.write('lightContinuous',s);});},
+    async initialize(){await persistence.run(()=>{const s=state();for(const r of s.runs){r.mode??='stages';r.enabled=enabled(r);if(activeStates.has(r.status)){r.status='paused';r.enabled=false;r.phase=null;r.reason='服务已重启，请点击继续，复用原阶段会话核验恢复';}if(r.current?.delivery?.state==='sending')r.current.delivery.state='unknown';
+      // 日期：2026-11-15。旧写入冲突不能遮住领域中已登记的真实阶段阻塞。
+      if(r.status==='blocked'&&r.reason===`CODEX_REQUEST_REJECTED: thread ${r.current?.threadId} already has an active writer`&&!['sending','unknown'].includes(r.current?.turnDelivery)&&r.current?.delivery?.state!=='unknown'){
+        const issue=stageResumeIssue(snapshot(),r.current);if(issue)r.reason=failureReason(issue);
+      }
+    }persistence.write('lightContinuous',s);});},
     read(){const runs=state().runs,s=snapshot();return [...runs.map(summary),...(s?.plans??[]).filter(plan=>!runs.some(run=>run.planKey===plan.key)&&planProgress(s,plan.key).passed).map(plan=>summary(completedRun(plan)))];},
     async change(input){
       if(!input||Object.keys(input).some(k=>!['planKey','action','expectedRevision','acknowledged','mode'].includes(k))||input.acknowledged!==true||!['start','pause','resume'].includes(input.action)||typeof input.planKey!=='string'||!Number.isSafeInteger(input.expectedRevision)||input.expectedRevision<0||(input.mode!==undefined&&!modes.has(input.mode)))lightError('INVALID_INPUT','连续执行请求无效');
@@ -272,7 +310,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
           }
           if(mode==='current_thread'&&run.current?.threadId&&run.session?.threadId!==run.current.threadId){
             const step=snap.steps.find(x=>x.key===run.current.stepKey),binding=snap.bindings.find(b=>b.key===step?.bindingKey);
-            if(binding)run.session={threadId:run.current.threadId,cwd:await realpath(binding.context.worktreePath),transport:run.current.adopted?'shared':'owned'};
+            if(binding)run.session={threadId:run.current.threadId,cwd:await realpath(binding.context.worktreePath),transport:run.current.transport??(run.current.adopted?'shared':'owned')};
           }
         }
         if(run)run.updatedAt=stamp();

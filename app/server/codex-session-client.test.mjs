@@ -52,6 +52,20 @@ test('owned resume reapplies its isolated thread configuration instead of fallin
  assert.equal(result.thread.id,'restored');assert.equal(client.owned.has('restored'),true);
 });
 
+// 日期：2026-11-15。公开协议的写入权冲突与其他明确拒绝必须分开处理。
+test('resume recognizes only the exact target writer conflict and never claims that thread',async()=>{
+ for(const [rpcMessage,code] of [
+  ['thread target already has an active writer','CODEX_THREAD_WRITER_CONFLICT'],
+  ['thread other already has an active writer','CODEX_REQUEST_REJECTED'],
+  ['permission denied','CODEX_REQUEST_REJECTED'],
+ ]){
+  const client=new CodexSessionClient(),calls=[];client.connect=async()=>{};
+  client.send=message=>{calls.push(message);queueMicrotask(()=>client.receive({id:message.id,error:{code:-32600,message:rpcMessage}}));};
+  await assert.rejects(client.resume('target'),{code});
+  assert.equal(client.owned.has('target'),false);assert.deepEqual(calls.map(c=>c.method),['thread/resume']);
+ }
+});
+
 test('stale steer rejection is not retried as a new turn and lost responses remain unknown',async()=>{
  for(const code of ['CODEX_REQUEST_REJECTED','CODEX_DISCONNECTED']){
   const client=new CodexSessionClient();client.owned.add('own');let sends=0;
@@ -134,6 +148,22 @@ test('desktop run stops for human interaction instead of waiting indefinitely or
  const f=desktopFixture({results:[desktopThread('idle',[old]),desktopThread('idle',[old]),waiting,waiting]});
  await assert.rejects(f.desktop.run('target','继续'),{code:'CODEX_INTERACTION_REQUIRED'});
  assert.equal(f.desktop.interactionRequired,true);assert.equal(f.calls.filter(c=>c.name==='send_message_to_thread').length,1);f.desktop.close();
+});
+
+test('desktop recovery observes the recorded active turn without sending another message',async()=>{
+ const active={id:'recorded',status:'inProgress'},done={id:'recorded',status:'completed'};
+ const f=desktopFixture({results:[desktopThread('active',[active]),desktopThread('idle',[done])]});
+ assert.deepEqual(await f.desktop.waitForTurn('target','recorded'),done);
+ assert.deepEqual(f.calls.map(c=>c.name),['read_thread','read_thread']);f.desktop.close();
+});
+
+test('desktop recovery refuses replacement turns and stops at human interaction',async()=>{
+ const waiting=desktopThread('active',[{id:'recorded',status:'inProgress'}]);waiting.thread.status.activeFlags=['waitingOnUserInput'];
+ for(const [state,code] of [[desktopThread('active',[{id:'other',status:'inProgress'}]),'CODEX_ACTIVE_TURN_UNKNOWN'],[waiting,'CODEX_INTERACTION_REQUIRED']]){
+  const f=desktopFixture({results:[state]});
+  await assert.rejects(f.desktop.waitForTurn('target','recorded'),{code});
+  assert.equal(f.calls.some(c=>c.name==='send_message_to_thread'),false);f.desktop.close();
+ }
 });
 
 test('session factory keeps stage execution owned and routes external notifications through the desktop',()=>{

@@ -274,3 +274,84 @@ test('an unknown notification remains a checkpoint after stage acceptance and ca
  assert.equal(f.snapshot().steps.find(step=>step.code==='A').status,'completed');assert.equal(f.p.read('lightContinuous').runs[0].current.delivery.state,'unknown');assert.equal(f.snapshot().steps.find(step=>step.code==='B').status,'pending');
  await f.change('resume','current_thread');await f.until('blocked');assert.equal(notificationCalls,1);assert.equal(f.requests.length,1);assert.equal(f.snapshot().steps.find(step=>step.code==='B').status,'pending');assert.equal(f.p.read('lightContinuous').runs[0].current.delivery.state,'unknown');
 });
+
+// 日期：2026-11-15。恢复只经原宿主路由已有写入者，并保留阶段、绑定及执行身份。
+async function restartWith(f,t,factory){
+ f.runner.close();
+ const runner=createContinuousRunner(f.p,f.service,{principalProvider:()=>f.grant.principal,clientFactory:factory});
+ await runner.initialize();t.after(()=>runner.close());
+ const change=(mode='stages')=>runner.change({planKey:'test-plan',action:'resume',mode,expectedRevision:f.snapshot().projects[0].revision,acknowledged:true});
+ const until=async status=>{for(let i=0;i<700;i++){if(runner.read()[0]?.status===status)return;await delay(10);}throw Error(JSON.stringify(runner.read()));};
+ return {runner,change,until};
+}
+const writerConflict=()=>Object.assign(Error('CODEX_THREAD_WRITER_CONFLICT'),{code:'CODEX_THREAD_WRITER_CONFLICT'});
+
+test('writer conflicts resume the same stage through the desktop and subsequent stages stay owned',async t=>{
+ const f=await fixture(t,{finish:false});await f.change('start');await f.until('blocked');
+ const original=f.p.read('lightContinuous').runs[0].current,restores=[];
+ const r=await restartWith(f,t,options=>{
+  const client=f.factory(options),run=client.run.bind(client);
+  client.resume=async id=>{restores.push([options.transport,id]);if(options.transport==='owned')throw writerConflict();return {thread:await client.readThread(id)};};
+  client.run=async(...args)=>{const result=await run(...args);await f.complete(args[0]);return result;};
+  return client;
+ });
+ await r.change();await r.until('completed');
+ assert.deepEqual(restores,[['owned','chat-1'],['shared','chat-1']]);
+ assert.deepEqual(f.requests.map(x=>x.id),['chat-1','chat-1','chat-2','chat-3']);assert.equal(f.created.length,3);
+ const history=f.p.read('lightContinuous').runs[0].history;
+ assert.equal(history[1].transport,'shared');assert.ok(history.slice(2).every(h=>h.transport==='owned'));
+ const first=f.snapshot().steps.find(x=>x.code==='A'),binding=f.snapshot().bindings.find(x=>x.key===first.bindingKey),execution=f.snapshot().executions.find(x=>x.key===first.executionKey);
+ assert.equal(binding.id,original.bindingId);assert.equal(execution.id,original.executionId);
+});
+
+test('writer recovery follows a live recorded turn without re-running it',async t=>{
+ const f=await fixture(t,{hold:true});await f.change('start');for(let i=0;i<150&&!f.held.has(1);i++)await delay(10);t.after(()=>f.release());
+ let waiting=0;
+ const r=await restartWith(f,t,options=>{
+  const client=f.factory(options);
+  client.resume=async id=>{if(options.transport==='owned')throw writerConflict();return {thread:await client.readThread(id)};};
+  client.waitForTurn=async(id,turnId)=>{waiting++;while(f.turns.get(id)?.status==='inProgress')await delay(10);assert.equal(f.turns.get(id).id,turnId);return {...f.turns.get(id)};};
+  return client;
+ });
+ await r.change();for(let i=0;i<150&&!waiting;i++)await delay(10);
+ assert.equal(waiting,1);assert.equal(f.requests.length,1);assert.equal(f.notifications.length,0);
+ f.release();await r.until('completed');assert.equal(f.requests.length,3);assert.equal(f.created.length,3);
+});
+
+test('current-thread writer recovery persists desktop routing across the remaining stages',async t=>{
+ const f=await fixture(t,{finish:false});await f.change('start','current_thread');await f.until('blocked');
+ const restores=[];
+ const r=await restartWith(f,t,options=>{
+  const client=f.factory(options),run=client.run.bind(client);
+  client.resume=async id=>{restores.push(options.transport);if(options.transport==='owned')throw writerConflict();return {thread:await client.readThread(id)};};
+  client.run=async(...args)=>{const result=await run(...args);await f.complete(args[0]);return result;};return client;
+ });
+ await r.change('current_thread');await r.until('completed');
+ assert.deepEqual(restores,['owned','shared','shared','shared']);assert.equal(f.created.length,1);assert.ok(f.requests.every(r=>r.id==='chat-1'));
+ assert.equal(f.p.read('lightContinuous').runs[0].session.transport,'shared');
+});
+
+test('recovery does not route other resume failures through the desktop',async t=>{
+ const f=await fixture(t,{finish:false});await f.change('start');await f.until('blocked');
+ const transports=[];
+ const r=await restartWith(f,t,options=>{transports.push(options.transport);const client=f.factory(options);client.resume=async()=>{throw Object.assign(Error('permission denied'),{code:'CODEX_REQUEST_REJECTED'});};return client;});
+ await r.change();await r.until('blocked');assert.deepEqual(transports,['owned']);assert.equal(f.requests.length,1);assert.match(r.runner.read()[0].reason,/permission denied/);
+});
+
+test('desktop fallback still verifies the original directory before sending',async t=>{
+ const f=await fixture(t,{finish:false});await f.change('start');await f.until('blocked');const moved=path.join(f.root,'moved');await mkdir(moved);
+ const r=await restartWith(f,t,options=>{const client=f.factory(options);client.resume=async id=>{if(options.transport==='owned')throw writerConflict();return {thread:{id,cwd:moved,status:{type:'idle'},turns:[]}};};return client;});
+ await r.change();await r.until('blocked');assert.match(r.runner.read()[0].reason,/目录/);assert.equal(f.requests.length,1);assert.equal(f.created.length,1);
+});
+
+test('registered stage blockers replace legacy writer errors and prevent any resume or repeated execution',async t=>{
+ const f=await fixture(t,{finish:false});await f.change('start');await f.until('blocked');
+ const s=f.snapshot(),stage=s.steps.find(x=>x.code==='A'),current=f.p.read('lightContinuous').runs[0].current,{trust,...source}=s.plans[0].source;
+ await f.service.update(f.grant.principal,{schemaVersion:'light-1.0',projectId:s.projects[0].id,planId:s.plans[0].id,expectedRevision:s.projects[0].revision,eventId:'block-directory',source,occurredAt:new Date().toISOString(),reason:'真实目录阻塞',stepId:stage.id,executionId:current.executionId,bindingId:current.bindingId,bindingRevision:current.bindingRevision,targetStatus:'blocked',evidence:[],checks:[],blocker:{blockerId:'wrong-directory',reason:'原生会话目录与登记的隔离工作树不一致',waitingFor:['总控修正绑定'],releaseConditions:['核对真实目录后恢复'],resolved:false},reopen:null,successorImpact:null});
+ await f.p.run(()=>{const state=f.p.read('lightContinuous');state.runs[0].reason=`CODEX_REQUEST_REJECTED: thread ${current.threadId} already has an active writer`;f.p.write('lightContinuous',state);});
+ let connections=0;const r=await restartWith(f,t,()=>{connections++;throw Error('must not connect');});
+ assert.match(r.runner.read()[0].reason,/阶段 A 尚未解除阻塞.*隔离工作树不一致/);
+ const before=f.snapshot();await r.change();await r.until('blocked');
+ assert.equal(connections,0);assert.equal(f.requests.length,1);assert.equal(f.created.length,1);assert.deepEqual(f.snapshot(),before);
+ assert.equal(f.p.read('lightContinuous').runs[0].current.executionId,current.executionId);assert.equal(r.runner.read()[0].enabled,true);
+});
