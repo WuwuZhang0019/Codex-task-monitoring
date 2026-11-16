@@ -228,7 +228,7 @@ export function createLightService(persistence, requests, {
       }, () => permitted(principal, projectKey, 'register', { input }));
     },
     // 由 D 的已确认发布入口调用。保留存在实体的状态、身份、历史及来源映射。
-    revise(principal, input) {
+    revise(principal, input, { allowConditionReplacement = false } = {}) {
       return commit(principal, 'revise', input, (value, project, plan, time) => {
         const candidate = validateLightSnapshot(structuredClone(input.snapshot));
         if (candidate.plans.length !== 1 || candidate.plans[0].key !== plan.key || candidate.projects[0]?.key !== project.key) lightError('INVALID_INPUT', '修订归属不匹配');
@@ -245,7 +245,7 @@ export function createLightService(persistence, requests, {
           const old = previous.find(item => item.key === step.key);
           if (old && ['code', 'originalCode', 'parentKey'].some(key => old[key] !== step[key])) lightError('HISTORY_REQUIRED', '已登记步骤身份映射不可重写');
           if (old) {
-            if (old.conditions.some(condition => condition.required && !step.conditions.some(item => item.conditionId === condition.conditionId && item.text === condition.text && item.required))) {
+            if (!allowConditionReplacement && old.conditions.some(condition => condition.required && !step.conditions.some(item => item.conditionId === condition.conditionId && item.text === condition.text && item.required))) {
               lightError('HISTORY_REQUIRED', '修订必须保留已有必要验收，替代需明确批准');
             }
             const conditions = step.conditions.map(condition => {
