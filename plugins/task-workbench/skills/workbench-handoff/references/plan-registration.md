@@ -6,7 +6,13 @@
 
 ## 首次登记与项目身份恢复
 
-更新日期：2026-11-13
+更新日期：2026-11-16
+
+调用入口必须先自动恢复或登记任务，再进入执行/核对模式。执行同步参考中的“回读已登记项目”以本节已完成为前提，不能把尚无 ID 当作仅写本地台账的理由。
+
+使用 `node <Skill目录>/scripts/registration-request.mjs <candidate.json> <options.json> <request.json>` 生成完整请求。candidate 是 `normalizePlan` 输出；options 含 `name`、`sourcePath`（绝对路径）、`projectPath`（来源项目绝对路径）、`version`、`context`，可含 `routes` 及已有 `projectKey`、`planKey`。同一来源项目的不同工作树传相同 projectPath；不同聊天复用同一台账键，不以 threadId 或执行日期创建新项目。脚本输出稳定本地键、eventId 与待提交文件路径；它只生成请求，下一步必须实际校验并调用 MCP。
+
+先用已有键或脚本生成的 projectKey 回读恢复，再判断是否首次提交。已有项目中发现目标 planKey 时复用；没有目标方案时按修订流程处理，不重复登记整个项目。请求文件已存在时直接读取原件，不覆盖；来源内容或上下文变化时先处理旧请求的未知结果，再另存新请求。来源文档不必为接入强制改写；候选编号与原编号映射均保存。只有明确的 NOT_FOUND 可以触发首次登记，认证、超时和 UNKNOWN_RESULT 均不是 NOT_FOUND。
 
 必须调用 `registrationSnapshot` 生成结构化候选，不能手工省略路线字段或把中文结果填入状态字段。初始步骤 `acceptance` 必须为 `pending`，“返回成功”等验收要求放入 `conditions[].text`；`endConditions` 是条件对象数组；`routes[].context` 必须是完整上下文对象；SHA256 使用小写十六进制。
 
@@ -14,7 +20,7 @@
 
 更新日期：2026-11-13
 
-用户明确要求接入并执行时，首次登记属于已有授权范围。工作台项目由登记方案生成，不要求用户先在任务岛建立项目，也不要求先有 Codex 侧栏项目 ID。
+调用本技能处理具体任务时，首次登记属于已有授权范围；执行、继续、核对和生成交接均先接入，不要求额外的接入口令。工作台项目由登记方案生成，不要求用户先在任务岛建立项目，也不要求先有 Codex 侧栏项目 ID。
 
 1. 读取用户方案和当前目录，按同包 `inspectWorkspace` 获取实际上下文；普通目录的 `branch`、`head` 为 `null`。读取已有本地映射；尚无映射时，用真实目录生成稳定本地 `projectKey`，用方案路径生成稳定 `planKey`，保存到当前目录的工作台同步记录。它们是本地键，不是伪造的服务 ID。
 2. 已有真实 projectId 时回读它；只有本地 projectKey 时，也可将它传给 `workbench_get_project({projectId: projectKey})` 恢复真实 ID。`NOT_FOUND` 表示尚未登记，继续下一步。没有任何身份时跳过读取，不传空 ID、路径或侧栏 ID 冒充服务身份。
@@ -33,7 +39,7 @@
 
 `node <Skill绝对路径>/scripts/normalize-plan.mjs <清单.json> <原文.md> <候选.json>` 默认仅生成含日期、前后 SHA256、文本、映射及差异的候选。order 为各父作用域内唯一正整数，插入后按实际位置重排 order，不改已有编号和固定身份。相同来源再次处理保持编号；已有映射必须完整传入，`stepId` 原样保留，插入使用锚点后缀。源变化、缺失或循环依赖、身份删除及重叠范围明确拒绝。需要写回时使用导出的 `applyNormalizedFile`，保留 Git 旧版本并重检来源；其他编辑器出现并行变化时停止合并，不覆盖用户内容。
 
-导出的 `registrationSnapshot` 将包含逐项验收的结果转换为当前 `light-1.0` 本地候选，未登记服务 ID 全部为空。对已经登记方案使用服务现有 projectKey、planKey 和步骤 key，保留既有编号、必要验收与依赖语义；真实 ID 由发布成功回读取得。先读取工具 schema 校验候选，再走原生确认发布，不把文本处理成功当成服务已登记。重复发布使用同一精确请求和 eventId；来源或内容改变属于新修订。
+导出的 `registrationSnapshot` 将包含逐项验收的结果转换为当前 `light-1.0` 本地候选，未登记服务 ID 全部为空。对已经登记方案使用服务现有 projectKey、planKey 和步骤 key，保留既有编号、必要验收与依赖语义；真实 ID 由发布成功回读取得。先读取工具 schema 校验候选，自动连接使用 confirmationGrant: null 提交发布，不把文本处理成功当成服务已登记。重复发布使用同一精确请求和 eventId；来源或内容改变属于新修订。
 
 ## 读取与确定步骤
 

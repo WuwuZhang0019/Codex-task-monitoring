@@ -8,6 +8,41 @@ import path from 'node:path';
 import {normalizePlan,sha256,applyNormalizedFile,registrationSnapshot} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/normalize-plan.mjs';
 import {validateLightSnapshot} from '../server/light-model.mjs';
 import {folderName,executionTitle,recordMapping,runHostOperation,inspectWorktree} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/context-ledger.mjs';
+import {registrationRequest} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/registration-request.mjs';
+import {validateLightToolArguments} from '../mcp/light.mjs';
+import {createPersistence} from '../server/persistence.mjs';
+import {createRequests} from '../server/business-requests.mjs';
+import {createLightAccess} from '../server/light-access.mjs';
+import {createLightService} from '../server/light-service.mjs';
+
+// 日期：2026-11-16。真实领域所有者验证自动登记、回读路线和重复请求的单次效果。
+test('调用入口生成的请求可自动登记并恢复原项目，不伪造历史完成', async t => {
+ const root=await mkdtemp(path.join(os.tmpdir(),'skill-auto-register-'));
+ t.after(()=>rm(root,{recursive:true,force:true}));
+ const persistence=await createPersistence(root),access=createLightAccess(persistence);
+ const {principal}=await access.connect({acknowledged:true});
+ const service=createLightService(persistence,createRequests(persistence),{authorize:access.authorize});
+ const result=normalizePlan(input());for(const node of result.mapping)node.acceptance='满足原方案明确验收';
+ const options={name:'自动接入回归',projectPath:root,sourcePath:path.join(root,'plan.md'),version:'2026-11-16',
+ context:{sessionGroup:'I',threadId:'fixture-thread',hostId:'local',folderId:null,worktreeOrdinal:1,worktreePath:root,branch:null,head:null,trust:'declared'}};
+ const request=registrationRequest(result,options);
+ assert.deepEqual(validateLightToolArguments('workbench_register_plan',request),[]);
+ assert.deepEqual(registrationRequest(result,options),request);
+ assert.equal(request.confirmationGrant,null);
+ const key=request.snapshot.projects[0].key;
+ const registered=await service.register(principal,request);
+ assert.deepEqual(await service.register(principal,request),registered);
+ const snapshot=service.read(principal,key);
+ assert.equal(snapshot.projects.length,1);assert.ok(snapshot.projects[0].id);
+ assert.ok(snapshot.plans[0].id);assert.equal(snapshot.steps.length,4);
+ assert.ok(snapshot.steps.every(s=>s.id&&s.status==='pending'&&s.acceptance==='pending'));
+ assert.deepEqual(snapshot.routes[0].stepKeys,['prepare','display']);
+ const reused=registrationRequest(result,{...options,projectKey:key,planKey:snapshot.plans[0].key});
+ assert.equal(reused.snapshot.projects[0].key,key);
+ assert.throws(()=>registrationRequest(result,{...options,projectPath:'relative'}),/ABSOLUTE/);
+ const changed=registrationRequest({...result,afterSha256:'b'.repeat(64)},options);
+ assert.equal(changed.snapshot.projects[0].key,key);assert.notEqual(changed.eventId,request.eventId);
+});
 
 function input(text='# 方案\n日期：2026-11-11\n## N01 准备\n### 1 提取\n### 2 校验\n## N02 展示\n依赖 N01；验收保持完整。\n```mermaid\nflowchart TD\n n[N01 准备] --> m[N02 展示]\n```\n普通列表 1. 保持原样\n'){
  const range=(value,start=0)=>{const i=text.indexOf(value,start);return {start:i,end:i+value.length,expected:value};};
