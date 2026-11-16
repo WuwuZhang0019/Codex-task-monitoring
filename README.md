@@ -2,9 +2,25 @@
 
 日期：2026-11-09
 
-更新日期：2026-11-11
+更新日期：2026-11-16
 
 状态：轻量路线 A—G 已验收并同步，revision149，进度7/7；下文旧 v1.0 记录保留为历史。
+
+## 界面预览
+
+以下截图展示任务岛的收起状态、展开后的多任务路线概览，以及单条路线的分叉与合流详情。
+
+### 顶部收起状态
+
+![任务岛收起时在 Codex 窗口顶部显示时间与路线进度](docs/assets/screenshots/task-island-collapsed.png)
+
+### 多任务路线概览
+
+![任务岛展开后集中展示多条任务路线及操作入口](docs/assets/screenshots/task-island-overview.png)
+
+### 路线详情
+
+![单条任务路线的站点、完成状态及多线分叉合流关系](docs/assets/screenshots/task-island-route-detail.png)
 
 ## 当前轻量路线入口
 
