@@ -107,7 +107,7 @@ test('D bridge 真实 STDIO 发现转发、写入响应丢失后原键查询、�
   await new Promise(resolve => { owner.closeAllConnections(); owner.close(resolve); });
   const unavailable = await call('workbench_get_project', { projectId: base.projectId });
   assert.equal(unavailable.structuredContent.error.code, 'OWNER_UNAVAILABLE');
-  await assert.rejects(client.listTools(), /OWNER_UNAVAILABLE/);
+  assert.deepEqual((await client.listTools()).tools.map(tool => tool.name), lightTools.map(tool => tool.name), '离线时仍能发现工具以便下一次调用恢复连接');
   assert.equal(diagnostics, '');
   assert.equal(JSON.stringify({ transcript, unknown, queried, unavailable }).includes(token), false);
   if (process.env.D_EVIDENCE_DIR) {

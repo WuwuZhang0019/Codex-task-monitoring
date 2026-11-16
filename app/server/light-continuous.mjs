@@ -34,7 +34,7 @@ function stageResumeIssue(s,current){
   if(!binding||binding.state!=='confirmed'||binding.revokedAt||binding.id!==current.bindingId||binding.bindingRevision!==current.bindingRevision||binding.context.threadId!==current.threadId||!execution||execution.id!==current.executionId||execution.bindingKey!==binding.key||execution.endedAt)return Error(`阶段 ${step.code} 的责任绑定或执行身份已变化，请先核对原会话后重试`);
   return null;
 }
-export function createContinuousRunner(persistence,service,{clientFactory=createSessionClient,principalProvider}={}){
+export function createContinuousRunner(persistence,service,{clientFactory=createSessionClient,principalProvider,canRun=()=>true}={}){
   const clients=new Map(),pumps=new Set(),workspaceClaims=new Map(),notifications=new Map();let closed=false;
   const state=()=>persistence.read('lightContinuous')??{version:1,runs:[]};
   const snapshot=()=>persistence.read('light')?.snapshot;
@@ -209,15 +209,21 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         }else if(current){
           if(!current.threadId)throw Error('THREAD_CREATION_RESULT_UNKNOWN');
           const step=s.steps.find(x=>x.key===current.stepKey);
-          if(step&&stepPassed(s,step)){await update(id,{current:null});continue;}
+          if(step&&stepPassed(s,step)&&!run.recovering){await update(id,{current:null});continue;}
           if(!current.executionId)throw Error('INCOMPLETE_START_REQUIRES_REVIEW');
-          if(['sending','unknown'].includes(current.turnDelivery))lightError('DELIVERY_UNKNOWN','阶段启动结果未知，请先核对原会话，避免重复执行',409);
+          if(['sending','unknown'].includes(current.turnDelivery)&&!current.turnId)lightError('DELIVERY_UNKNOWN','阶段启动结果未知，请先核对原会话，避免重复执行',409);
           const issue=stageResumeIssue(s,current);if(issue)throw issue;
           const resumed=await restore(current.threadId,current.transport??(run.mode==='current_thread'?run.session?.transport:'owned')??'owned');
           const {cwd}=await workspace(plan,step);
           if(resumed?.thread?.id!==current.threadId||!resumed.thread.cwd||!samePath(await realpath(resumed.thread.cwd),cwd))lightError('THREAD_WORKSPACE_MISMATCH','原会话的实际目录已变化，请核对会话目录后重试',409);
           current={...current,transport:resumed.transport};
           await update(id,{current,...(run.mode==='current_thread'&&run.session?.threadId===current.threadId?{session:{...run.session,transport:resumed.transport}}:{})});
+          if(current.turnId&&run.recovering){
+            const thread=await client.readThread(current.threadId);
+            observedTurn=thread.turns?.find(t=>t.id===current.turnId);
+            if(!observedTurn||typeof client.waitForTurn!=='function')lightError('DELIVERY_UNKNOWN','无法核对原回合结果，已保留原身份，禁止重复启动',409);
+            if(thread.status?.type==='active'&&thread.turns?.findLast(t=>t.status==='inProgress')?.id!==current.turnId)lightError('CODEX_THREAD_BUSY','原会话存在其他执行，请先核对',409);
+          }
           if(resumed.transport==='shared'&&resumed.thread.status?.type==='active'){
             observedTurn=resumed.thread.turns?.findLast(t=>t.status==='inProgress');
             if(!current.turnId||observedTurn?.id!==current.turnId||typeof client.waitForTurn!=='function')lightError('CODEX_THREAD_BUSY','原会话存在其他执行，等待结束后再接续',409);
@@ -265,19 +271,26 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         await update(id,{history});
         if(turn.status!=='completed'||client.interactionRequired)throw Error(client.interactionRequired?'需要人工确认，请处理该阶段会话后继续':'阶段会话失败或被中断');
         if(!stepPassed(latest,step))throw Error('阶段会话已结束，但工作台验收未通过；请在该会话修复后继续');
-        await update(id,{current:null});
+        await update(id,{current:null,recovering:false});
         if(find(id).status==='pausing'){await pauseIfRequested(id,'当前阶段已完成，后续阶段已暂停');return;}
       }
     }catch(error){if(!closed){const run=find(id);await update(id,{status:enabled(run)?'blocked':'paused',phase:null,...(run.current?.turnDelivery==='sending'?{current:{...run.current,turnDelivery:'unknown'}}:{}),reason:failureReason(error)});}}
     finally{client?.close();clients.delete(id);pumps.delete(id);for(const [cwd,owner]of workspaceClaims)if(owner===id)workspaceClaims.delete(cwd);if(!closed&&find(id)?.status==='running')setTimeout(()=>void pump(id),0);}
   }
   return {
-    async initialize(){await persistence.run(()=>{const s=state(),snap=snapshot();for(const r of s.runs){r.mode??='stages';r.enabled=enabled(r);const reconciled=completionView(r,snap);if(reconciled!==r){if(Object.entries(completionFields).some(([key,value])=>r[key]!==value))Object.assign(r,reconciled,{updatedAt:stamp()});continue;}if(activeStates.has(r.status)){r.status='paused';r.enabled=false;r.phase=null;r.reason='服务已重启，请点击继续，复用原阶段会话核验恢复';}if(r.current?.delivery?.state==='sending')r.current.delivery.state='unknown';
+    async initialize(){await persistence.run(()=>{const s=state(),snap=snapshot();for(const r of s.runs){const autoRecover=r.enabled===true;r.mode??='stages';r.enabled=enabled(r);const reconciled=completionView(r,snap);if(reconciled!==r){if(Object.entries(completionFields).some(([key,value])=>r[key]!==value))Object.assign(r,reconciled,{updatedAt:stamp()});continue;}if(activeStates.has(r.status)){
+        // Date: 2026-11-16. Keep explicit pause intent; recover only previously enabled runs.
+        if(r.status==='pausing'||!autoRecover){r.status='paused';r.enabled=false;r.phase=null;r.reason='已保留用户暂停要求';}
+        else if(r.current&&!r.current.threadId){r.status='blocked';r.phase=null;r.reason='THREAD_CREATION_RESULT_UNKNOWN: 请先核对原会话，避免重复创建';}
+        else {r.status='running';r.recovering=true;r.phase='recovering';r.reason='后台已恢复，正在核对原阶段会话并自动续接';}
+      }if(r.current?.delivery?.state==='sending')r.current.delivery.state='unknown';
       // 日期：2026-11-15。旧写入冲突不能遮住领域中已登记的真实阶段阻塞。
       if(r.status==='blocked'&&r.reason===`CODEX_REQUEST_REJECTED: thread ${r.current?.threadId} already has an active writer`&&!['sending','unknown'].includes(r.current?.turnDelivery)&&r.current?.delivery?.state!=='unknown'){
         const issue=stageResumeIssue(snapshot(),r.current);if(issue)r.reason=failureReason(issue);
       }
-    }persistence.write('lightContinuous',s);});},
+    }persistence.write('lightContinuous',s);});
+      for(const run of state().runs)if(run.status==='running'&&enabled(run))setTimeout(()=>void pump(run.id),0);
+    },
     read(){const runs=state().runs,s=snapshot();return [...runs.map(summary),...(s?.plans??[]).filter(plan=>!runs.some(run=>run.planKey===plan.key)&&planProgress(s,plan.key).passed).map(plan=>summary(completedRun(plan)))];},
     async change(input){
       if(!input||Object.keys(input).some(k=>!['planKey','action','expectedRevision','acknowledged','mode'].includes(k))||input.acknowledged!==true||!['start','pause','resume'].includes(input.action)||typeof input.planKey!=='string'||!Number.isSafeInteger(input.expectedRevision)||input.expectedRevision<0||(input.mode!==undefined&&!modes.has(input.mode)))lightError('INVALID_INPUT','连续执行请求无效');
@@ -295,6 +308,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         await preflight(plan,mode,previous);
       }
       await persistence.run(async()=>{
+        if(!canRun())lightError('OWNER_STOPPING','后台正在退出，请恢复连接后重试',409);
         const snap=snapshot(),plan=snap?.plans.find(p=>p.key===input.planKey),project=snap?.projects.find(p=>p.key===plan?.projectKey);
         if(!plan||!project)lightError('NOT_FOUND','方案不存在');
         if(input.action!=='pause'&&project.revision!==input.expectedRevision)lightError('REVISION_CONFLICT','任务已更新，请刷新重试',409);
@@ -309,7 +323,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
           if(!run){run={id:randomUUID(),planKey:plan.key,sourceHash:plan.source.sha256,status:'running',mode,enabled:true,intent:1,phase:'dispatching',current:null,history:[],createdAt:stamp(),updatedAt:stamp(),reason:''};s.runs.push(run);changed=true;}
           else if(run.status!=='completed'){
             changed=run.status!=='running'||run.mode!==mode;
-            if(changed){run.intent=(run.intent??0)+1;run.status='running';run.enabled=true;run.reason='';run.phase=run.current?'waiting':'dispatching';run.mode=mode;}
+            if(changed){run.recovering=false;run.intent=(run.intent??0)+1;run.status='running';run.enabled=true;run.reason='';run.phase=run.current?'waiting':'dispatching';run.mode=mode;}
           }
           if(mode==='current_thread'&&run.current?.threadId&&run.session?.threadId!==run.current.threadId){
             const step=snap.steps.find(x=>x.key===run.current.stepKey),binding=snap.bindings.find(b=>b.key===step?.bindingKey);

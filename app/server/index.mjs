@@ -12,6 +12,7 @@ import { createLightOnboarding } from './light-onboarding.mjs';
 import {createLightPanel} from './light-panel.mjs';
 import {createLightLibrary} from './light-library.mjs';
 import {createContinuousRunner} from './light-continuous.mjs';
+import { runtimeExitStatus } from './runtime-lifecycle.mjs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -150,7 +151,9 @@ async function createOwnedServer(options) {
   if (options.lightAccessEnabled && typeof options.authorize !== 'function') throw new Error('LIGHT_PRIVATE_AUTH_REQUIRED');
   const lightAccess = options.lightAccessEnabled ? createLightAccess(persistence, options.lightPresence) : null;
   const lightOnboarding = options.lightAccessEnabled ? createLightOnboarding(persistence) : null;
-  const lightAuthorize = options.lightAuthorize ?? lightAccess?.authorize;
+  let exitReserved = false;
+  const originalAuthorize = options.lightAuthorize ?? lightAccess?.authorize;
+  const lightAuthorize = (...args) => !exitReserved && (originalAuthorize?.(...args) ?? false);
   const light = createLightService(persistence, requests, {
     authorize: lightAuthorize,
     confirmBinding: options.lightConfirmBinding ?? lightAccess?.verifyBinding,
@@ -158,13 +161,14 @@ async function createOwnedServer(options) {
     automaticBinding: lightAccess?.automaticBinding,
   });
   const lightOutbox = createLightOutbox(persistence);
-  const continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:options.continuousClientFactory,principalProvider:options.continuousPrincipalProvider}) : null;
+  const continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:options.continuousClientFactory,principalProvider:options.continuousPrincipalProvider,canRun:()=>!exitReserved}) : null;
   await continuous?.initialize();
   const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [], continuous:()=>continuous?.read()??[] });
   const lightLibrary = createLightLibrary(persistence);
   const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize, automaticPublication:lightAccess?.automaticPublication});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const distDir = options.distDir ?? path.join(APP_DIR, 'dist');
+  const exitStatus = () => runtimeExitStatus(persistence.read('light')?.snapshot, continuous?.read() ?? []);
   const server = http.createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
@@ -176,6 +180,7 @@ async function createOwnedServer(options) {
       const pathname = safePath(req.url);
       if (options.authorize) await options.authorize(req, pathname);
       const method = req.method;
+      if (exitReserved) throw new HttpError(503, 'STOPPED');
       // MCP 的业务失败由协议层包装，必须在领域事务提交/回滚之后包装。
       if (pathname === '/api/light-onboarding' && lightOnboarding) {
         if (method !== 'POST' || req.headers.origin !== undefined || req.url !== pathname) throw new HttpError(403, 'FORBIDDEN');
@@ -205,6 +210,11 @@ async function createOwnedServer(options) {
         if(method!=='POST')throw new HttpError(405,'不支持的请求方法');
         respond(200,await continuous.change(await jsonBody(req)));
       } else await persistence.run(async () => {
+      if (exitReserved) throw new HttpError(503, 'STOPPED');
+      if (pathname === '/api/runtime/exit-status') {
+        if (!options.lightAccessEnabled || typeof options.authorize !== 'function' || method !== 'GET' || req.url !== pathname) throw new HttpError(403, 'FORBIDDEN');
+        return respond(200, exitStatus());
+      }
       if (pathname.startsWith('/api/light-library/')) {
         if (!options.lightAccessEnabled || typeof options.authorize !== 'function') throw new HttpError(403, '需要桌面所有者');
         if (method !== 'POST') throw new HttpError(405, '不支持的请求方法');
@@ -321,6 +331,11 @@ async function createOwnedServer(options) {
       if (status === 413) req.resume();
       sendJSON(res,status, { error: status === 500 ? '本地服务错误，请检查服务日志；数据未被清空' : error.message });
     }
+  });
+  server.prepareExit = () => persistence.run(() => {
+    const status = exitStatus();
+    if (status.allowed) exitReserved = true;
+    return status;
   });
   server.workbench={persistence,store,models,requests,drafts,publisher,business,light,lightOutbox,lightPublication,lightAccess,
     createLightMcp: (authenticate) => createLightMcp({service:light,authenticate,publish:lightPublication.publish,

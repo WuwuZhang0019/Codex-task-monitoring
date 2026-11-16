@@ -1,8 +1,9 @@
-// 日期 2026-11-10。stdout 仅供 MCP 协议，桥不会启动或恢复领域所有者。
+// Date: 2026-11-16. stdout is MCP-only; recovery uses the registered native island entry.
 import path from 'node:path';
 import os from 'node:os';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { createLightBridge, loadLightConfig } from './light-bridge.mjs';
+import { createIslandRecovery } from '../desktop/island-launcher.mjs';
 import { validAppId } from '../server/light-apps.mjs';
 
 try {
@@ -15,7 +16,9 @@ try {
   let config;
   try { config = await loadLightConfig(file); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
-  await createLightBridge(config, { reloadConfig: () => loadLightConfig(file), allowOfflineDiscovery: true, appId }).connect(new StdioServerTransport());
+  const recovery = config?.endpoint ? undefined : createIslandRecovery({ file: process.env.WORKBENCH_ISLAND_LAUNCHER ?? path.join(directory, 'launcher.json'), dataDir: config?.dataDir });
+  await createLightBridge(config, { reloadConfig: () => loadLightConfig(file), allowOfflineDiscovery: true, appId, recovery,
+    journalDirectory: path.join(path.dirname(file), 'recovery-events') }).connect(new StdioServerTransport());
 } catch {
   console.error('Workbench light bridge failed to start. Check the private owner configuration.');
   process.exitCode = 1;

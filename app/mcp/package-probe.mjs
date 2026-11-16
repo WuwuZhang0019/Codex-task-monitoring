@@ -10,7 +10,7 @@ const appDir = fileURLToPath(new URL('../', import.meta.url));
 const repository = path.dirname(appDir);
 // 日期：2026-11-11。每个包记录明确源码提交、脏文件和全部发布文件指纹。
 const sourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], {cwd:repository,encoding:'utf8',windowsHide:true}).trim();
-const dirtySource = execFileSync('git', ['status', '--porcelain', '--untracked-files=all', '--', 'plugins/task-workbench', 'app/mcp', 'app/server', 'app/desktop/prepare-resources.mjs'], {cwd:repository,encoding:'utf8',windowsHide:true}).trim();
+const dirtySource = execFileSync('git', ['status', '--porcelain', '--untracked-files=all', '--', 'plugins/task-workbench', 'app/mcp', 'app/server', 'app/desktop'], {cwd:repository,encoding:'utf8',windowsHide:true}).trim();
 if (process.argv.includes('--require-clean') && dirtySource) throw new Error('RELEASE_SOURCE_NOT_COMMITTED');
 const generatedDate = new Intl.DateTimeFormat('sv-SE', {timeZone:'Asia/Shanghai'}).format(new Date());
 const destination = process.argv[2];

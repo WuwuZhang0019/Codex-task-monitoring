@@ -1,11 +1,13 @@
-// Date: 2026-11-12. Explicit standalone lifecycle; MCP and UI readers never auto-start this service.
+// Date: 2026-11-16. Native island startup and recovery attach to one standalone owner.
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { open, mkdir, readFile } from 'node:fs/promises';
+import { open, mkdir, readFile, unlink } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import { connectOwner, discoverOwner } from './client.mjs';
 import { writePrivateJson } from './private-runtime.mjs';
+import { registerLauncher } from './island-launcher.mjs';
+import os from 'node:os';
 import { acquireDataLease } from '../server/data-lease.mjs';
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 export async function startService(dataDir) {
@@ -37,10 +39,15 @@ export async function startService(dataDir) {
 }
 export async function stopService(dataDir) {
   const { record, token } = await connectOwner(dataDir);
+  await unlink(path.join(dataDir, 'runtime-private/exit-result.json')).catch(error => { if (error.code !== 'ENOENT') throw error; });
   await writePrivateJson(path.join(dataDir, 'runtime-private/control.json'), {
     action: 'stop', ownerGeneration: record.ownerGeneration, token,
   });
   for (let i = 0; i < 300; i++) {
+    try {
+      const result = JSON.parse(await readFile(path.join(dataDir, 'runtime-private/exit-result.json'), 'utf8'));
+      if (result.ownerGeneration === record.ownerGeneration && result.error === 'TASK_ACTIVE') throw Error('TASK_ACTIVE: finish or cancel active task executions before exiting');
+    } catch (error) { if (error.code !== 'ENOENT') throw error; }
     try {
       const current = await discoverOwner(dataDir);
       if (current.ownerGeneration !== record.ownerGeneration) throw Error('OWNER_CHANGED_DURING_STOP');
@@ -66,9 +73,11 @@ export async function stopService(dataDir) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const [action, flag, dataDir, ...extra] = process.argv.slice(2);
-    if (!['start', 'stop', 'status'].includes(action) || flag !== '--data-dir' || !dataDir || !path.isAbsolute(dataDir) || extra.length) {
+    const registration = action === 'start' && extra.length === 4 && extra[0] === '--island-executable' && extra[2] === '--island-pid';
+    if (!['start', 'stop', 'status'].includes(action) || flag !== '--data-dir' || !dataDir || !path.isAbsolute(dataDir) || (extra.length && !registration)) {
       throw Error('Usage: node desktop/service.mjs start|stop|status --data-dir <absolute-directory>');
     }
+    if (registration) await registerLauncher(process.env.WORKBENCH_ISLAND_LAUNCHER ?? path.join(os.homedir(), '.codex/task-workbench-light/launcher.json'), { executable: extra[1], pid: Number(extra[3]), dataDir });
     const result = action === 'start' ? await startService(dataDir) : action === 'stop'
       ? await stopService(dataDir) : (await connectOwner(dataDir)).record;
     console.log(JSON.stringify(result));

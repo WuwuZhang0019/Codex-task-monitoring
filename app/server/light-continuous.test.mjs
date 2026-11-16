@@ -1,5 +1,5 @@
 // 日期：2026-11-13。真实领域状态验证连续调度、独立会话、暂停、恢复和失败门禁。
-import test from 'node:test';
+import test, {after} from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,writeFile,readFile,rm,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -14,15 +14,17 @@ import {createLightService} from './light-service.mjs';
 import {prepareLightPlan} from './light-import.mjs';
 import {createContinuousRunner} from './light-continuous.mjs';
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
+const fixtureRoots=[];
+after(async()=>{for(const root of fixtureRoots)await rm(root,{recursive:true,force:true});});
 async function fixture(t,{hold=false,finish=true,decorateClient=client=>client}={}){
- const root=await mkdtemp(path.join(os.tmpdir(),'continuous-fixture-'));t.after(()=>rm(root,{recursive:true,force:true}));
+ const root=await mkdtemp(path.join(os.tmpdir(),'continuous-fixture-'));fixtureRoots.push(root);
  const p=await createPersistence(path.join(root,'data')),access=createLightAccess(p),grant=await access.connect({appId:'codex',acknowledged:true});
  const service=createLightService(p,createRequests(p),{authorize:access.authorize,automaticBinding:access.automaticBinding,confirmBinding:access.verifyBinding,verifyExecutionContext:access.verifyExecutionContext});
  const file=path.join(root,'plan.md'),text='# 测试\n日期：2026-11-13\n## 实施路线与出口\n| 阶段 | 前置 | 范围 | 出口 |\n| A 第一步 | 无 | 空 | 成功 |\n| B 第二步 | A | 空 | 成功 |\n| C 第三步 | B | 空 | 成功 |\n';await writeFile(file,text);
  const context={sessionGroup:'A',threadId:null,hostId:null,folderId:null,worktreeOrdinal:1,worktreePath:root,branch:null,head:null,trust:'declared'};
  const candidate=prepareLightPlan({text,sourcePath:file,version:'1',projectKey:'test-project',planKey:'test-plan',name:'连续测试',date:'2026-11-13',context});
  const registered=await service.register(grant.principal,{eventId:'register',expectedRevision:0,snapshot:candidate});
- const created=[],requests=[],notifications=[],transports=[],turns=new Map(),held=new Set();let release;
+ const created=[],requests=[],notifications=[],transports=[],turns=new Map(),held=new Set();let release,releaseRequested=false;
  async function complete(threadId){
   const s=service.read(grant.principal,registered.projectId),step=s.steps.find(x=>x.status==='running'&&s.bindings.some(b=>b.key===x.bindingKey&&b.state==='confirmed'&&b.context.threadId===threadId)),binding=s.bindings.find(b=>b.key===step?.bindingKey),execution=s.executions.find(e=>e.key===step?.executionKey);
   assert.ok(step&&binding&&execution,'夹具必须完成该会话当前真正执行的阶段');
@@ -34,12 +36,12 @@ async function fixture(t,{hold=false,finish=true,decorateClient=client=>client}=
   async connect(){},async attach(id){return this.readThread(id);},async resume(id){return {thread:{id,cwd:root}};},
   async readThread(id){return {id,cwd:root,status:{type:turns.get(id)?.status==='inProgress'?'active':'idle'},turns:turns.has(id)?[turns.get(id)]:[]};},
   async notify(id,text){const turn=turns.get(id),delivery=options.transport==='shared'?'sent':turn?.status==='inProgress'?'steered':'started';notifications.push({id,text,turnId:turn?.id,delivery,active:turn?.status==='inProgress'});return {turnId:turn?.id??'notify-'+notifications.length,delivery};},
-  async run(id,text,onStarted){requests.push({id,text});const turn={id:'turn-'+requests.length,status:'inProgress'};turns.set(id,turn);await onStarted?.(turn.id);if(hold===true&&requests.length===1||Array.isArray(hold)&&hold.includes(requests.length))await new Promise(r=>{held.add(requests.length);release=r;});if(finish)await complete(id);turn.status='completed';return{...turn};},close(){}
+  async run(id,text,onStarted){requests.push({id,text});const turn={id:'turn-'+requests.length,status:'inProgress'};turns.set(id,turn);await onStarted?.(turn.id);if(hold===true&&requests.length===1||Array.isArray(hold)&&hold.includes(requests.length))await new Promise(r=>{held.add(requests.length);release=r;if(releaseRequested){releaseRequested=false;release=null;r();}});if(finish)await complete(id);turn.status='completed';return{...turn};},close(){}
  },options);};
  const runner=createContinuousRunner(p,service,{clientFactory:factory,principalProvider:()=>grant.principal});await runner.initialize();t.after(()=>runner.close());
  const change=(action,mode)=>runner.change({planKey:'test-plan',action,expectedRevision:service.read(grant.principal,registered.projectId).projects[0].revision,acknowledged:true,...(mode?{mode}:{})});
  async function until(status){for(let i=0;i<700;i++){if(runner.read()[0]?.status===status)return;await delay(10);}throw Error(JSON.stringify(runner.read()));}
- return{root,runner,created,requests,notifications,transports,turns,held,change,until,factory,complete,release:()=>release?.(),snapshot:()=>service.read(grant.principal,registered.projectId),p,service,grant};
+ return{root,runner,created,requests,notifications,transports,turns,held,change,until,factory,complete,release:()=>{if(release){const done=release;release=null;done();}else releaseRequested=true;},snapshot:()=>service.read(grant.principal,registered.projectId),p,service,grant};
 }
 test('three declared stages create three separate sequential chats and only complete after actual service checks',async t=>{
  const f=await fixture(t);await f.change('start');await f.until('completed');assert.equal(f.created.length,3);assert.deepEqual(f.created.map(c=>c.title.split(' / ')[1][0]),['A','B','C']);assert.ok(f.snapshot().steps.every(s=>s.status==='completed'));assert.equal(f.runner.read()[0].completed,3);
@@ -381,4 +383,42 @@ test('registered stage blockers replace legacy writer errors and prevent any res
  const before=f.snapshot();await r.change();await r.until('blocked');
  assert.equal(connections,0);assert.equal(f.requests.length,1);assert.equal(f.created.length,1);assert.deepEqual(f.snapshot(),before);
  assert.equal(f.p.read('lightContinuous').runs[0].current.executionId,current.executionId);assert.equal(r.runner.read()[0].enabled,true);
+});
+
+// 日期：2026-11-16。故障重启自动附着原回合，不重新投递执行指令。
+test('enabled execution automatically recovers its original turn after restart without duplicate dispatch', async t => {
+  const f=await fixture(t,{hold:true});
+  await f.change('start');
+  for(let i=0;i<500&&!f.p.read('lightContinuous').runs[0]?.current?.turnId;i++)await delay(10);
+  const original=structuredClone(f.p.read('lightContinuous').runs[0].current);
+  assert.ok(original.turnId);
+  f.runner.close();
+  let waits=0;
+  const runner=createContinuousRunner(f.p,f.service,{principalProvider:()=>f.grant.principal,clientFactory:options=>{
+    const client=f.factory(options);
+    client.waitForTurn=async(threadId,turnId)=>{
+      waits++;assert.equal(threadId,original.threadId);assert.equal(turnId,original.turnId);
+      for(let i=0;i<500&&f.turns.get(threadId)?.status==='inProgress';i++)await delay(10);
+      return f.turns.get(threadId);
+    };
+    return client;
+  }});
+  t.after(()=>runner.close());t.after(()=>f.release());
+  await runner.initialize();
+  for(let i=0;i<500&&!waits;i++)await delay(10);
+  assert.equal(waits,1);assert.equal(f.requests.length,1);assert.equal(f.created.length,1);
+  const current=f.p.read('lightContinuous').runs[0].current;
+  assert.equal(current.executionId,original.executionId);assert.equal(current.bindingId,original.bindingId);
+  f.release();
+  for(let i=0;i<700&&runner.read()[0].status==='running';i++)await delay(10);
+  assert.equal(runner.read()[0].status,'completed');assert.equal(f.requests.length,3);assert.equal(f.created.length,3);
+});
+
+test('restart preserves explicit pause and blocks unknown delivery without creating a new chat', async t => {
+  const f=await fixture(t);
+  const hash=f.snapshot().plans[0].source.sha256;
+  await f.p.run(()=>f.p.write('lightContinuous',{version:1,runs:[{id:'pause',planKey:'test-plan',status:'pausing',enabled:false,sourceHash:hash,current:null,history:[]}]}));
+  await f.runner.initialize();assert.equal(f.runner.read()[0].status,'paused');assert.equal(f.created.length,0);
+  await f.p.run(()=>f.p.write('lightContinuous',{version:1,runs:[{id:'uncertain',planKey:'test-plan',status:'running',enabled:true,sourceHash:hash,current:{creationAttempted:true,threadId:null},history:[]}]}));
+  await f.runner.initialize();assert.equal(f.runner.read()[0].status,'blocked');assert.match(f.runner.read()[0].reason,/THREAD_CREATION_RESULT_UNKNOWN/);assert.equal(f.created.length,0);
 });

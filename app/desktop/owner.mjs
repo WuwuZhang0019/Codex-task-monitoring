@@ -32,7 +32,7 @@ function authorize(req, pathname) {
   if (shuttingDown) throw new HttpError(503, 'STOPPED');
 }
 await mkdir(root, { recursive: true });
-// Date: 2026-11-12. Only explicit desktop/service startup invokes this entry; bridges never launch it.
+// Date: 2026-11-16. The installed island and its recovery entry share this single owner.
 await preparePrivateDirectory(privateDirectory);
 // Keep generation/session cleanup serialized even after the HTTP server releases its business lease.
 const releaseLifecycle = acquireDataLease(privateDirectory);
@@ -45,13 +45,23 @@ const record = { version: 1, ownerGeneration: generation, pid: process.pid, endp
 await writeFile(`${discovery}.tmp`, JSON.stringify(record), { mode: 0o600 });
 await rename(`${discovery}.tmp`, discovery);
 console.log(JSON.stringify({ ready: true, ...record }));
-let stopping;
+let stopping, stopCheck;
 function stop() {
   if (stopping) return stopping;
+  if (!stopCheck) stopCheck = checkAndStop().finally(() => { stopCheck = null; });
+  return stopCheck;
+}
+async function checkAndStop() {
+  const status = await server.prepareExit();
+  if (!status.allowed) {
+    await writePrivateJson(path.join(privateDirectory, 'exit-result.json'), { ownerGeneration: generation, error: 'TASK_ACTIVE', ...status });
+    return false;
+  }
   shuttingDown = true;
-  stopping = drainAndStop();
+  stopping = drainAndStop().then(() => true);
   return stopping;
 }
+function requestStop() { void stop().then(stopped => { if (stopped) process.exit(0); }); }
 async function drainAndStop() {
   await writeFile(stopped, JSON.stringify({ ownerGeneration: generation, stoppedAt: new Date().toISOString(), reason: 'explicitExit' }), { mode: 0o600 });
   server.closeIdleConnections();
@@ -59,7 +69,7 @@ async function drainAndStop() {
   const current = JSON.parse(await readFile(discovery, 'utf8').catch(() => 'null'));
   if (current?.ownerGeneration === generation) {
     await unlink(discovery);
-    for (const name of ['owner-session.json', 'panel-session.json', 'control.json']) {
+    for (const name of ['owner-session.json', 'panel-session.json', 'control.json', 'exit-result.json']) {
       await unlink(path.join(privateDirectory, name)).catch(error => { if (error.code !== 'ENOENT') throw error; });
     }
   }
@@ -67,8 +77,8 @@ async function drainAndStop() {
 }
 if (process.env.WORKBENCH_OWNER_MODE !== 'standalone') {
   process.stdin.setEncoding('utf8');
-  process.stdin.on('data', data => { if (data.trim() === 'stop') stop().then(() => process.exit(0)); });
-  process.stdin.on('end', () => stop().then(() => process.exit(0)));
+  process.stdin.on('data', data => { if (data.trim() === 'stop') requestStop(); });
+  process.stdin.on('end', () => requestStop());
 }
 // The explicit service CLI writes this protected, generation-bound control request.
 let checking = false;
@@ -80,10 +90,10 @@ setInterval(async () => {
     const supplied = Buffer.from(`Bearer ${request.token ?? ''}`);
     if (request.action === 'stop' && request.ownerGeneration === generation
       && supplied.length === expected.length && timingSafeEqual(supplied, expected)) {
-      await stop();
-      process.exit(0);
+      await unlink(path.join(privateDirectory, 'control.json')).catch(() => {});
+      if (await stop()) process.exit(0);
     }
   } catch (error) { if (error.code !== 'ENOENT') console.error('Invalid runtime control request'); }
   finally { checking = false; }
 }, 250);
-for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => stop().then(() => process.exit(0)));
+for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => requestStop());
