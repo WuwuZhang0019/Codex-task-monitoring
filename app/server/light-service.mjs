@@ -2,7 +2,7 @@
 import { randomUUID } from 'node:crypto';
 import { digest } from './receipts.mjs';
 import { requireLightShape, validateLightSnapshot, lightError, transitions, unique,
-  requiredConditions, childrenOf, dependenciesOf, waitingFor, planProgress } from './light-model.mjs';
+  requiredConditions, childrenOf, dependenciesOf, waitingFor, planProgress, stepPassed } from './light-model.mjs';
 import { legacyLightStatus } from './light-import.mjs';
 import { touches } from './light-library.mjs';
 import { validateCoordination } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
@@ -262,10 +262,53 @@ export function createLightService(persistence, requests, {
         for (const route of candidate.routes) route.id = value.snapshot.routes.find(item => item.key === route.key)?.id ?? randomUUID();
         value.snapshot.routes = [...value.snapshot.routes.filter(item => item.planKey !== plan.key), ...candidate.routes];
         Object.assign(plan, { ...candidate.plans[0], id: plan.id });
-        for (const step of candidate.steps.filter(item => item.status === 'completed' || item.status === 'running')) {
-          const old = previous.find(item => item.key === step.key);
-          if (digest(old?.dependsOn) !== digest(step.dependsOn) || digest(old?.conditions) !== digest(step.conditions)
-            || candidate.steps.some(item => item.parentKey === step.key && !previous.some(oldStep => oldStep.key === item.key))) {
+        // 日期：2026-11-16。只补录未执行叶步骤；不绕过当前执行绑定或制造历史执行。
+        const reports = input.historicalSteps ?? [];
+        if (!Array.isArray(reports) || reports.length > 200) lightError('INVALID_INPUT', '历史补录格式无效');
+        unique(reports.map(item => item.stepKey), '重复历史步骤');
+        for (const report of reports) {
+          if (!report || !Array.isArray(report.checks) || !Array.isArray(report.evidence)
+            || report.occurredAt !== null && (typeof report.occurredAt !== 'string' || !report.occurredAt.trim()))
+            lightError('INVALID_INPUT', '历史补录须包含检查、证据和已知时间或 null');
+          const step = value.snapshot.steps.find(item => item.planKey === plan.key && item.key === report.stepKey);
+          if (!step || step.status !== 'pending' || step.executionKey || step.bindingKey
+            || childrenOf(value.snapshot, step.key).length || step.blockers.some(item => !item.resolved)) {
+            lightError('INVALID_TRANSITION', '历史补录仅适用于无执行记录、无阻塞的待核验叶步骤');
+          }
+          const owner = value.snapshot.bindings.find(item => item.planKey === plan.key && item.state === 'confirmed'
+            && !item.revokedAt && (item.stepKeys.includes(step.key) || item.stepKeys.includes(step.parentKey)));
+          permitted(principal, project.id, 'revise', { input, ...(owner ? { binding: owner } : {}) });
+          unique(report.checks.map(item => item.conditionId), '重复验收检查');
+          unique(report.evidence.map(item => item.evidenceId), '重复证据');
+          for (const check of report.checks) {
+            requireLightShape('condition', check);
+            if (!step.conditions.some(item => item.conditionId === check.conditionId && item.text === check.text && item.required === check.required))
+              lightError('EVIDENCE_MISMATCH', '历史验收条件必须匹配原步骤');
+          }
+          for (const proof of report.evidence) requireLightShape('evidence', proof);
+          if (!['pending', 'completed'].includes(report.status)) lightError('INVALID_INPUT', '历史结果须待核验或已完成');
+          if (report.status === 'completed') {
+            if (waitingFor(value.snapshot, step).length) lightError('DEPENDENCY_NOT_READY', '历史前置尚未核验', 409);
+            applyChecks(step, report.checks, report.evidence);
+            step.status = 'completed'; step.acceptance = 'passed';
+          } else {
+            step.conditions = step.conditions.map(item => report.checks.find(check => check.conditionId === item.conditionId)
+              ?? { ...item, result: 'pending', evidenceIds: [] });
+            step.evidence = structuredClone(report.evidence); step.acceptance = 'recheck';
+          }
+          step.sync = 'synced'; step.updatedAt = time;
+          // occurredAt 是实际历史时间；未知时事件使用本次补录时刻，原始 null 保存在审计输入中。
+          history(value, { ...input, eventId: `${input.eventId}/history/${digest(step.key)}`,
+            occurredAt: report.occurredAt ?? input.occurredAt, reason: `历史补录：${input.reason}`, evidence: report.evidence },
+            step, 'pending', null, time, digest([principal, project.id, 'reviseHistory']));
+        }
+        // 已核验历史子项不应撤销原阶段完成；新增未完成的必要工作才触发出口复核。
+        for (const old of previous.filter(item => item.status === 'completed' || item.status === 'running')) {
+          const step = candidate.steps.find(item => item.key === old.key);
+          const addedUnfinished = candidate.steps.some(item => item.parentKey === step.key && item.required
+            && !previous.some(oldStep => oldStep.key === item.key) && !stepPassed(value.snapshot, item));
+          if (digest(old.dependsOn) !== digest(step.dependsOn) || digest(old.conditions) !== digest(step.conditions)
+            || step.status === 'completed' && addedUnfinished) {
             step.status = 'blocked'; step.acceptance = 'recheck';
             addBlocker(step, { blockerId: `revision:${input.eventId}`, reason: input.reason, waitingFor: ['修订后复核'], releaseConditions: ['重新满足验收'], resolved: false });
             invalidateSuccessors(value.snapshot, step, input.reason, time);

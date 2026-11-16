@@ -114,3 +114,15 @@ test('E 实际工作树与错误目录分支分别核验',async()=>{
   const child=await mkdtemp(path.join(repository,'child-'));await assert.rejects(inspectWorktree(child),/ROOT_MISMATCH/);
  } finally {await rm(repository,{recursive:true,force:true});}
 });
+
+
+// 日期：2026-11-16。未知步骤的开发线以独立标题路线接入，不制造标题之间的先后。
+test('动态标题模式生成各线独立起点，保留已明确子步骤与原始依赖',()=>{
+ const result=normalizePlan(input());for(const node of result.mapping)node.acceptance='原验收条件';
+ const context={sessionGroup:'fixture',threadId:null,hostId:null,folderId:null,worktreeOrdinal:1,worktreePath:path.resolve('fixture'),branch:null,head:null,trust:'declared'};
+ const s=registrationSnapshot(result,{projectKey:'growing/project',planKey:'growing/plan',name:'动态线',sourcePath:path.resolve('plan.md'),version:'1',context,growing:true});
+ assert.equal(validateLightSnapshot(s),s);
+ assert.deepEqual(s.routes.map(r=>r.stepKeys),[['prepare'],['display']]);
+ assert.equal(s.steps.length,4);assert.deepEqual(s.steps.find(step=>step.key==='display').dependsOn,['prepare']);
+ assert.ok(s.steps.every(step=>step.status==='pending'));
+});
