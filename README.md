@@ -47,7 +47,7 @@
 | Codex 插件与 Skill | 从方案提取路线，登记或恢复任务，同步进度、核对交付并生成交接指令 | 本仓库 `plugins/task-workbench` |
 | Windows 任务岛 | 展示顶部缩略路线、任务列表及详细路线图，提供设置和任务操作入口 | [任务岛外壳仓库](https://github.com/WuwuZhang0019/windows-dynamic-island/tree/codex/island-workbench-shell) |
 
-截至本文更新，业务源码版本为 `0.2.1`，插件源码版本为 `0.1.25`；本机安装版和当前聊天加载的插件版本需分别核对。
+截至本文更新，业务源码版本为 `0.2.2`，插件源码版本为 `0.1.26`；本机安装版和当前聊天加载的插件版本需分别核对。
 
 目前支持：
 
@@ -99,7 +99,7 @@ npm ci
 npm run dev
 ```
 
-开发模式启动本地 API 和 Vite 页面，默认端口分别为 `4318` 和 `4317`。
+开发模式仅启动本地 API，默认端口为 `4318`。旧网页界面及其 Tauri 外壳已于 2026-11-16 删除，桌面界面统一使用任务岛。
 
 ```powershell
 npm test
@@ -115,13 +115,20 @@ npm run desktop:resources
 
 资源输出到 `app/desktop/resources`，包含 Node 运行时及业务服务。任务岛外壳的构建脚本默认从相邻的 `Codex-task-monitoring/app/desktop/resources` 获取资源，也可通过 `WORKBENCH_RUNTIME_SOURCE` 指定资源目录。构建原生任务岛还需要外壳仓库的 Bun、Rust 和 Windows Tauri 构建环境。
 
+打包 Windows exe（构建右侧任务岛）：
+
+```powershell
+npm run package:exe
+```
+
+默认使用相邻的 `windows-dynamic-island` 仓库，可通过 `WORKBENCH_ISLAND_SOURCE` 指定外壳源码目录，通过 `BUN_EXECUTABLE` 指定 Bun。产物位于外壳仓库的 `src-tauri/target/release/bundle/nsis`。
+
 目录概览：
 
 - `app/server`：本地业务服务与持久化。
 - `app/mcp`：MCP 接口、协议校验及插件打包。
 - `app/desktop`：服务生命周期、运行资源准备与数据迁移。
 - `app/contracts`：业务服务与任务岛的接入契约。
-- `app/src`：业务仓库中的网页界面与领域逻辑。
 - `plugins/task-workbench`：Codex 插件、Skill 与参考脚本。
 - `app/tests`：领域、接入和浏览器回归检查。
 - `docs`：方案、使用资料与执行记录。

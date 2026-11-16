@@ -105,14 +105,6 @@ test('service mode requires real identities and cannot implicitly replace simula
   assert.throws(() => acceptEnvelope(simulation, service), /mode cannot change/);
 });
 
-test('existing light simulation snapshot maps without changing fixed ids or status semantics', async () => {
-  const snapshot = JSON.parse(await readFile(new URL('../../src/light-simulation.json', import.meta.url), 'utf8'));
-  const envelope = createScenario('multi-project'); envelope.snapshot = snapshot;
-  const accepted = validateEnvelope(envelope);
-  assert.deepEqual(accepted.snapshot, snapshot);
-});
-
-
 test('service-schema nullable original codes map losslessly without synthesizing replacement numbering', async () => {
   const schema = JSON.parse(await readFile(new URL('../../mcp/contracts/light-v1.json', import.meta.url), 'utf8'));
   const allowedOriginalCode = new Ajv2020().compile(schema.$defs.step.properties.originalCode);

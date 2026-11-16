@@ -38,7 +38,9 @@ const distribution = path.join(cache, `node-v${nodeVersion}-win-x64`);
 await copyFile(path.join(distribution, 'node.exe'), path.join(root, 'node.exe'));
 await copyFile(path.join(distribution, 'LICENSE'), path.join(root, 'NODE-LICENSE'));
 await buildBusinessSchema();
-for (const directory of ['server', 'mcp', 'dist']) {
+// 日期：2026-11-16。移除旧网页资源。
+await rm(path.join(root, 'app/dist'), { recursive: true, force: true });
+for (const directory of ['server', 'mcp']) {
   const destination = path.resolve(root, 'app', directory);
   const relative = path.relative(root, destination);
   if (relative.startsWith('..') || path.isAbsolute(relative)) throw Error('Resource destination escapes generated root');

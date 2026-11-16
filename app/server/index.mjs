@@ -16,7 +16,7 @@ import { runtimeExitStatus } from './runtime-lifecycle.mjs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { readFile, realpath, stat, readdir } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { createStore } from './store.mjs';
 import { createModelStore } from './model-store.mjs';
 import { createAI } from './ai.mjs';
@@ -28,7 +28,7 @@ import { existsSync } from 'node:fs';
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BODY_LIMIT = 2 * 1024 * 1024;
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.txt': 'text/plain; charset=utf-8' };
+
 
 export function loadEnvironment(file = path.join(APP_DIR, '.env')) {
   const existing = { ...process.env };
@@ -83,32 +83,6 @@ async function jsonBody(req) {
 function sendJSON(res, status, value) {
   res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
   res.end(JSON.stringify(value));
-}
-function contained(root, file) {
-  const relative = path.relative(root, file);
-  return relative === '' || (!relative.startsWith(`..${path.sep}`) && relative !== '..' && !path.isAbsolute(relative));
-}
-async function staticFile(res, pathname, distDir, head) {
-  try {
-    const root = await realpath(distDir);
-    let target = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
-    if (!contained(root, target)) throw new HttpError(403, '拒绝目录越界');
-    try {
-      target = await realpath(target);
-    } catch (error) {
-      if (error.code !== 'ENOENT') throw error;
-      if (path.extname(pathname)) throw new HttpError(404, '文件不存在');
-      target = await realpath(path.join(root, 'index.html'));
-    }
-    if (!contained(root, target)) throw new HttpError(403, '拒绝符号链接越界');
-    if (!(await stat(target)).isFile()) throw new HttpError(404, '文件不存在');
-    const content = await readFile(target);
-    res.writeHead(200, { 'Content-Type': MIME[path.extname(target).toLowerCase()] ?? 'application/octet-stream', 'Content-Length': content.length, 'Cache-Control': 'no-cache' });
-    res.end(head ? undefined : content);
-  } catch (error) {
-    if (error.code === 'ENOENT' || error.code === 'ENOTDIR') throw new HttpError(404, '生产 dist 不存在，请先构建前端');
-    throw error;
-  }
 }
 async function readSample(sampleFile) {
   if (sampleFile) return readFile(sampleFile, 'utf8');
@@ -167,7 +141,6 @@ async function createOwnedServer(options) {
   const lightLibrary = createLightLibrary(persistence);
   const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize, automaticPublication:lightAccess?.automaticPublication});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
-  const distDir = options.distDir ?? path.join(APP_DIR, 'dist');
   const exitStatus = () => runtimeExitStatus(persistence.read('light')?.snapshot, continuous?.read() ?? []);
   const server = http.createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -319,7 +292,7 @@ async function createOwnedServer(options) {
       if (pathname === '/api/health' || pathname === '/api/sample') throw new HttpError(405, '不支持的请求方法');
       if (pathname === '/api' || pathname.startsWith('/api/')) throw new HttpError(404, 'API 不存在');
       if (method !== 'GET' && method !== 'HEAD') throw new HttpError(405, '不支持的请求方法');
-      await staticFile(res, pathname, distDir, method === 'HEAD');
+      throw new HttpError(404, '此服务仅提供 API，请使用任务岛桌面程序');
       });
       if (options.afterCommit && await options.afterCommit(req, response) === 'drop') { res.destroy(); return; }
       if(response)sendJSON(res,response.status,response.value);

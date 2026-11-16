@@ -8,36 +8,23 @@
     "node": ">=22.16.0"
   },
   "scripts": {
-    "dev": "concurrently -k -n api,web \"node --watch server/index.mjs\" \"vite\"",
-    "build": "node mcp/build-business-schema.mjs && tsc --noEmit && vite build",
+    "dev": "node --watch server/index.mjs",
+    "build": "node mcp/build-business-schema.mjs",
     "start": "node server/index.mjs",
-    "test": "node --test server/*.test.mjs mcp/*.test.mjs && npm run test:domain && npm run test:skill",
+    "test": "node --test server/*.test.mjs mcp/*.test.mjs && npm run test:skill",
     "test:skill": "node --test tests/skill-workflow.test.mjs tests/coordination.test.mjs tests/host-project-preparation.test.mjs tests/host-project-client.test.mjs tests/shared-projects.test.mjs",
-    "test:domain": "tsc src/domain.ts --outDir .test-build --module ESNext --target ES2022 --moduleResolution Bundler --skipLibCheck && node --test tests/domain.test.mjs",
-    "test:e2e": "npm run build && node tests/e2e.mjs",
-    "tauri": "tauri",
     "service": "node desktop/service.mjs",
     "desktop:resources": "node desktop/prepare-resources.mjs",
     "test:desktop": "node --test desktop/*.test.mjs",
-    "test:growing:browser": "node tests/growing-routes-browser.mjs"
+    "test:growing:browser": "node tests/growing-routes-browser.mjs",
+    "package:exe": "node desktop/package-island.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",
-    "ajv": "8.17.1",
-    "lucide-react": "^0.468.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "ajv": "8.17.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",
-    "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.4.0",
-    "concurrently": "^9.1.0",
-    "esbuild": "0.25.12",
-    "typescript": "^5.7.0",
-    "vite": "^6.1.0",
-    "@tauri-apps/cli": "2.11.0"
+    "esbuild": "0.25.12"
   }
 }

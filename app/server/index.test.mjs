@@ -341,18 +341,18 @@ test('localhost Host and Origin defenses, no CORS opt-in, Vite proxy allowed', a
   assert.deepEqual((await f.request('/api/projects')).value.projects, []);
 });
 
-test('static dist works, SPA fallback, traversal and symlink escape are blocked', async t => {
+test('API-only service rejects retired UI assets, traversal and symlink escape', async t => {
   const f = await fixture(t);
-  assert.match((await f.request('/')).value, /fixture/);
-  assert.match((await f.request('/asset.js')).headers.get('content-type'), /javascript/);
-  assert.match((await f.request('/projects/abc')).value, /fixture/);
+  assert.equal((await f.request('/')).status, 404);
+  assert.equal((await f.request('/asset.js')).status, 404);
+  assert.equal((await f.request('/projects/abc')).status, 404);
   assert.equal((await f.request('/missing.js')).status, 404);
   assert.equal((await f.request('/api/no-such-route')).status, 404);
   assert.equal((await f.request('/asset.js', { method: 'HEAD' })).value, '');
   await writeFile(path.join(f.root, 'secret.txt'), 'DO NOT LEAK');
   // Directory junctions do not require Windows symlink privileges.
   await symlink(f.root, path.join(f.distDir, 'leak'), 'junction');
-  assert.equal((await f.request('/leak/secret.txt')).status, 403);
+  assert.equal((await f.request('/leak/secret.txt')).status, 404);
   for (const rawPath of ['/../secret.txt', '/%2e%2e/secret.txt', '/%2e%2e%2fsecret.txt', '/..%5csecret.txt', '/..%20/secret.txt', '/.../secret.txt', '/asset.js:stream', '/%00secret', '//evil.test/file']) {
     const result = await f.rawRequest(rawPath);
     assert.equal(result.status, rawPath.startsWith('//') ? 400 : 403, rawPath);
