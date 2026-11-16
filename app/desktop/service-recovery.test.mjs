@@ -61,7 +61,16 @@ test('normal service exit is rejected while active; forced termination recovers 
   assert.deepEqual(after.executions,before.executions);assert.deepEqual(after.bindings,before.bindings);assert.equal(after.projects[0].revision,before.projects[0].revision);
   const event=await call('workbench_query_event',{projectId:registered.projectId,operation:'update',eventId:'start'});
   assert.equal(event.state,'committed');assert.equal(event.result.executionId,execution.executionId);
-  const cancel={...start,eventId:'cancel',expectedRevision:after.projects[0].revision,targetStatus:'cancelled',successorImpact:'隔离测试结束，无后继任务'};
+  // Date: 2026-11-17. A user pause must permit normal stop and retain the original execution on restart.
+  const paused=await call('workbench_update_step_status',{...start,eventId:'pause',expectedRevision:after.projects[0].revision,targetStatus:'blocked',blocker:{blockerId:'user-pause',reason:'用户暂停',waitingFor:['用户继续'],releaseConditions:['明确继续后恢复原执行'],resolved:false}});
+  await stopService(root);
+  record=await startService(root);
+  const checkpoint=await call('workbench_get_project',{projectId:registered.projectId});
+  assert.equal(checkpoint.projects[0].revision,paused.revision);
+  assert.equal(checkpoint.steps[0].status,'blocked');
+  assert.equal(checkpoint.executions[0].id,execution.executionId);
+  assert.equal(checkpoint.executions[0].endedAt,null);
+  const cancel={...start,eventId:'cancel',expectedRevision:checkpoint.projects[0].revision,targetStatus:'cancelled',successorImpact:'隔离测试结束，无后继任务'};
   await call('workbench_update_step_status',cancel);
   await stopService(root);
 });
