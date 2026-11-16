@@ -2,7 +2,7 @@
 import { randomUUID } from 'node:crypto';
 import { digest } from './receipts.mjs';
 import { requireLightShape, validateLightSnapshot, lightError, transitions, unique,
-  requiredConditions, childrenOf, dependenciesOf, waitingFor, planProgress, stepPassed } from './light-model.mjs';
+  requiredConditions, childrenOf, dependenciesOf, waitingFor, planProgress, stepPassed, stepInScope, bindingOwnsStep } from './light-model.mjs';
 import { legacyLightStatus } from './light-import.mjs';
 import { touches } from './light-library.mjs';
 import { validateCoordination } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
@@ -36,16 +36,16 @@ function applyChecks(step, checks, evidence) {
 function activeBinding(snapshot, step, input) {
   const binding = snapshot.bindings.find(item => item.id === input.bindingId);
   if (!binding || binding.state !== 'confirmed' || binding.revokedAt || binding.bindingRevision !== input.bindingRevision
-    || binding.planKey !== step.planKey || !binding.stepKeys.includes(step.key) && !binding.stepKeys.includes(step.parentKey)) {
+    || binding.planKey !== step.planKey || !bindingOwnsStep(snapshot, binding, step)) {
     lightError('STALE_BINDING', '有效责任绑定不匹配', 409);
   }
   return binding;
 }
 function canRun(snapshot, step, allowCompletedParent = false) {
   const waiting = waitingFor(snapshot, step);
-  const parent = snapshot.steps.find(item => item.key === step.parentKey);
-  const parentReady = !parent || parent.status === 'running' || allowCompletedParent && parent.status === 'completed';
-  if (waiting.length || !parentReady) lightError('DEPENDENCY_NOT_READY', [...waiting, ...(!parentReady ? [parent.key] : [])].join(', '), 409);
+  const parents = snapshot.steps.filter(item => item.key !== step.key && stepInScope(snapshot.steps, step.key, [item.key]));
+  const unready = parents.filter(parent => parent.status !== 'running' && !(allowCompletedParent && parent.status === 'completed'));
+  if (waiting.length || unready.length) lightError('DEPENDENCY_NOT_READY', [...waiting, ...unready.map(parent => parent.key)].join(', '), 409);
   if (step.blockers.some(item => !item.resolved)) lightError('BLOCKER_NOT_RESOLVED', step.key, 409);
 }
 function addBlocker(step, blocker) {
@@ -55,7 +55,7 @@ function addBlocker(step, blocker) {
 }
 function invalidateSuccessors(snapshot, origin, reason, time) {
   const affected = new Set([origin.key]);
-  if (origin.parentKey) affected.add(origin.parentKey);
+  for (const step of snapshot.steps) if (stepInScope(snapshot.steps, origin.key, [step.key])) affected.add(step.key);
   let changed = true;
   while (changed) {
     changed = false;
@@ -276,7 +276,7 @@ export function createLightService(persistence, requests, {
             lightError('INVALID_TRANSITION', '历史补录仅适用于无执行记录、无阻塞的待核验叶步骤');
           }
           const owner = value.snapshot.bindings.find(item => item.planKey === plan.key && item.state === 'confirmed'
-            && !item.revokedAt && (item.stepKeys.includes(step.key) || item.stepKeys.includes(step.parentKey)));
+            && !item.revokedAt && bindingOwnsStep(value.snapshot, item, step));
           permitted(principal, project.id, 'revise', { input, ...(owner ? { binding: owner } : {}) });
           unique(report.checks.map(item => item.conditionId), '重复验收检查');
           unique(report.evidence.map(item => item.evidenceId), '重复证据');
@@ -305,7 +305,7 @@ export function createLightService(persistence, requests, {
         // 已核验历史子项不应撤销原阶段完成；新增未完成的必要工作才触发出口复核。
         for (const old of previous.filter(item => item.status === 'completed' || item.status === 'running')) {
           const step = candidate.steps.find(item => item.key === old.key);
-          const addedUnfinished = candidate.steps.some(item => item.parentKey === step.key && item.required
+          const addedUnfinished = candidate.steps.some(item => item.key !== step.key && stepInScope(candidate.steps, item.key, [step.key]) && item.required
             && !previous.some(oldStep => oldStep.key === item.key) && !stepPassed(value.snapshot, item));
           if (digest(old.dependsOn) !== digest(step.dependsOn) || digest(old.conditions) !== digest(step.conditions)
             || step.status === 'completed' && addedUnfinished) {
@@ -361,16 +361,27 @@ export function createLightService(persistence, requests, {
             if (input.takeover) {
               permitted(principal, input.projectId, 'takeoverBinding', { input, binding, steps });
               const old = value.snapshot.bindings.find(item => item.id === input.takeover.fromBindingId && item.planKey === plan.key);
+              const selected = input.takeover.scope === 'selected';
               if (!old || old.key === binding.key || !['confirmed', 'revoked'].includes(old.state)
                 || old.bindingRevision !== input.takeover.expectedBindingRevision
-                || digest([...old.stepKeys].sort()) !== digest([...binding.stepKeys].sort())) lightError('STALE_BINDING', '接手须核对完整旧责任范围和版本', 409);
-              const executions = value.snapshot.executions.filter(item => item.bindingKey === old.key && !item.endedAt);
-              if (digest(executions.map(item => item.id).sort()) !== digest([...input.takeover.executionIds].sort())) lightError('STALE_EXECUTION', '接手必须覆盖旧绑定全部未结束执行', 409);
+                || !selected && (old.excludedStepKeys?.length || digest([...old.stepKeys].sort()) !== digest([...binding.stepKeys].sort()))) lightError('STALE_BINDING', '接手须核对原责任范围和版本', 409);
+              const transferred = value.snapshot.steps.filter(step => bindingOwnsStep(value.snapshot, binding, step));
+              if (transferred.some(step => !bindingOwnsStep(value.snapshot, old, step))) lightError('STALE_BINDING', '所选步骤不属于原绑定的有效责任', 409);
+              const selectedKeys = new Set(transferred.map(step => step.key));
+              const open = value.snapshot.executions.filter(item => item.bindingKey === old.key && !item.endedAt);
+              const executions = selected ? open.filter(item => item.stepKeys.some(key => selectedKeys.has(key))) : open;
+              if (executions.some(item => item.stepKeys.some(key => !selectedKeys.has(key)))) lightError('STALE_EXECUTION', '不可拆分同一个执行的责任范围', 409);
+              if (digest(executions.map(item => item.id).sort()) !== digest([...input.takeover.executionIds].sort())) lightError('STALE_EXECUTION', '接手必须精确覆盖所选范围内全部未结束执行', 409);
               value.metadata.continuations ??= [];
               value.metadata.continuations.push({ eventId: input.eventId, fromBindingKey: old.key, fromBindingId: old.id,
                 fromBindingRevision: old.bindingRevision, toBindingKey: binding.key, toBindingId: binding.id,
+                scope: selected ? 'selected' : 'all', stepKeys: [...binding.stepKeys],
                 executions: structuredClone(executions), receivedAt: time, reason: input.reason });
-              old.state = 'revoked'; old.revokedAt ??= time; old.bindingRevision += 1;
+              if (selected) old.excludedStepKeys = [...new Set([...(old.excludedStepKeys ?? []), ...binding.stepKeys])];
+              if (!selected || !value.snapshot.steps.some(step => bindingOwnsStep(value.snapshot, old, step))) {
+                old.state = 'revoked'; old.revokedAt ??= time;
+              }
+              old.bindingRevision += 1;
               for (const execution of executions) {
                 execution.bindingKey = binding.key;
                 for (const step of value.snapshot.steps.filter(item => execution.stepKeys.includes(item.key))) step.bindingKey = binding.key;
@@ -435,7 +446,7 @@ export function createLightService(persistence, requests, {
           canRun(snapshot, step, from === target);
           const revisedEvidence = from === target && digest({ checks: step.conditions, evidence: step.evidence }) !== digest({ checks: input.checks, evidence: input.evidence });
           applyChecks(step, input.checks, input.evidence);
-          if (childrenOf(snapshot, step.key).some(child => child.required && (child.status !== 'completed' || child.acceptance !== 'passed'))) lightError('DEPENDENCY_NOT_READY', '必要细分未完成', 409);
+          if (childrenOf(snapshot, step.key).some(child => child.required && !stepPassed(snapshot, child))) lightError('DEPENDENCY_NOT_READY', '必要细分未完成', 409);
           step.acceptance = 'passed';
           if (revisedEvidence) invalidateSuccessors(snapshot, step, input.reason, time);
         }

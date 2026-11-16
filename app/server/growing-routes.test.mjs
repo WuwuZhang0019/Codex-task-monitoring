@@ -41,6 +41,18 @@ async function fixture(t) {
  return {p,access,principal,service,publisher,read,base,grow,call,proof,bind,update};
 }
 
+test('嵌套阶段沿祖先路线及绑定展示，未完成阶段不能通过整包验收',async t=>{
+ const f=await fixture(t),work=f.grow('package');assert.equal((await f.call(work.request)).status,'accepted');
+ const stage=f.grow('stage-one',{headingKey:work.stepKey});assert.equal((await f.call(stage.request)).status,'accepted');
+ const phase=f.read().steps.find(s=>s.key===stage.stepKey);assert.equal(phase.code,'A-01-01');assert.equal(phase.parentKey,work.stepKey);
+ const binding=await f.bind(),root=f.read().steps[0];await f.update(root.key,'running',binding);await f.update(work.stepKey,'running',binding);
+ await f.update(stage.stepKey,'running',binding);
+ const pack=f.read().steps.find(s=>s.key===work.stepKey),proof=f.proof();
+ await assert.rejects(f.update(pack.key,'completed',binding,{checks:pack.conditions.map(c=>({...c,result:'passed',evidenceIds:[proof.evidenceId]})),evidence:[proof]}),{code:'DEPENDENCY_NOT_READY'});
+ assert.equal(f.read().steps.find(s=>s.key===pack.key).status,'running');
+ assert.equal(f.grow('stage-one',{headingKey:work.stepKey}).stepId,phase.id,'换聊和重试复用同一阶段');
+});
+
 test('追加实际步骤、请求重放与同任务重试保留身份，不预造未知节点',async t=>{
  const f=await fixture(t),initial=f.read();assert.equal(initial.steps.length,2);
  const first=f.grow('actual-1'),result=await f.call(first.request);assert.equal(result.status,'accepted');

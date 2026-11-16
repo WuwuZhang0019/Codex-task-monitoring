@@ -40,7 +40,7 @@ let override=null;
 let preferences={collapsed:[],selected:read().steps[0].key,focus:[read().routes[0].key],scroll:{},y:{}};
 const server=await preview({root:shell,configFile:false,preview:{host:'127.0.0.1',port:1492,strictPort:true}});
 let browser;
-const report={date:'2026-11-16',native:false,transport:'browser bridge to real isolated domain service and MCP handler',checks:[],screenshots:[]};
+const report={date:'2026-11-17',native:false,transport:'browser bridge to real isolated domain service and MCP handler',checks:[],screenshots:[]};
 try{
  browser=await chromium.launch({headless:true,channel:'msedge'});
  async function pageFor(size){
@@ -84,6 +84,10 @@ try{
  await service.update(principal,{...base('finish-current'),bindingId:bound.bindingId,bindingRevision:bound.bindingRevision,executionId,stepId:step.id,targetStatus:'completed',checks:step.conditions.map(c=>({...c,result:'passed',evidenceIds:['fixture-proof']})),evidence:[proof()],blocker:null,reopen:null,successorImpact:null});
  const next=await grow('下一实际工作');assert.equal(read().steps[0].status,'running');
  await page.waitForFunction(key=>!!document.querySelector(`[data-graph-renderer] [data-step-key="${key}"]`),next.stepKey);
+ const phase=await grow('责任包内阶段',{headingKey:next.stepKey});
+ await page.waitForFunction(key=>!!document.querySelector(`[data-graph-renderer] [data-step-key="${key}"]`),phase.stepKey);
+ assert.equal(read().steps.find(step=>step.key===phase.stepKey).parentKey,next.stepKey);
+ report.checks.push('registered phases nested under an existing work package appear as separate stations');
  for(const width of [1100,820,480]){await page.setViewportSize({width,height:820});await assertLeft(page);await snap(page,'03-grown-'+width);}
  report.checks.push('completion updates the original node; another real step grows the line without blocking its running heading','compact origins stay left at 1100, 820 and 480 px');
  await page.close();

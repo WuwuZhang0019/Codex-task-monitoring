@@ -18,7 +18,7 @@ export function normalizePlan({ text, expectedSha256, nodes, references=[], prev
   requireValue(old.size===previous.length,'DUPLICATE_MAPPING');
   requireValue(previous.every(n=>byKey.has(n.key)),'HISTORY_REQUIRED');
   for(const n of nodes){
-    requireValue(!n.parentKey||byKey.has(n.parentKey)&&!byKey.get(n.parentKey).parentKey,'INVALID_PARENT');
+    requireValue(!n.parentKey||byKey.has(n.parentKey),'INVALID_PARENT');
     requireValue(!old.has(n.key)||old.get(n.key).parentKey===(n.parentKey??null),'IDENTITY_CHANGED');
     requireValue((n.dependsOn??[]).every(k=>byKey.has(k)),'MISSING_DEPENDENCY');
     requireValue(Number.isSafeInteger(n.order)&&n.order>=1,'POSITIVE_INTEGER_ORDER_REQUIRED');
@@ -30,8 +30,10 @@ export function normalizePlan({ text, expectedSha256, nodes, references=[], prev
   const stages=nodes.filter(n=>!n.parentKey).sort((a,b)=>a.order-b.order);
   requireValue(new Set(stages.map(n=>n.order)).size===stages.length,'DUPLICATE_ORDER');
   for(const n of stages){let code=old.get(n.key)?.code;if(!code){while(used.has(letters(nextStage)))nextStage++;code=letters(nextStage++);}requireValue(/^[A-Z]+$/.test(code),'INVALID_STAGE_CODE');mapping.set(n.key,{...old.get(n.key),key:n.key,code,parentKey:null});used.add(code);}
-  for(const stage of stages){
+  const parents=[...stages];
+  for(const stage of parents){
     const children=nodes.filter(n=>n.parentKey===stage.key).sort((a,b)=>a.order-b.order);
+    parents.push(...children);
     requireValue(new Set(children.map(n=>n.order)).size===children.length,'DUPLICATE_ORDER');
     const stageCode=mapping.get(stage.key).code;let next=1;
     for(const n of children){

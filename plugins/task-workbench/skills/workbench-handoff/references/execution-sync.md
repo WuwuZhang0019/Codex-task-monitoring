@@ -4,6 +4,8 @@
 
 状态：Skill 操作规则
 
+更新日期：2026-11-17。绑定只覆盖本次明确执行的步骤。先保存 `scope.json`，内容为 `{ "stepIds": ["服务返回的当前步骤ID"] }`，在真实目录运行 `node <Skill目录>/scripts/binding-request.mjs <snapshot.json> <稳定eventId> <bind.json> <planId> <scope.json>`。脚本不会默认绑定整个方案；只有用户明确授权整条路线时才使用 `allSteps: true`。既有有效绑定已覆盖本次范围时直接复用。生成的接续请求使用 `takeover.scope: "selected"`，只转移所选步骤子树及其全部未结束执行，保留其他步骤的原责任。旧绑定版本会前进，旧聊天回读后可继续其保留范围，但不能再写已转出的步骤。确认必须保持原提案的范围和执行清单；服务不支持 selected 时保留请求并报告版本不匹配，不扩大为整体接管。
+
 ## 开始本次执行
 
 更新日期：2026-11-16。本次明确的实际工作尚无节点时，先按 [动态路线](growing-routes.md) 追加并回读；同一事项已有节点时复用，不因重试重复新增。历史已做事项按该参考补录验收，不模拟重新开始。
@@ -14,7 +16,7 @@
 
 旧回复中的 UNKNOWN_RESULT 不能无限继承为当前阻塞：先回读原项目最新 bindings、executions。仅在存在已保存的真实 eventId 或未结束执行时按对应恢复流程核验；没有原事件键时不能构造空键查询，更不能把历史自述代替当前服务证据。已登记方案复用原身份，禁止重复登记。
 
-更新日期：2026-11-13。绑定前保存最新 get_project 返回的 snapshot，使用同包 `scripts/binding-request.mjs` 生成完整绑定请求：在真实执行目录运行 `node <Skill目录>/scripts/binding-request.mjs <snapshot.json> <稳定eventId> <bind.json> [planId]`。脚本从当前 CODEX_THREAD_ID 获取真实会话，核验当前目录并使用服务返回的项目、方案、步骤及版本。不要用空对象调用绑定，也不要用空 eventId 查询。调用前用插件 `runtime/validate.mjs workbench_bind_context <bind.json>` 校验，确认有效后保存精确请求再提交；任何执行写入请求均须同样核对完整身份和原事件键。结果未知时查询刚保存的真实 eventId，服务恢复后复用原请求与身份，不能重复登记已成功的方案。
+更新日期：2026-11-13。绑定前保存最新 get_project 返回的 snapshot，使用同包 `scripts/binding-request.mjs` 生成完整绑定请求：在真实执行目录运行 `node <Skill目录>/scripts/binding-request.mjs <snapshot.json> <稳定eventId> <bind.json> <planId> <scope.json>`。脚本从当前 CODEX_THREAD_ID 获取真实会话，核验当前目录并使用服务返回的项目、方案、步骤及版本。不要用空对象调用绑定，也不要用空 eventId 查询。调用前用插件 `runtime/validate.mjs workbench_bind_context <bind.json>` 校验，确认有效后保存精确请求再提交；任何执行写入请求均须同样核对完整身份和原事件键。结果未知时查询刚保存的真实 eventId，服务恢复后复用原请求与身份，不能重复登记已成功的方案。
 
 更新日期：2026-11-13
 
@@ -83,7 +85,7 @@
 
 更新日期：2026-11-11
 
-换聊继续未结束执行时，`workbench_bind_context` 的 propose/confirm 可携带 `takeover: {fromBindingId,expectedBindingRevision,executionIds}`。完整核对旧责任范围和全部未结束执行，原生确认入口核验新会话、实际目录分支及相同接手意图。成功确认在同一事务撤销旧责任、确认新责任并转移所列原 executionId，保存原绑定版本和执行快照。不得自行预留新 executionId 替代仍有效的原执行；不能核对完整旧范围时先明确分配，不吞并无关责任。
+换聊继续未结束执行时，`workbench_bind_context` 的 propose/confirm 携带 `takeover: {fromBindingId,expectedBindingRevision,executionIds,scope:"selected"}`。完整核对本次所选子树及其中全部未结束执行，原生确认入口核验新会话、实际目录分支及相同接手意图。成功确认在同一事务从旧绑定排除所选子树、确认新责任并转移原 executionId，其他责任和执行保留原绑定；不能拆分一个执行内部的多个责任。旧接口省略 scope 时仍表示整体接管，只可在已有明确整体授权下使用。不得自行预留新 executionId 替代仍有效的原执行，不吞并无关责任。
 
 已提交旧事件按原键回放仍返回原回执；接手后旧绑定的新事件拒绝实时写入，并保存历史待核对记录。使用旧主体在原作用域 `workbench_query_event({operation:'update',eventId,...})` 查询时，`state: pendingReview` 表示迟到历史等待核对，不是已提交或可自动重放。新会话继续沿用原 executionId、当前新 bindingId/bindingRevision 和最新 revision。宿主标题、业务状态、验收状态、同步状态及执行结束原因分别保存。
 

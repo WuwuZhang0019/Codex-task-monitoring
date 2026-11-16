@@ -6,6 +6,7 @@ import { inspectWorkspace, inspectGitRef, runHostOperation } from './context-led
 import { HostProjectClient } from './host-project-client.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { stepInScope, bindingOwnsStep } from './step-scope.mjs';
 
 const clone = value => structuredClone(value);
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
@@ -373,9 +374,9 @@ function scopedSteps(state, task, snapshot) {
 function dependencyIssues(state, task, snapshot) {
   const steps = scopedSteps(state, task, snapshot), issues = [];
   for (const step of steps) {
-    const parent = snapshot.steps.find(item => item.key === step.parentKey);
-    for (const key of [...step.dependsOn, ...(parent?.dependsOn ?? [])]) if (!passed(snapshot, snapshot.steps.find(item => item.key === key))) issues.push(`DEPENDENCY:${key}`);
-    if (parent && parent.status !== 'running') issues.push(`PARENT:${parent.key}`);
+    const parents = snapshot.steps.filter(item => item.key !== step.key && stepInScope(snapshot.steps, step.key, [item.key]));
+    for (const key of new Set([step, ...parents].flatMap(item => item.dependsOn))) if (!passed(snapshot, snapshot.steps.find(item => item.key === key))) issues.push(`DEPENDENCY:${key}`);
+    for (const parent of parents) if (parent.status !== 'running') issues.push(`PARENT:${parent.key}`);
     if ((step.blockers ?? []).some(item => !item.resolved)) issues.push(`BLOCKER:${step.id}`);
     if (!['pending', 'running'].includes(step.status)) issues.push(`STEP_REQUIRES_REVIEW:${step.id}`);
   }
@@ -607,7 +608,7 @@ export async function dispatchTask(state, batchId, taskId, { snapshot, projects,
   const steps = scopedSteps(state, task, snapshot);
   const openExecutions = snapshot.executions.filter(item => !item.endedAt && item.stepKeys.some(key => steps.some(step => step.key === key)));
   const owners = snapshot.bindings.filter(item => item.state === 'confirmed' && !item.revokedAt
-    && steps.some(step => item.stepKeys.includes(step.key) || item.stepKeys.includes(step.parentKey)));
+    && steps.some(step => bindingOwnsStep(snapshot, item, step)));
   task.bindings = owners.map(item => ({ bindingId: item.id, bindingRevision: item.bindingRevision }));
   const priorTargets = new Set([...owners.map(item => item.context.threadId), ...openExecutions.map(item => snapshot.bindings.find(b => b.key === item.bindingKey)?.context.threadId)].filter(Boolean));
   check(priorTargets.size <= 1, 'RESPONSIBILITY_REVIEW_REQUIRED');

@@ -598,6 +598,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "excludedStepKeys": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
         "key": {
           "type": "string",
           "minLength": 1
@@ -1259,6 +1260,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "scope": { "enum": ["selected"] },
             "fromBindingId": { "type": "string", "minLength": 1 },
             "expectedBindingRevision": { "type": "integer", "minimum": 1 },
             "executionIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }

@@ -2,6 +2,7 @@
 import {readFile, writeFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import {sha256} from './normalize-plan.mjs';
+import {stepInScope} from './step-scope.mjs';
 
 function requireValue(value, code) { if (!value) throw Error(code); }
 
@@ -9,9 +10,9 @@ export function buildGrowingRouteRevision(snapshot, options) {
   requireValue(snapshot?.mode === 'service', 'SERVICE_SNAPSHOT_REQUIRED');
   const plan = snapshot.plans.find(item => item.id === options.planId);
   const project = snapshot.projects.find(item => item.key === plan?.projectKey);
-  const heading = snapshot.steps.find(item => item.key === options.headingKey && item.planKey === plan?.key && item.parentKey === null);
+  const heading = snapshot.steps.find(item => item.key === options.headingKey && item.planKey === plan?.key);
   requireValue(project?.id && Number.isSafeInteger(project.revision) && heading, 'EXACT_HEADING_REQUIRED');
-  requireValue(snapshot.routes.some(route => route.planKey === plan.key && route.stepKeys.includes(heading.key)), 'HEADING_ROUTE_REQUIRED');
+  requireValue(snapshot.routes.some(route => route.planKey === plan.key && stepInScope(snapshot.steps, heading.key, route.stepKeys)), 'HEADING_ROUTE_REQUIRED');
   requireValue(options.taskKey?.trim() || options.existingStepKey?.trim(), 'STABLE_TASK_KEY_REQUIRED');
   const key = options.existingStepKey ?? heading.key + '/work/' + sha256(options.taskKey).slice(0, 24);
   let step = snapshot.steps.find(item => item.key === key);
@@ -46,8 +47,9 @@ export function buildGrowingRouteRevision(snapshot, options) {
   if (created) {
     candidate.steps.push(step);
     // 候选先容纳新子项；领域修订保留原完成历史并执行真实复核失效。
-    const parent = candidate.steps.find(item => item.key === heading.key);
-    if (parent.status === 'completed') { parent.status = 'blocked'; parent.acceptance = 'recheck'; }
+    for (const parent of candidate.steps.filter(item => stepInScope(candidate.steps, heading.key, [item.key]))) {
+      if (parent.status === 'completed') { parent.status = 'blocked'; parent.acceptance = 'recheck'; }
+    }
   }
   candidate.routes = snapshot.routes.filter(item => item.planKey === plan.key).map(item => ({...structuredClone(item), id:null}));
   for (const group of ['bindings', 'executions', 'supplements', 'events']) candidate[group] = [];

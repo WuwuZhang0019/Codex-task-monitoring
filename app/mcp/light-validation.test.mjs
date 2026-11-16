@@ -23,7 +23,7 @@ test('binding and updates expose concrete fields while retaining strict conditio
  assert.ok(lightTools.find(t=>t.name==='workbench_update_step_status').inputSchema.properties.stepId);
  const context={sessionGroup:'A',threadId:'real-thread',hostId:'local',folderId:null,worktreeOrdinal:1,worktreePath:'G:\\rust\\test',branch:null,head:null,trust:'declared'};
  const snapshot={...failed.snapshot,mode:'service',projects:failed.snapshot.projects.map(p=>({...p,id:'project-id',revision:1})),plans:failed.snapshot.plans.map(p=>({...p,id:'plan-id',source:{...p.source,sha256:p.source.sha256.toLowerCase()}})),steps:failed.snapshot.steps.map(s=>({...s,id:s.key+'-id'}))};
- const proposal=bindingProposal(snapshot,context,{eventId:'bind-event'});
+ const proposal=bindingProposal(snapshot,context,{eventId:'bind-event',stepIds:[snapshot.steps[0].id]});
  assert.deepEqual(validateLightToolArguments('workbench_bind_context',proposal),[]);
  assert.ok(validateLightToolArguments('workbench_bind_context',{...proposal,confirmationGrant:'incorrect'}).length);
  assert.ok(validateLightToolArguments('workbench_bind_context',{}).some(e=>e.path==='/eventId'));

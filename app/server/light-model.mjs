@@ -3,6 +3,8 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import contract from '../mcp/contracts/light-v1.json' with { type: 'json' };
 import { HttpError } from './validation.mjs';
 import { validateCoordination } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
+import { stepInScope, bindingOwnsStep } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/step-scope.mjs';
+export { stepInScope, bindingOwnsStep };
 
 const schema = structuredClone(contract);
 for (const key of Object.keys(schema).filter(key => key.startsWith('x-'))) delete schema[key];
@@ -29,8 +31,12 @@ export function requiredConditions(conditions, evidence) {
 }
 export function childrenOf(snapshot, key) { return snapshot.steps.filter(step => step.parentKey === key); }
 export function dependenciesOf(snapshot, step) {
-  const parent = snapshot.steps.find(item => item.key === step.parentKey);
-  return [...new Set([...step.dependsOn, ...(parent?.dependsOn ?? [])])];
+  const dependencies = new Set(), visited = new Set();
+  for (let current = step; current && !visited.has(current.key); current = snapshot.steps.find(item => item.key === current.parentKey)) {
+    visited.add(current.key);
+    for (const key of current.dependsOn) dependencies.add(key);
+  }
+  return [...dependencies];
 }
 export function waitingFor(snapshot, step) {
   return dependenciesOf(snapshot, step).filter(key => {
@@ -90,7 +96,7 @@ export function validateLightSnapshot(snapshot) {
     codes.push(`${scope}/${step.code}`); orders.push(`${scope}/${step.order}`);
     if (step.parentKey !== null) {
       const parent = steps.get(step.parentKey);
-      if (!parent || parent.parentKey !== null || parent.planKey !== step.planKey || !step.code.startsWith(parent.code + '-')) {
+      if (!parent || parent.planKey !== step.planKey || !step.code.startsWith(parent.code + '-')) {
         lightError('INVALID_PARENT', step.key);
       }
     }
@@ -124,16 +130,21 @@ export function validateLightSnapshot(snapshot) {
   for (const plan of snapshot.plans) {
     const covered = snapshot.routes.filter(item => item.planKey === plan.key).flatMap(item => item.stepKeys);
     unique(covered, '步骤被多条路线重复覆盖');
-    if (snapshot.steps.some(step => step.planKey === plan.key && !covered.includes(step.key) && !covered.includes(step.parentKey))) lightError('COVERAGE_MISMATCH', '路线遗漏步骤');
+    if (snapshot.steps.some(step => step.planKey === plan.key && !stepInScope(snapshot.steps, step.key, covered))) lightError('COVERAGE_MISMATCH', '路线遗漏步骤');
   }
   const owners = new Set();
   for (const binding of snapshot.bindings) {
     if (plans.get(binding.planKey)?.projectKey !== binding.projectKey) lightError('MISSING_REFERENCE', binding.key);
     unique(binding.stepKeys, '绑定步骤重复');
     for (const key of binding.stepKeys) samePlan(key, binding.planKey);
+    unique(binding.excludedStepKeys ?? [], '绑定排除步骤重复');
+    for (const key of binding.excludedStepKeys ?? []) {
+      samePlan(key, binding.planKey);
+      if (!stepInScope(snapshot.steps, key, binding.stepKeys)) lightError('STALE_BINDING', '排除步骤不属于原责任范围');
+    }
     if (binding.state === 'confirmed') {
       if (!binding.id || !binding.bindingRevision || !binding.confirmationRef || binding.revokedAt) lightError('STALE_BINDING', binding.key);
-      const owned = snapshot.steps.filter(step => binding.stepKeys.includes(step.key) || binding.stepKeys.includes(step.parentKey));
+      const owned = snapshot.steps.filter(step => bindingOwnsStep(snapshot, binding, step));
       for (const step of owned) {
         if (owners.has(step.key)) lightError('DUPLICATE_OWNER', step.key);
         owners.add(step.key);

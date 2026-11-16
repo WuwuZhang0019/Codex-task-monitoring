@@ -76,6 +76,7 @@ export interface Binding extends Entity {
 	projectKey: string;
 	planKey: string;
 	stepKeys: string[];
+	excludedStepKeys?: string[];
 	state: string;
 	bindingRevision: number | null;
 	context: Context;
@@ -328,6 +329,8 @@ export function validateEnvelope(value: unknown): WorkbenchEnvelope {
 			plans.get(b.planKey)?.projectKey !== b.projectKey ||
 			!strings(b.stepKeys) ||
 			b.stepKeys.some((k) => steps.get(k)?.planKey !== b.planKey) ||
+			(b.excludedStepKeys !== undefined &&
+				(!strings(b.excludedStepKeys) || b.excludedStepKeys.some((k) => steps.get(k)?.planKey !== b.planKey))) ||
 			!validContext(b.context) ||
 			!text(b.state) ||
 			!revision(b.bindingRevision)

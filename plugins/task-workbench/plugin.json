@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.26",
-  "description": "2026-11-16 支持动态步骤路线、按需启动任务岛与断线对账续接",
+  "version": "0.1.27",
+  "description": "2026-11-17 支持完整阶段展示、按步骤接续绑定与断线恢复",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,

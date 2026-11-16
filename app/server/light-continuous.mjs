@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {createSessionClient} from './codex-session-client.mjs';
 import {inspectWorkspace} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/context-ledger.mjs';
-import {stepPassed,waitingFor,planProgress,lightError} from './light-model.mjs';
+import {stepPassed,waitingFor,planProgress,lightError,stepInScope,bindingOwnsStep} from './light-model.mjs';
 import {digest} from './receipts.mjs';
 
 const activeStates=new Set(['running','pausing']);
@@ -101,25 +101,27 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     if(run.mode==='current_thread'&&!run.session)await update(run.id,{session:{threadId:thread.id,cwd,transport:'owned'}});
     const owner=await principal();
     const context={...route.context,threadId:thread.id,hostId:'local',worktreePath:cwd,branch:observed.branch,head:observed.head,trust:'declared'};
-    const scope=s.steps.filter(x=>x.key===step.key||x.parentKey===step.key);
-    const previous=s.bindings.filter(b=>b.state==='confirmed'&&b.planKey===plan.key&&b.stepKeys.some(key=>scope.some(x=>x.key===key||x.parentKey===key)));
+    const scope=s.steps.filter(x=>stepInScope(s.steps,x.key,[step.key]));
+    const previous=s.bindings.filter(b=>b.state==='confirmed'&&b.planKey===plan.key&&scope.some(x=>bindingOwnsStep(s,b,x)));
     if(previous.length>1)throw Error('MULTIPLE_BINDINGS_REQUIRE_REVIEW');
     const old=previous[0];
-    const stepIds=old?old.stepKeys.map(key=>s.steps.find(x=>x.key===key)?.id):[step.id];
-    const takeover=old?{fromBindingId:old.id,expectedBindingRevision:old.bindingRevision,executionIds:[]}:undefined;
+    const stepIds=[step.id];
+    const transferred=old?s.executions.filter(e=>e.bindingKey===old.key&&!e.endedAt&&e.stepKeys.some(key=>scope.some(x=>x.key===key))):[];
+    const takeover=old?{fromBindingId:old.id,expectedBindingRevision:old.bindingRevision,executionIds:transferred.map(e=>e.id),scope:'selected'}:undefined;
     const proposal={...base(run,step.code+'/bind'),action:'propose',stepIds,context,bindingId:null,expectedBindingRevision:null,confirmationGrant:null,...(takeover?{takeover}:{})};
     let bound=await service.bind(owner,proposal);
     if(bound.state!=='confirmed')bound=await service.bind(owner,{...proposal,...base(run,step.code+'/confirm'),action:'confirm',bindingId:bound.bindingId,expectedBindingRevision:bound.bindingRevision});
     if(bound.state!=='confirmed')throw Error('BINDING_NOT_CONFIRMED');
     current.bindingId=bound.bindingId;current.bindingRevision=bound.bindingRevision;
-    const reserved=await service.reserveExecutionId(owner,base(run,step.code+'/reserve'));current.executionId=reserved.executionId;
+    const existing=transferred.find(e=>e.stepKeys.includes(step.key));
+    const reserved=existing??await service.reserveExecutionId(owner,base(run,step.code+'/reserve'));current.executionId=existing?.id??reserved.executionId;
     await update(run.id,{current});
     await service.update(owner,{...base(run,step.code+'/start'),stepId:step.id,executionId:current.executionId,bindingId:current.bindingId,bindingRevision:current.bindingRevision,
       targetStatus:'running',evidence:[],checks:[],blocker:null,reopen:null,successorImpact:null});
     return current;
   }
   function prompt(run,current){
-    const s=snapshot(),plan=s.plans.find(p=>p.key===run.planKey),stage=s.steps.find(x=>x.key===current.stepKey),scope=s.steps.filter(x=>x.key===stage.key||x.parentKey===stage.key);
+    const s=snapshot(),plan=s.plans.find(p=>p.key===run.planKey),stage=s.steps.find(x=>x.key===current.stepKey),scope=s.steps.filter(x=>stepInScope(s.steps,x.key,[stage.key]));
     const dispatch=run.mode==='current_thread'?'后续阶段继续使用当前会话，任务岛在验收通过后发送下一阶段指令。':'后续阶段按方案边界创建独立会话。';
     return `开始执行 ${plan.name} / ${stage.code}：${stage.title}\n日期：${new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai'}).format(new Date())}\n用户已在任务岛点击“连续执行”，授权在该方案既定范围内执行、同步进度及接续直至整体结束。${dispatch}你只负责本阶段及其子步骤，完成后如实同步，由任务岛调度下一阶段，不自行创建聊天，不提前执行未派发阶段。\n读取当前安装的 workbench-handoff 技能和方案原文：${plan.source.path}。核对适用AGENTS.md。不要重新登记方案。实际任务执行与验收必须按原文，不凭预设或自述标记通过。若方案明确为空任务模拟，按原文等待及返回值执行。\n真实会话ID：${current.threadId}；宿主local。总控已完成此会话的绑定及本阶段running登记。复用以下身份，不重复预留本阶段executionId，不接手别的责任。每次状态写入前回读最新版本。\n${JSON.stringify({projectId:s.projects.find(p=>p.key===plan.projectKey).id,planId:plan.id,bindingId:current.bindingId,bindingRevision:current.bindingRevision,executionId:current.executionId,stageId:current.stepId,scope:scope.map(x=>({id:x.id,code:x.code,parentKey:x.parentKey,dependsOn:x.dependsOn,conditions:x.conditions,status:x.status}))},null,2)}\n使用工作台MCP回读并按实际结果同步。子步骤依次取得各自开始许可和executionId，沿用本阶段父级责任绑定覆盖子步骤；全部必要子步骤完成验收后，完成本阶段。保留可回读的实际证据。提交completed前逐项匹配服务中的conditionId、text、required，result=passed并关联passed证据。参数被明确拒绝时按validationErrors修正后继续。\n已授权且仍有必要修复时继续本阶段；真正外部阻塞、失败或需人工决定时如实标记blocked并报告原因。禁止越过前置或把会话结束当成阶段成功。`;
   }
