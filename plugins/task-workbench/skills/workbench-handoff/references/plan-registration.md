@@ -35,6 +35,8 @@
 
 ## 可执行规范化入口
 
+更新日期：2026-11-16。标题下步骤未知时先登记标题，实际步骤明确后按 [动态路线](growing-routes.md) 增量修订；已有明确步骤不隐藏或删除。主路线只覆盖标题也能保留子步骤实体，任务岛显示层负责展开。
+
 更新日期：2026-11-11
 
 使用同包 `scripts/normalize-plan.mjs`。先由当前聊天按原文语义识别步骤，生成 UTF-16 精确范围清单；脚本只执行已确认的编号及引用替换，不从普通列表猜步骤。清单字段为 `expectedSha256`、`nodes`、`references`、`previous`。每个 node 含稳定 `key`、`parentKey`、原编号 `originalCode`、`title`、`locator`、显式 `order`、`dependsOn`（固定本地键数组）、`acceptance`、`codeRange: {start,end,expected}`；新增中插项另含 `insertAfterKey`。references 每项含相同范围及 `targetKey`，覆盖依赖表、Mermaid 标签、文内及已授权外部引用。未确认范围保留待确认，不执行猜测性替换。

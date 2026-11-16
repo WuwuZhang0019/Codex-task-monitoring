@@ -57,7 +57,7 @@ export function normalizePlan({ text, expectedSha256, nodes, references=[], prev
   return {date:new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai'}).format(new Date()),beforeSha256:expectedSha256,afterSha256:sha256(output),text:output,mapping:[...mapping.values()],edits:edits.filter(e=>e.expected!==e.replacement)};
 }
 
-export function registrationSnapshot(result,{projectKey,planKey,name,sourcePath,version,context,routes}){
+export function registrationSnapshot(result,{projectKey,planKey,name,sourcePath,version,context,routes,growing=false}){
   requireValue(projectKey&&planKey&&name&&sourcePath&&version&&context,'REGISTRATION_CONTEXT_REQUIRED');
   requireValue(result.mapping.every(n=>typeof n.acceptance==='string'&&n.acceptance.trim()),'ACCEPTANCE_REQUIRED');
   const timestamp=result.date+'T00:00:00+08:00',stages=result.mapping.filter(n=>!n.parentKey).sort((a,b)=>a.order-b.order);
@@ -65,7 +65,7 @@ export function registrationSnapshot(result,{projectKey,planKey,name,sourcePath,
     projects:[{key:projectKey,id:null,name,planKeys:[planKey],revision:null}],
     plans:[{key:planKey,id:null,projectKey,name,stageCount:stages.length,stageKeys:stages.map(n=>n.key),source:{path:sourcePath,version,sha256:result.afterSha256,locator:'规范化映射及明确依赖',trust:'declared'},endConditions:[]}],
     steps:result.mapping.map(n=>({key:n.key,id:null,projectKey,planKey,parentKey:n.parentKey,code:n.code,originalCode:n.originalCode,sourceLocator:n.locator,title:n.title,order:n.order,required:true,dependsOn:n.dependsOn,status:'pending',acceptance:'pending',sync:'pendingSync',conditions:[{conditionId:n.key+'/exit',text:n.acceptance,required:true,result:'pending',evidenceIds:[]}],evidence:[],blockers:[],executionKey:null,bindingKey:null,updatedAt:timestamp})),
-    routes:(routes??[{key:planKey+'/main',label:name,stepKeys:stages.map(n=>n.key),context}]).map((r,i)=>({...r,id:null,projectKey,planKey,order:i+1,sourceStepKey:r.sourceStepKey??null,returnStepKey:r.returnStepKey??null})),
+    routes:(routes??(growing ? stages.map(n=>({key:planKey+'/line/'+n.key,label:n.title,stepKeys:[n.key],context})) : [{key:planKey+'/main',label:name,stepKeys:stages.map(n=>n.key),context}])).map((r,i)=>({...r,id:null,projectKey,planKey,order:i+1,sourceStepKey:r.sourceStepKey??null,returnStepKey:r.returnStepKey??null})),
     bindings:[],executions:[],supplements:[],events:[],uiPreferences:{collapsedKeys:[],selectedStepKey:null,focusedRouteKey:null,scrollByProject:{}}};
 }
 

@@ -19,7 +19,16 @@ const definitions = {
     schemaVersion: base.schemaVersion, expectedRevision: { const: 0 }, eventId: string,
     source: ref('sourceDeclaration'), occurredAt: string, snapshot: ref('snapshot'), confirmationGrant: { anyOf: [string, { type: 'null' }] },
   }) },
-  workbench_revise_plan: { operation: 'revise', gate: 'publish', schema: object({ ...base, snapshot: ref('snapshot'), confirmationGrant: { anyOf: [string, { type: 'null' }] } }) },
+  workbench_revise_plan: { operation: 'revise', gate: 'publish', schema: {
+    ...object({ ...base, snapshot: ref('snapshot'), confirmationGrant: { anyOf: [string, { type: 'null' }] } }),
+    properties: { ...base, snapshot: ref('snapshot'), confirmationGrant: { anyOf: [string, { type: 'null' }] },
+      // 日期：2026-11-16。历史补录不创建虚构的执行开始、结束或 executionId。
+      historicalSteps: { type: 'array', minItems: 1, maxItems: 200, items: object({
+        stepKey: string, status: { enum: ['pending', 'completed'] }, occurredAt: { anyOf: [string, { type: 'null' }] },
+        checks: { type: 'array', items: ref('condition') }, evidence: { type: 'array', items: ref('evidence') },
+      }) },
+    },
+  } },
   workbench_reserve_execution: { operation: 'reserveExecutionId', schema: object(base) },
   workbench_update_step_status: { operation: 'update', schema: ref('update') },
   workbench_record_supplement: { operation: 'supplement', schema: ref('supplementWrite') },

@@ -1,6 +1,6 @@
 {
   "name": "route-workbench",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "license": "GPL-3.0-or-later",
   "type": "module",
@@ -18,7 +18,8 @@
     "tauri": "tauri",
     "service": "node desktop/service.mjs",
     "desktop:resources": "node desktop/prepare-resources.mjs",
-    "test:desktop": "node --test desktop/*.test.mjs"
+    "test:desktop": "node --test desktop/*.test.mjs",
+    "test:growing:browser": "node tests/growing-routes-browser.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",
