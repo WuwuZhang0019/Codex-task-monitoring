@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-17",
+  "status": "completed",
+  "codeCommit": "bc1ad029a561098808109e18132562b8f5c33f35",
+  "shellCommit": "2a935e3",
+  "pluginVersion": "0.1.27",
+  "installedExe": "F:/任务岛/dynamic-island.exe",
+  "installedExeSha256": "128820756279f159a6cf0f4b9135fa02daa674e807b099da6c782dae69647d55",
+  "privateRecoveryBackup": "C:/Users/Zyf/AppData/Local/com.codextaskmonitor.workbench/recovery-2026-11-17-scoped-continuation",
+  "maintenanceRestart": {
+    "originalBusinessStateUnchanged": true,
+    "projects": 7,
+    "steps": 109,
+    "executions": 87,
+    "bindings": 26
+  },
+  "afterStageMapping": {
+    "projectId": "06e75391-1d44-43e5-b696-28c9091c7a3f",
+    "revision": 93,
+    "projectSteps": 30,
+    "totalProjects": 7,
+    "totalSteps": 112,
+    "totalExecutions": 87,
+    "originalStepsStatesAndEvidencePreserved": true,
+    "originalExecutionsAndBindingsPreserved": true,
+    "eventId": "revise/pdsd-i04-visible-phases-20261117-v1",
+    "phases": [
+      {
+        "id": "93dc1a94-8631-4c2c-8416-eee1d77aa94f",
+        "code": "I-04-01",
+        "title": "第1阶段：技术实现与定向核验",
+        "status": "completed",
+        "acceptance": "passed"
+      },
+      {
+        "id": "005fc339-a95c-4090-a7ea-7f5069860463",
+        "code": "I-04-02",
+        "title": "第2阶段：隔离验收",
+        "status": "pending",
+        "acceptance": "recheck"
+      },
+      {
+        "id": "293f4189-7b79-40f6-b463-a964f2b24711",
+        "code": "I-04-03",
+        "title": "第3阶段：原现场与整包收口",
+        "status": "pending",
+        "acceptance": "pending"
+      }
+    ]
+  },
+  "validation": {
+    "serviceMcpSkillDesktop": 314,
+    "subsequentSkillChecks": 60,
+    "frontendSource": 75,
+    "rustLibrary": 40,
+    "browserChecks": 8
+  },
+  "nativeObservation": "Settings accessibility tree and updated collapsed route observed; floating expanded-card input was not targetable. Browser verification covers the full readonly route.",
+  "existingChatCompatibility": "The current connector retained an old argument validator. Its rejected revision was confirmed unknown, then the same event was submitted through the normally installed 0.1.27 public STDIO MCP. Existing connector project reads still succeed."
+}
