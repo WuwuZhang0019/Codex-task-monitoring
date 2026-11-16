@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.23",
-  "description": "2026-11-16 调用技能自动登记任务岛，恢复已有身份并回读路线",
+  "version": "0.1.24",
+  "description": "2026-11-16 先提取并登记步骤路线图，回读成功后开展业务核验",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,

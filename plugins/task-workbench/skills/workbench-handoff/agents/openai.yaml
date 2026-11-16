@@ -1,5 +1,5 @@
-# 日期：2026-11-12
+# 日期：2026-11-16
 interface:
   display_name: "工作台方案执行与交接"
   short_description: "核对交接，或在授权范围内跨项目派发、跟踪并恢复开发线任务"
-  default_prompt: "使用 $workbench-handoff 按我提供的方案选择仅核对/生成或授权协调模式，在授权范围内接入、派发、跟踪并核验回执。"
+  default_prompt: "使用 $workbench-handoff 先提取步骤路线图、自动登记或恢复并回读任务岛路线，再按我的授权开展核对、执行或协调；上岛前不展开业务审查。"
