@@ -1,13 +1,13 @@
 // 日期：2026-11-13。已有来源目录复用、具名项目归类与原生独立工作树的真实 Git 回归。
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm, realpath } from 'node:fs/promises';
+import { mkdtemp, rm, realpath, mkdir } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createCoordination, sharedSourceTargets, prepareHostProject, mapLine, validateCoordination,
   createRequest, planBatch, dispatchTask, verifyTarget, verifyHostProject, recoveryReport,
-  stageDispatch, recordNativeResult, recordWorkspaceWait } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
+  stageDispatch, recordNativeResult, recordWorkspaceWait, stageSidebarProject, pathKey } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
 import { inspectWorkspace } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/context-ledger.mjs';
 
 async function fixture(t) {
@@ -20,7 +20,7 @@ async function fixture(t) {
   git('-C', repo, '-c', 'user.name=Fixture', '-c', 'user.email=test@example.invalid', 'commit', '--allow-empty', '-m', 'fixture');
   for (const name of ['ab', 'cd']) git('-C', repo, 'branch', 'codex/' + name);
   const projects = [{ projectId: 'existing-source', hostId: 'local', path: repo, label: '已有项目', isGitRepository: true }];
-  const lines = ['ab', 'cd'].map((lineId, i) => ({ lineId, stepIds: ['s' + (i + 1)], execution: { type: 'managed-worktree', startingRef: 'codex/' + lineId } }));
+  const lines = ['ab', 'cd'].map((lineId, i) => ({ lineId, separateProject: false, stepIds: ['s' + (i + 1)], execution: { type: 'managed-worktree', startingRef: 'codex/' + lineId } }));
   const targets = sharedSourceTargets({ sourceHostProjectId: projects[0].projectId, projects, lines });
   const state = createCoordination({ id: 'shared-source-test', projectId: 'project', planId: 'plan', coordinator: { threadId: 'coordinator', hostId: 'local' },
     authorization: { mode: 'execute', source: { threadId: 'human', locator: 'turn', quote: '复用来源目录，各分支用独立工作树执行' },
@@ -34,7 +34,7 @@ async function fixture(t) {
   return { root, repo, git, projects, lines, targets, state, snapshot, tasks, checkpoint, mapped };
 }
 
-test('来源项目统一复用，执行路径留空；准备不会创建项目、打开目录或切来源分支', async t => {
+test('显式复用来源项目时执行路径留空；准备不会创建项目、打开目录或切来源分支', async t => {
   const f = await fixture(t);
   for (const target of f.targets) {
     assert.equal(target.projectSourcePath, f.repo); assert.equal(target.worktreePath, null);
@@ -46,7 +46,7 @@ test('来源项目统一复用，执行路径留空；准备不会创建项目�
   }
   assert.equal(f.state.operations.length, 0);
   assert.equal(f.git('-C', f.repo, 'branch', '--show-current'), 'main');
-  assert.throws(() => sharedSourceTargets({ sourceHostProjectId: 'missing', projects: f.projects, lines: f.lines }), /SOURCE_GIT_PROJECT/);
+  assert.throws(() => sharedSourceTargets({ sourceHostProjectId: 'missing', projects: f.projects, lines: f.lines }), /SOURCE_PROJECT/);
 });
 
 test('需要单独项目归类时仍选同一来源目录，并按名称加路径核验而不误用现有同路径项目', async t => {
@@ -64,6 +64,65 @@ test('需要单独项目归类时仍选同一来源目录，并按名称加路�
   const verified = await verifyHostProject(f.state, { operationId: result.operation.operationId,
     projects: [...f.projects, { ...f.projects[0], label: '分支一', projectId: 'host-line-id' }], evidence: 'actual host projection' }, f.checkpoint);
   assert.equal(verified.targetId, 'host-line-id');
+});
+
+// 日期：2026-11-16。分支侧栏文件夹默认独立归类，执行目录仍是来源普通目录。
+test('主线复用原项目，逻辑分支默认使用同路径具名项目；非Git目录可核验并生成local请求', async t => {
+  const f = await fixture(t), directory = path.join(f.root, 'ordinary'); await mkdir(directory);
+  const source = { projectId: 'ordinary', hostId: 'local', path: directory, label: 'test', isGitRepository: false };
+  const targets = sharedSourceTargets({ sourceHostProjectId: 'ordinary', projects: [source], lines: [
+    { lineId: 'main', stepIds: ['s2'], execution: { type: 'local' } },
+    { lineId: 'ab', label: 'test-A', stepIds: ['s1'], execution: { type: 'local' } },
+    { lineId: 'C', stepIds: ['s2'], execution: { type: 'local' } },
+  ] });
+  assert.equal(targets[0].hostProjectId, 'ordinary'); assert.equal(targets[0].separateProject, false);
+  assert.equal(targets[1].hostProjectId, undefined); assert.equal(targets[1].separateProject, true);
+  assert.equal(targets[2].label, 'test-C'); assert.ok(targets.every(t => t.worktreePath === directory && t.projectSourcePath === directory));
+  const projects = [source, { ...source, projectId: 'group-ab', label: 'test-A' }];
+  const prepared = await prepareHostProject(f.state, { target: targets[1], projects }, f.checkpoint, {
+    client: { list() { throw Error('must reuse exact named group'); }, close() {} },
+  });
+  assert.equal(prepared.status, 'ready'); assert.equal(prepared.hostProjectId, 'group-ab');
+  const mapping = await mapLine(f.state, { ...targets[1], hostProjectId: prepared.hostProjectId }, projects);
+  assert.equal(mapping.branch, null); assert.equal(mapping.head, null); assert.equal(mapping.executionMode, 'local');
+  assert.equal(validateCoordination(f.state), f.state);
+  const request = createRequest(f.state, f.tasks[0], mapping, projects);
+  assert.equal(request.target.projectId, 'group-ab'); assert.deepEqual(request.target.environment, { type: 'local' });
+  planBatch(f.state, { id: 'ordinary', tasks: [f.tasks[0]] }, f.snapshot);
+  await dispatchTask(f.state, 'ordinary', 'task-ab', { snapshot: f.snapshot, projects, checkpoint: f.checkpoint,
+    adapter: { createChat: async () => ({ targetId: 'ordinary-chat', hostId: 'local' }) } });
+  await verifyTarget(f.state, 'ordinary', 'task-ab', { threadId: 'ordinary-chat', hostId: 'local', hostProjectId: 'group-ab', worktreePath: directory, branch: null, evidence: 'actual fixture directory' });
+  assert.equal(f.state.batches[0].tasks[0].state, 'contextVerified');
+  assert.throws(() => sharedSourceTargets({ sourceHostProjectId: 'ordinary', projects, lines: [{ lineId: 'ab', stepIds: ['s1'], execution: { type: 'managed-worktree', startingRef: 'main' } }] }), /SOURCE_GIT_PROJECT_REQUIRED/);
+});
+
+test('分支项目准备将同路径错误名称排除，创建请求的roots保持主目录', async t => {
+  const f = await fixture(t), directory = path.join(f.root, 'ordinary-create'); await mkdir(directory);
+  const source = { projectId: 'source', hostId: 'local', path: directory, label: 'test', isGitRepository: false };
+  const target = sharedSourceTargets({ sourceHostProjectId: 'source', projects: [source], lines: [{ lineId: 'ab', stepIds: ['s1'], execution: { type: 'local' } }] })[0];
+  assert.equal(target.label, 'test-ab');
+  const native = { id: 'public-group', name: target.label, roots: [{ path: directory }] };
+  let creates = 0;
+  const result = await prepareHostProject(f.state, { target, projects: [source] }, f.checkpoint, {
+    client: { list: async () => ({ data: [{ ...native, id: 'public-source', name: 'test' }] }),
+      create: async input => { creates++; assert.equal(input.roots.length, 1); assert.equal(pathKey(input.roots[0].path), pathKey(directory)); assert.equal(input.name, 'test-ab'); return { project: native }; },
+      read: async () => ({ project: native }), close() {} }, openWorkspace: async d => assert.equal(pathKey(d), pathKey(directory)),
+  });
+  assert.equal(creates, 1); assert.equal(result.next, 'verify-project');
+  assert.equal(result.reason, 'HOST_PROJECT_READBACK_REQUIRED', JSON.stringify(result));
+  await assert.rejects(verifyHostProject(f.state, { operationId: result.operation.operationId, projects: [source], evidence: 'source alone is insufficient' }, f.checkpoint), /NOT_CONFIRMED/);
+  assert.equal(result.sidebarFallback.command, 'stage-sidebar-project');
+  const input = { operationId: result.operation.operationId, target, projects: [source], evidence: '宿主实时列表中尚无对应侧栏项目',
+    capabilities: { computerUse: { status: 'available', evidence: '电脑技能允许且宿主窗口已选择' } } };
+  await assert.rejects(stageSidebarProject(f.state, { ...input, target: { ...target, label: 'other' } }, f.checkpoint), /INTENT_MISMATCH/);
+  await assert.rejects(stageSidebarProject(f.state, { ...input, capabilities: {} }, f.checkpoint), /AUTOMATION_UNAVAILABLE/);
+  const staged = await stageSidebarProject(f.state, input, f.checkpoint);
+  assert.equal(staged.action.label, 'test-ab'); assert.equal(pathKey(staged.action.path), pathKey(directory));
+  assert.equal(staged.action.route, 'computerUse'); assert.equal(staged.next, 'automate-sidebar-project');
+  assert.ok(f.state.operations[0].sidebarCreation, 'UI动作返回前已持久化创建尝试');
+  assert.equal((await stageSidebarProject(f.state, input, f.checkpoint)).action, null, '未确认结果不重复提交表单');
+  const verified = await stageSidebarProject(f.state, { ...input, projects: [source, { ...source, projectId: 'native-group', label: target.label }] }, f.checkpoint);
+  assert.equal(verified.hostProjectId, 'native-group'); assert.equal(verified.operation.status, 'succeeded'); assert.equal(creates, 1);
 });
 
 test('同一来源两线可规划原生工作树，实际路径未知时不误判共享目录；未授权工作树不能创建', async t => {

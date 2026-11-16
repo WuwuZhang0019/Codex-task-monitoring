@@ -38,11 +38,15 @@
 
 日期：2026-11-13
 
-新多线方案先选择用户已经拥有的真实来源项目。默认直接复用该项目；需要多个侧栏项目归类时，它们选择同一个已有来源目录，不先 `git clone` 多份目录。历史已建的克隆和独立项目只作为兼容输入，不自动删除、迁移或改变其信任配置。
+更新日期：2026-11-16。新多线方案先选择已有来源项目。主线保留原侧栏项目，分支默认建立各自的侧栏项目文件夹，所有 roots 仍指向同一来源目录；不先克隆多份目录。比如 test、test-A、test-C、test-G 都指向 G:\rust\test。主线与分支的来源项目身份、侧栏归类身份、执行目录分别记录；历史克隆和项目保留，不自动删除。
 
-运行 `coordination-cli.mjs source-targets <检查点.json> <输入.json>`。输入 `{sourceHostProjectId,hostId?,projects:<宿主列表>,lines:[{lineId,stepIds,execution:{type:'managed-worktree',startingRef:<用户明确起点>},label?,separateProject?}]}`；`hostId` 缺省 local。在来源目录直接执行的 main 线显式使用 `execution:{type:'local'}`。输出目标已携带 `sourceHostProjectId/projectSourcePath`，分支执行的 `worktreePath:null` 表示尚未创建，不能填成来源目录或预先猜测路径。
+运行 `coordination-cli.mjs source-targets <检查点.json> <输入.json>`，输入 `{sourceHostProjectId,hostId?,projects,lines:[{lineId,role?,stepIds,execution,label?,separateProject?}]}`。主线用 `role:'main'` 或 `lineId:'main'`，分支默认 separateProject=true，label 默认来源名称加 lineId。方案03第一执行线显式 label=test-A（包含A/B），第二线 test-C（C/D），第三线 test-G（G/H）。用户明确要求不分组时才能设 separateProject=false。
 
-目标依次交给 `prepare-project`：默认已有项目返回 ready，完全不调用项目创建或目录深链。确实需要额外归类时设 `separateProject:true` 与 `label`，创建 roots 仍指向来源目录；按宿主、名称、来源路径回读确认，不能随意复用同路径的其他归类。新归类 ID 与原来源项目 ID 分别保存。
+普通目录及逻辑分支使用 `execution:{type:'local'}`，worktreePath 等于来源目录，branch/head 据实记录，非 Git 为 null。Git 核验异常不能降级。用户明确要求独立工作树时使用 `execution:{type:'managed-worktree',startingRef}`，worktreePath 在宿主创建前为 null，仍需单独的 createWorktree 授权。
+
+目标依次交给 `prepare-project`：同宿主、同路径且名称匹配的分组可复用；缺项才创建同 roots 的具名项目。不能仅凭路径相同就把分支分配回主项目。创建后调用真实宿主 list_projects 并 verify-project，区分公开项目 UUID 和 hostProjectId。后续创建会话时 target.projectId 使用分支分组的 hostProjectId，local 环境保持原 cwd。
+
+已有会话归类修复使用宿主 move_thread_to_project，先核对同源路径和真实 threadId，移动后复查 projectId/cwd。此操作不创建替代会话、不重放任务、不改变暂停意图；原生要求人工确认时保留原归属和检查点。来源目录相同并不授权跨文件写入或消除并行资源冲突，已有资源检查继续生效。
 
 `map` 输入 `mapping:{lineId,hostProjectId,hostId,projectSourcePath,execution:{type:'managed-worktree',startingRef},stepIds}`。脚本只读检查来源仓库与起点存在，保存 sourceHead、startingRef、startingHead、gitCommonDir；branch/head/worktreePath 在新执行上下文确认前均为空。缺起点、来源错配或原线仍在执行时停止，不在来源目录自动建分支或切分支。
 
@@ -58,9 +62,15 @@
 
 日期：2026-11-13
 
+更新日期：2026-11-16。`prepare-project` 返回的 `sidebarFallback` 表示公开项目记录可能尚未进入宿主侧栏。先调用真实 `list_projects`，缺项时运行 `stage-sidebar-project`，输入 `{operationId,target,projects,capabilities:{computerUse:{status:'available',evidence:<实际电脑技能和宿主能力>}},evidence:<最新侧栏缺项观察>}`。命令先核对精确意图和授权、落盘 sidebarCreation，再返回 `automate-sidebar-project` 的电脑操作动作。Agent 应继续自动执行，不将该动作转为要求用户手动建目录。
+
+Windows 实测入口：选中实际 Codex 模式窗口，使用“文件→新建项目…”，填写 target.label；“源文件夹→添加”选择 target.projectSourcePath，核对路径后创建。重叠文件选择器应使用最新截图中该选择器对应的 screenshotId 和坐标，不能把父窗口 UIA 的旧索引当作弹窗输入位置。点击后等待可观察状态更新，刷新树或截图，再选择下一步；不硬编码本次机器的索引或坐标。创建后以宿主列表的名称、路径及 hostId 确认唯一项目，再 verify-project。若原尝试仍未确认，命令只返回 verify-project；沿用原窗口、操作身份恢复，不重放创建提交。
+
+此路径已实际自动创建同路径 test-C/test-G 并经宿主列表确认。公开 API 记录与原生侧栏项目为不同身份，保存两者，不修改 Codex 私有数据。原生界面或插件权限仍以当前环境为准，权限弹窗、信任确认等按对应电脑技能处理，不自动代签。
+
 仅在任务确实需要分别归属的宿主项目时使用此流程。工作台登记和普通单目录执行不依赖新侧栏项目。已有明确的人类创建执行聊天授权时，添加既定目录为项目属于必要准备，无须让用户逐目录操作；只核对/生成模式不执行添加。
 
-1. 调用宿主 `list_projects` 取得最新实际列表，核验目标目录存在、Git 工作树根及分支。以 `hostId + path` 匹配，不能按项目名称猜测；多项同路径需核对固定 ID。普通非 Git 目录沿用普通执行流程，此多工作树协调脚本仍检查 Git。
+1. 调用宿主 `list_projects` 取得最新实际列表，核验目标目录存在、Git 工作树根及分支。以 `hostId + path` 匹配，不能按项目名称猜测；多项同路径需核对固定 ID。普通非 Git 目录使用显式 local 模式，仍核验目录；只有真实工作树模式要求 Git。
 2. 新路线先按上节从来源项目生成 target，再运行 `node '<Skill目录>/scripts/coordination-cli.mjs' prepare-project '<检查点.json>' '<输入.json>'`，输入 `{target,projects:<宿主最新列表数组>}`。旧 `{lineId,hostId,worktreePath,branch,stepIds}` 目标仅作为已有目录兼容输入，不是克隆生成指令。匹配来源项目返回真实 `hostProjectId`；确需新增归类才保存 `createProject` 意图并执行公开协议。项目 roots 取 `projectSourcePath`，不取尚未创建的执行工作树。
 3. 同包 `scripts/host-project-client.mjs` 导出 `HostProjectClient`，以 `initialize.capabilities.experimentalApi:true` 协商公开 app-server 协议，只使用 `project/list`、`project/create` 和 `project/read`。创建参数为 `{idempotencyKey,name,roots:[{path}],metadata?}`；幂等键由固定操作身份产生，roots 使用已核验的精确目标目录。列出并复用已有公开项目，或创建后回读其 roots；不读写私有库，不启动模型或发送聊天消息，也不把另建执行会话当成原生项目准备。
 4. 公开项目准备后，命令通过官方 `codex://new?path=...` 入口让桌面采用目标目录，路径参数必须正确编码。该步骤不使用电脑 UI 自动化，也不操作认证或权限提示。Windows 的 `codex app PATH` 当前仅打印目录，不会按指定目录创建项目，不能将其退出成功记为添加成功。官方入口说明见 [Commands](https://learn.chatgpt.com/docs/reference/commands)，CLI 平台区别见 [Developer commands](https://learn.chatgpt.com/docs/developer-commands#codex-app)。

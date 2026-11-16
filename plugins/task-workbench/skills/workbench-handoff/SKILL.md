@@ -11,11 +11,15 @@ description: 为轻量路线工作台接入方案、核对进度、生成交接�
 
 更新日期：2026-11-13
 
-多开发线默认复用用户已有的来源项目及同一个来源目录，不先克隆多份目录。先按 [来源项目与执行工作树](references/coordination.md#来源项目与执行工作树)运行 `source-targets`，用宿主真实 `sourceHostProjectId` 与本批开发线生成目标。需要额外侧栏归类时显式设 `separateProject:true` 和 `label`，创建的新项目 roots 仍是原来源目录；分支执行使用已授权的原生 `create_thread` worktree 环境，实际目录由宿主返回后核验。不把工作树再次添加为项目，不用同一执行目录切分支代替隔离。已有克隆方案保留为历史，不自动删除、覆盖或迁移。
+更新日期：2026-11-16。有分支的方案默认给每条分支建立独立的 Codex 侧栏项目文件夹，主线保留原项目；这些侧栏项目的 roots 均指向主会话同一个来源目录。例如 `test`、`test-A`、`test-C`、`test-G` 都使用 `G:\rust\test`，A/B 归入 test-A、C/D 归入 test-C、G/H 归入 test-G。不要把同目录误解成全部会话归入同一个侧栏项目，也不要为归类新建磁盘目录或 Git 分支。
+
+先按 [来源项目与执行工作树](references/coordination.md#来源项目与执行工作树)运行 `source-targets`。主线用 `role:'main'` 或 `lineId:'main'`；分支默认 `separateProject:true`，名称默认 `<来源项目名>-<lineId>`，可用 label 指定。只在用户明确要求全部留在同一侧栏项目时设 `separateProject:false`。普通同目录逻辑分支使用 `execution:{type:'local'}`，非 Git 目录记录 branch/head 为 null。用户明确要求真实独立工作树时才采用 managed-worktree 并取得 createWorktree 授权；项目来源目录与实际执行工作树分开记录。
 
 确需新增侧栏归类时，按 [自动准备宿主项目](references/coordination.md#自动准备宿主项目)运行 `prepare-project`，实际创建后用宿主 `list_projects` 和 `verify-project` 回读；公开 `project.id` 与宿主 `hostProjectId` 分开保存。只请求复用已有项目时不调用创建接口或工作目录深链。来源目录已使用不等于新工作树自动获信任；原生工作树如实回报 accessState，`waitingForTrust` 时等待用户确认，禁止代点或写信任配置；确认后重验同一聊天，不重复创建。
 
-用户要求“接入并执行”且当前项目尚无工作台 ID 时，先按 [首次登记流程](references/plan-registration.md#首次登记与项目身份恢复)建立本地候选并调用 `workbench_register_plan`，不要先用空 projectId 读取，也不要让用户去任务岛手工建立项目。自动连接已开启时登记使用 `confirmationGrant: null`，成功响应会生成真实项目、方案、步骤 ID；随后回读、绑定并开始。Codex 侧栏项目与工作台项目是不同身份，普通测试不需要另外创建侧栏项目。已持有本地 projectKey 时可用它调用 `workbench_get_project` 恢复真实 ID。
+更新日期：2026-11-16。公开 project/create 成功但宿主 list_projects 仍缺分组时，不把“创建记录”当作侧栏完成，也不默认让用户手动新建。按 sidebarFallback 运行 `stage-sidebar-project`，读取电脑操作技能，自动完成 Codex 文件菜单→新建项目→填写分组名→添加主会话同一源文件夹→创建，再回读并 verify-project。已有创建意图和界面结果未知时先核对原窗口及列表，禁止盲目重复提交。只有真实权限、信任或不可用能力阻塞时才报告具体缺项；应用授权超时不是要求用户手建项目的默认理由。
+
+用户要求“接入并执行”且当前项目尚无工作台 ID 时，先按 [首次登记流程](references/plan-registration.md#首次登记与项目身份恢复)建立本地候选并调用 `workbench_register_plan`，不要先用空 projectId 读取，也不要让用户去任务岛手工建立项目。自动连接已开启时登记使用 `confirmationGrant: null`，成功响应会生成真实项目、方案、步骤 ID；随后回读、绑定并开始。Codex 侧栏项目与工作台项目是不同身份，普通单线测试不需要另外创建侧栏项目；有分支时按上文建立同路径的侧栏归类。已持有本地 projectKey 时可用它调用 `workbench_get_project` 恢复真实 ID。
 
 状态：支持核对/生成与授权协调两种模式；实际宿主能力、安装来源和原生派发验收分别记录
 

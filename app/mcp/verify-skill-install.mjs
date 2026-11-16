@@ -43,10 +43,19 @@ async function behavior(directory) {
     state.authorization.permissions.push('createWorktree');
     const sourceProjects = [{ projectId: 'source-project', hostId: 'local', path: 'G:\\fixture\\source', label: 'existing', isGitRepository: true }];
     const sharedTarget = module.sharedSourceTargets({ sourceHostProjectId: 'source-project', projects: sourceProjects,
-      lines: [{ lineId: 'line', stepIds: ['step'], execution: { type: 'managed-worktree', startingRef: 'main' } }] })[0];
+      lines: [{ lineId: 'line', separateProject: false, stepIds: ['step'], execution: { type: 'managed-worktree', startingRef: 'main' } }] })[0];
     const sharedMapping = await module.mapLine(state, sharedTarget, sourceProjects,
       async directory => ({ worktreePath: directory, repositoryRoot: directory, gitCommonDir: directory + '/.git', head: 'a'.repeat(40), branch: 'main' }), async () => 'a'.repeat(40));
     const managedRequest = module.createRequest(state, { lineId: 'line', stepIds: ['step'], id: 'smoke', spec: { title: 'smoke' } }, sharedMapping, sourceProjects);
+    // 日期：2026-11-16。安装后的真实导出函数必须包含默认同路径侧栏分组及普通目录 local 映射。
+    const ordinaryProjects = [{ ...sourceProjects[0], isGitRepository: false }];
+    const branchTarget = module.sharedSourceTargets({ sourceHostProjectId: 'source-project', projects: ordinaryProjects,
+      lines: [{ lineId: 'line', stepIds: ['step'], execution: { type: 'local' } }] })[0];
+    const ordinaryGroup = { ...ordinaryProjects[0], projectId: 'branch-group', label: branchTarget.label };
+    const ordinaryMapping = await module.mapLine(state, { ...branchTarget, hostProjectId: ordinaryGroup.projectId }, [ordinaryGroup],
+      async directory => ({ worktreePath: directory, repositoryRoot: null, gitCommonDir: null, branch: null, head: null }));
+    module.validateCoordination(state);
+    const ordinaryRequest = module.createRequest(state, { lineId: 'line', stepIds: ['step'], spec: { title: 'smoke' } }, ordinaryMapping, [ordinaryGroup]);
     const publicPrepare = await module.planHostProjects(state, { targets: [target], projects: [],
       capabilities: { publicProjects: { status: 'available', evidence: 'isolated public protocol adapter' } } },
     async directory => ({ worktreePath: directory, repositoryRoot: directory, gitCommonDir: directory + '/.git', head: 'a'.repeat(40), branch: 'main' }));
@@ -55,6 +64,9 @@ async function behavior(directory) {
       workspaceLink: new URL(module.workspaceProjectLink(target.worktreePath)).searchParams.get('path') === target.worktreePath,
       sharedSourceProject: sharedMapping.projectSourcePath === sourceProjects[0].path && sharedMapping.worktreePath === null,
       nativeManagedWorktree: managedRequest.target.projectId === 'source-project' && managedRequest.target.environment.type === 'worktree',
+      branchSidebarGrouping: branchTarget.separateProject === true && branchTarget.label === 'existing-line' && branchTarget.projectSourcePath === ordinaryProjects[0].path,
+      nativeSidebarAutomation: typeof module.stageSidebarProject === 'function',
+      ordinaryLocalDirectory: ordinaryMapping.branch === null && ordinaryMapping.head === null && ordinaryRequest.target.projectId === 'branch-group' && ordinaryRequest.target.environment.type === 'local',
       recoveryReadable: module.recoveryReport(state).unfinished.length === 0,
       nativeDispatch: 'notRun' };
   } catch (error) {
