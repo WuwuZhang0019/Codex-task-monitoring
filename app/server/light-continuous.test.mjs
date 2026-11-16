@@ -132,6 +132,33 @@ test('completed plans without continuous history stay visibly completed even whe
  const result=await f.change('start');assert.equal(result.run.status,'completed');assert.equal(f.created.length,3);assert.equal(f.requests.length,3);
 });
 
+// 日期：2026-11-16。总控在接续受阻后补交真实验收，展示及重启均应对账最终结果。
+async function acceptBlockedStages(f){
+ for(const action of ['start','resume','resume']){
+  await f.change(action);await f.until('blocked');
+  assert.match(f.runner.read()[0].reason,/验收未通过/);
+  await f.complete(f.created.at(-1).id);
+ }
+}
+test('late external acceptance clears the displayed checkpoint and restart persists completion without dispatch',async t=>{
+ const f=await fixture(t,{finish:false});await acceptBlockedStages(f);
+ const before=f.p.read('lightContinuous').runs[0],domain=f.p.read('light');
+ assert.equal(before.status,'blocked');assert.equal(before.current.code,'C');
+ const displayed=f.runner.read()[0];assert.equal(displayed.id,before.id);assert.equal(displayed.status,'completed');assert.equal(displayed.enabled,false);assert.equal(displayed.phase,null);assert.equal(displayed.stageCode,null);assert.equal(displayed.threadId,null);assert.equal(displayed.reason,'整个方案已完成并通过验收');assert.equal(displayed.completed,3);
+ await writeFile(f.snapshot().plans[0].source.path,'later documentation edits do not undo accepted work');
+ const {runner}=await restartWith(f,t,f.factory),saved=f.p.read('lightContinuous').runs[0];
+ assert.equal(runner.read()[0].status,'completed');assert.equal(saved.status,'completed');assert.equal(saved.enabled,false);assert.equal(saved.current,null);assert.equal(saved.phase,null);assert.deepEqual(saved.history,before.history);assert.equal(saved.id,before.id);assert.deepEqual(f.p.read('light'),domain);
+ await delay(30);assert.equal(f.created.length,3);assert.equal(f.requests.length,3);
+});
+test('late stage acceptance cannot clear a checkpoint until final conditions and their evidence pass',async t=>{
+ const f=await fixture(t,{finish:false});await f.p.run(()=>{const light=f.p.read('light');light.snapshot.plans[0].endConditions=[{conditionId:'final',text:'最终验收',required:true,result:'pending',evidenceIds:[]}];f.p.write('light',light);});
+ await acceptBlockedStages(f);assert.equal(f.runner.read()[0].completed,3);assert.equal(f.runner.read()[0].status,'blocked');
+ await f.runner.initialize();assert.equal(f.p.read('lightContinuous').runs[0].status,'blocked');
+ await f.p.run(()=>{const light=f.p.read('light');light.snapshot.plans[0].endConditions[0]={...light.snapshot.plans[0].endConditions[0],result:'passed',evidenceIds:['missing-final-proof']};f.p.write('light',light);});
+ assert.equal(f.runner.read()[0].status,'blocked','最终条件文本通过但证据无效仍不能完成');
+ await f.runner.initialize();assert.equal(f.p.read('lightContinuous').runs[0].status,'blocked');assert.equal(f.requests.length,3);
+});
+
 test('restart migrates a legacy enabled run to an explicit disabled pause',async t=>{
  const f=await fixture(t);
  await f.p.run(()=>f.p.write('lightContinuous',{version:1,runs:[{id:'legacy',planKey:'test-plan',status:'running',sourceHash:f.snapshot().plans[0].source.sha256,current:null,history:[]}]}));

@@ -10,6 +10,8 @@ import {digest} from './receipts.mjs';
 
 const activeStates=new Set(['running','pausing']);
 const modes=new Set(['stages','current_thread']);
+// 日期：2026-11-16。领域最终验收通过后，旧接续检查点不再遮住方案完成状态。
+const completionFields={status:'completed',enabled:false,phase:null,current:null,reason:'整个方案已完成并通过验收'};
 const stamp=()=>new Date().toISOString();
 const samePath=(a,b)=>process.platform==='win32'?path.resolve(a).toLowerCase()===path.resolve(b).toLowerCase():path.resolve(a)===path.resolve(b);
 const enabled=run=>run.enabled??['running','blocked'].includes(run.status);
@@ -39,8 +41,9 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
   const find=id=>state().runs.find(r=>r.id===id);
   async function update(id,fields){if(closed)return;await persistence.run(()=>{const s=state(),r=s.runs.find(r=>r.id===id);if(r){Object.assign(r,fields,{updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
   async function pauseIfRequested(id,reason){if(closed)return;await persistence.run(()=>{const s=state(),r=s.runs.find(r=>r.id===id);if(r?.status==='pausing'){Object.assign(r,{status:'paused',enabled:false,phase:null,reason,updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
-  function summary(run){const s=snapshot(),stages=s?.steps.filter(x=>x.planKey===run.planKey&&x.parentKey===null&&x.required)??[];return {id:run.id,planKey:run.planKey,status:run.status,mode:run.mode??'stages',enabled:run.status==='completed'?false:enabled(run),phase:run.phase??null,stageCode:run.current?.code??null,threadId:run.current?.threadId??run.session?.threadId??null,reason:run.reason??'',completed:stages.filter(x=>stepPassed(s,x)).length,total:stages.length};}
-  const completedRun=plan=>({id:'completed/'+plan.key,planKey:plan.key,status:'completed',mode:'stages',enabled:false,history:[],reason:'整个方案已完成并通过验收'});
+  function completionView(run,s){return s?.plans.some(p=>p.key===run.planKey)&&planProgress(s,run.planKey).passed?{...run,...completionFields}:run;}
+  function summary(run){const s=snapshot();if(!activeStates.has(run.status)&&!pumps.has(run.id))run=completionView(run,s);const stages=s?.steps.filter(x=>x.planKey===run.planKey&&x.parentKey===null&&x.required)??[];return {id:run.id,planKey:run.planKey,status:run.status,mode:run.mode??'stages',enabled:run.status==='completed'?false:enabled(run),phase:run.phase??null,stageCode:run.current?.code??null,threadId:run.current?.threadId??run.session?.threadId??null,reason:run.reason??'',completed:stages.filter(x=>stepPassed(s,x)).length,total:stages.length};}
+  const completedRun=plan=>({id:'completed/'+plan.key,planKey:plan.key,mode:'stages',history:[],...completionFields});
   async function principal(){
     if(principalProvider)return principalProvider();
     const config=JSON.parse(await readFile(path.join(process.env.CODEX_HOME??path.join(os.homedir(),'.codex'),'task-workbench-light/config.json'),'utf8'));
@@ -236,7 +239,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
             const owner=await principal(),input=base(run,'complete-plan');
             if(service.query(owner,input.projectId,'completePlan',input.eventId).state!=='committed')await service.completePlan(owner,{...input,checks:finalPlan.endConditions,evidence:proofs});
             if(!planProgress(snapshot(),plan.key).passed)throw Error('方案最终状态仍未通过验收');
-            await update(id,{status:'completed',enabled:false,phase:null,current:null,reason:'整个方案已完成并通过验收'});return;
+            await update(id,completionFields);return;
           }
           const ongoing=pending.find(x=>x.status==='running');
           if(ongoing){const binding=s.bindings.find(b=>b.key===ongoing.bindingKey);if(!binding?.context.threadId)throw Error('现有执行缺少真实会话身份');const current={adopted:true,stepId:ongoing.id,stepKey:ongoing.key,code:ongoing.code,threadId:binding.context.threadId};const fields={current,phase:run.mode==='current_thread'?'notifying':'waiting'};if(run.mode==='current_thread')fields.session={threadId:current.threadId,cwd:await realpath(binding.context.worktreePath),transport:'shared'};await update(id,fields);continue;}
@@ -269,7 +272,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     finally{client?.close();clients.delete(id);pumps.delete(id);for(const [cwd,owner]of workspaceClaims)if(owner===id)workspaceClaims.delete(cwd);if(!closed&&find(id)?.status==='running')setTimeout(()=>void pump(id),0);}
   }
   return {
-    async initialize(){await persistence.run(()=>{const s=state();for(const r of s.runs){r.mode??='stages';r.enabled=enabled(r);if(activeStates.has(r.status)){r.status='paused';r.enabled=false;r.phase=null;r.reason='服务已重启，请点击继续，复用原阶段会话核验恢复';}if(r.current?.delivery?.state==='sending')r.current.delivery.state='unknown';
+    async initialize(){await persistence.run(()=>{const s=state(),snap=snapshot();for(const r of s.runs){r.mode??='stages';r.enabled=enabled(r);const reconciled=completionView(r,snap);if(reconciled!==r){if(Object.entries(completionFields).some(([key,value])=>r[key]!==value))Object.assign(r,reconciled,{updatedAt:stamp()});continue;}if(activeStates.has(r.status)){r.status='paused';r.enabled=false;r.phase=null;r.reason='服务已重启，请点击继续，复用原阶段会话核验恢复';}if(r.current?.delivery?.state==='sending')r.current.delivery.state='unknown';
       // 日期：2026-11-15。旧写入冲突不能遮住领域中已登记的真实阶段阻塞。
       if(r.status==='blocked'&&r.reason===`CODEX_REQUEST_REJECTED: thread ${r.current?.threadId} already has an active writer`&&!['sending','unknown'].includes(r.current?.turnDelivery)&&r.current?.delivery?.state!=='unknown'){
         const issue=stageResumeIssue(snapshot(),r.current);if(issue)r.reason=failureReason(issue);
@@ -282,7 +285,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
       const initial=snapshot(),plan=initial?.plans.find(p=>p.key===input.planKey),previous=state().runs.find(r=>r.planKey===input.planKey);
       if(!plan)lightError('NOT_FOUND','方案不存在',404);
       if(planProgress(initial,plan.key).passed){
-        if(previous)await update(previous.id,{status:'completed',enabled:false,phase:null,current:null,reason:'整个方案已完成并通过验收'});
+        if(previous)await update(previous.id,completionFields);
         return {saved:true,run:summary(previous?find(previous.id):completedRun(plan))};
       }
       const mode=input.mode??previous?.mode??'stages';
