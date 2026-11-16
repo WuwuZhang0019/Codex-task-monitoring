@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-16",
+  "scope": "isolated Windows native app, actual standalone owner and SDK STDIO; no real model calls",
+  "nativeChecks": [
+    {
+      "action": "record",
+      "at": "2026-11-16T09:29:10.823Z",
+      "ownerGeneration": "cc267243-f1e9-4346-ae8d-57b31feed095",
+      "islandPid": 17260
+    },
+    {
+      "action": "record",
+      "at": "2026-11-16T09:30:16.455Z",
+      "ownerGeneration": "cc267243-f1e9-4346-ae8d-57b31feed095",
+      "islandPid": 17260
+    },
+    {
+      "action": "crash-service",
+      "at": "2026-11-16T09:30:34.080Z"
+    },
+    {
+      "action": "verify",
+      "at": "2026-11-16T09:30:40.059Z",
+      "ownerGeneration": "fa93852a-ff15-46d2-96d2-246e019ad83c",
+      "identityPreserved": true,
+      "eventRecovered": true,
+      "islandPid": 17260
+    },
+    {
+      "action": "crash-both",
+      "at": "2026-11-16T09:30:42.507Z"
+    },
+    {
+      "action": "recover-both",
+      "at": "2026-11-16T09:30:44.866Z",
+      "ownerGeneration": "d8cd40ba-e4a0-4f8f-a8ce-46b16cce18cd",
+      "identityPreserved": true,
+      "eventRecovered": true,
+      "islandPid": 50088
+    },
+    {
+      "action": "stop",
+      "at": "2026-11-16T09:31:43.540Z"
+    }
+  ],
+  "normalExitProtection": {
+    "observed": true,
+    "dialogTitle": "任务岛 · 退出保护",
+    "mainWindowDisabled": true,
+    "ownerAndTopmost": true,
+    "confirmationKeptExecutionAlive": true,
+    "idleExitObserved": true
+  },
+  "validation": {
+    "serverAndMcp": 234,
+    "desktop": 14,
+    "domain": 6,
+    "skill": 55,
+    "packagedBridge": 6,
+    "rust": 40
+  },
+  "deployment": "source branches only; installed application and plugin cache unchanged"
+}

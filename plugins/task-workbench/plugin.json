@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.25",
-  "description": "2026-11-16 先提取并登记步骤路线图，回读成功后开展业务核验",
+  "version": "0.1.26",
+  "description": "2026-11-16 支持按需启动任务岛、断线恢复及原事件对账续接",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,
