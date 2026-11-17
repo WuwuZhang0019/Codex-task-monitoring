@@ -1,0 +1,225 @@
+{
+  "date": "2026-11-17",
+  "native": false,
+  "checks": [
+    "windows/1100/full: two joins and the intervening fork share two display rows; all twenty stations and curve endpoints preserved",
+    "windows/1100/compact: two joins and the intervening fork share two display rows; all twenty stations and curve endpoints preserved",
+    "windows/480/full: two joins and the intervening fork share two display rows; all twenty stations and curve endpoints preserved",
+    "windows/480/compact: two joins and the intervening fork share two display rows; all twenty stations and curve endpoints preserved",
+    "dynamic/1100/full: two joins and the intervening fork share two display rows; all twenty stations and curve endpoints preserved",
+    "dynamic/1100/compact: two joins and the intervening fork share two display rows; all twenty stations and curve endpoints preserved",
+    "dynamic/480/full: two joins and the intervening fork share two display rows; all twenty stations and curve endpoints preserved",
+    "dynamic/480/compact: two joins and the intervening fork share two display rows; all twenty stations and curve endpoints preserved"
+  ],
+  "sizes": [
+    {
+      "style": "windows",
+      "width": 1100,
+      "compact": false,
+      "preceding": [
+        156,
+        250
+      ],
+      "branches": [
+        156,
+        250
+      ],
+      "continuation": [
+        203,
+        203,
+        203,
+        203,
+        203,
+        203,
+        203,
+        203
+      ],
+      "height": 190,
+      "nodes": 20,
+      "errors": []
+    },
+    {
+      "style": "windows",
+      "width": 1100,
+      "compact": true,
+      "preceding": [
+        96,
+        114
+      ],
+      "branches": [
+        96,
+        114
+      ],
+      "continuation": [
+        105,
+        105,
+        105,
+        105,
+        105,
+        105,
+        105,
+        105
+      ],
+      "height": 42,
+      "nodes": 20,
+      "errors": []
+    },
+    {
+      "style": "windows",
+      "width": 480,
+      "compact": false,
+      "preceding": [
+        156,
+        250
+      ],
+      "branches": [
+        156,
+        250
+      ],
+      "continuation": [
+        203,
+        203,
+        203,
+        203,
+        203,
+        203,
+        203,
+        203
+      ],
+      "height": 190,
+      "nodes": 20,
+      "errors": []
+    },
+    {
+      "style": "windows",
+      "width": 480,
+      "compact": true,
+      "preceding": [
+        96,
+        114
+      ],
+      "branches": [
+        96,
+        114
+      ],
+      "continuation": [
+        105,
+        105,
+        105,
+        105,
+        105,
+        105,
+        105,
+        105
+      ],
+      "height": 42,
+      "nodes": 20,
+      "errors": []
+    },
+    {
+      "style": "dynamic",
+      "width": 1100,
+      "compact": false,
+      "preceding": [
+        178,
+        272
+      ],
+      "branches": [
+        178,
+        272
+      ],
+      "continuation": [
+        225,
+        225,
+        225,
+        225,
+        225,
+        225,
+        225,
+        225
+      ],
+      "height": 190,
+      "nodes": 20,
+      "errors": []
+    },
+    {
+      "style": "dynamic",
+      "width": 1100,
+      "compact": true,
+      "preceding": [
+        118,
+        136
+      ],
+      "branches": [
+        118,
+        136
+      ],
+      "continuation": [
+        127,
+        127,
+        127,
+        127,
+        127,
+        127,
+        127,
+        127
+      ],
+      "height": 42,
+      "nodes": 20,
+      "errors": []
+    },
+    {
+      "style": "dynamic",
+      "width": 480,
+      "compact": false,
+      "preceding": [
+        178,
+        272
+      ],
+      "branches": [
+        178,
+        272
+      ],
+      "continuation": [
+        225,
+        225,
+        225,
+        225,
+        225,
+        225,
+        225,
+        225
+      ],
+      "height": 190,
+      "nodes": 20,
+      "errors": []
+    },
+    {
+      "style": "dynamic",
+      "width": 480,
+      "compact": true,
+      "preceding": [
+        118,
+        136
+      ],
+      "branches": [
+        118,
+        136
+      ],
+      "continuation": [
+        127,
+        127,
+        127,
+        127,
+        127,
+        127,
+        127,
+        127
+      ],
+      "height": 42,
+      "nodes": 20,
+      "errors": []
+    }
+  ],
+  "errors": []
+}

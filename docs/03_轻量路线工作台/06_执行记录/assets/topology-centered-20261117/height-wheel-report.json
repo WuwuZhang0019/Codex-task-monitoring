@@ -1,0 +1,417 @@
+{
+  "date": "2026-11-17",
+  "native": false,
+  "checks": [
+    "windows: full project grows past old fixed ceiling and keeps every lane visible",
+    "windows: graph wheel remains horizontal and does not page tasks",
+    "windows: small/large display changes height without moving the top edge",
+    "windows: a simple task contracts the shell instead of retaining empty height",
+    "windows: side scrolling to a different task resizes and preserves its reading anchor",
+    "windows: one wheel detent smoothly pages exactly one task through the right gutter",
+    "windows: quick reversal and first/last task boundaries remain stable",
+    "windows: successive detents visit the middle and last tasks without skipping",
+    "windows: reduced motion preserves the task anchor across height changes",
+    "windows: screen-height cap preserves existing side wheel vertical scrolling",
+    "windows: resizing the available screen updates the cap in both directions",
+    "windows: settled height does not oscillate",
+    "dynamic: full project grows past old fixed ceiling and keeps every lane visible",
+    "dynamic: graph wheel remains horizontal and does not page tasks",
+    "dynamic: small/large display changes height without moving the top edge",
+    "dynamic: a simple task contracts the shell instead of retaining empty height",
+    "dynamic: side scrolling to a different task resizes and preserves its reading anchor",
+    "dynamic: one wheel detent smoothly pages exactly one task through the right gutter",
+    "dynamic: quick reversal and first/last task boundaries remain stable",
+    "dynamic: successive detents visit the middle and last tasks without skipping",
+    "dynamic: reduced motion preserves the task anchor across height changes",
+    "dynamic: screen-height cap preserves existing side wheel vertical scrolling",
+    "dynamic: resizing the available screen updates the cap in both directions",
+    "dynamic: settled height does not oscillate"
+  ],
+  "sizes": [
+    {
+      "style": "windows",
+      "case": "actual-readonly-project",
+      "height": 704,
+      "top": 8,
+      "bottom": 712,
+      "viewport": 1200,
+      "scroll": 0,
+      "scrollHeight": 634,
+      "listHeight": 634,
+      "cardHeight": 604,
+      "cardBottom": 646,
+      "listBottom": 666
+    },
+    {
+      "style": "windows",
+      "case": "simple-task",
+      "height": 303,
+      "top": 8,
+      "bottom": 311,
+      "viewport": 1200,
+      "scroll": 0,
+      "scrollHeight": 233,
+      "listHeight": 233,
+      "cardHeight": 203,
+      "cardBottom": 243,
+      "listBottom": 265
+    },
+    {
+      "style": "windows",
+      "case": "side-wheel-animation",
+      "samples": [
+        {
+          "scroll": 142,
+          "height": 704
+        },
+        {
+          "scroll": 207,
+          "height": 643.578125
+        },
+        {
+          "scroll": 265,
+          "height": 560.59375
+        },
+        {
+          "scroll": 318,
+          "height": 495.890625
+        },
+        {
+          "scroll": 366,
+          "height": 439.0625
+        },
+        {
+          "scroll": 408,
+          "height": 401.265625
+        },
+        {
+          "scroll": 444,
+          "height": 371.734375
+        },
+        {
+          "scroll": 477,
+          "height": 350.546875
+        },
+        {
+          "scroll": 549,
+          "height": 316.984375
+        },
+        {
+          "scroll": 566,
+          "height": 312.953125
+        },
+        {
+          "scroll": 579,
+          "height": 309.171875
+        },
+        {
+          "scroll": 590,
+          "height": 306.640625
+        },
+        {
+          "scroll": 599,
+          "height": 305.078125
+        },
+        {
+          "scroll": 605,
+          "height": 304.046875
+        },
+        {
+          "scroll": 610,
+          "height": 303.453125
+        },
+        {
+          "scroll": 613,
+          "height": 303
+        },
+        {
+          "scroll": 615,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        },
+        {
+          "scroll": 616,
+          "height": 303
+        }
+      ]
+    },
+    {
+      "style": "windows",
+      "case": "short-screen",
+      "height": 564,
+      "top": 8,
+      "bottom": 572,
+      "viewport": 620,
+      "scroll": 1216,
+      "scrollHeight": 2510,
+      "listHeight": 494,
+      "cardHeight": 2480,
+      "cardBottom": 1306,
+      "listBottom": 526
+    },
+    {
+      "style": "dynamic",
+      "case": "actual-readonly-project",
+      "height": 706,
+      "top": 0,
+      "bottom": 706,
+      "viewport": 1200,
+      "scroll": 0,
+      "scrollHeight": 634,
+      "listHeight": 634,
+      "cardHeight": 604,
+      "cardBottom": 668,
+      "listBottom": 688
+    },
+    {
+      "style": "dynamic",
+      "case": "simple-task",
+      "height": 305,
+      "top": 0,
+      "bottom": 305,
+      "viewport": 1200,
+      "scroll": 0,
+      "scrollHeight": 233,
+      "listHeight": 233,
+      "cardHeight": 203,
+      "cardBottom": 267,
+      "listBottom": 287
+    },
+    {
+      "style": "dynamic",
+      "case": "side-wheel-animation",
+      "samples": [
+        {
+          "scroll": 72,
+          "height": 706
+        },
+        {
+          "scroll": 143,
+          "height": 706
+        },
+        {
+          "scroll": 208,
+          "height": 667
+        },
+        {
+          "scroll": 266,
+          "height": 580.859375
+        },
+        {
+          "scroll": 319,
+          "height": 508.984375
+        },
+        {
+          "scroll": 366,
+          "height": 455.21875
+        },
+        {
+          "scroll": 408,
+          "height": 411.71875
+        },
+        {
+          "scroll": 445,
+          "height": 379.84375
+        },
+        {
+          "scroll": 477,
+          "height": 358.046875
+        },
+        {
+          "scroll": 506,
+          "height": 341.375
+        },
+        {
+          "scroll": 529,
+          "height": 329.5625
+        },
+        {
+          "scroll": 549,
+          "height": 321.6875
+        },
+        {
+          "scroll": 566,
+          "height": 315.78125
+        },
+        {
+          "scroll": 580,
+          "height": 311.734375
+        },
+        {
+          "scroll": 591,
+          "height": 309.140625
+        },
+        {
+          "scroll": 599,
+          "height": 307.328125
+        },
+        {
+          "scroll": 606,
+          "height": 306.1875
+        },
+        {
+          "scroll": 610,
+          "height": 305.53125
+        },
+        {
+          "scroll": 613,
+          "height": 305.1875
+        },
+        {
+          "scroll": 615,
+          "height": 305.046875
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        },
+        {
+          "scroll": 616,
+          "height": 305
+        }
+      ]
+    },
+    {
+      "style": "dynamic",
+      "case": "short-screen",
+      "height": 572,
+      "top": 0,
+      "bottom": 572,
+      "viewport": 620,
+      "scroll": 1216,
+      "scrollHeight": 2510,
+      "listHeight": 500,
+      "cardHeight": 2480,
+      "cardBottom": 1328,
+      "listBottom": 554
+    }
+  ],
+  "errors": []
+}

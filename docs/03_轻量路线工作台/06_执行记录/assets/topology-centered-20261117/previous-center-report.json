@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-17",
+  "native": false,
+  "checks": [
+    "windows/1100/full: E/F/I/J centered between A/C/G; all ten stations and curve endpoints preserved",
+    "windows/1100/compact: E/F/I/J centered between A/C/G; all ten stations and curve endpoints preserved",
+    "windows/480/full: E/F/I/J centered between A/C/G; all ten stations and curve endpoints preserved",
+    "windows/480/compact: E/F/I/J centered between A/C/G; all ten stations and curve endpoints preserved",
+    "dynamic/1100/full: E/F/I/J centered between A/C/G; all ten stations and curve endpoints preserved",
+    "dynamic/1100/compact: E/F/I/J centered between A/C/G; all ten stations and curve endpoints preserved",
+    "dynamic/480/full: E/F/I/J centered between A/C/G; all ten stations and curve endpoints preserved",
+    "dynamic/480/compact: E/F/I/J centered between A/C/G; all ten stations and curve endpoints preserved"
+  ],
+  "sizes": [
+    {
+      "style": "windows",
+      "width": 1100,
+      "compact": false,
+      "preceding": [
+        156,
+        250,
+        344
+      ],
+      "continuation": [
+        250,
+        250,
+        250,
+        250
+      ],
+      "height": 284,
+      "nodes": 10,
+      "errors": []
+    },
+    {
+      "style": "windows",
+      "width": 1100,
+      "compact": true,
+      "preceding": [
+        69,
+        87,
+        105
+      ],
+      "continuation": [
+        87,
+        87,
+        87,
+        87
+      ],
+      "height": 60,
+      "nodes": 10,
+      "errors": []
+    },
+    {
+      "style": "windows",
+      "width": 480,
+      "compact": false,
+      "preceding": [
+        156,
+        250,
+        344
+      ],
+      "continuation": [
+        250,
+        250,
+        250,
+        250
+      ],
+      "height": 284,
+      "nodes": 10,
+      "errors": []
+    },
+    {
+      "style": "windows",
+      "width": 480,
+      "compact": true,
+      "preceding": [
+        69,
+        87,
+        105
+      ],
+      "continuation": [
+        87,
+        87,
+        87,
+        87
+      ],
+      "height": 60,
+      "nodes": 10,
+      "errors": []
+    },
+    {
+      "style": "dynamic",
+      "width": 1100,
+      "compact": false,
+      "preceding": [
+        178,
+        272,
+        366
+      ],
+      "continuation": [
+        272,
+        272,
+        272,
+        272
+      ],
+      "height": 284,
+      "nodes": 10,
+      "errors": []
+    },
+    {
+      "style": "dynamic",
+      "width": 1100,
+      "compact": true,
+      "preceding": [
+        91,
+        109,
+        127
+      ],
+      "continuation": [
+        109,
+        109,
+        109,
+        109
+      ],
+      "height": 60,
+      "nodes": 10,
+      "errors": []
+    },
+    {
+      "style": "dynamic",
+      "width": 480,
+      "compact": false,
+      "preceding": [
+        178,
+        272,
+        366
+      ],
+      "continuation": [
+        272,
+        272,
+        272,
+        272
+      ],
+      "height": 284,
+      "nodes": 10,
+      "errors": []
+    },
+    {
+      "style": "dynamic",
+      "width": 480,
+      "compact": true,
+      "preceding": [
+        91,
+        109,
+        127
+      ],
+      "continuation": [
+        109,
+        109,
+        109,
+        109
+      ],
+      "height": 60,
+      "nodes": 10,
+      "errors": []
+    }
+  ],
+  "errors": []
+}
