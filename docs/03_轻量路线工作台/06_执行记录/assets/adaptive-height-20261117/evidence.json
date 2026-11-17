@@ -1,0 +1,143 @@
+{
+  "date": "2026-11-17",
+  "shellCommits": [
+    "d8809ba",
+    "222b34e"
+  ],
+  "checks": {
+    "frontendTests": 108,
+    "rustLibraryTests": 41,
+    "frontendLint": "passed",
+    "frontendBuild": "passed",
+    "rustClippy": "passed",
+    "rustFormat": "passed"
+  },
+  "browser": {
+    "date": "2026-11-17",
+    "native": false,
+    "checks": [
+      "windows: full project grows past old fixed ceiling and keeps every lane visible",
+      "windows: small/large display changes height without moving the top edge",
+      "windows: a simple task contracts the shell instead of retaining empty height",
+      "windows: side scrolling to a different task resizes and preserves its reading anchor",
+      "windows: screen-height cap preserves existing side wheel vertical scrolling",
+      "windows: resizing the available screen updates the cap in both directions",
+      "windows: settled height does not oscillate",
+      "dynamic: full project grows past old fixed ceiling and keeps every lane visible",
+      "dynamic: small/large display changes height without moving the top edge",
+      "dynamic: a simple task contracts the shell instead of retaining empty height",
+      "dynamic: side scrolling to a different task resizes and preserves its reading anchor",
+      "dynamic: screen-height cap preserves existing side wheel vertical scrolling",
+      "dynamic: resizing the available screen updates the cap in both directions",
+      "dynamic: settled height does not oscillate"
+    ],
+    "sizes": [
+      {
+        "style": "windows",
+        "case": "actual-readonly-project",
+        "height": 704,
+        "top": 8,
+        "bottom": 712,
+        "viewport": 1200,
+        "scroll": 0,
+        "scrollHeight": 634,
+        "listHeight": 634,
+        "cardHeight": 604,
+        "cardBottom": 646,
+        "listBottom": 666
+      },
+      {
+        "style": "windows",
+        "case": "simple-task",
+        "height": 303,
+        "top": 8,
+        "bottom": 311,
+        "viewport": 1200,
+        "scroll": 0,
+        "scrollHeight": 233,
+        "listHeight": 233,
+        "cardHeight": 203,
+        "cardBottom": 243,
+        "listBottom": 265
+      },
+      {
+        "style": "windows",
+        "case": "short-screen",
+        "height": 564,
+        "top": 8,
+        "bottom": 572,
+        "viewport": 620,
+        "scroll": 600,
+        "scrollHeight": 2510,
+        "listHeight": 494,
+        "cardHeight": 2480,
+        "cardBottom": 1922,
+        "listBottom": 526
+      },
+      {
+        "style": "dynamic",
+        "case": "actual-readonly-project",
+        "height": 706,
+        "top": 0,
+        "bottom": 706,
+        "viewport": 1200,
+        "scroll": 0,
+        "scrollHeight": 634,
+        "listHeight": 634,
+        "cardHeight": 604,
+        "cardBottom": 668,
+        "listBottom": 688
+      },
+      {
+        "style": "dynamic",
+        "case": "simple-task",
+        "height": 305,
+        "top": 0,
+        "bottom": 305,
+        "viewport": 1200,
+        "scroll": 0,
+        "scrollHeight": 233,
+        "listHeight": 233,
+        "cardHeight": 203,
+        "cardBottom": 267,
+        "listBottom": 287
+      },
+      {
+        "style": "dynamic",
+        "case": "short-screen",
+        "height": 572,
+        "top": 0,
+        "bottom": 572,
+        "viewport": 620,
+        "scroll": 600,
+        "scrollHeight": 2510,
+        "listHeight": 500,
+        "cardHeight": 2480,
+        "cardBottom": 1944,
+        "listBottom": 554
+      }
+    ],
+    "errors": []
+  },
+  "deployment": {
+    "date": "2026-11-17",
+    "runtime": "G:/rust/windows-dynamic-island/src-tauri/target/release/dynamic-island.exe",
+    "installed": "F:/任务岛/dynamic-island.exe",
+    "exeSha256": "caa8183dd5069ec2d4aae4713ee9111d3717c506aef7313a11a1b3abd14deebf",
+    "backendPid": 23640,
+    "backendProcessRetained": true,
+    "businessStateUnchanged": true,
+    "originalBusinessIdsPreserved": true,
+    "projects": 7,
+    "steps": 112,
+    "executions": 89,
+    "backup": "C:/Users/Zyf/AppData/Local/com.codextaskmonitor.workbench/recovery-2026-11-17-adaptive-height"
+  },
+  "nativeObservation": {
+    "runningProcess": "confirmed",
+    "collapsedIsland": "visible",
+    "settingsWindow": "visible",
+    "expandedInteraction": "not verified: transparent floating-window click rejected by automation",
+    "multiMonitorAndDpi": "not interactively verified"
+  }
+}
