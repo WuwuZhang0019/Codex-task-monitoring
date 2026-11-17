@@ -22,12 +22,20 @@ function fixture(count){
  s.uiPreferences={collapsedKeys:[],selectedStepKey:null,focusedRouteKey:null,scrollByProject:{}};
  return s;
 }
-function twoTasks(){
+function twoTasks(count=2){
  const s=structuredClone(original),tiny=fixture(1),project='height-fixture-project',plan='height-fixture-plan';
  tiny.projects[0]={...tiny.projects[0],key:project,id:project,name:'隔离简单任务',planKeys:[plan]};
  tiny.plans[0]={...tiny.plans[0],key:plan,id:plan,projectKey:project,name:'隔离简单任务'};
  for(const item of [...tiny.steps,...tiny.routes]){item.projectKey=project;item.planKey=plan;}
  for(const group of ['projects','plans','steps','routes'])s[group].push(...tiny[group]);
+ if(count===3){
+  const extra=structuredClone(tiny),suffix='/third';
+  for(const group of ['projects','plans','steps','routes'])for(const item of extra[group]){item.key+=suffix;item.id+=suffix;if(item.projectKey)item.projectKey+=suffix;if(item.planKey)item.planKey+=suffix;}
+  extra.projects[0].planKeys=extra.projects[0].planKeys.map(key=>key+suffix);
+  extra.plans[0].stageKeys=extra.plans[0].stageKeys.map(key=>key+suffix);
+  extra.routes[0].stepKeys=extra.routes[0].stepKeys.map(key=>key+suffix);
+  for(const group of ['projects','plans','steps','routes'])s[group].push(...extra[group]);
+ }
  return s;
 }
 let browser,page;
@@ -66,6 +74,12 @@ try{
   assert.ok(tall.height>560,JSON.stringify(tall));assert.ok(tall.bottom<=1200-40);assert.ok(tall.cardBottom<=tall.listBottom+1,'all project lanes fit when screen space permits');
   await page.screenshot({path:path.join(output,style+'-full-project.png')});
   report.checks.push(style+': full project grows past old fixed ceiling and keeps every lane visible');
+  const lane=page.locator('[data-route-card] .wb-lane').first();
+  assert.ok(await lane.evaluate(element=>element.scrollWidth>element.clientWidth),'readonly project provides an overflowing route for horizontal wheel verification');
+  const laneBox=await lane.boundingBox(),outerBefore=(await metrics()).scroll;await page.mouse.move(laneBox.x+120,laneBox.y+40);await page.mouse.wheel(0,240);await page.waitForTimeout(200);
+  assert.ok(await lane.evaluate(element=>element.scrollLeft>0),'wheel inside a route still scrolls horizontally');assert.equal((await metrics()).scroll,outerBefore,'graph scrolling must not page the task list');
+  await lane.evaluate(element=>{element.scrollLeft=0;});
+  report.checks.push(style+': graph wheel remains horizontal and does not page tasks');
   await page.getByTitle('切换为紧凑列表',{exact:true}).click();await settled();const compact=await metrics();
   assert.ok(compact.height<tall.height-100);assert.ok(Math.abs(compact.top-tall.top)<1);
   await page.getByTitle('切换为完整卡片',{exact:true}).click();await settled();assert.ok((await metrics()).height>compact.height+100);
@@ -74,15 +88,46 @@ try{
   assert.ok(simple.height<tall.height-150);assert.ok(Math.abs(simple.top-tall.top)<1);report.sizes.push({style,case:'simple-task',...simple});
   report.checks.push(style+': a simple task contracts the shell instead of retaining empty height');
   snapshot=twoTasks();await page.waitForFunction(()=>document.querySelectorAll('[data-route-card]').length===2);await settled();
-  const side=await page.locator('[data-workbench-routes]').boundingBox();await page.mouse.move(side.x+2,side.y+side.height/2);await page.mouse.wheel(0,10000);
+  const side=await page.locator('[data-workbench-routes]').boundingBox();await page.mouse.move(side.x+side.width+4,side.y+40);await page.mouse.wheel(0,120);
+  const movement=await page.evaluate(async()=>{
+   const samples=[];
+   for(let i=0;i<36;i++){samples.push({scroll:document.querySelector('[data-workbench-routes]').scrollTop,height:document.querySelector('[data-hit]').getBoundingClientRect().height});await new Promise(requestAnimationFrame);}
+   return samples;
+  });
+  const distance=movement.at(-1).scroll;
+  assert.ok(distance>100,'one ordinary wheel detent reaches the next task');
+  assert.ok(movement.filter(sample=>sample.scroll>1&&sample.scroll<distance-1).length>=4,'task paging must pass through intermediate positions');
+  assert.ok(Math.max(...movement.slice(1).map((sample,i)=>Math.abs(sample.scroll-movement[i].scroll)))<distance*0.6,'paging must not snap at the height transition');
+  report.sizes.push({style,case:'side-wheel-animation',samples:movement});
   await page.waitForFunction(()=>Number(document.querySelector('[data-expanded-content]')?.getAttribute('data-content-height'))<500);await settled();
   assert.ok((await metrics()).scroll>0);
   await page.setViewportSize({width:1100,height:900});await settled();assert.ok((await metrics()).height<500,'screen changes retain the currently viewed simple task');
   await page.setViewportSize({width:1100,height:1200});await settled();assert.ok((await metrics()).height<500);
-  await page.mouse.move(side.x+2,side.y+30);await page.mouse.wheel(0,-10000);
+  const lastTop=(await metrics()).scroll;await page.mouse.wheel(0,120);await page.waitForTimeout(450);assert.ok(Math.abs((await metrics()).scroll-lastTop)<=1,'last task is a stable boundary');
+  await page.mouse.move(side.x+side.width+4,side.y+30);await page.mouse.wheel(0,-120);
   await page.waitForFunction(()=>Number(document.querySelector('[data-expanded-content]')?.getAttribute('data-content-height'))>560);await settled();
   assert.ok((await metrics()).scroll<=1);
   report.checks.push(style+': side scrolling to a different task resizes and preserves its reading anchor');
+  report.checks.push(style+': one wheel detent smoothly pages exactly one task through the right gutter');
+  await page.mouse.wheel(0,-120);await page.waitForTimeout(450);assert.ok((await metrics()).scroll<=1,'first task is a stable boundary');
+  await page.mouse.wheel(0,120);await page.waitForTimeout(90);await page.mouse.wheel(0,-120);await page.waitForTimeout(600);await settled();
+  assert.ok((await metrics()).scroll<=1,'reverse wheel interrupts the animation without a stale final snap');
+  assert.ok((await metrics()).height>560);
+  report.checks.push(style+': quick reversal and first/last task boundaries remain stable');
+  snapshot=twoTasks(3);await page.waitForFunction(()=>document.querySelectorAll('[data-route-card]').length===3);await settled();
+  const gutter=await page.locator('[data-workbench-routes]').boundingBox();await page.mouse.move(gutter.x+gutter.width+4,gutter.y+30);await page.mouse.wheel(0,120);await page.waitForTimeout(650);await settled();
+  const middleTop=await page.locator('[data-route-card]').nth(1).evaluate(card=>card.getBoundingClientRect().top-document.querySelector('[data-workbench-routes]').getBoundingClientRect().top);
+  assert.ok(Math.abs(middleTop-10)<=2,'one detent lands on the middle task without skipping to the last');
+  await page.mouse.wheel(0,120);await page.waitForTimeout(650);await settled();
+  const thirdTop=await page.locator('[data-route-card]').nth(2).evaluate(card=>card.getBoundingClientRect().top-document.querySelector('[data-workbench-routes]').getBoundingClientRect().top);
+  assert.ok(Math.abs(thirdTop-10)<=2,'the next detent advances by one more task');
+  report.checks.push(style+': successive detents visit the middle and last tasks without skipping');
+  await page.emulateMedia({reducedMotion:'reduce'});await page.mouse.wheel(0,-120);await page.waitForTimeout(650);await settled();await page.mouse.wheel(0,-120);await page.waitForTimeout(650);await settled();
+  assert.ok((await metrics()).scroll<=1,'reduced motion still aligns the first task after its height grows');
+  await page.mouse.wheel(0,120);await page.waitForTimeout(650);await settled();
+  assert.ok(Math.abs(await page.locator('[data-route-card]').nth(1).evaluate(card=>card.getBoundingClientRect().top-document.querySelector('[data-workbench-routes]').getBoundingClientRect().top)-10)<=2,'reduced motion still aligns the next task after its height shrinks');
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  report.checks.push(style+': reduced motion preserves the task anchor across height changes');
   snapshot=fixture(24);
   const animationBottom=await page.evaluate(async()=>{const values=[];for(let i=0;i<120;i++){values.push(document.querySelector('[data-hit]').getBoundingClientRect().bottom);await new Promise(requestAnimationFrame);}return Math.max(...values);});
   assert.ok(animationBottom<=1200-40,'height animation must not overshoot the available screen area');
