@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-17",
+  "runtime": "G:\\rust\\windows-dynamic-island\\src-tauri\\target\\release\\dynamic-island.exe",
+  "installed": "F:\\任务岛\\dynamic-island.exe",
+  "exeSha256": "53b44a14207a2aca9b102bf504032efb57276808e79f42707fc92b85d48e18a5",
+  "backendPid": 23640,
+  "backendProcessRetained": true,
+  "businessStateUnchanged": true,
+  "originalBusinessIdsPreserved": true,
+  "projects": 7,
+  "steps": 112,
+  "executions": 89,
+  "backup": "C:\\Users\\Zyf\\AppData\\Local\\com.codextaskmonitor.workbench\\recovery-2026-11-17-centered-continuation"
+}
