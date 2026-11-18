@@ -88,6 +88,11 @@ try {
           nodes.map(node => getComputedStyle(node).borderRadius));
         assert.deepEqual(mergeShapes, ['0px', '0px']);
         const lane = card.locator('.wb-group-lane');
+        const detail = card.getByRole('button', { name: '详图', exact: true });
+        if (await detail.isVisible()) {
+          assert.equal(await lane.evaluate(element => element.scrollWidth), await lane.evaluate(element => element.clientWidth));
+          await detail.click();
+        }
         const list = page.locator('[data-workbench-routes]');
         const outerTop = await list.evaluate(element => element.scrollTop);
         await lane.hover({ position: { x: 90, y: 35 } });
