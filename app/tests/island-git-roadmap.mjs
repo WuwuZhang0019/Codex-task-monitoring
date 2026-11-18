@@ -1,4 +1,4 @@
-// Date: 2026-11-13. Browser evidence for source-adapted branch curves and host interactions.
+// Date: 2026-11-18. Browser evidence for octilinear rails and host interactions.
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -16,7 +16,7 @@ const logs = [];
 server?.on('error', error => logs.push(String(error)));
 server?.stdout.on('data', chunk => logs.push(String(chunk)));
 server?.stderr.on('data', chunk => logs.push(String(chunk)));
-const report = { date: '2026-11-13', native: false, checks: [], failures: [], pageErrors: [] };
+const report = { date: '2026-11-18', native: false, checks: [], failures: [], pageErrors: [] };
 await mkdir(output, { recursive: true });
 let browser;
 try {
@@ -53,8 +53,8 @@ try {
         assert.equal(await graph.locator('[data-step-key]').count(), 14);
         assert.equal(await graph.locator('[data-merge="true"]').count(), 2);
         assert.equal(await graph.locator('path[data-from]').count(), 16);
-        assert.equal(await card.locator('.wb-graph-legend li').count(), 4);
-        assert.equal(await card.locator('.wb-graph-legend i').evaluateAll(elements => new Set(elements.map(element => element.style.background)).size), 4);
+        assert.equal(await card.locator('[data-route-legend-key]').count(), 4);
+        assert.equal(await card.locator('[data-route-legend-key] i').evaluateAll(elements => new Set(elements.map(element => element.style.background)).size), 4);
         assert.equal(await graph.locator('button, line').count(), 0);
         const alignment = await graph.evaluate(element => {
           const svg = element.querySelector('svg');
@@ -74,8 +74,19 @@ try {
           return errors;
         });
         assert.deepEqual(alignment, [], 'Every drawn edge must meet the actual station center');
-        const curves = await graph.locator('path').evaluateAll(paths => paths.filter(edge => edge.getAttribute('d').includes(' Q ')).length);
-        assert.ok(curves >= 6, 'Both forks and joins must use rounded curves');
+        const paths = await graph.locator('path[data-from]').evaluateAll(paths => paths.map(edge => ({
+          commands: edge.getAttribute('d').match(/[A-Z]/g),
+          dashed: getComputedStyle(edge).strokeDasharray !== 'none',
+          kind: edge.dataset.kind,
+        })));
+        for (const { commands, dashed, kind } of paths) {
+          assert.equal(commands[0], 'M');
+          assert.ok(commands.length >= 2 && commands.slice(1).every(command => command === 'L'));
+          assert.equal(dashed, kind === 'dependency');
+        }
+        const mergeShapes = await graph.locator('[data-merge="true"] .wb-dot').evaluateAll(nodes =>
+          nodes.map(node => getComputedStyle(node).borderRadius));
+        assert.deepEqual(mergeShapes, ['0px', '0px']);
         const lane = card.locator('.wb-group-lane');
         const list = page.locator('[data-workbench-routes]');
         const outerTop = await list.evaluate(element => element.scrollTop);
