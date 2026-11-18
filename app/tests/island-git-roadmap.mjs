@@ -134,6 +134,27 @@ try {
         const left = await lane.evaluate(element => element.scrollLeft);
         await page.waitForTimeout(1200);
         assert.equal(await lane.evaluate(element => element.scrollLeft), left, 'Polling must preserve graph reading position');
+        if (width === 480) {
+          await page.getByRole('combobox', { name: '演示场景' }).selectOption('multi-project');
+          const pin = page.getByTitle('固定展开', { exact: true });
+          if (await pin.isVisible()) await pin.click();
+          const cards = list.locator('[data-route-card]');
+          const topOfCard = index => list.evaluate((element, i) => {
+            const card = element.querySelectorAll('[data-route-card]')[i];
+            const padding = parseFloat(getComputedStyle(element.querySelector('.wb-route-list')).paddingTop);
+            return Math.min(element.scrollHeight - element.clientHeight, Math.max(0, card.offsetTop - padding));
+          }, index);
+          await cards.nth(0).locator('.wb-group-graph-fit').hover();
+          await page.mouse.wheel(0, 120);
+          await page.waitForTimeout(450);
+          assert.ok(Math.abs(await list.evaluate(element => element.scrollTop) - await topOfCard(1)) <= 2,
+            'One wheel tick in an overview aligns the next task');
+          await cards.nth(1).locator('.wb-group-graph-fit').hover();
+          await page.mouse.wheel(0, -120);
+          await page.waitForTimeout(450);
+          assert.ok(Math.abs(await list.evaluate(element => element.scrollTop) - await topOfCard(0)) <= 2,
+            'One reverse wheel tick returns to the previous task');
+        }
         report.checks.push(name);
       } catch (error) {
         report.failures.push({ name, error: String(error.stack) });
