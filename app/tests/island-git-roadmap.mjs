@@ -78,11 +78,14 @@ try {
           commands: edge.getAttribute('d').match(/[A-Z]/g),
           dashed: getComputedStyle(edge).strokeDasharray !== 'none',
           kind: edge.dataset.kind,
+          status: edge.dataset.status,
         })));
-        for (const { commands, dashed, kind } of paths) {
+        assert.ok(paths.some(edge => edge.kind === 'route' && edge.status === 'completed'));
+        assert.ok(paths.some(edge => edge.kind === 'route' && edge.status !== 'completed'));
+        for (const { commands, dashed, kind, status } of paths) {
           assert.equal(commands[0], 'M');
           assert.ok(commands.length >= 2 && commands.slice(1).every(command => command === 'L'));
-          assert.equal(dashed, kind === 'dependency');
+          assert.equal(dashed, kind === 'dependency' || status !== 'completed');
         }
         const mergeShapes = await graph.locator('[data-merge="true"] .wb-dot').evaluateAll(nodes =>
           nodes.map(node => getComputedStyle(node).borderRadius));
@@ -114,6 +117,9 @@ try {
         assert.equal(await thumbnail.locator('[data-step-key]').count(), 14);
         assert.equal(await thumbnail.textContent(), '');
         assert.equal(await thumbnail.locator('path[data-from]').count(), 16);
+        assert.equal(await thumbnail.locator('path[data-from]').evaluateAll(edges => edges.every(edge =>
+          (getComputedStyle(edge).strokeDasharray !== 'none') ===
+          (edge.dataset.kind === 'dependency' || edge.dataset.status !== 'completed'))), true);
         await page.screenshot({ path: path.join(output, `${style}-${width}-compact.png`) });
         await page.keyboard.press('Escape');
         const summary = page.locator('[data-workbench-summary]');
