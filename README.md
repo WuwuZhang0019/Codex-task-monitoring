@@ -20,13 +20,13 @@
 
 展开后集中查看多条任务路线，切换显示方式，并使用连续执行与归档入口。
 
-![任务岛展开后集中展示多条任务路线及操作入口](docs/assets/screenshots/task-island-overview.png)
+![任务岛展开后集中展示多条任务路线及操作入口](docs/assets/screenshots/task-island-overview-2026-11-18.png)
 
 ### 路线详情
 
 以不同颜色区分任务线，展示站点状态与分叉、合流关系。
 
-![单条任务路线的站点、完成状态及多线分叉合流关系](docs/assets/screenshots/task-island-route-detail.png)
+![单条任务路线的站点、完成状态及多线分叉合流关系](docs/assets/screenshots/task-island-route-detail-2026-11-18.png)
 
 ## 为什么做这个项目
 
