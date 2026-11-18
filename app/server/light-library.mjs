@@ -1,4 +1,5 @@
-// Date: 2026-11-12. Owner-only route archival and transactional deletion.
+// Date: 2026-11-18. Owner-only route archival, pause checkpoints and transactional deletion.
+import { randomUUID } from 'node:crypto';
 import { digest } from './receipts.mjs';
 import { lightError, validateLightSnapshot } from './light-model.mjs';
 
@@ -8,11 +9,11 @@ export function touches(value, keys) {
   return value && typeof value === 'object' && Object.entries(value).some(([key, item]) => keys.has(key) || touches(item, keys));
 }
 
-export function createLightLibrary(persistence) {
+export function createLightLibrary(persistence, { pauseContinuous } = {}) {
   return {
     change(action, input) {
       return persistence.run(() => {
-        if (!['archive', 'restore', 'delete'].includes(action) || !input || input.acknowledged !== true
+        if (!['archive', 'restore', 'delete', 'pause'].includes(action) || !input || input.acknowledged !== true
           || Object.keys(input).sort().join(',') !== 'acknowledged,expectedRevision,key'
           || typeof input.key !== 'string' || !input.key || !Number.isSafeInteger(input.expectedRevision)) {
           lightError('INVALID_INPUT', '需要条目、版本和明确确认');
@@ -23,14 +24,89 @@ export function createLightLibrary(persistence) {
         const route = snapshot.routes.find(item => item.key === input.key);
         const plan = snapshot.plans.find(item => item.key === (route?.planKey ?? input.key));
         const project = snapshot.projects.find(item => item.key === (plan?.projectKey ?? input.key));
-        if (!project || (!route && plan && snapshot.routes.some(item => item.planKey === plan.key))
-          || (!route && !plan && snapshot.plans.some(item => item.projectKey === project.key))) {
+        if (!project || (action !== 'pause' && ((!route && plan && snapshot.routes.some(item => item.planKey === plan.key))
+          || (!route && !plan && snapshot.plans.some(item => item.projectKey === project.key))))) {
           lightError('NOT_FOUND', '列表条目不存在', 404);
         }
         const library = persistence.read('lightLibrary') ?? { version: 1, archived: [] };
         const archived = library.archived.find(item => item.key === input.key);
         const time = new Date().toISOString();
-        if (action === 'archive') {
+        if (action === 'pause') {
+          const stepByKey = new Map(snapshot.steps.map(item => [item.key, item]));
+          const projectPlans = new Set(snapshot.plans.filter(item => item.projectKey === project.key).map(item => item.key));
+          const pausedPlans = new Set(plan ? [plan.key] : [...projectPlans]);
+          let expanded = true;
+          while (expanded) {
+            expanded = false;
+            for (const item of snapshot.routes) {
+              if (!projectPlans.has(item.planKey)) continue;
+              for (const ref of [item.sourceStepKey, item.returnStepKey]) {
+                const sourcePlan = stepByKey.get(ref)?.planKey;
+                if (sourcePlan && projectPlans.has(sourcePlan) && pausedPlans.has(sourcePlan) !== pausedPlans.has(item.planKey)) {
+                  pausedPlans.add(sourcePlan); pausedPlans.add(item.planKey); expanded = true;
+                }
+              }
+            }
+            for (const item of snapshot.supplements) {
+              const sourcePlan = stepByKey.get(item.sourceStepKey)?.planKey;
+              if (sourcePlan && item.linkedPlanKey && projectPlans.has(sourcePlan) && projectPlans.has(item.linkedPlanKey)
+                && pausedPlans.has(sourcePlan) !== pausedPlans.has(item.linkedPlanKey)) {
+                pausedPlans.add(sourcePlan); pausedPlans.add(item.linkedPlanKey); expanded = true;
+              }
+            }
+          }
+          const inScope = item => pausedPlans.size ? pausedPlans.has(item.planKey) : item.projectKey === project.key;
+          const openExecutionSteps = new Set(snapshot.executions
+            .filter(item => inScope(item) && !item.endedAt && item.outcome === 'running')
+            .flatMap(item => item.stepKeys ?? []));
+          const targetSteps = snapshot.steps.filter(item =>
+            inScope(item) && (item.status === 'running' || (openExecutionSteps.has(item.key) && item.status === 'pending')));
+          for (const step of targetSteps) {
+            const fromStatus = step.status;
+            step.status = 'blocked';
+            step.updatedAt = time;
+            step.sync = 'synced';
+            const blocker = step.blockers.find(item => item.blockerId === 'user-pause');
+            if (blocker) {
+              blocker.reason = '用户在任务岛暂停任务';
+              blocker.waitingFor = ['用户继续'];
+              blocker.releaseConditions = ['明确继续后恢复原执行'];
+              blocker.resolved = false;
+            } else {
+              step.blockers.push({
+                blockerId: 'user-pause',
+                reason: '用户在任务岛暂停任务',
+                waitingFor: ['用户继续'],
+                releaseConditions: ['明确继续后恢复原执行'],
+                resolved: false,
+              });
+            }
+            const eventId = `light/pause/${randomUUID()}`;
+            snapshot.events.push({
+              eventId, stepKey: step.key, executionKey: step.executionKey ?? null,
+              fromStatus, toStatus: 'blocked', occurredAt: time, receivedAt: time,
+              reason: '用户在任务岛暂停任务', evidenceIds: [], sync: 'synced',
+            });
+            value.history.push({ eventId, input: { key: input.key, stepKey: step.key, action: 'pause' }, previous: fromStatus, receivedAt: time });
+          }
+          if (targetSteps.length) project.revision += 1;
+          const continuousState = persistence.read('lightContinuous');
+          if (continuousState?.runs) {
+            let continuousChanged = false;
+            for (const run of continuousState.runs) {
+              if (pausedPlans.has(run.planKey) && run.status !== 'completed' && (run.enabled || ['running', 'pausing'].includes(run.status))) {
+                run.enabled = false;
+                run.status = 'paused';
+                run.phase = null;
+                run.reason = '用户在任务岛暂停任务';
+                run.updatedAt = time;
+                continuousChanged = true;
+              }
+            }
+            if (continuousChanged) persistence.write('lightContinuous', continuousState);
+          }
+          pauseContinuous?.(pausedPlans);
+        } else if (action === 'archive') {
           if (!archived) library.archived.push({ key: input.key, archivedAt: time });
         } else if (action === 'restore') {
           library.archived = library.archived.filter(item => item.key !== input.key);

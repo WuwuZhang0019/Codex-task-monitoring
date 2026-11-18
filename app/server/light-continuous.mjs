@@ -73,7 +73,8 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     const currentStep=s.steps.find(x=>x.key===run?.current?.stepKey),currentBinding=s.bindings.find(b=>b.key===currentStep?.bindingKey);
     let firstPath=mode==='current_thread'?(currentBinding?.context.worktreePath??(run?.mode==='current_thread'?run.session?.cwd:null)):null;
     for(const step of pending){const {cwd}=await workspace(plan,step);if(mode==='current_thread'){if(firstPath&&!samePath(firstPath,cwd))lightError('WORKSPACE_MISMATCH','当前会话模式不能跨不同工作树，请选择“阶段完成后接续新会话”',409);firstPath??=cwd;}}
-    const ongoing=pending.filter(x=>x.status==='running');
+    const isUserPaused=step=>{const unresolved=(step?.blockers??[]).filter(b=>!b.resolved);return step?.status==='blocked'&&unresolved.length>0&&unresolved.every(b=>b.blockerId==='user-pause')&&s.executions.some(e=>e.key===step.executionKey&&!e.endedAt);};
+    const ongoing=pending.filter(x=>x.status==='running'||isUserPaused(x));
     if(mode==='current_thread'&&new Set(ongoing.map(x=>s.bindings.find(b=>b.key===x.bindingKey)?.context.threadId)).size>1)lightError('MULTIPLE_ACTIVE_THREADS','多个会话正在执行，请使用按阶段接续或先处理现有会话',409);
     for(const step of ongoing){const binding=s.bindings.find(b=>b.key===step.bindingKey);if(!binding?.context.threadId)lightError('THREAD_ID_REQUIRED',`阶段 ${step.code} 缺少真实会话身份，请先核对绑定`,409);}
   }
@@ -341,6 +342,26 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         const s=state();run=s.runs.find(r=>r.planKey===plan.key);
         if(input.action==='pause'){if(run&&run.status!=='completed'){const draining=activeStates.has(run.status)&&pumps.has(run.id);run.enabled=false;run.status=draining?'pausing':'paused';run.phase=null;run.reason='连续执行已关闭，当前阶段完成后暂停';}}
         else{
+          const lightValue=persistence.read('light');
+          if(lightValue?.snapshot){
+            const resumable=lightValue.snapshot.steps.filter(step=>step.planKey===plan.key&&step.status==='blocked'&&step.blockers.some(b=>!b.resolved)&&step.blockers.filter(b=>!b.resolved).every(b=>b.blockerId==='user-pause'));
+            if(resumable.length){
+              const resumeTime=stamp();
+              for(const step of resumable){
+                for(const blocker of step.blockers)if(blocker.blockerId==='user-pause')blocker.resolved=true;
+                const openExec=step.executionKey&&lightValue.snapshot.executions.some(e=>e.key===step.executionKey&&!e.endedAt);
+                const nextStatus=openExec?'running':'pending';
+                step.status=nextStatus;step.updatedAt=resumeTime;step.sync='synced';
+                const eventId=`light/resume/${randomUUID()}`;
+                lightValue.snapshot.events.push({eventId,stepKey:step.key,executionKey:step.executionKey??null,fromStatus:'blocked',toStatus:nextStatus,occurredAt:resumeTime,receivedAt:resumeTime,reason:'用户在任务岛恢复连续执行',evidenceIds:[],sync:'synced'});
+                lightValue.history.push({eventId,input:{planKey:plan.key,stepKey:step.key,action:input.action},previous:'blocked',receivedAt:resumeTime});
+              }
+              const targetProject=lightValue.snapshot.projects.find(p=>p.key===plan.projectKey);
+              if(targetProject)targetProject.revision+=1;
+              lightValue.snapshot.revision+=1;lightValue.snapshot.generatedAt=resumeTime;lightValue.snapshot.date=resumeTime.slice(0,10);
+              persistence.write('light',lightValue);
+            }
+          }
           if(run&&run.sourceHash!==plan.source.sha256){
             // 明确同步的新版本只在当前责任已验收的边界采用，保留原会话与历史。
             run.sourceHash=plan.source.sha256;run.current=null;run.previousRunIds=[...(run.previousRunIds??[]),run.id];run.id=randomUUID();
@@ -364,6 +385,14 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
       }
       if(run?.status==='running')setTimeout(()=>void pump(run.id),0);
       return {saved:true,run:run?summary(run):null};
+    },
+    pausePlans(planKeys){
+      const keys=new Set(planKeys);
+      for(const r of state().runs){
+        if(!keys.has(r.planKey))continue;
+        const c=clients.get(r.id);
+        if(c){c.close();clients.delete(r.id);}
+      }
     },
     prepareHandoff(){
       // A known checkpoint must exist before dropping any observer of an active turn.

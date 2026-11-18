@@ -43,7 +43,8 @@ try{
  const button=page.getByRole('switch',{name:/连续执行：/}).first();await button.waitFor();
  assert.equal(await button.textContent(),'连续执行');assert.equal(await button.getAttribute('aria-checked'),'false');
  await page.waitForTimeout(700);const size=await button.evaluate(b=>({width:getComputedStyle(b).width,height:getComputedStyle(b).height}));assert.equal(size.width,'102px');assert.equal(size.height,'28px');
- assert.equal(await button.evaluate(b=>b.nextElementSibling?.getAttribute('aria-label')?.startsWith('归档：')),true);
+ assert.equal(await button.evaluate(b=>b.nextElementSibling?.getAttribute('aria-label')?.startsWith('暂停：')),true);
+ assert.equal(await button.evaluate(b=>b.nextElementSibling?.nextElementSibling?.getAttribute('aria-label')?.startsWith('归档：')),true);
  await mkdir('test-results/continuous-button',{recursive:true});await page.screenshot({path:'test-results/continuous-button/off.png'});
  holdNext=true;await button.click();await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('aria-busy')==='true');assert.match(await button.textContent(),/处理中/);release();
  await page.waitForFunction(()=>document.querySelector('.wb-continuous')?.getAttribute('aria-checked')==='true');

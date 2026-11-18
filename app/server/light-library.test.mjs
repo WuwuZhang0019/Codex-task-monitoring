@@ -11,6 +11,7 @@ import { createLightLibrary } from './light-library.mjs';
 import { createLightPanel } from './light-panel.mjs';
 import { prepareLightPlan } from './light-import.mjs';
 import { validateLightSnapshot } from './light-model.mjs';
+import { runtimeExitStatus } from './runtime-lifecycle.mjs';
 
 async function fixture(t) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'task-library-'));
@@ -141,4 +142,35 @@ test('failed preparation rolls back deletion and committed interruption recovers
       assert.equal(recovered.read('light').snapshot.routes.length, 1); assert.deepEqual(recovered.read('lightLibrary').archived, []);
     }
   }
+});
+
+test('pause converts running steps and continuous runs into blocked checkpoints that permit backend exit while preserving execution identity', async t => {
+  const { persistence, snapshot, key } = await fixture(t);
+  const pausedPlans = [];
+  const library = createLightLibrary(persistence, { pauseContinuous: plans => pausedPlans.push(...plans) });
+  await persistence.run(() => {
+    const value = persistence.read('light'), s = value.snapshot, [first, second] = s.steps;
+    const context = { sessionGroup: 'test', threadId: 'test', hostId: 'local', folderId: null, worktreeOrdinal: 1, worktreePath: 'G:/test', branch: 'main', head: null, trust: 'declared' };
+    s.bindings.push({ key: 'active-binding', id: 'binding-id', projectKey: first.projectKey, planKey: first.planKey,
+      stepKeys: [first.key, second.key], bindingRevision: 1, state: 'confirmed', context, confirmationRef: 'confirmation', revokedAt: null });
+    first.status = 'running';
+    first.bindingKey = 'active-binding';
+    first.executionKey = 'active-execution';
+    s.executions.push({ key: 'active-execution', id: 'execution-id', projectKey: first.projectKey, planKey: first.planKey,
+      stepKeys: [first.key], bindingKey: 'active-binding', outcome: 'running', startedAt: '2026-11-18T00:00:00Z', endedAt: null, handoffConclusion: null });
+    persistence.write('light', value);
+    persistence.write('lightContinuous', { version: 1, runs: [{ id: 'run-1', planKey: first.planKey, status: 'running', enabled: true, mode: 'stages', phase: 'executing', current: null, history: [], reason: '' }] });
+  });
+  assert.equal(runtimeExitStatus(persistence.read('light').snapshot, persistence.read('lightContinuous').runs).allowed, false);
+  await library.change('pause', { key, expectedRevision: persistence.read('light').snapshot.revision, acknowledged: true });
+  const after = persistence.read('light').snapshot;
+  const runs = persistence.read('lightContinuous').runs;
+  assert.equal(after.steps[0].status, 'blocked');
+  assert.equal(after.steps[0].blockers.find(b => b.blockerId === 'user-pause')?.resolved, false);
+  assert.equal(after.executions[0].id, 'execution-id');
+  assert.equal(after.executions[0].endedAt, null);
+  assert.equal(runs[0].status, 'paused');
+  assert.equal(runs[0].enabled, false);
+  assert.deepEqual(pausedPlans, [snapshot.plans[0].key]);
+  assert.deepEqual(runtimeExitStatus(after, runs), { allowed: true, activeExecutions: 0, runningSteps: 0, continuousRuns: 0 });
 });

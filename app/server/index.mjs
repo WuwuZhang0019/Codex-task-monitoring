@@ -143,7 +143,7 @@ async function createOwnedServer(options) {
   const continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:continuousFactory,principalProvider:options.continuousPrincipalProvider,canRun:()=>!exitReserved}) : null;
   await continuous?.initialize();
   const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [], continuous:()=>continuous?.read()??[] });
-  const lightLibrary = createLightLibrary(persistence);
+  const lightLibrary = createLightLibrary(persistence, { pauseContinuous: plans => continuous?.pausePlans(plans) });
   const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize, automaticPublication:lightAccess?.automaticPublication});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const exitStatus = () => runtimeExitStatus(persistence.read('light')?.snapshot, continuous?.read() ?? []);
