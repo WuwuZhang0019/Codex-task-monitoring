@@ -13,23 +13,37 @@ import {createLightAccess} from './light-access.mjs';
 import {createLightService} from './light-service.mjs';
 import {prepareLightPlan} from './light-import.mjs';
 import {createContinuousRunner} from './light-continuous.mjs';
+import {createLightHandler} from '../mcp/light.mjs';
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const fixtureRoots=[];
 after(async()=>{for(const root of fixtureRoots)await rm(root,{recursive:true,force:true});});
-async function fixture(t,{hold=false,finish=true,decorateClient=client=>client}={}){
+async function fixture(t,{hold=false,finish=true,withChildren=false,decorateClient=client=>client}={}){
  const root=await mkdtemp(path.join(os.tmpdir(),'continuous-fixture-'));fixtureRoots.push(root);
  const p=await createPersistence(path.join(root,'data')),access=createLightAccess(p),grant=await access.connect({appId:'codex',acknowledged:true});
  const service=createLightService(p,createRequests(p),{authorize:access.authorize,automaticBinding:access.automaticBinding,confirmBinding:access.verifyBinding,verifyExecutionContext:access.verifyExecutionContext});
- const file=path.join(root,'plan.md'),text='# 测试\n日期：2026-11-13\n## 实施路线与出口\n| 阶段 | 前置 | 范围 | 出口 |\n| A 第一步 | 无 | 空 | 成功 |\n| B 第二步 | A | 空 | 成功 |\n| C 第三步 | B | 空 | 成功 |\n';await writeFile(file,text);
+ const file=path.join(root,'plan.md'),text='# 测试\n日期：2026-11-13\n## 实施路线与出口\n| 阶段 | 前置 | 范围 | 出口 |\n| A 第一步 | 无 | 空 | 成功 |\n| B 第二步 | A | 空 | 成功 |\n| C 第三步 | A、B | 空 | 成功 |\n';await writeFile(file,text);
  const context={sessionGroup:'A',threadId:null,hostId:null,folderId:null,worktreeOrdinal:1,worktreePath:root,branch:null,head:null,trust:'declared'};
  const candidate=prepareLightPlan({text,sourcePath:file,version:'1',projectKey:'test-project',planKey:'test-plan',name:'连续测试',date:'2026-11-13',context});
+ if(withChildren){
+  const parent=candidate.steps.find(step=>step.code==='B');
+  for(let index=1;index<=4;index++){
+   const code=`B-0${index}`,key=parent.key+`-0${index}`;
+   candidate.steps.push({...parent,key,code,originalCode:code,title:code,parentKey:parent.key,order:index,
+     dependsOn:index===1?[]:[parent.key+`-0${index-1}`],conditions:[{...parent.conditions[0],conditionId:key+'/exit'}]});
+  }
+ }
  const registered=await service.register(grant.principal,{eventId:'register',expectedRevision:0,snapshot:candidate});
  const created=[],requests=[],notifications=[],transports=[],turns=new Map(),held=new Set();let release,releaseRequested=false;
- async function complete(threadId){
-  const s=service.read(grant.principal,registered.projectId),step=s.steps.find(x=>x.status==='running'&&s.bindings.some(b=>b.key===x.bindingKey&&b.state==='confirmed'&&b.context.threadId===threadId)),binding=s.bindings.find(b=>b.key===step?.bindingKey),execution=s.executions.find(e=>e.key===step?.executionKey);
+ const snapshot=()=>service.read(grant.principal,registered.projectId);
+ function base(eventId,s=snapshot()){
+  const {trust,...source}=s.plans[0].source;
+  return {schemaVersion:'light-1.0',projectId:registered.projectId,planId:registered.planIds[0],expectedRevision:s.projects[0].revision,eventId,source,occurredAt:new Date().toISOString(),reason:'隔离夹具'};
+ }
+ async function complete(threadId,code){
+  const s=snapshot(),step=s.steps.find(x=>(!code||x.code===code)&&x.status==='running'&&s.bindings.some(b=>b.key===x.bindingKey&&b.state==='confirmed'&&b.context.threadId===threadId)),binding=s.bindings.find(b=>b.key===step?.bindingKey),execution=s.executions.find(e=>e.key===step?.executionKey);
   assert.ok(step&&binding&&execution,'夹具必须完成该会话当前真正执行的阶段');
-  const {trust,...source}=s.plans[0].source;const proof={evidenceId:'proof-'+step.code,location:'fixture://'+step.code,method:'实际夹具返回成功',deliveryVersion:'1',result:'passed'};
-  await service.update(grant.principal,{schemaVersion:'light-1.0',projectId:registered.projectId,planId:registered.planIds[0],expectedRevision:s.projects[0].revision,eventId:'complete-'+step.code,source,occurredAt:new Date().toISOString(),reason:'夹具验收通过',stepId:step.id,executionId:execution.id,bindingId:binding.id,bindingRevision:binding.bindingRevision,targetStatus:'completed',evidence:[proof],checks:step.conditions.map(c=>({...c,result:'passed',evidenceIds:[proof.evidenceId]})),blocker:null,reopen:null,successorImpact:null});
+  const proof={evidenceId:'proof-'+step.code,location:'fixture://'+step.code,method:'实际夹具返回成功',deliveryVersion:'1',result:'passed'};
+  await service.update(grant.principal,{...base('complete-'+step.code,s),stepId:step.id,executionId:execution.id,bindingId:binding.id,bindingRevision:binding.bindingRevision,targetStatus:'completed',evidence:[proof],checks:step.conditions.map(c=>({...c,result:'passed',evidenceIds:[proof.evidenceId]})),blocker:null,reopen:null,successorImpact:null});
  }
  const factory=(options={})=>{transports.push(options.transport??'owned');return decorateClient({
   async create(cwd,title){const id='chat-'+(created.length+1);created.push({id,cwd,title});return{id,cwd};},
@@ -41,7 +55,7 @@ async function fixture(t,{hold=false,finish=true,decorateClient=client=>client}=
  const runner=createContinuousRunner(p,service,{clientFactory:factory,principalProvider:()=>grant.principal});await runner.initialize();t.after(()=>runner.close());
  const change=(action,mode)=>runner.change({planKey:'test-plan',action,expectedRevision:service.read(grant.principal,registered.projectId).projects[0].revision,acknowledged:true,...(mode?{mode}:{})});
  async function until(status){for(let i=0;i<700;i++){if(runner.read()[0]?.status===status)return;await delay(10);}throw Error(JSON.stringify(runner.read()));}
- return{root,runner,created,requests,notifications,transports,turns,held,change,until,factory,complete,release:()=>{if(release){const done=release;release=null;done();}else releaseRequested=true;},snapshot:()=>service.read(grant.principal,registered.projectId),p,service,grant};
+ return{root,runner,created,requests,notifications,transports,turns,held,change,until,factory,complete,release:()=>{if(release){const done=release;release=null;done();}else releaseRequested=true;},snapshot,p,service,grant,base,context};
 }
 test('three declared stages create three separate sequential chats and only complete after actual service checks',async t=>{
  const f=await fixture(t);await f.change('start');await f.until('completed');assert.equal(f.created.length,3);assert.deepEqual(f.created.map(c=>c.title.split(' / ')[1][0]),['A','B','C']);assert.ok(f.snapshot().steps.every(s=>s.status==='completed'));assert.equal(f.runner.read()[0].completed,3);
@@ -421,4 +435,174 @@ test('restart preserves explicit pause and blocks unknown delivery without creat
   await f.runner.initialize();assert.equal(f.runner.read()[0].status,'paused');assert.equal(f.created.length,0);
   await f.p.run(()=>f.p.write('lightContinuous',{version:1,runs:[{id:'uncertain',planKey:'test-plan',status:'running',enabled:true,sourceHash:hash,current:{creationAttempted:true,threadId:null},history:[]}]}));
   await f.runner.initialize();assert.equal(f.runner.read()[0].status,'blocked');assert.match(f.runner.read()[0].reason,/THREAD_CREATION_RESULT_UNKNOWN/);assert.equal(f.created.length,0);
+});
+
+// 日期：2026-11-18。使用真实领域事务复现跨聊天 B-04 → B 整包验收 → C。
+const findStep=(f,code)=>f.snapshot().steps.find(step=>step.code===code);
+async function bindStep(f,code,threadId,takeover){
+  const proposal={...f.base(`bind-${code}`),action:'propose',stepIds:[findStep(f,code).id],
+    context:{...f.context,threadId,hostId:'local'},bindingId:null,expectedBindingRevision:null,confirmationGrant:null,
+    ...(takeover?{takeover}:{})};
+  const proposed=await f.service.bind(f.grant.principal,proposal);
+  if(proposed.state==='confirmed')return proposed.bindingId;
+  const confirmed=await f.service.bind(f.grant.principal,{...proposal,...f.base(`confirm-${code}`),action:'confirm',
+    bindingId:proposed.bindingId,expectedBindingRevision:proposed.bindingRevision});
+  assert.equal(confirmed.state,'confirmed');
+  return confirmed.bindingId;
+}
+async function startStep(f,code,bindingId){
+  const binding=f.snapshot().bindings.find(item=>item.id===bindingId);
+  const {executionId}=await f.service.reserveExecutionId(f.grant.principal,f.base(`reserve-${code}`));
+  await f.service.update(f.grant.principal,{...f.base(`start-${code}`),stepId:findStep(f,code).id,executionId,
+    bindingId,bindingRevision:binding.bindingRevision,targetStatus:'running',evidence:[],checks:[],blocker:null,reopen:null,successorImpact:null});
+  return executionId;
+}
+async function existingPackage(f){
+  await startStep(f,'A',await bindStep(f,'A','prior-a'));
+  await f.complete('prior-a','A');
+  const bindingId=await bindStep(f,'B','original-b');
+  const executionId=await startStep(f,'B',bindingId);
+  for(const code of ['B-01','B-02','B-03']){
+    await startStep(f,code,bindingId);
+    await f.complete('original-b',code);
+  }
+  const binding=f.snapshot().bindings.find(item=>item.id===bindingId);
+  const last=await bindStep(f,'B-04','separate-b04',{fromBindingId:bindingId,expectedBindingRevision:binding.bindingRevision,executionIds:[],scope:'selected'});
+  await startStep(f,'B-04',last);
+  return {bindingId,executionId,previousBindingRevision:binding.bindingRevision};
+}
+async function projectReadback(f){
+  const handler=createLightHandler({service:f.service,authenticate:()=>f.grant.principal});
+  const response=await handler.callTool({params:{name:'workbench_get_project',arguments:{projectId:f.base('read').projectId}}});
+  return response.structuredContent;
+}
+async function eventually(check){
+  for(let i=0;i<500;i++){if(check())return;await delay(10);}
+  assert.fail('Expected runner progress was not observed');
+}
+
+test('last required child exposes package acceptance, then continuous execution reuses B and starts C only after B passes',async t=>{
+  const f=await fixture(t,{withChildren:true,hold:[1]});
+  const original=await existingPackage(f);
+  await f.change('start');
+  await eventually(()=>f.runner.read()[0]?.phase==='waiting');
+  assert.equal(f.requests.length,0);
+  assert.deepEqual((await projectReadback(f)).workflow[0].parentAcceptances,[]);
+
+  const priorTurn={id:'original-b-turn',status:'inProgress'};
+  f.turns.set('original-b',priorTurn);
+  await f.complete('separate-b04','B-04');
+  const {workflow,result}=await projectReadback(f),item=workflow[0].parentAcceptances[0];
+  assert.deepEqual(result,f.snapshot(),'旧调用者仍收到原快照形状');
+  assert.equal(item.threadId,'original-b');
+  assert.equal(item.executionId,original.executionId);
+  assert.equal(item.bindingId,original.bindingId);
+  assert.equal(item.bindingRevision,original.previousBindingRevision+1,'接手 B-04 后使用父绑定最新版本');
+  assert.deepEqual(item.conditionIds,[findStep(f,'B').conditions[0].conditionId]);
+  assert.deepEqual(item.children.map(child=>child.evidenceIds),[['proof-B-01'],['proof-B-02'],['proof-B-03'],['proof-B-04']]);
+  assert.ok(!workflow[0].runnableStepKeys.includes(findStep(f,'C').key));
+  assert.equal(findStep(f,'B').acceptance,'pending');
+  await eventually(()=>f.runner.read()[0]?.reason.includes('原会话空闲'));
+  assert.equal(f.requests.length,0,'不向忙碌的原阶段会话提交新回合');
+  await f.change('pause');await f.until('paused');
+  priorTurn.status='completed';
+  assert.equal(f.requests.length,0,'暂停后不派发整包验收');
+
+  await f.change('resume');await eventually(()=>f.held.has(1));t.after(()=>f.release());
+  assert.equal(f.created.length,0,'父阶段沿用原会话');
+  assert.equal(f.requests[0].id,'original-b');
+  assert.match(f.requests[0].text,/B 整包验收/);
+  assert.ok(f.requests[0].text.includes(original.executionId));
+  assert.equal(findStep(f,'C').status,'pending');
+  await f.change('start');
+  assert.equal(f.requests.length,1,'重复开启不会重复派发');
+  f.release();await f.until('completed');
+  assert.deepEqual(f.requests.map(request=>request.id),['original-b','chat-1']);
+  assert.match(f.created[0].title,/ C：/);
+  assert.equal(f.snapshot().executions.filter(item=>item.stepKeys.includes(findStep(f,'B').key)).length,1);
+  assert.equal(f.snapshot().executions.find(item=>item.id===original.executionId).outcome,'completedScope');
+  assert.deepEqual((await projectReadback(f)).workflow[0].parentAcceptances,[]);
+});
+
+test('an ended package turn without evidence keeps C gated; manual parent acceptance exposes C as ready',async t=>{
+  const f=await fixture(t,{withChildren:true,finish:false});
+  await existingPackage(f);await f.complete('separate-b04','B-04');
+  assert.equal(f.runner.read().length,0);
+  assert.equal(f.requests.length,0,'手动执行模式不投递跨聊天消息');
+  await f.change('start','current_thread');await f.until('blocked');
+  assert.match(f.runner.read()[0].reason,/整包验收仍未通过/);
+  assert.equal(f.notifications.length,0);
+  assert.equal(f.requests.length,1);
+  assert.equal(findStep(f,'C').status,'pending');
+  await f.change('resume');await f.until('blocked');
+  assert.equal(f.requests.length,1,'回读既有验收回合，不盲目重发');
+
+  await f.complete('original-b','B');
+  const {workflow}=await projectReadback(f);
+  assert.deepEqual(workflow[0].parentAcceptances,[]);
+  assert.deepEqual(workflow[0].runnableStepKeys,[findStep(f,'C').key]);
+  assert.equal(findStep(f,'C').status,'pending','可启动的读模型不会预先登记开始');
+});
+
+test('unknown package delivery is preserved after restart and cannot be sent to B twice',async t=>{
+  let attempts=0;
+  const f=await fixture(t,{withChildren:true,decorateClient:client=>{
+    client.run=async()=>{attempts++;throw Object.assign(Error('CODEX_DELIVERY_UNKNOWN'),{code:'CODEX_DELIVERY_UNKNOWN'});};
+    return client;
+  }});
+  const original=await existingPackage(f);await f.complete('separate-b04','B-04');
+  await f.change('start');await f.until('blocked');
+  const first=f.p.read('lightContinuous').runs[0].current;
+  assert.equal(first.turnDelivery,'unknown');
+  assert.equal(first.executionId,original.executionId);
+  const recovered=await restartWith(f,t,f.factory);
+  await recovered.change();await recovered.until('blocked');
+  assert.equal(attempts,1);assert.equal(f.created.length,0);
+  assert.match(recovered.runner.read()[0].reason,/整包验收指令投递结果未知/);
+  assert.equal(findStep(f,'C').status,'pending');
+});
+
+test('an owned stage that leaves only package acceptance gets one focused follow-up in the same chat',async t=>{
+  const f=await fixture(t,{withChildren:true,finish:false,decorateClient:client=>{
+    const run=client.run.bind(client);
+    client.run=async(id,message,onStarted,options)=>{
+      const turn=await run(id,message,onStarted,options);
+      if(message.startsWith('开始执行 连续测试 / B：')){
+        const binding=f.snapshot().bindings.find(item=>item.context.threadId===id);
+        for(const code of ['B-01','B-02','B-03','B-04']){
+          await startStep(f,code,binding.id);await f.complete(id,code);
+        }
+      }else await f.complete(id);
+      return turn;
+    };
+    return client;
+  }});
+  await f.change('start');await f.until('completed');
+  assert.deepEqual(f.requests.map(request=>request.id),['chat-1','chat-2','chat-2','chat-3']);
+  assert.match(f.requests[2].text,/B 整包验收/);
+  assert.equal(f.p.read('lightContinuous').runs[0].history.filter(item=>item.kind==='parentAcceptance').length,1);
+});
+
+test('restart observes a known package turn before continuing to C without resending',async t=>{
+  const f=await fixture(t,{withChildren:true,hold:[1]});
+  const original=await existingPackage(f);await f.complete('separate-b04','B-04');
+  await f.change('start');await eventually(()=>f.held.has(1));t.after(()=>f.release());
+  const parentTurn=f.p.read('lightContinuous').runs[0].current;
+  const watched=[];
+  const recovered=await restartWith(f,t,options=>{
+    const client=f.factory(options);
+    client.waitForTurn=async(id,turnId)=>{
+      watched.push({id,turnId});
+      await eventually(()=>f.turns.get(id)?.status==='completed');
+      return f.turns.get(id);
+    };
+    return client;
+  });
+  await eventually(()=>watched.length===1);
+  assert.deepEqual(watched,[{id:'original-b',turnId:parentTurn.turnId}]);
+  assert.equal(f.p.read('lightContinuous').runs[0].current.executionId,original.executionId);
+  assert.equal(f.requests.length,1);
+  assert.equal(findStep(f,'C').status,'pending');
+  f.release();await recovered.until('completed');
+  assert.deepEqual(f.requests.map(request=>request.id),['original-b','chat-1']);
 });

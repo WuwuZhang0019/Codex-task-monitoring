@@ -4,6 +4,7 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { ListToolsRequestSchema, CallToolRequestSchema, McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
 import contract from './contracts/light-v1.json' with { type: 'json' };
+import { planWorkflow } from '../server/light-model.mjs';
 
 const string = { type: 'string', minLength: 1, maxLength: 2000 };
 const ref = name => ({ $ref: `#/$defs/${name}` });
@@ -72,7 +73,8 @@ export const lightTools = Object.entries(definitions).map(([name, definition]) =
   };
   const bindingHelp = name === 'workbench_bind_context' ? ' Bind only the explicitly authorized stepIds. For a continuation use takeover.scope=selected with the exact open executionIds in that subtree; other work stays with its previous binding. Automatic desktop mode verifies the directory and returns state=confirmed from ordinary propose. For a non-Git directory use branch=null and head=null; detached worktrees keep their observed head. Confirm takeover with confirmationGrant=null. Legacy grants still require confirmation.' : '';
   const registrationHelp = ['workbench_register_plan', 'workbench_revise_plan'].includes(name) ? ' Automatic desktop connection accepts confirmationGrant=null without a private desktop confirmation call. For first registration supply a local snapshot with all service IDs null; the response creates projectId and planIds. No existing project ID or Codex sidebar project is needed. Legacy scoped connections require a valid confirmation grant.' : '';
-  return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.${bindingHelp}${registrationHelp}`, inputSchema,
+  const workflowHelp = name === 'workbench_get_project' ? ' The workflow field lists runnable step keys and parents ready for package acceptance, with their original session, execution and child evidence references.' : '';
+  return { name, description: `Light workbench ${definition.operation}. Requires an authenticated owner grant.${bindingHelp}${registrationHelp}${workflowHelp}`, inputSchema,
     annotations: { readOnlyHint: !!definition.read, destructiveHint: !definition.read, idempotentHint: true, openWorldHint: false } };
 });
 const ajv = new Ajv2020({ allErrors: true, strict: true, strictRequired: false, strictTypes: false });
@@ -122,7 +124,8 @@ export function createLightHandler({ service, authenticate = () => null, publish
       else if (definition.operation === 'query') result = service.query(principal, args.projectId, args.operation, args.eventId);
       else result = await service[definition.operation](principal, structuredClone(args));
       const value = { schemaVersion: 'light-1.0', requestId: result.requestId ?? randomUUID(), status: 'accepted',
-        supportedCapabilities, result };
+        supportedCapabilities, result,
+        ...(definition.operation === 'read' ? { workflow: result.plans.map(plan => planWorkflow(result, plan.key)) } : {}) };
       return { content: [{ type: 'text', text: JSON.stringify(value) }], structuredContent: value };
     } catch (error) {
       const candidate = error.code ?? error.message?.split(':')[0];

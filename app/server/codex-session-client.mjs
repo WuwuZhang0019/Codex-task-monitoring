@@ -169,9 +169,10 @@ export class DesktopSessionClient{
   }
   async attach(threadId){return this.readThread(threadId);}
   async resume(threadId){return {thread:await this.attach(threadId)};}
-  async notify(threadId,text){
+  async notify(threadId,text,{idleOnly=false}={}){
     const before=await this.attach(threadId);
     if(!['idle','active','notLoaded'].includes(before.status.type))throw clientError('CODEX_ACTIVE_TURN_UNKNOWN');
+    if(idleOnly&&(before.status.type==='active'||before.turns.some(turn=>turn.status==='inProgress')))throw clientError('CODEX_THREAD_BUSY');
     // The desktop owns routing of active follow-ups. Report only confirmed delivery, never assume steering.
     let result;
     try{result=await this.call('send_message_to_thread',{threadId,hostId:this.hostId,prompt:text});}
@@ -200,10 +201,10 @@ export class DesktopSessionClient{
     }
     throw clientError('CODEX_DELIVERY_UNKNOWN');
   }
-  async run(threadId,text,onStarted=async()=>{}){
+  async run(threadId,text,onStarted=async()=>{},options){
     const before=await this.readThread(threadId),prior=before.turns.at(-1);
     if(before.status.type==='active')throw clientError('CODEX_THREAD_BUSY');
-    const sent=await this.notify(threadId,text),startedAt=Date.now();
+    const sent=await this.notify(threadId,text,options),startedAt=Date.now();
     let turnId=sent.turnId;
     if(turnId)await onStarted(turnId);
     while(!this.closed){

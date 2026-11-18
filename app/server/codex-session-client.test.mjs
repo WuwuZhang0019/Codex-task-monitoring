@@ -142,6 +142,13 @@ test('desktop run refuses busy threads and does not mistake old completed turns 
  await assert.rejects(f.desktop.run('target','下阶段'),{code:'CODEX_DELIVERY_UNKNOWN'});assert.equal(f.calls.filter(c=>c.name==='send_message_to_thread').length,1);f.desktop.close();
 });
 
+test('package verification never sends into a desktop thread that became busy after the first read',async()=>{
+ const f=desktopFixture({results:[desktopThread(),desktopThread('active',[{id:'new',status:'inProgress'}])]});
+ await assert.rejects(f.desktop.run('target','整包验收',undefined,{idleOnly:true}),{code:'CODEX_THREAD_BUSY'});
+ assert.deepEqual(f.calls.map(call=>call.name),['read_thread','read_thread']);
+ f.desktop.close();
+});
+
 test('desktop run stops for human interaction instead of waiting indefinitely or approving it',async()=>{
  const waiting=desktopThread('active',[{id:'new',status:'inProgress'}]);waiting.thread.status.activeFlags=['waitingOnApproval'];
  const old={id:'old',status:'completed'};

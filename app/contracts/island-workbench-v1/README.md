@@ -41,3 +41,9 @@ app/node_modules/.bin/tsc.cmd --noEmit --moduleResolution Bundler --module ESNex
 更新日期：2026-11-12
 
 Envelope 可包含 agentApps（每个固定应用的开启、连接和最后通信状态）及 bindingApps（绑定 key 到应用标识的映射）。字段由受控面板适配器提供，不写入 light-1.0 业务快照。未提供时保持旧版兼容；不得根据任务标题或路径猜测历史归属。
+
+## 验收与开始提示
+
+更新日期：2026-11-19。
+
+面板可在同一次读取中提供 `workflow`，按 `planKey` 返回 `parentAcceptances` 和 `runnableStepKeys`。父阶段整包验收提示包含步骤、原责任聊天及服务端关联的执行和子步骤证据索引。外壳只使用当前有效快照的提示，旧服务省略字段时正常读取。可启动步骤仍需取得绑定和开始许可。

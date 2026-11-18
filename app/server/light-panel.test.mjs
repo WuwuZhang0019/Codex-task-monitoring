@@ -31,6 +31,7 @@ test('private panel shares committed snapshot, verifies source, persists prefere
   const base=()=>`http://127.0.0.1:${server.address().port}/api/light-panel`;
   const get=async()=>{const r=await fetch(base(),{headers:{Authorization:'Bearer owner'}});assert.equal(r.status,200);return r.json();};
   const read=await get();assert.deepEqual(read.snapshot,server.workbench.light.read('test',registered.projectId));assert.equal(read.sources['F/plan'],text);assert.equal(read.capabilities.threadJump,false);
+  assert.deepEqual(read.workflow,[{planKey:'F/plan',runnableStepKeys:[read.snapshot.steps[0].key],parentAcceptances:[]}]);
   const revision=read.snapshot.revision;
   assert.equal((await fetch(base())).status,403);
   assert.equal((await fetch(base(),{headers:{Authorization:'Bearer plugin-token'}})).status,403);

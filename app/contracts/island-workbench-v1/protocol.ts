@@ -139,9 +139,16 @@ export interface UnknownOperation {
 	state: "unknown";
 	reason: string;
 }
+// Date: 2026-11-18. Optional display data derived by the owner from the same snapshot.
+export interface WorkflowProgress {
+	planKey: string;
+	runnableStepKeys: string[];
+	parentAcceptances: { stepKey: string; code: string; threadId: string }[];
+}
 export interface WorkbenchEnvelope {
 	agentApps?: AgentConnection[];
 	bindingApps?: Record<string, AppId>;
+	workflow?: WorkflowProgress[];
 	protocolVersion: typeof PROTOCOL_VERSION;
 	mode: "simulation" | "service";
 	snapshot: WorkbenchSnapshot | null;
@@ -256,6 +263,26 @@ export function validateEnvelope(value: unknown): WorkbenchEnvelope {
 	const projects = new Map(s.projects.map((x) => [x.key, x]));
 	const plans = new Map(s.plans.map((x) => [x.key, x]));
 	const steps = new Map(s.steps.map((x) => [x.key, x]));
+	if (
+		e.workflow !== undefined &&
+		(!Array.isArray(e.workflow) ||
+			e.workflow.some(
+				(progress) =>
+					!object(progress) ||
+					!plans.has(progress.planKey) ||
+					!strings(progress.runnableStepKeys) ||
+					progress.runnableStepKeys.some((key) => steps.get(key)?.planKey !== progress.planKey) ||
+					!Array.isArray(progress.parentAcceptances) ||
+					progress.parentAcceptances.some(
+						(item) =>
+							!object(item) ||
+							steps.get(item.stepKey)?.planKey !== progress.planKey ||
+							!text(item.code) ||
+							!text(item.threadId),
+					),
+			))
+	)
+		fail("workflow progress");
 	for (const p of s.projects)
 		if (
 			!text(p.name) ||
@@ -405,6 +432,7 @@ export function acceptEnvelope(current: WorkbenchEnvelope | null, incoming: unkn
 		return {
 			...next,
 			snapshot: structuredClone(current.snapshot),
+			workflow: undefined,
 			connection: {
 				...next.connection,
 				state: next.connection.state === "ready" ? "stale" : next.connection.state,

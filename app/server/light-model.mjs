@@ -30,13 +30,15 @@ export function requiredConditions(conditions, evidence) {
     && item.evidenceIds.length > 0 && item.evidenceIds.every(id => proofs.get(id)?.result === 'passed'));
 }
 export function childrenOf(snapshot, key) { return snapshot.steps.filter(step => step.parentKey === key); }
-export function dependenciesOf(snapshot, step) {
-  const dependencies = new Set(), visited = new Set();
+function* lineage(snapshot, step) {
+  const visited = new Set();
   for (let current = step; current && !visited.has(current.key); current = snapshot.steps.find(item => item.key === current.parentKey)) {
     visited.add(current.key);
-    for (const key of current.dependsOn) dependencies.add(key);
+    yield current;
   }
-  return [...dependencies];
+}
+export function dependenciesOf(snapshot, step) {
+  return [...new Set([...lineage(snapshot, step)].flatMap(item => item.dependsOn))];
 }
 export function waitingFor(snapshot, step) {
   return dependenciesOf(snapshot, step).filter(key => {
@@ -44,10 +46,47 @@ export function waitingFor(snapshot, step) {
     return dependency?.status !== 'completed' || dependency.acceptance !== 'passed';
   });
 }
+export function unreadyAncestors(snapshot, step, allowCompleted = false) {
+  return [...lineage(snapshot, step)].slice(1)
+    .filter(parent => parent.status !== 'running' && !(allowCompleted && parent.status === 'completed')).map(parent => parent.key);
+}
+export function stepReady(snapshot, step) {
+  return step.status === 'pending' && !step.blockers.some(item => !item.resolved)
+    && !waitingFor(snapshot, step).length && !unreadyAncestors(snapshot, step).length;
+}
 export function stepPassed(snapshot, step) {
   return step.status === 'completed' && step.acceptance === 'passed'
     && requiredConditions(step.conditions, step.evidence) && !step.blockers.some(item => !item.resolved)
     && childrenOf(snapshot, step.key).filter(item => item.required).every(child => stepPassed(snapshot, child));
+}
+
+export function parentAcceptanceOf(snapshot, step) {
+  if (step?.status !== 'running' || step.blockers.some(item => !item.resolved)
+    || waitingFor(snapshot, step).length || unreadyAncestors(snapshot, step).length) return null;
+  const children = childrenOf(snapshot, step.key).filter(child => child.required);
+  if (!children.length || !children.every(child => stepPassed(snapshot, child))) return null;
+  const binding = snapshot.bindings.find(item => item.key === step.bindingKey);
+  const execution = snapshot.executions.find(item => item.key === step.executionKey);
+  if (binding?.state !== 'confirmed' || binding.revokedAt || !binding.context.threadId || !binding.context.hostId
+    || !bindingOwnsStep(snapshot, binding, step) || execution?.outcome !== 'running' || execution.endedAt
+    || execution.bindingKey !== binding.key || !execution.stepKeys.includes(step.key)) return null;
+  return { binding, execution, children };
+}
+
+// 日期：2026-11-18。提示从已提交快照计算，手动接续和重启无需补写触发事件。
+export function planWorkflow(snapshot, planKey) {
+  const steps = snapshot.steps.filter(step => step.planKey === planKey);
+  return { planKey, runnableStepKeys: steps.filter(step => stepReady(snapshot, step)).map(step => step.key),
+    parentAcceptances: steps.flatMap(step => {
+      const task = parentAcceptanceOf(snapshot, step);
+      if (!task) return [];
+      const { binding, execution, children } = task;
+      return [{ stepKey: step.key, stepId: step.id, code: step.code, threadId: binding.context.threadId, hostId: binding.context.hostId,
+        bindingId: binding.id, bindingRevision: binding.bindingRevision, executionId: execution.id,
+        conditionIds: step.conditions.filter(item => item.required).map(item => item.conditionId),
+        children: children.map(child => ({ stepKey: child.key, code: child.code,
+          evidenceIds: child.evidence.filter(item => item.result === 'passed').map(item => item.evidenceId) })) }];
+    }) };
 }
 export function planProgress(snapshot, planKey) {
   const plan = snapshot.plans.find(item => item.key === planKey);

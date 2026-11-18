@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { HttpError } from './validation.mjs';
 import { validAppId } from './light-apps.mjs';
 import { digest } from './receipts.mjs';
+import { planWorkflow } from './light-model.mjs';
 
 // Date: 2026-11-12. Old confirmed grants retain trustworthy ownership without changing historical tasks.
 export function bindingApplications(bindings, grants, owners = {}) {
@@ -56,6 +57,7 @@ export function createLightPanel(persistence, { connections = () => [], continuo
       const bindingApps = bindingApplications(snapshot.bindings, grants, owners);
       return { date: '2026-11-12', snapshot, sources, preferences: persistence.read('lightPanelPreferences') ?? null,
         agentApps: connections(), bindingApps, continuousRuns:continuous(), continuousSupported:true,
+        workflow: snapshot.plans.map(plan => planWorkflow(snapshot, plan.key)),
         library: persistence.read('lightLibrary') ?? { version: 1, archived: [] }, librarySupported: true,
         capabilities: { threadJump: false, reason: '当前宿主未提供聊天跳转；可复制固定 ID，在 Codex 中查找' } };
     },

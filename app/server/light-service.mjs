@@ -2,7 +2,7 @@
 import { randomUUID } from 'node:crypto';
 import { digest } from './receipts.mjs';
 import { requireLightShape, validateLightSnapshot, lightError, transitions, unique,
-  requiredConditions, childrenOf, dependenciesOf, waitingFor, planProgress, stepPassed, stepInScope, bindingOwnsStep } from './light-model.mjs';
+  requiredConditions, childrenOf, dependenciesOf, waitingFor, unreadyAncestors, planProgress, planWorkflow, stepPassed, stepInScope, bindingOwnsStep } from './light-model.mjs';
 import { legacyLightStatus } from './light-import.mjs';
 import { touches } from './light-library.mjs';
 import { validateCoordination } from '../../plugins/task-workbench/skills/workbench-handoff/scripts/coordination.mjs';
@@ -42,10 +42,8 @@ function activeBinding(snapshot, step, input) {
   return binding;
 }
 function canRun(snapshot, step, allowCompletedParent = false) {
-  const waiting = waitingFor(snapshot, step);
-  const parents = snapshot.steps.filter(item => item.key !== step.key && stepInScope(snapshot.steps, step.key, [item.key]));
-  const unready = parents.filter(parent => parent.status !== 'running' && !(allowCompletedParent && parent.status === 'completed'));
-  if (waiting.length || unready.length) lightError('DEPENDENCY_NOT_READY', [...waiting, ...unready.map(parent => parent.key)].join(', '), 409);
+  const waiting = [...waitingFor(snapshot, step), ...unreadyAncestors(snapshot, step, allowCompletedParent)];
+  if (waiting.length) lightError('DEPENDENCY_NOT_READY', waiting.join(', '), 409);
   if (step.blockers.some(item => !item.resolved)) lightError('BLOCKER_NOT_RESOLVED', step.key, 409);
 }
 function addBlocker(step, blocker) {
@@ -181,9 +179,10 @@ export function createLightService(persistence, requests, {
       const project = snapshot.projects.find(item => item.id === projectId);
       const plan = snapshot.plans.find(item => item.id === planId && item.projectKey === project.key);
       if (!plan) lightError('NOT_FOUND', planId, 404);
-      return { ...planProgress(snapshot, plan.key), routes: snapshot.routes.filter(item => item.planKey === plan.key).map(route => ({ key: route.key,
+      const workflow = planWorkflow(snapshot, plan.key);
+      return { ...planProgress(snapshot, plan.key), ...workflow, routes: snapshot.routes.filter(item => item.planKey === plan.key).map(route => ({ key: route.key,
         completed: route.stepKeys.every(key => { const step = snapshot.steps.find(item => item.key === key); return !step.required || step.status === 'completed' && step.acceptance === 'passed'; }),
-        runnable: route.stepKeys.filter(key => { const step = snapshot.steps.find(item => item.key === key); return step.status === 'pending' && !waitingFor(snapshot, step).length && !step.blockers.some(item => !item.resolved); }) })) };
+        runnable: route.stepKeys.filter(key => workflow.runnableStepKeys.includes(key)) })) };
     },
     query(principal, projectId, operation, eventId) {
       permitted(principal, projectId, 'query');
