@@ -12,6 +12,8 @@ import { createLightOnboarding } from './light-onboarding.mjs';
 import {createLightPanel} from './light-panel.mjs';
 import {createLightLibrary} from './light-library.mjs';
 import {createContinuousRunner} from './light-continuous.mjs';
+import { RetainedSessionClient } from './retained-session.mjs';
+import { createSessionClient } from './codex-session-client.mjs';
 import { runtimeExitStatus } from './runtime-lifecycle.mjs';
 import http from 'node:http';
 import path from 'node:path';
@@ -125,7 +127,7 @@ async function createOwnedServer(options) {
   if (options.lightAccessEnabled && typeof options.authorize !== 'function') throw new Error('LIGHT_PRIVATE_AUTH_REQUIRED');
   const lightAccess = options.lightAccessEnabled ? createLightAccess(persistence, options.lightPresence) : null;
   const lightOnboarding = options.lightAccessEnabled ? createLightOnboarding(persistence) : null;
-  let exitReserved = false;
+  let exitReserved = null;
   const originalAuthorize = options.lightAuthorize ?? lightAccess?.authorize;
   const lightAuthorize = (...args) => !exitReserved && (originalAuthorize?.(...args) ?? false);
   const light = createLightService(persistence, requests, {
@@ -135,7 +137,10 @@ async function createOwnedServer(options) {
     automaticBinding: lightAccess?.automaticBinding,
   });
   const lightOutbox = createLightOutbox(persistence);
-  const continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:options.continuousClientFactory,principalProvider:options.continuousPrincipalProvider,canRun:()=>!exitReserved}) : null;
+  const continuousFactory = options.continuousClientFactory ?? (options.retainSessions
+    ? ({ transport, runId }) => transport === 'owned' ? new RetainedSessionClient(directory, runId) : createSessionClient({ transport })
+    : undefined);
+  const continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:continuousFactory,principalProvider:options.continuousPrincipalProvider,canRun:()=>!exitReserved}) : null;
   await continuous?.initialize();
   const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [], continuous:()=>continuous?.read()??[] });
   const lightLibrary = createLightLibrary(persistence);
@@ -153,7 +158,7 @@ async function createOwnedServer(options) {
       const pathname = safePath(req.url);
       if (options.authorize) await options.authorize(req, pathname);
       const method = req.method;
-      if (exitReserved) throw new HttpError(503, 'STOPPED');
+      if (exitReserved) throw new HttpError(503, exitReserved);
       // MCP 的业务失败由协议层包装，必须在领域事务提交/回滚之后包装。
       if (pathname === '/api/light-onboarding' && lightOnboarding) {
         if (method !== 'POST' || req.headers.origin !== undefined || req.url !== pathname) throw new HttpError(403, 'FORBIDDEN');
@@ -171,6 +176,7 @@ async function createOwnedServer(options) {
         if (method === 'GET') respond(200, await handler.listTools());
         else if (method === 'POST') {
           const body = await jsonBody(req);
+          if (exitReserved === 'UPDATING') throw new HttpError(503, exitReserved);
           if (!body || Object.keys(body).some(key => !['name', 'arguments'].includes(key))) throw new HttpError(400, 'INVALID_INPUT');
           try { respond(200, await handler.callTool({ params: body })); }
           catch (error) {
@@ -183,7 +189,7 @@ async function createOwnedServer(options) {
         if(method!=='POST')throw new HttpError(405,'不支持的请求方法');
         respond(200,await continuous.change(await jsonBody(req)));
       } else await persistence.run(async () => {
-      if (exitReserved) throw new HttpError(503, 'STOPPED');
+      if (exitReserved) throw new HttpError(503, exitReserved);
       if (pathname === '/api/runtime/exit-status') {
         if (!options.lightAccessEnabled || typeof options.authorize !== 'function' || method !== 'GET' || req.url !== pathname) throw new HttpError(403, 'FORBIDDEN');
         return respond(200, exitStatus());
@@ -307,8 +313,14 @@ async function createOwnedServer(options) {
   });
   server.prepareExit = () => persistence.run(() => {
     const status = exitStatus();
-    if (status.allowed) exitReserved = true;
+    if (exitReserved) return { ...status, allowed: false };
+    if (status.allowed) exitReserved = 'STOPPED';
     return status;
+  });
+  server.prepareHandoff = () => persistence.run(() => {
+    if (exitReserved || !options.retainSessions || !continuous?.prepareHandoff()) return false;
+    exitReserved = 'UPDATING';
+    return true;
   });
   server.workbench={persistence,store,models,requests,drafts,publisher,business,light,lightOutbox,lightPublication,lightAccess,
     createLightMcp: (authenticate) => createLightMcp({service:light,authenticate,publish:lightPublication.publish,

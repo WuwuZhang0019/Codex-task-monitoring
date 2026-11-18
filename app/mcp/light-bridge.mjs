@@ -7,6 +7,7 @@ import { ListToolsRequestSchema, CallToolRequestSchema, McpError, ErrorCode } fr
 import { lightTools, validateLightToolArguments } from './light.mjs';
 import { discoverOwner } from '../desktop/client.mjs';
 import { preparePrivateDirectory, writePrivateJson } from '../desktop/private-runtime.mjs';
+import { liveUpdateProtocol } from '../desktop/runtime-protocol.mjs';
 
 export async function loadLightConfig(file) {
   if (!file || !path.isAbsolute(file)) throw new Error('LIGHT_CONFIG_REQUIRED');
@@ -59,7 +60,8 @@ export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs
   async function connection() {
     const current = reloadConfig ? await reloadConfig() : config;
     const owner = current.dataDir ? await discoverOwner(current.dataDir) : current;
-    return { endpoint: `${owner.endpoint.replace(/\/$/, '')}/api/light-mcp`, token: current.token };
+    return { endpoint: `${owner.endpoint.replace(/\/$/, '')}/api/light-mcp`, token: current.token,
+      ownerGeneration: owner.ownerGeneration, protocol: owner.liveUpdateProtocol };
   }
   async function probe() {
     const current = await connection();
@@ -186,8 +188,14 @@ export function createLightBridge(config, { readTimeoutMs = 5000, writeTimeoutMs
       return response;
     } catch {
       if (recovery) try {
+        const prior = current;
         current = await ready();
-        const response = readOnly ? await send(current, name, args, true) : await reconcile(current, entry);
+        let response = readOnly ? await send(current, name, args, true) : await reconcile(current, entry);
+        // A confirmed successor holds the exclusive data lease. The prior owner cannot still commit this event.
+        if (!response && prior.protocol === liveUpdateProtocol && current.protocol === liveUpdateProtocol
+          && prior.ownerGeneration !== current.ownerGeneration && prior.token === current.token) {
+          response = await send(current, name, args, false);
+        }
         if (response) {
           if (entry && response.structuredContent.status === 'accepted') await clear(entry);
           observe(name, args, response);

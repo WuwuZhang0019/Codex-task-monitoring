@@ -28,5 +28,5 @@ export async function connectOwner(dataDir) {
     });
     request.once('error', reject);
   });
-  return { record, token: session.token };
+  return { record, token: session.token, release: session.release, codexEnvironment: session.codexEnvironment };
 }

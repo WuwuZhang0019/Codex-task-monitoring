@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { builtinModules } from 'node:module';
+import { liveUpdateProtocol } from './runtime-protocol.mjs';
 
 const app = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const root = path.join(app, 'desktop/resources');
@@ -47,12 +48,14 @@ for (const directory of ['server', 'mcp']) {
   await rm(destination, { recursive: true, force: true });
   await cp(path.join(app, directory), destination, { recursive: true });
 }
-for (const name of ['owner.mjs', 'migrate.mjs', 'client.mjs', 'private-runtime.mjs', 'service.mjs', 'island-launcher.mjs']) {
+for (const name of ['owner.mjs', 'migrate.mjs', 'client.mjs', 'private-runtime.mjs', 'service.mjs', 'island-launcher.mjs',
+  'runtime-protocol.mjs', 'runtime-release.mjs']) {
   await copyFile(path.join(app, 'desktop', name), path.join(root, 'app/desktop', name));
 }
 // 日期 2026-11-11。保持 server/index 的相对位置，随发行物携带运行依赖。
 const serverBuild = await build({
-  absWorkingDir: app, entryPoints: ['server/index.mjs'], outfile: path.join(root, 'app/server/index.mjs'),
+  absWorkingDir: app, entryPoints: ['server/index.mjs', 'server/session-worker.mjs'], outdir: path.join(root, 'app/server'),
+  outExtension: { '.js': '.mjs' },
   bundle: true, format: 'esm', platform: 'node', target: 'node22', metafile: true,
   banner: { js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" },
 });
@@ -76,7 +79,7 @@ await mkdir(path.join(root, 'docs/99_归档'), { recursive: true });
 await copyFile(path.join(sampleDir, sample), path.join(root, 'docs/99_归档', sample));
 // Node's license includes the notices for its bundled third-party components.
 await writeFile(path.join(root, 'NODE-SHASUMS256.txt'), sums);
-const manifest = { date: generatedDate, nodeVersion, nodeExeSha256: createHash('sha256').update(await readFile(path.join(root,'node.exe'))).digest('hex'), distribution: archiveName, distributionSha256: expected,
+const manifest = { date: generatedDate, liveUpdateProtocol, nodeVersion, nodeExeSha256: createHash('sha256').update(await readFile(path.join(root,'node.exe'))).digest('hex'), distribution: archiveName, distributionSha256: expected,
   serverEntrypoint: 'app/server/index.mjs', serverBundledPackages: serverLicenses.count, serverExternalImports, resources: {} };
 async function inventory(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {

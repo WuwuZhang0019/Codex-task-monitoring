@@ -10,6 +10,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { createLightBridge } from './light-bridge.mjs';
 import { lightTools } from './light.mjs';
+import { liveUpdateProtocol } from '../desktop/runtime-protocol.mjs';
 const result = value => ({ content: [{ type: 'text', text: JSON.stringify(value) }], structuredContent: value });
 const base = { schemaVersion: 'light-1.0', projectId: 'crash-project', planId: 'crash-plan', expectedRevision: 0,
   eventId: 'original-event', source: { path: 'fixture.md', version: '2026-11-16', sha256: 'a'.repeat(64), locator: 'fixture' },
@@ -47,6 +48,26 @@ test('a committed write with a lost response is recovered by its original event 
   assert.equal(response.structuredContent.status,'accepted');assert.equal(response.structuredContent.result.executionId,'original-execution');
   assert.deepEqual(f.counts(),{writes:1,queries:1});assert.ok(starts>=2);
   assert.deepEqual(await readdir(path.join(f.root,'events')),[]);
+});
+
+test('a compatible successor reconciles the original event before replaying an uncommitted write', async t => {
+  const f = await fixture(t);
+  const ownerFile = path.join(f.root, 'owner.json');
+  const record = { version: 1, liveUpdateProtocol, endpoint: f.config.endpoint, ownerGeneration: 'before' };
+  await writeFile(ownerFile, JSON.stringify(record));
+  let connections = 0;
+  const recovery = { async ensure(check) {
+    if (++connections === 2) {
+      f.forget();
+      f.drop();
+      await writeFile(ownerFile, JSON.stringify({ ...record, ownerGeneration: 'after' }));
+    }
+    return check();
+  } };
+  const client = await connect(t, { dataDir: f.root, token: f.config.token }, { recovery });
+  const response = await client.callTool({ name: 'workbench_reserve_execution', arguments: base });
+  assert.equal(response.structuredContent.result.executionId, 'original-execution');
+  assert.deepEqual(f.counts(), { writes: 2, queries: 1 });
 });
 
 test('unresolved writes persist across bridge restart, reject changed payloads and query before same-key retry',async t=>{

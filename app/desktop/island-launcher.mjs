@@ -48,6 +48,16 @@ export function createIslandRecovery({ file, dataDir, timeoutMs = 20000, interva
   async function ensure(check) {
     let ready;
     try { ready = await check(); } catch (error) { if (!outage(error)) throw error; }
+    if (!ready && dataDir) {
+      const pending = path.join(dataDir, 'runtime-private', 'upgrade.json');
+      const deadline = Date.now() + timeoutMs;
+      for (;;) {
+        try { await stat(pending); } catch (error) { if (error.code === 'ENOENT') break; throw error; }
+        if (Date.now() >= deadline) throw Error('OWNER_UNAVAILABLE');
+        await pause(intervalMs);
+        try { return await check(); } catch (error) { if (!outage(error)) throw error; }
+      }
+    }
     let record;
     try { record = await readLauncher(file, dataDir); }
     catch (error) {

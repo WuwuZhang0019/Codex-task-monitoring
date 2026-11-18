@@ -35,11 +35,13 @@ function stageResumeIssue(s,current){
   return null;
 }
 export function createContinuousRunner(persistence,service,{clientFactory=createSessionClient,principalProvider,canRun=()=>true}={}){
-  const clients=new Map(),pumps=new Set(),workspaceClaims=new Map(),notifications=new Map();let closed=false;
+  const clients=new Map(),pumps=new Set(),workspaceClaims=new Map(),notifications=new Map();
+  const waiting=new Set();
+  let closed=false,handingOff=false;
   const state=()=>persistence.read('lightContinuous')??{version:1,runs:[]};
   const snapshot=()=>persistence.read('light')?.snapshot;
   const find=id=>state().runs.find(r=>r.id===id);
-  async function update(id,fields){if(closed)return;await persistence.run(()=>{const s=state(),r=s.runs.find(r=>r.id===id);if(r){Object.assign(r,fields,{updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
+  async function update(id,fields){if(closed)return;await persistence.run(()=>{if(closed)return;const s=state(),r=s.runs.find(r=>r.id===id);if(r){Object.assign(r,fields,{updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
   async function pauseIfRequested(id,reason){if(closed)return;await persistence.run(()=>{const s=state(),r=s.runs.find(r=>r.id===id);if(r?.status==='pausing'){Object.assign(r,{status:'paused',enabled:false,phase:null,reason,updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
   function completionView(run,s){return s?.plans.some(p=>p.key===run.planKey)&&planProgress(s,run.planKey).passed?{...run,...completionFields}:run;}
   function summary(run){const s=snapshot();if(!activeStates.has(run.status)&&!pumps.has(run.id))run=completionView(run,s);const stages=s?.steps.filter(x=>x.planKey===run.planKey&&x.parentKey===null&&x.required)??[];return {id:run.id,planKey:run.planKey,status:run.status,mode:run.mode??'stages',enabled:run.status==='completed'?false:enabled(run),phase:run.phase??null,stageCode:run.current?.code??null,threadId:run.current?.threadId??run.session?.threadId??null,reason:run.reason??'',completed:stages.filter(x=>stepPassed(s,x)).length,total:stages.length};}
@@ -138,6 +140,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
   async function deliverCurrent(id,client){
     let current,run,send=false,attempted=false;
     await persistence.run(()=>{
+      if(closed)return;
       const value=state();run=value.runs.find(r=>r.id===id);current=run?.current;
       const step=snapshot()?.steps.find(x=>x.key===current?.stepKey);
       if(!run||run.status!=='running'||run.mode!=='current_thread'||!current?.threadId||!step||stepPassed(snapshot(),step))return;
@@ -169,12 +172,12 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
   async function pump(id){
     if(pumps.has(id)||closed)return;pumps.add(id);
     let client;
-    function connection(transport='owned'){if(!client||client.__runnerTransport!==transport){client?.close();client=clientFactory({transport});client.__runnerTransport=transport;clients.set(id,client);}return client;}
-    async function restore(threadId,transport='owned'){
+    function connection(transport='owned'){if(!client||client.__runnerTransport!==transport){client?.close();client=clientFactory({transport,runId:id});client.__runnerTransport=transport;clients.set(id,client);}return client;}
+    async function restore(threadId,transport='owned',workerId){
       let response;
-      try{response=await connection(transport).resume(threadId);}
+      try{response=await connection(transport).resume(threadId,workerId);}
       catch(error){
-        if(transport!=='owned'||error.code!=='CODEX_THREAD_WRITER_CONFLICT')throw error;
+        if(workerId||transport!=='owned'||error.code!=='CODEX_THREAD_WRITER_CONFLICT')throw error;
         response=await connection('shared').resume(threadId);
       }
       return {...response,transport:client.__runnerTransport};
@@ -207,7 +210,9 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
             if(currentClient.interactionRequired)lightError('CODEX_INTERACTION_REQUIRED','当前会话正在等待人工批准或输入，请处理后重试',409);
             if(thread.status?.type!=='active'&&last&&last.status!=='inProgress')throw Error('原阶段会话已结束但尚未通过验收，请在该会话处理后重试');
           }else await update(id,{phase:'waiting',reason:'已开启，等待当前阶段完成并验收后接续'});
-          await new Promise(resolve=>setTimeout(resolve,1000));continue;
+          waiting.add(id);
+          try{await new Promise(resolve=>setTimeout(resolve,1000));}finally{waiting.delete(id);}
+          continue;
         }else if(current){
           if(!current.threadId)throw Error('THREAD_CREATION_RESULT_UNKNOWN');
           const step=s.steps.find(x=>x.key===current.stepKey);
@@ -215,7 +220,11 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
           if(!current.executionId)throw Error('INCOMPLETE_START_REQUIRES_REVIEW');
           if(['sending','unknown'].includes(current.turnDelivery)&&!current.turnId)lightError('DELIVERY_UNKNOWN','阶段启动结果未知，请先核对原会话，避免重复执行',409);
           const issue=stageResumeIssue(s,current);if(issue)throw issue;
-          const resumed=await restore(current.threadId,current.transport??(run.mode==='current_thread'?run.session?.transport:'owned')??'owned');
+          const transport=current.transport??(run.mode==='current_thread'?run.session?.transport:'owned')??'owned';
+          if(run.recovering&&current.turnId&&transport==='owned'&&connection(transport).detach&&!current.workerId){
+            lightError('DELIVERY_UNKNOWN','原回合缺少独立执行进程标识，已保留原身份',409);
+          }
+          const resumed=await restore(current.threadId,transport,run.recovering?current.workerId:undefined);
           const {cwd}=await workspace(plan,step);
           if(resumed?.thread?.id!==current.threadId||!resumed.thread.cwd||!samePath(await realpath(resumed.thread.cwd),cwd))lightError('THREAD_WORKSPACE_MISMATCH','原会话的实际目录已变化，请核对会话目录后重试',409);
           current={...current,transport:resumed.transport};
@@ -257,13 +266,21 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         }
         await update(id,{phase:'executing',reason:''});
         let turn;
-        if(observedTurn){
-          await update(id,{phase:'waiting',reason:'已连接原会话，等待当前回合完成后核验'});
-          turn=await client.waitForTurn(current.threadId,current.turnId);
-        }else{
-          current={...current,turnDelivery:'sending'};await update(id,{current});
-          turn=await client.run(current.threadId,prompt(run,current),async turnId=>{current={...find(id).current,turnId,turnDelivery:'started'};await update(id,{current});if(run.mode!=='current_thread'&&find(id)?.mode==='current_thread')await notifyCurrent(id,client);});
-        }
+        try{
+          if(observedTurn){
+            await update(id,{phase:'waiting',reason:'已连接原会话，等待当前回合完成后核验'});
+            waiting.add(id);
+            turn=await client.waitForTurn(current.threadId,current.turnId);
+          }else{
+            current={...current,turnDelivery:'sending'};await update(id,{current});
+            turn=await client.run(current.threadId,prompt(run,current),async turnId=>{
+              current={...find(id).current,turnId,turnDelivery:'started',...(client.workerId?{workerId:client.workerId}:{})};
+              await update(id,{current});
+              if(run.mode!=='current_thread'&&find(id)?.mode==='current_thread')await notifyCurrent(id,client);
+              waiting.add(id);
+            });
+          }
+        }finally{waiting.delete(id);}
         if(notifications.has(id))await notifications.get(id);
         if(closed)return;
         const latest=snapshot(),step=latest.steps.find(x=>x.key===current.stepKey);
@@ -277,10 +294,17 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         if(find(id).status==='pausing'){await pauseIfRequested(id,'当前阶段已完成，后续阶段已暂停');return;}
       }
     }catch(error){if(!closed){const run=find(id);await update(id,{status:enabled(run)?'blocked':'paused',phase:null,...(run.current?.turnDelivery==='sending'?{current:{...run.current,turnDelivery:'unknown'}}:{}),reason:failureReason(error)});}}
-    finally{client?.close();clients.delete(id);pumps.delete(id);for(const [cwd,owner]of workspaceClaims)if(owner===id)workspaceClaims.delete(cwd);if(!closed&&find(id)?.status==='running')setTimeout(()=>void pump(id),0);}
+    finally{
+      const saved=closed?null:find(id);
+      if(client?.detach&&(handingOff||(saved?.recovering&&saved?.current?.workerId)))client.detach();
+      else await client?.close();
+      clients.delete(id);pumps.delete(id);
+      for(const [cwd,owner]of workspaceClaims)if(owner===id)workspaceClaims.delete(cwd);
+      if(!closed&&find(id)?.status==='running')setTimeout(()=>void pump(id),0);
+    }
   }
   return {
-    async initialize(){await persistence.run(()=>{const s=state(),snap=snapshot();for(const r of s.runs){const autoRecover=r.enabled===true;r.mode??='stages';r.enabled=enabled(r);const reconciled=completionView(r,snap);if(reconciled!==r){if(Object.entries(completionFields).some(([key,value])=>r[key]!==value))Object.assign(r,reconciled,{updatedAt:stamp()});continue;}if(activeStates.has(r.status)){
+    async initialize(){await persistence.run(()=>{const s=state(),snap=snapshot();for(const r of s.runs){const autoRecover=r.enabled===true;r.mode??='stages';r.enabled=enabled(r);const reconciled=completionView(r,snap);if(reconciled!==r&&!(r.status==='running'&&autoRecover&&r.current?.turnId)){if(Object.entries(completionFields).some(([key,value])=>r[key]!==value))Object.assign(r,reconciled,{updatedAt:stamp()});continue;}if(activeStates.has(r.status)){
         // Date: 2026-11-16. Keep explicit pause intent; recover only previously enabled runs.
         if(r.status==='pausing'||!autoRecover){r.status='paused';r.enabled=false;r.phase=null;r.reason='已保留用户暂停要求';}
         else if(r.current&&!r.current.threadId){r.status='blocked';r.phase=null;r.reason='THREAD_CREATION_RESULT_UNKNOWN: 请先核对原会话，避免重复创建';}
@@ -341,6 +365,19 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
       if(run?.status==='running')setTimeout(()=>void pump(run.id),0);
       return {saved:true,run:run?summary(run):null};
     },
-    close(){closed=true;for(const c of clients.values())c.close();},
+    prepareHandoff(){
+      // A known checkpoint must exist before dropping any observer of an active turn.
+      if(closed||notifications.size||[...pumps].some(id=>!waiting.has(id)))return false;
+      for(const run of state().runs){
+        if(!activeStates.has(run.status))continue;
+        const current=run.current;
+        if(run.status!=='running'||run.enabled!==true||!waiting.has(run.id)
+          ||!current?.threadId||['sending','unknown','rejected'].includes(current.delivery?.state))return false;
+        if(!current.adopted&&(!current.turnId||current.turnDelivery!=='started'
+          ||(current.transport!=='shared'&&(!current.workerId||clients.get(run.id)?.workerId!==current.workerId))))return false;
+      }
+      closed=true;handingOff=true;return true;
+    },
+    close(){closed=true;for(const c of clients.values()){if(handingOff&&c.detach)c.detach();else void c.close();}},
   };
 }

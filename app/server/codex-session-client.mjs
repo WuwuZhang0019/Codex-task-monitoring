@@ -96,11 +96,16 @@ export class CodexSessionClient{
       return {turnId,delivery};
     }catch(error){if(error.code==='CODEX_REQUEST_REJECTED')throw clientError('CODEX_DELIVERY_REJECTED',error.message);throw clientError('CODEX_DELIVERY_UNKNOWN');}
   }
-  async run(threadId,text,onStarted=async()=>{}){
+  async startTurn(threadId,text){
     this.interactionRequired=false;
     const result=await this.request('turn/start',{threadId,input:textInput(text)});
-    const turn=result.turn;if(!turn?.id)throw Error('CODEX_TURN_UNKNOWN');await onStarted(turn.id);
-    const key=threadId+'/'+turn.id;
+    if(!result.turn?.id)throw Error('CODEX_TURN_UNKNOWN');
+    return result.turn.id;
+  }
+  async run(threadId,text,onStarted=async()=>{}){
+    const turnId=await this.startTurn(threadId,text);
+    await onStarted(turnId);
+    const key=threadId+'/'+turnId;
     if(this.finished.has(key)){const done=this.finished.get(key);this.finished.delete(key);return done;}
     return new Promise((resolve,reject)=>this.turns.set(key,{resolve,reject}));
   }
