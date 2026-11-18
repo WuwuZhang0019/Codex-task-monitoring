@@ -1,7 +1,7 @@
 // Date: 2026-11-18. Owner-only route archival, pause checkpoints and transactional deletion.
 import { randomUUID } from 'node:crypto';
 import { digest } from './receipts.mjs';
-import { lightError, validateLightSnapshot } from './light-model.mjs';
+import { bindingOwnsStep, lightError, validateLightSnapshot } from './light-model.mjs';
 
 export function touches(value, keys) {
   if (typeof value === 'string') return keys.has(value);
@@ -9,21 +9,161 @@ export function touches(value, keys) {
   return value && typeof value === 'object' && Object.entries(value).some(([key, item]) => keys.has(key) || touches(item, keys));
 }
 
-export function createLightLibrary(persistence, { pauseContinuous } = {}) {
+function relatedPlans(snapshot, project, plan) {
+  const stepByKey = new Map(snapshot.steps.map(item => [item.key, item]));
+  const projectPlans = new Set(snapshot.plans.filter(item => item.projectKey === project.key).map(item => item.key));
+  const pausedPlans = new Set(plan ? [plan.key] : [...projectPlans]);
+  let expanded = true;
+  while (expanded) {
+    expanded = false;
+    for (const item of snapshot.routes) {
+      if (!projectPlans.has(item.planKey)) continue;
+      for (const ref of [item.sourceStepKey, item.returnStepKey]) {
+        const sourcePlan = stepByKey.get(ref)?.planKey;
+        if (sourcePlan && projectPlans.has(sourcePlan) && pausedPlans.has(sourcePlan) !== pausedPlans.has(item.planKey)) {
+          pausedPlans.add(sourcePlan); pausedPlans.add(item.planKey); expanded = true;
+        }
+      }
+    }
+    for (const item of snapshot.supplements) {
+      const sourcePlan = stepByKey.get(item.sourceStepKey)?.planKey;
+      if (sourcePlan && item.linkedPlanKey && projectPlans.has(sourcePlan) && projectPlans.has(item.linkedPlanKey)
+        && pausedPlans.has(sourcePlan) !== pausedPlans.has(item.linkedPlanKey)) {
+        pausedPlans.add(sourcePlan); pausedPlans.add(item.linkedPlanKey); expanded = true;
+      }
+    }
+  }
+  return pausedPlans;
+}
+
+function taskScope(snapshot, key) {
+  const route = snapshot.routes.find(item => item.key === key);
+  const plan = snapshot.plans.find(item => item.key === (route?.planKey ?? key));
+  const project = snapshot.projects.find(item => item.key === (plan?.projectKey ?? key));
+  return { route, plan, project };
+}
+
+function checkChange(snapshot, input) {
+  if (!input || input.acknowledged !== true || Object.keys(input).sort().join(',') !== 'acknowledged,expectedRevision,key'
+    || typeof input.key !== 'string' || !input.key || !Number.isSafeInteger(input.expectedRevision)) {
+    lightError('INVALID_INPUT', '需要条目、版本和明确确认');
+  }
+  if (!snapshot) lightError('NOT_FOUND', '任务不存在', 404);
+  if (snapshot.revision !== input.expectedRevision) lightError('REVISION_CONFLICT', '任务已更新，请刷新后重试', 409);
+}
+
+function pausedTargets(value, key, runs) {
+  const { snapshot } = value;
+  const { project, plan } = taskScope(snapshot, key);
+  if (!project) lightError('NOT_FOUND', '列表条目不存在', 404);
+  const plans = relatedPlans(snapshot, project, plan);
+  const targets = new Map();
+  for (const step of snapshot.steps) {
+    if (!plans.has(step.planKey) || step.status !== 'blocked' || !step.blockers.some(b => b.blockerId === 'user-pause' && !b.resolved)
+      || step.blockers.some(b => b.blockerId !== 'user-pause' && !b.resolved)) continue;
+    const execution = snapshot.executions.find(item => item.planKey === step.planKey && item.stepKeys.includes(step.key)
+      && !item.endedAt && item.outcome === 'running' && (!step.executionKey || item.key === step.executionKey));
+    const binding = snapshot.bindings.find(item => item.key === execution?.bindingKey && item.planKey === step.planKey
+      && item.state === 'confirmed' && !item.revokedAt && bindingOwnsStep(snapshot, item, step));
+    if (!binding?.context.threadId || binding.context.hostId !== 'local' || !binding.context.worktreePath) {
+      lightError('TASK_RESUME_CONTEXT', '找不到可接续的本机原会话，请回到执行聊天核对绑定', 409);
+    }
+    const { threadId, worktreePath } = binding.context;
+    const target = targets.get(threadId) ?? {
+      threadId, worktreePath, steps: [],
+      ownedRunId: runs.find(run => run.current?.threadId === threadId && !run.current.adopted && run.current.transport !== 'shared')?.id,
+    };
+    if (target.worktreePath !== worktreePath) lightError('TASK_RESUME_CONTEXT', '原会话关联了不同工作目录，请核对绑定', 409);
+    const checkpoint = snapshot.events.findLast(event => event.stepKey === step.key && event.toStatus === 'blocked')?.eventId
+      ?? digest([step.key, step.updatedAt]);
+    const targetPlan = snapshot.plans.find(item => item.key === step.planKey);
+    target.steps.push({ projectId: project.id, planId: targetPlan.id, sourcePath: targetPlan.source.path,
+      stepId: step.id, stepKey: step.key, code: step.code, bindingId: binding.id,
+      bindingRevision: binding.bindingRevision, executionId: execution.id, checkpoint });
+    targets.set(threadId, target);
+  }
+  return [...targets.values()];
+}
+
+export function createLightLibrary(persistence, { pauseContinuous, connectResume } = {}) {
+  let resuming = false;
+  const runs = () => persistence.read('lightContinuous')?.runs ?? [];
+  const attempts = value => value.metadata.taskResumeAttempts ??= [];
+
+  async function resume(input) {
+    if (resuming) lightError('TASK_RESUME_BUSY', '正在接续，请等待原会话返回结果', 409);
+    const initial = persistence.read('light');
+    checkChange(initial?.snapshot, input);
+    const targets = pausedTargets(initial, input.key, runs());
+    if (!targets.length) lightError('TASK_RESUME_CONTEXT', '当前没有可接续的暂停步骤，请核对其他阻塞', 409);
+    if (!connectResume) lightError('TASK_RESUME_UNAVAILABLE', '原会话连接不可用，请在原执行聊天继续', 409);
+    resuming = true;
+    try {
+      for (const pending of targets) {
+        const checkpointIds = new Set(pending.steps.map(step => step.checkpoint));
+        const prior = attempts(persistence.read('light')).filter(attempt => attempt.threadId === pending.threadId
+          && attempt.checkpointIds.some(id => checkpointIds.has(id)));
+        if (prior.some(attempt => attempt.state === 'sending')) {
+          lightError('TASK_RESUME_UNKNOWN', '继续指令是否送达尚未确认，请在原执行聊天核对', 409);
+        }
+        const delivered = new Set(prior.flatMap(attempt => attempt.checkpointIds));
+        const unsent = target => ({ ...target, steps: target.steps.filter(step => !delivered.has(step.checkpoint)) });
+        const target = unsent(pending);
+        if (!target.steps.length) continue;
+        const targetHash = digest(target);
+        const client = await connectResume(target);
+        try {
+          await persistence.run(() => {
+            const value = persistence.read('light');
+            const fresh = pausedTargets(value, input.key, runs()).find(item => item.threadId === target.threadId);
+            if (!fresh || digest(unsent(fresh)) !== targetHash) lightError('REVISION_CONFLICT', '暂停步骤或执行绑定已更新，请刷新后重试', 409);
+            attempts(value).push({ id: targetHash, threadId: target.threadId, checkpointIds: target.steps.map(step => step.checkpoint),
+              stepKeys: target.steps.map(step => step.stepKey), state: 'sending' });
+            persistence.write('light', value);
+          });
+          const finish = state => persistence.run(() => {
+            const value = persistence.read('light');
+            const entries = attempts(value);
+            const index = entries.findIndex(attempt => attempt.id === targetHash);
+            if (index < 0) return;
+            if (state === 'sent') entries[index].state = state;
+            else entries.splice(index, 1);
+            persistence.write('light', value);
+          });
+          try {
+            const message = '用户在任务岛点击了“继续”。请在本会话从暂停处接续以下原执行。'
+              + '请先通过工作台回读最新版本、方案、绑定及执行身份。按原步骤读取适用指引和已有工作，复用执行身份，'
+              + '逐步对仍暂停且可执行的步骤通过工作台提交 running，并用原 user-pause 阻塞内容提交 resolved=true。'
+              + '保留其他阻塞，遵守依赖、权限和原验收条件；按实际进度同步。此授权仅覆盖列出的暂停步骤。\n'
+              + JSON.stringify(target.steps.map(({ checkpoint, stepKey, ...identity }) => identity));
+            const receipt = await client.notify(target.threadId, message);
+            if (!receipt?.turnId) lightError('TASK_RESUME_UNKNOWN', '继续指令是否送达尚未确认，请在原执行聊天核对', 409);
+          } catch (error) {
+            if (['CODEX_DELIVERY_REJECTED', 'CODEX_THREAD_BUSY', 'CODEX_INTERACTION_REQUIRED', 'CODEX_ACTIVE_TURN_UNKNOWN'].includes(error.code)) {
+              await finish('rejected');
+              lightError('TASK_RESUME_UNAVAILABLE', '原执行聊天暂时无法接收指令，请在该聊天核对后重试', 409);
+            }
+            lightError('TASK_RESUME_UNKNOWN', '继续指令是否送达尚未确认，请在原执行聊天核对', 409);
+          }
+          await finish('sent');
+        } finally {
+          client.detach ? client.detach() : await client.close();
+        }
+      }
+      return { saved: true, revision: persistence.read('light').snapshot.revision };
+    } finally {
+      resuming = false;
+    }
+  }
+
   return {
     change(action, input) {
+      if (action === 'resume') return resume(input);
       return persistence.run(() => {
-        if (!['archive', 'restore', 'delete', 'pause'].includes(action) || !input || input.acknowledged !== true
-          || Object.keys(input).sort().join(',') !== 'acknowledged,expectedRevision,key'
-          || typeof input.key !== 'string' || !input.key || !Number.isSafeInteger(input.expectedRevision)) {
-          lightError('INVALID_INPUT', '需要条目、版本和明确确认');
-        }
+        if (!['archive', 'restore', 'delete', 'pause'].includes(action)) lightError('INVALID_INPUT', '不支持的任务操作');
         const value = persistence.read('light'), snapshot = value?.snapshot;
-        if (!snapshot) lightError('NOT_FOUND', '任务不存在', 404);
-        if (snapshot.revision !== input.expectedRevision) lightError('REVISION_CONFLICT', '任务已更新，请刷新后重试', 409);
-        const route = snapshot.routes.find(item => item.key === input.key);
-        const plan = snapshot.plans.find(item => item.key === (route?.planKey ?? input.key));
-        const project = snapshot.projects.find(item => item.key === (plan?.projectKey ?? input.key));
+        checkChange(snapshot, input);
+        const { route, plan, project } = taskScope(snapshot, input.key);
         if (!project || (action !== 'pause' && ((!route && plan && snapshot.routes.some(item => item.planKey === plan.key))
           || (!route && !plan && snapshot.plans.some(item => item.projectKey === project.key))))) {
           lightError('NOT_FOUND', '列表条目不存在', 404);
@@ -32,29 +172,7 @@ export function createLightLibrary(persistence, { pauseContinuous } = {}) {
         const archived = library.archived.find(item => item.key === input.key);
         const time = new Date().toISOString();
         if (action === 'pause') {
-          const stepByKey = new Map(snapshot.steps.map(item => [item.key, item]));
-          const projectPlans = new Set(snapshot.plans.filter(item => item.projectKey === project.key).map(item => item.key));
-          const pausedPlans = new Set(plan ? [plan.key] : [...projectPlans]);
-          let expanded = true;
-          while (expanded) {
-            expanded = false;
-            for (const item of snapshot.routes) {
-              if (!projectPlans.has(item.planKey)) continue;
-              for (const ref of [item.sourceStepKey, item.returnStepKey]) {
-                const sourcePlan = stepByKey.get(ref)?.planKey;
-                if (sourcePlan && projectPlans.has(sourcePlan) && pausedPlans.has(sourcePlan) !== pausedPlans.has(item.planKey)) {
-                  pausedPlans.add(sourcePlan); pausedPlans.add(item.planKey); expanded = true;
-                }
-              }
-            }
-            for (const item of snapshot.supplements) {
-              const sourcePlan = stepByKey.get(item.sourceStepKey)?.planKey;
-              if (sourcePlan && item.linkedPlanKey && projectPlans.has(sourcePlan) && projectPlans.has(item.linkedPlanKey)
-                && pausedPlans.has(sourcePlan) !== pausedPlans.has(item.linkedPlanKey)) {
-                pausedPlans.add(sourcePlan); pausedPlans.add(item.linkedPlanKey); expanded = true;
-              }
-            }
-          }
+          const pausedPlans = relatedPlans(snapshot, project, plan);
           const inScope = item => pausedPlans.size ? pausedPlans.has(item.planKey) : item.projectKey === project.key;
           const openExecutionSteps = new Set(snapshot.executions
             .filter(item => inScope(item) && !item.endedAt && item.outcome === 'running')

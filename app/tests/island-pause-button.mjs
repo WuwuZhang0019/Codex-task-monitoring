@@ -1,4 +1,4 @@
-// Date: 2026-11-18. Verify the middle pause button between continuous execution and archive.
+// Date: 2026-11-19. Verify the middle switch sends pause and resume as distinct actions.
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -59,6 +59,15 @@ try {
           }
         }
         snapshot.revision += 1;
+      } else if (args.action === 'resume') {
+        for (const step of snapshot.steps) {
+          const blocker = step.blockers.find(item => item.blockerId === 'user-pause');
+          if (step.planKey === args.value.key && blocker && !blocker.resolved) {
+            blocker.resolved = true;
+            step.status = 'running';
+          }
+        }
+        snapshot.revision += 1;
       }
       return { saved: true, revision: snapshot.revision };
     }
@@ -93,17 +102,27 @@ try {
 
   await page.locator('[data-route-card]').first().screenshot({ path: path.join(output, 'card-with-pause-button.png') });
   const pauseBtn = page.locator('.wb-route-pause').first();
+  assert.equal(await pauseBtn.getAttribute('aria-checked'), 'true');
   await pauseBtn.hover({ force: true });
   await page.waitForTimeout(400);
   await page.locator('[data-route-card]').first().screenshot({ path: path.join(output, 'card-pause-hover.png') });
 
   await pauseBtn.click();
-  await page.waitForFunction(() => document.querySelector('.wb-route-pause')?.hasAttribute('disabled') === true);
+  await page.waitForFunction(() => {
+    const button = document.querySelector('.wb-route-pause');
+    return button?.getAttribute('aria-checked') === 'false' && !button.hasAttribute('disabled');
+  });
   assert.equal(libraryCalls.length, 1);
   assert.equal(libraryCalls[0].action, 'pause');
   assert.equal(libraryCalls[0].value.acknowledged, true);
   await page.getByText(/已暂停：/).waitFor();
   await page.locator('[data-route-card]').first().screenshot({ path: path.join(output, 'card-after-pause.png') });
+  assert.match(await pauseBtn.getAttribute('title'), /^继续：/);
+  await pauseBtn.press('Space');
+  await page.waitForFunction(() => document.querySelector('.wb-route-pause')?.getAttribute('aria-checked') === 'true');
+  assert.deepEqual(libraryCalls.map(call => call.action), ['pause', 'resume']);
+  assert.equal(libraryCalls[1].value.key, libraryCalls[0].value.key);
+  await page.getByText(/继续指令已送达：/).waitFor();
   console.log(JSON.stringify({ passed: true, libraryCalls }));
 } finally {
   await browser?.close();

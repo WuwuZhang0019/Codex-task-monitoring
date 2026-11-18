@@ -144,10 +144,26 @@ test('failed preparation rolls back deletion and committed interruption recovers
   }
 });
 
-test('pause converts running steps and continuous runs into blocked checkpoints that permit backend exit while preserving execution identity', async t => {
+test('pause preserves the checkpoint, and resume sends it once to the original chat without enabling continuous execution', async t => {
   const { persistence, snapshot, key } = await fixture(t);
   const pausedPlans = [];
-  const library = createLightLibrary(persistence, { pauseContinuous: plans => pausedPlans.push(...plans) });
+  const messages = [];
+  let deliveryUnknown = false;
+  const options = {
+    pauseContinuous: plans => pausedPlans.push(...plans),
+    async connectResume(target) {
+      assert.equal(target.worktreePath, 'G:/test');
+      return {
+        async notify(threadId, text) {
+          messages.push({ threadId, text });
+          if (deliveryUnknown) throw Object.assign(Error('Timed out'), { code: 'CODEX_DELIVERY_UNKNOWN' });
+          return { turnId: 'resume-turn' };
+        },
+        close() {},
+      };
+    },
+  };
+  const library = createLightLibrary(persistence, options);
   await persistence.run(() => {
     const value = persistence.read('light'), s = value.snapshot, [first, second] = s.steps;
     const context = { sessionGroup: 'test', threadId: 'test', hostId: 'local', folderId: null, worktreeOrdinal: 1, worktreePath: 'G:/test', branch: 'main', head: null, trust: 'declared' };
@@ -173,4 +189,29 @@ test('pause converts running steps and continuous runs into blocked checkpoints 
   assert.equal(runs[0].enabled, false);
   assert.deepEqual(pausedPlans, [snapshot.plans[0].key]);
   assert.deepEqual(runtimeExitStatus(after, runs), { allowed: true, activeExecutions: 0, runningSteps: 0, continuousRuns: 0 });
+
+  const input = { key, expectedRevision: after.revision, acknowledged: true };
+  await assert.rejects(library.change('resume', { ...input, expectedRevision: after.revision - 1 }), /REVISION_CONFLICT/);
+  assert.equal(messages.length, 0);
+  await library.change('resume', input);
+  await createLightLibrary(persistence, options).change('resume', input);
+  assert.equal(messages.length, 1);
+  assert.equal(messages[0].threadId, 'test');
+  assert.match(messages[0].text, /"executionId":"execution-id"/);
+  assert.deepEqual(persistence.read('light').snapshot, after);
+  assert.deepEqual(persistence.read('lightContinuous').runs, runs);
+
+  // A later pause creates a fresh checkpoint. An uncertain send is not replayed.
+  await persistence.run(() => {
+    const value = persistence.read('light');
+    value.snapshot.steps[0].status = 'running';
+    value.snapshot.steps[0].blockers[0].resolved = true;
+    persistence.write('light', value);
+  });
+  await library.change('pause', input);
+  deliveryUnknown = true;
+  const later = { ...input, expectedRevision: persistence.read('light').snapshot.revision };
+  await assert.rejects(library.change('resume', later), /TASK_RESUME_UNKNOWN/);
+  await assert.rejects(createLightLibrary(persistence, options).change('resume', later), /TASK_RESUME_UNKNOWN/);
+  assert.equal(messages.length, 2);
 });
