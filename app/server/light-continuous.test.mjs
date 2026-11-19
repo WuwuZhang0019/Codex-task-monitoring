@@ -17,10 +17,12 @@ import {createLightHandler} from '../mcp/light.mjs';
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const fixtureRoots=[];
 after(async()=>{for(const root of fixtureRoots)await rm(root,{recursive:true,force:true});});
-async function fixture(t,{hold=false,finish=true,withChildren=false,decorateClient=client=>client}={}){
+async function fixture(t,{hold=false,finish=true,withChildren=false,manualAcceptance=false,decorateClient=client=>client}={}){
  const root=await mkdtemp(path.join(os.tmpdir(),'continuous-fixture-'));fixtureRoots.push(root);
  const p=await createPersistence(path.join(root,'data')),access=createLightAccess(p),grant=await access.connect({appId:'codex',acknowledged:true});
- const service=createLightService(p,createRequests(p),{authorize:access.authorize,automaticBinding:access.automaticBinding,confirmBinding:access.verifyBinding,verifyExecutionContext:access.verifyExecutionContext});
+ let runner;
+ const service=createLightService(p,createRequests(p),{authorize:access.authorize,automaticBinding:access.automaticBinding,confirmBinding:access.verifyBinding,verifyExecutionContext:access.verifyExecutionContext,
+   ...(manualAcceptance?{onStepPassed:(...args)=>runner.queueManualAcceptance(...args)}:{})});
  const file=path.join(root,'plan.md'),text='# 测试\n日期：2026-11-13\n## 实施路线与出口\n| 阶段 | 前置 | 范围 | 出口 |\n| A 第一步 | 无 | 空 | 成功 |\n| B 第二步 | A | 空 | 成功 |\n| C 第三步 | A、B | 空 | 成功 |\n';await writeFile(file,text);
  const context={sessionGroup:'A',threadId:null,hostId:null,folderId:null,worktreeOrdinal:1,worktreePath:root,branch:null,head:null,trust:'declared'};
  const candidate=prepareLightPlan({text,sourcePath:file,version:'1',projectKey:'test-project',planKey:'test-plan',name:'连续测试',date:'2026-11-13',context});
@@ -52,7 +54,7 @@ async function fixture(t,{hold=false,finish=true,withChildren=false,decorateClie
   async notify(id,text){const turn=turns.get(id),delivery=options.transport==='shared'?'sent':turn?.status==='inProgress'?'steered':'started';notifications.push({id,text,turnId:turn?.id,delivery,active:turn?.status==='inProgress'});return {turnId:turn?.id??'notify-'+notifications.length,delivery};},
   async run(id,text,onStarted){requests.push({id,text});const turn={id:'turn-'+requests.length,status:'inProgress'};turns.set(id,turn);await onStarted?.(turn.id);if(hold===true&&requests.length===1||Array.isArray(hold)&&hold.includes(requests.length))await new Promise(r=>{held.add(requests.length);release=r;if(releaseRequested){releaseRequested=false;release=null;r();}});if(finish)await complete(id);turn.status='completed';return{...turn};},close(){}
  },options);};
- const runner=createContinuousRunner(p,service,{clientFactory:factory,principalProvider:()=>grant.principal});await runner.initialize();t.after(()=>runner.close());
+ runner=createContinuousRunner(p,service,{clientFactory:factory,principalProvider:()=>grant.principal});await runner.initialize();t.after(()=>runner.close());
  const change=(action,mode)=>runner.change({planKey:'test-plan',action,expectedRevision:service.read(grant.principal,registered.projectId).projects[0].revision,acknowledged:true,...(mode?{mode}:{})});
  async function until(status){for(let i=0;i<700;i++){if(runner.read()[0]?.status===status)return;await delay(10);}throw Error(JSON.stringify(runner.read()));}
  return{root,runner,created,requests,notifications,transports,turns,held,change,until,factory,complete,release:()=>{if(release){const done=release;release=null;done();}else releaseRequested=true;},snapshot,p,service,grant,base,context};
@@ -480,6 +482,66 @@ async function eventually(check){
   for(let i=0;i<500;i++){if(check())return;await delay(10);}
   assert.fail('Expected runner progress was not observed');
 }
+
+test('manual execution queues package acceptance on the last child commit and leaves C for the user',async t=>{
+  const f=await fixture(t,{withChildren:true,manualAcceptance:true,hold:[1]});
+  const original=await existingPackage(f);
+  assert.equal(f.runner.read().length,0);
+  assert.equal(f.requests.length,0);
+  const earlier={id:'original-b-turn',status:'inProgress'};
+  f.turns.set('original-b',earlier);
+  await f.complete('separate-b04','B-04');
+  await eventually(()=>f.runner.read()[0]?.reason.includes('原会话空闲'));
+  assert.equal(f.runner.read()[0].enabled,false);
+  assert.equal(f.requests.length,0);
+  assert.equal(findStep(f,'C').status,'pending');
+
+  const recovered=await restartWith(f,t,f.factory);
+  earlier.status='completed';
+  await eventually(()=>f.held.has(1));t.after(()=>f.release());
+  assert.equal(f.requests[0].id,'original-b');
+  assert.match(f.requests[0].text,/手动模式的父阶段收口/);
+  assert.ok(f.requests[0].text.includes(original.executionId));
+  assert.equal(findStep(f,'C').status,'pending');
+  f.release();
+  await eventually(()=>f.p.read('lightContinuous').acceptances[0].status==='completed');
+  assert.equal(findStep(f,'B').acceptance,'passed');
+  assert.equal(findStep(f,'C').status,'pending');
+  assert.deepEqual((await projectReadback(f)).workflow[0].runnableStepKeys,[findStep(f,'C').key]);
+  assert.equal(recovered.runner.read().length,0);
+  assert.equal(f.requests.length,1);
+  assert.equal(f.created.length,0);
+});
+
+test('manual acceptance after disabling continuous execution retains the gate without evidence',async t=>{
+  const f=await fixture(t,{withChildren:true,manualAcceptance:true,finish:false});
+  await existingPackage(f);
+  await f.change('start');await eventually(()=>f.runner.read()[0]?.phase==='waiting');
+  await f.change('pause');await f.until('paused');
+  await f.complete('separate-b04','B-04');
+  await f.until('blocked');
+  assert.equal(f.runner.read()[0].enabled,false);
+  assert.equal(f.requests.length,1);
+  assert.equal(findStep(f,'B').acceptance,'pending');
+  const recovered=await restartWith(f,t,f.factory);
+  await recovered.until('blocked');
+  assert.equal(findStep(f,'C').status,'pending');
+  assert.equal(f.requests.length,1);
+  assert.equal(f.created.length,0);
+});
+
+test('enabling continuous execution while manual acceptance runs waits for that same acceptance',async t=>{
+  const f=await fixture(t,{withChildren:true,manualAcceptance:true,hold:[1]});
+  await existingPackage(f);await f.complete('separate-b04','B-04');
+  await eventually(()=>f.held.has(1));t.after(()=>f.release());
+  await f.change('start');
+  await eventually(()=>f.runner.read()[0]?.reason.includes('已安排的整包验收'));
+  assert.equal(f.requests.length,1);
+  assert.equal(findStep(f,'C').status,'pending');
+  f.release();await f.until('completed');
+  assert.deepEqual(f.requests.map(request=>request.id),['original-b','chat-1']);
+  assert.match(f.requests[1].text,/开始执行 连续测试 \/ C：/);
+});
 
 test('last required child exposes package acceptance, then continuous execution reuses B and starts C only after B passes',async t=>{
   const f=await fixture(t,{withChildren:true,hold:[1]});

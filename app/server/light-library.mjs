@@ -215,7 +215,7 @@ export function createLightLibrary(persistence, { pauseContinuous, connectResume
           const continuousState = persistence.read('lightContinuous');
           if (continuousState?.runs) {
             let continuousChanged = false;
-            for (const run of continuousState.runs) {
+            for (const run of [...continuousState.runs, ...(continuousState.acceptances ?? [])]) {
               if (pausedPlans.has(run.planKey) && run.status !== 'completed' && (run.enabled || ['running', 'pausing'].includes(run.status))) {
                 run.enabled = false;
                 run.status = 'paused';

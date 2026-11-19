@@ -128,6 +128,7 @@ async function createOwnedServer(options) {
   const lightAccess = options.lightAccessEnabled ? createLightAccess(persistence, options.lightPresence) : null;
   const lightOnboarding = options.lightAccessEnabled ? createLightOnboarding(persistence) : null;
   let exitReserved = null;
+  let continuous = null;
   const originalAuthorize = options.lightAuthorize ?? lightAccess?.authorize;
   const lightAuthorize = (...args) => !exitReserved && (originalAuthorize?.(...args) ?? false);
   const light = createLightService(persistence, requests, {
@@ -135,14 +136,15 @@ async function createOwnedServer(options) {
     confirmBinding: options.lightConfirmBinding ?? lightAccess?.verifyBinding,
     verifyExecutionContext: options.lightVerifyExecutionContext ?? lightAccess?.verifyExecutionContext,
     automaticBinding: lightAccess?.automaticBinding,
+    onStepPassed: (...args) => continuous?.queueManualAcceptance(...args),
   });
   const lightOutbox = createLightOutbox(persistence);
   const continuousFactory = options.continuousClientFactory ?? (options.retainSessions
     ? ({ transport, runId }) => transport === 'owned' ? new RetainedSessionClient(directory, runId) : createSessionClient({ transport })
     : undefined);
-  const continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:continuousFactory,principalProvider:options.continuousPrincipalProvider,canRun:()=>!exitReserved}) : null;
+  continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:continuousFactory,principalProvider:options.continuousPrincipalProvider,canRun:()=>!exitReserved}) : null;
   await continuous?.initialize();
-  const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [], continuous:()=>continuous?.read()??[] });
+  const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [], continuous:()=>continuous?.read({includeManual:false})??[] });
   const lightLibrary = createLightLibrary(persistence, {
     pauseContinuous: plans => continuous?.pausePlans(plans),
     async connectResume(target) {

@@ -96,7 +96,7 @@ export async function createPersistence(directory, { fault = async () => {} } = 
     if (context.getStore()) return operation();
     const promise = queue.then(async () => {
       check();
-      const transaction = { state: structuredClone(state), changed: false };
+      const transaction = { state: structuredClone(state), changed: false, commitCallbacks: [] };
       return context.run(transaction, async () => {
         const result = await operation();
         if (!transaction.changed) return result;
@@ -118,6 +118,9 @@ export async function createPersistence(directory, { fault = async () => {} } = 
           state = prepared.state;
           await unlink(committedFile);
           await unlink(preparedFile);
+          context.exit(() => {
+            for (const callback of transaction.commitCallbacks) queueMicrotask(callback);
+          });
           return result;
         } catch (error) {
           if (marked) recoveryRequired = true;
@@ -129,5 +132,10 @@ export async function createPersistence(directory, { fault = async () => {} } = 
     queue = promise.catch(() => {});
     return promise;
   }
-  return { read, write, run };
+  function afterCommit(callback) {
+    const transaction = context.getStore();
+    if (!transaction) throw Error('Commit callback outside transaction');
+    transaction.commitCallbacks.push(callback);
+  }
+  return { read, write, run, afterCommit };
 }

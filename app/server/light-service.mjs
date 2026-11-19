@@ -79,7 +79,7 @@ function invalidateSuccessors(snapshot, origin, reason, time) {
 
 export function createLightService(persistence, requests, {
   authorize = () => false, confirmBinding = () => false, verifyExecutionContext = () => true,
-  automaticBinding = () => false,
+  automaticBinding = () => false, onStepPassed,
 } = {}) {
   function permitted(principal, projectId, operation, details = {}) {
     if (!principal || authorize(principal, projectId, operation, details) !== true) lightError('FORBIDDEN', '适配层未授予当前作用域', 403);
@@ -479,6 +479,9 @@ export function createLightService(persistence, requests, {
           if (['completed', 'cancelled'].includes(target)) { execution.outcome = target === 'completed' ? 'completedScope' : 'cancelled'; execution.endedAt ??= time; }
         }
         history(value, input, step, from, execution?.key ?? null, time, eventScope);
+        if (target === 'completed' && from !== 'completed' && step.required && step.parentKey) {
+          onStepPassed?.(value, step.parentKey, principal, time);
+        }
         return { stepId: step.id, executionId: execution?.id ?? null };
       }, 'update'); } catch (error) {
         // 接手后迟到的新事件只进入历史待核对，不改变实时业务或项目版本。

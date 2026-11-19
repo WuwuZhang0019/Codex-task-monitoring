@@ -16,6 +16,7 @@ const stamp=()=>new Date().toISOString();
 const samePath=(a,b)=>process.platform==='win32'?path.resolve(a).toLowerCase()===path.resolve(b).toLowerCase():path.resolve(a)===path.resolve(b);
 const enabled=run=>run.enabled??['running','blocked'].includes(run.status);
 const threadBusy=thread=>thread.status?.type==='active'||thread.turns?.some(turn=>turn.status==='inProgress');
+const acceptanceAttempted=current=>current?.acceptanceOnly&&(current.turnId||['sending','unknown'].includes(current.turnDelivery));
 function acceptanceCurrent(current,{binding,execution}){
   const {adopted,observeOnly,delivery,turnId,turnDelivery,workerId,...stage}=current;
   return {...stage,acceptanceOnly:true,transport:stage.transport??(adopted?'shared':'owned'),
@@ -47,7 +48,9 @@ function failureReason(error){
 }
 export function validateContinuous(value){
   if(value===undefined)return;
-  if(value?.version!==1||!Array.isArray(value.runs)||value.runs.some(r=>!r.id||!r.planKey||!['running','pausing','paused','blocked','completed'].includes(r.status)||!Array.isArray(r.history)||(r.mode!==undefined&&!modes.has(r.mode))||(r.enabled!==undefined&&typeof r.enabled!=='boolean')))throw Error('INVALID_CONTINUOUS_STATE');
+  const invalidRun=r=>!r.id||!r.planKey||!['running','pausing','paused','blocked','completed'].includes(r.status)||!Array.isArray(r.history)||(r.mode!==undefined&&!modes.has(r.mode))||(r.enabled!==undefined&&typeof r.enabled!=='boolean');
+  if(value?.version!==1||!Array.isArray(value.runs)||value.runs.some(invalidRun)
+    ||(value.acceptances!==undefined&&(!Array.isArray(value.acceptances)||value.acceptances.some(r=>invalidRun(r)||r.manualAcceptance!==true||r.enabled!==false))))throw Error('INVALID_CONTINUOUS_STATE');
 }
 function stageResumeIssue(s,current){
   const step=s?.steps.find(x=>x.key===current?.stepKey);
@@ -65,9 +68,11 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
   const waiting=new Set();
   let closed=false,handingOff=false;
   const state=()=>persistence.read('lightContinuous')??{version:1,runs:[]};
+  const allRuns=value=>[...value.runs,...(value.acceptances??[])];
   const snapshot=()=>persistence.read('light')?.snapshot;
-  const find=id=>state().runs.find(r=>r.id===id);
-  async function update(id,fields){if(closed)return;await persistence.run(()=>{if(closed)return;const s=state(),r=s.runs.find(r=>r.id===id);if(r){Object.assign(r,fields,{updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
+  const find=id=>allRuns(state()).find(r=>r.id===id);
+  const wake=id=>setTimeout(()=>void pump(id),0);
+  async function update(id,fields){if(closed)return;await persistence.run(()=>{if(closed)return;const s=state(),r=allRuns(s).find(r=>r.id===id);if(r){Object.assign(r,fields,{updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
   async function pauseIfRequested(id,reason){if(closed)return;await persistence.run(()=>{const s=state(),r=s.runs.find(r=>r.id===id);if(r?.status==='pausing'){Object.assign(r,{status:'paused',enabled:false,phase:null,reason,updatedAt:stamp()});persistence.write('lightContinuous',s);}});}
   function completionView(run,s){return s?.plans.some(p=>p.key===run.planKey)&&planProgress(s,run.planKey).passed?{...run,...completionFields}:run;}
   function summary(run){const s=snapshot();if(!activeStates.has(run.status)&&!pumps.has(run.id))run=completionView(run,s);const stages=s?.steps.filter(x=>x.planKey===run.planKey&&x.parentKey===null&&x.required)??[];return {id:run.id,planKey:run.planKey,status:run.status,mode:run.mode??'stages',enabled:run.status==='completed'?false:enabled(run),phase:run.phase??null,stageCode:run.current?.code??null,threadId:run.current?.threadId??run.session?.threadId??null,reason:run.reason??'',completed:stages.filter(x=>stepPassed(s,x)).length,total:stages.length};}
@@ -157,23 +162,49 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     const dispatch=run.mode==='current_thread'?'后续阶段继续使用当前会话，任务岛在验收通过后发送下一阶段指令。':'后续阶段按方案边界创建独立会话。';
     return `开始执行 ${plan.name} / ${stage.code}：${stage.title}\n日期：${new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai'}).format(new Date())}\n用户已在任务岛点击“连续执行”，授权在该方案既定范围内执行、同步进度及接续直至整体结束。${dispatch}你只负责本阶段及其子步骤，完成后如实同步，由任务岛调度下一阶段，不自行创建聊天，不提前执行未派发阶段。\n读取当前安装的 workbench-handoff 技能和方案原文：${plan.source.path}。核对适用AGENTS.md。不要重新登记方案。实际任务执行与验收必须按原文，不凭预设或自述标记通过。若方案明确为空任务模拟，按原文等待及返回值执行。\n真实会话ID：${current.threadId}；宿主local。总控已完成此会话的绑定及本阶段running登记。复用以下身份，不重复预留本阶段executionId，不接手别的责任。每次状态写入前回读最新版本。\n${JSON.stringify({projectId:s.projects.find(p=>p.key===plan.projectKey).id,planId:plan.id,bindingId:current.bindingId,bindingRevision:current.bindingRevision,executionId:current.executionId,stageId:current.stepId,scope:scope.map(x=>({id:x.id,code:x.code,parentKey:x.parentKey,dependsOn:x.dependsOn,conditions:x.conditions,status:x.status}))},null,2)}\n使用工作台MCP回读并按实际结果同步。子步骤依次取得各自开始许可和executionId，沿用本阶段父级责任绑定覆盖子步骤；全部必要子步骤完成验收后，完成本阶段。保留可回读的实际证据。提交completed前逐项匹配服务中的conditionId、text、required，result=passed并关联passed证据。参数被明确拒绝时按validationErrors修正后继续。\n已授权且仍有必要修复时继续本阶段；真正外部阻塞、失败或需人工决定时如实标记blocked并报告原因。禁止越过前置或把会话结束当成阶段成功。`;
   }
-  function acceptancePrompt(s,plan,step,{binding,execution,children}){
+  function acceptancePrompt(s,plan,step,{binding,execution,children},manual){
     const identities={projectId:s.projects.find(project=>project.key===plan.projectKey).id,planId:plan.id,
       stepId:step.id,bindingId:binding.id,bindingRevision:binding.bindingRevision,executionId:execution.id};
     const conditionIds=step.conditions.filter(check=>check.required).map(check=>check.conditionId);
     return `请执行 ${plan.name} / ${step.code} 整包验收。日期：${new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai'}).format(new Date())}\n`
-      +`用户已开启此方案的连续执行。必要子步骤 ${children.map(child=>child.code).join('、')} 已验收，本回合只负责父阶段整包验收。\n`
+      +(manual?'本次为手动模式的父阶段收口。':'用户已开启此方案的连续执行。')
+      +`必要子步骤 ${children.map(child=>child.code).join('、')} 已验收，本回合只负责父阶段整包验收。\n`
       +`读取方案原文 ${plan.source.path}，用 workbench_get_project 回读最新绑定、执行、父阶段验收项和子步骤原始证据。\n`
       +`复用原执行 ${JSON.stringify(identities)}。逐项核对 ${JSON.stringify(conditionIds)} 和实际整包交付版本。`
       +'子步骤证据可作为核验依据，逐项评估是否覆盖整包条件。确实通过后，用 workbench_update_step_status 提交父步骤 completed、匹配的验收项和同一交付版本的证据，再回读确认。'
-      +'若缺证据、存在并行改动或需要人工决定，报告具体问题并保留待验收。后续阶段由任务岛按依赖接续。';
+      +'若缺证据、存在并行改动或需要人工决定，报告具体问题并保留待验收。'
+      +(manual?'整包验收回读后结束本回合，后续步骤等用户启动。':'后续阶段由任务岛按依赖接续。');
   }
   function acceptanceWorkspaceBusy(s,run,current,cwd){
     const claimedBy=workspaceClaims.get(cwd.toLowerCase());
     return !!(claimedBy&&claimedBy!==run.id)||s.executions.some(execution=>{
       const binding=s.bindings.find(item=>item.key===execution.bindingKey);
-      return execution.id!==current.executionId&&!execution.endedAt&&binding&&samePath(binding.context.worktreePath,cwd);
+      if(execution.id===current.executionId||execution.endedAt||!binding||!samePath(binding.context.worktreePath,cwd))return false;
+      return !run.manualAcceptance||!execution.stepKeys.every(key=>
+        (binding.context.threadId===current.threadId&&stepInScope(s.steps,current.stepKey,[key]))
+        ||parentAcceptanceOf(s,s.steps.find(step=>step.key===key)));
     });
+  }
+  function ownsAcceptance(metadata,binding,owner){
+    const issuer=metadata.bindingOwners?.[binding.key]??binding.confirmationRef?.match(/^automatic:(.+)$/)?.[1];
+    const grant=persistence.read('grants')[owner];
+    return binding.context.hostId==='local'&&issuer===owner&&grant?.kind==='lightAccess'&&!grant.revokedAt&&(grant.appId??'codex')==='codex';
+  }
+  // 日期：2026-11-19。只有新通过的必要子任务入队，验收派发等领域事务提交后再启动。
+  function queueManualAcceptance({snapshot:s,metadata},parentKey,owner,time){
+    if(closed||!canRun())return;
+    const step=s.steps.find(item=>item.key===parentKey),task=parentAcceptanceOf(s,step);
+    if(!task||!ownsAcceptance(metadata,task.binding,owner))return;
+    const value=state(),run=value.runs.find(item=>item.planKey===step.planKey);
+    if(run&&(enabled(run)||acceptanceAttempted(run.current)&&run.current.executionId===task.execution.id))return;
+    const jobs=value.acceptances??=[];
+    if(jobs.some(item=>item.current.executionId===task.execution.id&&item.status!=='completed'))return;
+    const plan=s.plans.find(item=>item.key===step.planKey),{binding}=task,id=randomUUID();
+    const current=acceptanceCurrent({stepId:step.id,stepKey:step.key,code:step.code,threadId:binding.context.threadId,transport:'shared'},task);
+    jobs.push({id,planKey:plan.key,sourceHash:plan.source.sha256,status:'running',enabled:false,manualAcceptance:true,phase:'waiting',
+      current,history:[],createdAt:time,updatedAt:time,reason:`等待原聊天核验 ${step.code} 整包`});
+    persistence.write('lightContinuous',value);
+    persistence.afterCommit(()=>wake(id));
   }
   // 日期：2026-11-18。派发前重新核对领域快照，并沿用原阶段回合检查点。
   function acceptanceForDispatch(run,current,cwd,owner){
@@ -184,9 +215,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     const issue=stageResumeIssue(s,current);if(issue)throw issue;
     const task=parentAcceptanceOf(s,step);
     if(!task)throw Error(`阶段 ${current.code} 的整包验收条件已变化，请先核对最新状态`);
-    const {binding}=task,issuer=metadata.bindingOwners?.[binding.key]??binding.confirmationRef?.match(/^automatic:(.+)$/)?.[1];
-    const grant=persistence.read('grants')[owner];
-    if(binding.context.hostId!=='local'||issuer!==owner||grant?.kind!=='lightAccess'||grant.revokedAt||(grant.appId??'codex')!=='codex'){
+    if(!ownsAcceptance(metadata,task.binding,owner)){
       throw Error(`阶段 ${current.code} 需要其原责任会话核验；当前 Codex 授权与原绑定不匹配`);
     }
     if(acceptanceWorkspaceBusy(s,run,current,cwd))return null;
@@ -194,7 +223,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
   }
   async function checkpointAcceptance(run,current,cwd,owner){
     return persistence.run(()=>{
-      const value=state(),fresh=value.runs.find(item=>item.id===run.id);
+      const value=state(),fresh=allRuns(value).find(item=>item.id===run.id);
       if(closed||!canRun()||fresh?.status!=='running'||fresh.intent!==run.intent||!fresh.current?.acceptanceOnly
         ||fresh.current.executionId!==current.executionId||fresh.current.turnId)return null;
       const acceptance=acceptanceForDispatch(fresh,current,cwd,owner);
@@ -212,7 +241,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
       const fresh=find(run.id);
       const ready=!closed&&canRun()&&fresh?.status==='running'&&fresh.intent===run.intent&&acceptanceForDispatch(fresh,checked,cwd,owner);
       if(ready){
-        const text=acceptancePrompt(ready.s,ready.plan,ready.step,ready.task);
+        const text=acceptancePrompt(ready.s,ready.plan,ready.step,ready.task,run.manualAcceptance);
         workspaceClaims.set(cwd.toLowerCase(),run.id);
         return {current:checked,text};
       }
@@ -288,6 +317,22 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         let run=find(id);if(!run||!activeStates.has(run.status))return;
         if(run.status==='pausing'){await pauseIfRequested(id,'已暂停接续');return;}
         const s=snapshot(),plan=s?.plans.find(p=>p.key===run.planKey);if(!plan)throw Error('PLAN_NOT_FOUND');
+        const other=state();
+        if(run.manualAcceptance){
+          if(other.runs.some(item=>item.planKey===run.planKey&&item.status==='pausing')){
+            await waitForProgress('等待正在结束的连续执行回合');continue;
+          }
+        }else{
+          const pending=(other.acceptances??[]).filter(item=>item.planKey===run.planKey&&item.status!=='completed');
+          if(pending.some(item=>item.status==='running')){
+            await waitForProgress('等待原聊天完成已安排的整包验收');continue;
+          }
+          const unfinished=pending.find(item=>{
+            const step=s.steps.find(step=>step.key===item.current.stepKey);
+            return step&&!stepPassed(s,step)&&(item.status==='blocked'||acceptanceAttempted(item.current));
+          });
+          if(unfinished)throw Error(unfinished.reason);
+        }
         if(plan.source.sha256!==run.sourceHash)throw Error('SOURCE_CHANGED');
         await verifySource(plan);
         const stages=s.steps.filter(x=>x.planKey===plan.key&&x.parentKey===null&&x.required).sort((a,b)=>a.order-b.order);
@@ -328,7 +373,10 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
           if(!current.threadId)throw Error('THREAD_CREATION_RESULT_UNKNOWN');
           const step=s.steps.find(x=>x.key===current.stepKey);
           if(current.acceptanceOnly&&['sending','unknown'].includes(current.turnDelivery)&&!current.turnId)lightError('DELIVERY_UNKNOWN','整包验收指令投递结果未知，请先核对原会话，避免重复发送',409);
-          if(step&&stepPassed(s,step)&&(current.acceptanceOnly?!current.turnId:!run.recovering)){await update(id,{current:null,recovering:false});continue;}
+          if(step&&stepPassed(s,step)&&(current.acceptanceOnly?!current.turnId:!run.recovering)){
+            if(run.manualAcceptance){await update(id,{status:'completed',phase:null,reason:'整包验收已通过'});return;}
+            await update(id,{current:null,recovering:false});continue;
+          }
           if(!current.executionId)throw Error('INCOMPLETE_START_REQUIRES_REVIEW');
           if(['sending','unknown'].includes(current.turnDelivery)&&!current.turnId)lightError('DELIVERY_UNKNOWN','阶段启动结果未知，请先核对原会话，避免重复执行',409);
           const issue=stageResumeIssue(s,current);if(issue)throw issue;
@@ -450,10 +498,13 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
           }
           await update(id,{current:acceptanceCurrent(current,acceptance),recovering:false});continue;
         }
+        if(run.manualAcceptance){
+          await update(id,{status:'completed',phase:null,reason:'整包验收已通过'});return;
+        }
         await update(id,{current:null,recovering:false});
         if(find(id).status==='pausing'){await pauseIfRequested(id,'当前阶段已完成，后续阶段已暂停');return;}
       }
-    }catch(error){if(!closed){const run=find(id);await update(id,{status:enabled(run)?'blocked':'paused',phase:null,...(run.current?.turnDelivery==='sending'?{current:{...run.current,turnDelivery:'unknown'}}:{}),reason:failureReason(error)});}}
+    }catch(error){if(!closed){const run=find(id);if(run?.status==='running'||run?.status==='pausing')await update(id,{status:enabled(run)||run.manualAcceptance?'blocked':'paused',phase:null,...(run.current?.turnDelivery==='sending'?{current:{...run.current,turnDelivery:'unknown'}}:{}),reason:failureReason(error)});}}
     finally{
       const saved=closed?null:find(id);
       if(client?.detach&&(handingOff||(saved?.recovering&&saved?.current?.workerId)))client.detach();
@@ -464,7 +515,8 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     }
   }
   return {
-    async initialize(){await persistence.run(()=>{const s=state(),snap=snapshot();for(const r of s.runs){const autoRecover=r.enabled===true;r.mode??='stages';r.enabled=enabled(r);const reconciled=completionView(r,snap);if(reconciled!==r&&!(r.status==='running'&&autoRecover&&r.current?.turnId)){if(Object.entries(completionFields).some(([key,value])=>r[key]!==value))Object.assign(r,reconciled,{updatedAt:stamp()});continue;}if(activeStates.has(r.status)){
+    queueManualAcceptance,
+    async initialize(){await persistence.run(()=>{const s=state(),snap=snapshot();for(const r of allRuns(s)){const autoRecover=r.enabled===true||r.manualAcceptance;r.mode??='stages';r.enabled=enabled(r);const reconciled=r.manualAcceptance?r:completionView(r,snap);if(reconciled!==r&&!(r.status==='running'&&autoRecover&&r.current?.turnId)){if(Object.entries(completionFields).some(([key,value])=>r[key]!==value))Object.assign(r,reconciled,{updatedAt:stamp()});continue;}if(activeStates.has(r.status)){
         // Date: 2026-11-16. Keep explicit pause intent; recover only previously enabled runs.
         if(r.status==='pausing'||!autoRecover){r.status='paused';r.enabled=false;r.phase=null;r.reason='已保留用户暂停要求';}
         else if(r.current&&!r.current.threadId){r.status='blocked';r.phase=null;r.reason='THREAD_CREATION_RESULT_UNKNOWN: 请先核对原会话，避免重复创建';}
@@ -475,9 +527,18 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         const issue=stageResumeIssue(snapshot(),r.current);if(issue)r.reason=failureReason(issue);
       }
     }persistence.write('lightContinuous',s);});
-      for(const run of state().runs)if(run.status==='running'&&enabled(run))setTimeout(()=>void pump(run.id),0);
+      for(const run of allRuns(state()))if(run.status==='running'&&(enabled(run)||run.manualAcceptance))wake(run.id);
     },
-    read(){const runs=state().runs,s=snapshot();return [...runs.map(summary),...(s?.plans??[]).filter(plan=>!runs.some(run=>run.planKey===plan.key)&&planProgress(s,plan.key).passed).map(plan=>summary(completedRun(plan)))];},
+    read({includeManual=true}={}){
+      const {runs,acceptances=[]}=state(),s=snapshot(),visible=new Map(runs.map(run=>[run.planKey,run]));
+      for(const job of includeManual?acceptances:[]){
+        const step=s?.steps.find(item=>item.key===job.current.stepKey);
+        const existing=visible.get(job.planKey);
+        if(step&&((job.status==='running')||(job.status==='blocked'&&!stepPassed(s,step)))
+          &&(!existing||(!enabled(existing)&&!activeStates.has(existing.status))))visible.set(job.planKey,job);
+      }
+      return [...[...visible.values()].map(summary),...(s?.plans??[]).filter(plan=>!visible.has(plan.key)&&planProgress(s,plan.key).passed).map(plan=>summary(completedRun(plan)))];
+    },
     async change(input){
       if(!input||Object.keys(input).some(k=>!['planKey','action','expectedRevision','acknowledged','mode'].includes(k))||input.acknowledged!==true||!['start','pause','resume'].includes(input.action)||typeof input.planKey!=='string'||!Number.isSafeInteger(input.expectedRevision)||input.expectedRevision<0||(input.mode!==undefined&&!modes.has(input.mode)))lightError('INVALID_INPUT','连续执行请求无效');
       let run,changed=false;
@@ -547,7 +608,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     },
     pausePlans(planKeys){
       const keys=new Set(planKeys);
-      for(const r of state().runs){
+      for(const r of allRuns(state())){
         if(!keys.has(r.planKey))continue;
         const c=clients.get(r.id);
         if(c){c.close();clients.delete(r.id);}
@@ -556,11 +617,12 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     prepareHandoff(){
       // A known checkpoint must exist before dropping any observer of an active turn.
       if(closed||notifications.size||[...pumps].some(id=>!waiting.has(id)))return false;
-      for(const run of state().runs){
+      for(const run of allRuns(state())){
         if(!activeStates.has(run.status))continue;
         const current=run.current;
-        if(run.status!=='running'||run.enabled!==true||!waiting.has(run.id)
+        if(run.status!=='running'||(!run.manualAcceptance&&run.enabled!==true)||!waiting.has(run.id)
           ||!current?.threadId||['sending','unknown','rejected'].includes(current.delivery?.state))return false;
+        if(run.manualAcceptance&&!current.turnId&&run.phase==='waiting'&&!acceptanceAttempted(current))continue;
         if(!current.adopted&&(!current.turnId||current.turnDelivery!=='started'
           ||(current.transport!=='shared'&&(!current.workerId||clients.get(run.id)?.workerId!==current.workerId))))return false;
       }
