@@ -83,13 +83,13 @@ test('normal service exit is rejected while active; forced termination recovers 
     assert.equal(response.status,200,await response.text());
   };
   await change('pause',running);
-  await change('resume',await call('workbench_get_project',{projectId:registered.projectId}));
   await stopService(root);
   record=await startService(root);
   const waiting=await call('workbench_get_project',{projectId:registered.projectId});
   assert.equal(waiting.steps[0].status,'blocked');
-  assert.equal(waiting.steps[0].blockers[0].resolved,true);
-  const resumed=await call('workbench_update_step_status',{...start,eventId:'resume-after-island',expectedRevision:waiting.projects[0].revision});
+  assert.equal(waiting.steps[0].blockers[0].resolved,false);
+  const resumed=await call('workbench_update_step_status',{...start,eventId:'resume-after-island',expectedRevision:waiting.projects[0].revision,
+    blocker:{...waiting.steps[0].blockers[0],resolved:true}});
   assert.equal(resumed.executionId,execution.executionId);
   await assert.rejects(stopService(root),/TASK_ACTIVE/);
   const cancel={...start,eventId:'cancel',expectedRevision:resumed.revision,targetStatus:'cancelled',successorImpact:'隔离测试结束，无后继任务'};

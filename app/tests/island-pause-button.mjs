@@ -1,4 +1,4 @@
-// Date: 2026-11-19. Verify the middle switch waits for the original chat to report running.
+// Date: 2026-11-19. Previously released pauses can notify the original chat before it reports running.
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -63,14 +63,6 @@ try {
           }
         }
         snapshot.revision += 1;
-      } else if (args.action === 'resume') {
-        for (const step of snapshot.steps) {
-          const blocker = step.blockers.find(item => item.blockerId === 'user-pause');
-          if (step.planKey === args.value.key && blocker && !blocker.resolved) {
-            blocker.resolved = true;
-          }
-        }
-        snapshot.revision += 1;
       }
       return { saved: true, revision: snapshot.revision };
     }
@@ -80,7 +72,11 @@ try {
   await page.goto('http://127.0.0.1:1499');
   await page.locator('[data-workbench-summary]').waitFor();
   await page.evaluate(() => {
-    window.__TAURI_INTERNALS__ = { invoke: (command, args) => window.pauseBridge(command, args) };
+    window.__TAURI_INTERNALS__ = { invoke: async (command, args) => {
+      const result = await window.pauseBridge(command, args);
+      if (command === 'island_workbench_read') window.resumeFixtureRevision = result.snapshot.revision;
+      return result;
+    } };
   });
   await page.waitForFunction(() => document.querySelector('[data-workbench-summary]')?.getAttribute('data-connection') === 'ready');
   await page.locator('[data-hit]').first().click();
@@ -120,13 +116,19 @@ try {
   assert.equal(libraryCalls[0].value.acknowledged, true);
   await page.getByText(/已暂停：/).waitFor();
   await page.locator('[data-route-card]').first().screenshot({ path: path.join(output, 'card-after-pause.png') });
+  for (const step of snapshot.steps) {
+    const blocker = step.blockers.find(item => item.blockerId === 'user-pause');
+    if (blocker) blocker.resolved = true;
+  }
+  snapshot.revision += 1;
+  await page.waitForFunction(() => window.resumeFixtureRevision === 3);
   assert.match(await pauseBtn.getAttribute('title'), /^继续：/);
   await pauseBtn.press('Space');
-  await page.getByText('请在原 Codex 聊天发送「继续」或点击继续').waitFor();
+  await page.getByText(/已通知原 Codex 聊天/).waitFor();
   assert.equal(await pauseBtn.getAttribute('aria-checked'), 'false');
-  assert.equal(await pauseBtn.isDisabled(), true);
   assert.deepEqual(libraryCalls.map(call => call.action), ['pause', 'resume']);
   assert.equal(libraryCalls[1].value.key, libraryCalls[0].value.key);
+  assert.equal(libraryCalls[1].value.expectedRevision, 3);
   for (const step of snapshot.steps) {
     if (step.planKey === libraryCalls[1].value.key && step.blockers.some(item => item.blockerId === 'user-pause' && item.resolved)) {
       step.status = 'running';

@@ -144,10 +144,26 @@ test('failed preparation rolls back deletion and committed interruption recovers
   }
 });
 
-test('resume releases a saved pause without starting a turn or continuous execution', async t => {
+test('resume notifies the original chat once for both current and previously released pause checkpoints', async t => {
   const { root, persistence, snapshot, key } = await fixture(t);
   const pausedPlans = [];
-  const library = createLightLibrary(persistence, { pauseContinuous: plans => pausedPlans.push(...plans) });
+  const notifications = [];
+  let uncertain = false;
+  const options = {
+    pauseContinuous: plans => pausedPlans.push(...plans),
+    async connectResume(target) {
+      assert.equal(target.worktreePath, 'G:/test');
+      return {
+        async notify(threadId, message) {
+          notifications.push({ threadId, message });
+          if (uncertain) throw Object.assign(Error('timeout'), { code: 'CODEX_DELIVERY_UNKNOWN' });
+          return { turnId: 'opened-turn' };
+        },
+        close() {},
+      };
+    },
+  };
+  const library = createLightLibrary(persistence, options);
   await persistence.run(() => {
     const value = persistence.read('light'), s = value.snapshot, [first, second] = s.steps;
     const context = { sessionGroup: 'test', threadId: 'test', hostId: 'local', folderId: null, worktreeOrdinal: 1, worktreePath: 'G:/test', branch: 'main', head: null, trust: 'declared' };
@@ -174,20 +190,33 @@ test('resume releases a saved pause without starting a turn or continuous execut
   assert.deepEqual(pausedPlans, [snapshot.plans[0].key]);
   assert.deepEqual(runtimeExitStatus(after, runs), { allowed: true, activeExecutions: 0, runningSteps: 0, continuousRuns: 0 });
 
-  const input = { key, expectedRevision: after.revision, acknowledged: true };
-  await assert.rejects(library.change('resume', { ...input, expectedRevision: after.revision - 1 }), /REVISION_CONFLICT/);
+  // The previously deployed manual release left the original step blocked with a resolved pause.
+  await persistence.run(() => {
+    const value = persistence.read('light');
+    const snap = value.snapshot;
+    snap.steps[0].blockers[0].resolved = true;
+    snap.events.push({ ...snap.events.at(-1), eventId: 'light/resume/previous-manual-release' });
+    snap.revision += 1;
+    persistence.write('light', value);
+  });
+  const waiting = persistence.read('light').snapshot;
+  const input = { key, expectedRevision: waiting.revision, acknowledged: true };
+  await assert.rejects(library.change('resume', { ...input, expectedRevision: after.revision }), /REVISION_CONFLICT/);
   await library.change('resume', input);
+  assert.deepEqual(persistence.read('light').snapshot, waiting);
+  assert.deepEqual(persistence.read('lightContinuous').runs, runs);
   const reopened = await createPersistence(root);
-  const waiting = reopened.read('light').snapshot;
-  assert.equal(waiting.steps[0].status, 'blocked');
-  assert.equal(waiting.steps[0].blockers[0].resolved, true);
-  assert.equal(waiting.steps[1].status, after.steps[1].status);
-  assert.deepEqual(waiting.executions, after.executions);
-  assert.deepEqual(waiting.bindings, after.bindings);
-  assert.equal(waiting.events.at(-1).toStatus, 'blocked');
-  assert.deepEqual(reopened.read('lightContinuous').runs, runs);
-  assert.equal(runtimeExitStatus(waiting, runs).allowed, true);
-  const newInput = { ...input, expectedRevision: waiting.revision };
-  assert.equal((await createLightLibrary(reopened).change('resume', newInput)).revision, waiting.revision);
-  assert.deepEqual(reopened.read('light').snapshot, waiting);
+  await createLightLibrary(reopened, options).change('resume', input);
+  assert.equal(notifications.length, 1);
+  assert.equal(notifications[0].threadId, 'test');
+  assert.match(notifications[0].message, /"executionId":"execution-id"/);
+  assert.match(notifications[0].message, /"pauseCheckpoint":"light\/pause\//);
+
+  await library.change('pause', input);
+  uncertain = true;
+  const later = { ...input, expectedRevision: persistence.read('light').snapshot.revision };
+  await assert.rejects(library.change('resume', later), /TASK_RESUME_UNKNOWN/);
+  await assert.rejects(library.change('resume', later), /TASK_RESUME_UNKNOWN/);
+  assert.equal(notifications.length, 2);
+  assert.equal(persistence.read('light').snapshot.steps[0].status, 'blocked');
 });
