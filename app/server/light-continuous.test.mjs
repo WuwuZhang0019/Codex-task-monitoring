@@ -29,7 +29,7 @@ async function fixture(t,{hold=false,finish=true,withChildren=false,decorateClie
   for(let index=1;index<=4;index++){
    const code=`B-0${index}`,key=parent.key+`-0${index}`;
    candidate.steps.push({...parent,key,code,originalCode:code,title:code,parentKey:parent.key,order:index,
-     dependsOn:index===1?[]:[parent.key+`-0${index-1}`],conditions:[{...parent.conditions[0],conditionId:key+'/exit'}]});
+     dependsOn:index===1?[]:[parent.key+`-0${index-1}`],conditions:[{...parent.conditions[0],conditionId:key+'/exit'}],blockers:[]});
   }
  }
  const registered=await service.register(grant.principal,{eventId:'register',expectedRevision:0,snapshot:candidate});
@@ -524,6 +524,38 @@ test('last required child exposes package acceptance, then continuous execution 
   assert.deepEqual((await projectReadback(f)).workflow[0].parentAcceptances,[]);
 });
 
+test('current-chat mode waits for a blocked delegated child and resumes package acceptance when it passes',async t=>{
+  const f=await fixture(t,{withChildren:true,hold:[1]});
+  const original=await existingPackage(f);
+  f.turns.set('original-b',{id:'original-b-turn',status:'completed'});
+  const child=findStep(f,'B-04'),binding=f.snapshot().bindings.find(item=>item.key===child.bindingKey);
+  const execution=f.snapshot().executions.find(item=>item.key===child.executionKey);
+  const blocker={blockerId:'site-check',reason:'等待现场复验',releaseConditions:['完成现场复验'],waitingFor:['CAD 宿主'],resolved:false};
+  const report={stepId:child.id,bindingId:binding.id,bindingRevision:binding.bindingRevision,executionId:execution.id,
+    evidence:[],checks:[],reopen:null,successorImpact:null};
+  await f.service.update(f.grant.principal,{...f.base('block-b04'),...report,targetStatus:'blocked',blocker});
+
+  await f.change('start','current_thread');
+  await eventually(()=>f.runner.read()[0]?.reason.includes('等待现场复验'));
+  assert.equal(f.runner.read()[0].phase,'waiting');
+  assert.equal(f.requests.length,0);
+  assert.equal(f.notifications.length,0);
+  assert.equal(findStep(f,'C').status,'pending');
+
+  await f.service.update(f.grant.principal,{...f.base('unblock-b04'),...report,targetStatus:'running',blocker:{...blocker,resolved:true}});
+  await f.complete('separate-b04','B-04');
+  await eventually(()=>f.held.has(1));t.after(()=>f.release());
+  assert.equal(f.requests[0].id,'original-b');
+  assert.match(f.requests[0].text,/B 整包验收/);
+  assert.ok(f.requests[0].text.includes(original.executionId));
+  assert.equal(findStep(f,'C').status,'pending');
+
+  f.release();await f.until('completed');
+  assert.deepEqual(f.requests.map(request=>request.id),['original-b','original-b']);
+  assert.match(f.requests[1].text,/开始执行 连续测试 \/ C：/);
+  assert.equal(f.created.length,0);
+});
+
 test('an ended package turn without evidence keeps C gated; manual parent acceptance exposes C as ready',async t=>{
   const f=await fixture(t,{withChildren:true,finish:false});
   await existingPackage(f);await f.complete('separate-b04','B-04');
@@ -581,6 +613,46 @@ test('an owned stage that leaves only package acceptance gets one focused follow
   assert.deepEqual(f.requests.map(request=>request.id),['chat-1','chat-2','chat-2','chat-3']);
   assert.match(f.requests[2].text,/B 整包验收/);
   assert.equal(f.p.read('lightContinuous').runs[0].history.filter(item=>item.kind==='parentAcceptance').length,1);
+});
+
+test('a scheduled parent waits for its delegated last child across restart and resumes the same chat for acceptance',async t=>{
+  const f=await fixture(t,{withChildren:true,finish:false,decorateClient:client=>{
+    client.workerId='previous-worker';
+    const run=client.run.bind(client);
+    client.run=async(id,message,onStarted,options)=>{
+      const turn=await run(id,message,onStarted,options);
+      if(message.startsWith('开始执行 连续测试 / B：')){
+        const binding=f.snapshot().bindings.find(item=>item.context.threadId===id);
+        for(const code of ['B-01','B-02','B-03']){
+          await startStep(f,code,binding.id);await f.complete(id,code);
+        }
+        const last=await bindStep(f,'B-04','separate-b04',{fromBindingId:binding.id,
+          expectedBindingRevision:binding.bindingRevision,executionIds:[],scope:'selected'});
+        await startStep(f,'B-04',last);
+      }else await f.complete(id);
+      return turn;
+    };
+    return client;
+  }});
+
+  await f.change('start');
+  await eventually(()=>f.runner.read()[0]?.reason.includes('等待 B-04 验收通过'));
+  assert.deepEqual(f.requests.map(request=>request.id),['chat-1','chat-2']);
+  assert.equal(findStep(f,'C').status,'pending');
+  assert.equal(f.p.read('lightContinuous').runs[0].current.workerId,'previous-worker');
+
+  const recovered=await restartWith(f,t,options=>{
+    const client=f.factory(options),resume=client.resume.bind(client);
+    client.resume=async(id,expectedWorker)=>{
+      assert.equal(expectedWorker,undefined,'新增验收回合不绑定已经结束的工作进程');
+      return resume(id);
+    };
+    return client;
+  });
+  await f.complete('separate-b04','B-04');
+  await recovered.until('completed');
+  assert.deepEqual(f.requests.map(request=>request.id),['chat-1','chat-2','chat-2','chat-3']);
+  assert.match(f.requests[2].text,/B 整包验收/);
 });
 
 test('restart observes a known package turn before continuing to C without resending',async t=>{

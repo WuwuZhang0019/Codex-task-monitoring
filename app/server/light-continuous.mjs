@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {createSessionClient} from './codex-session-client.mjs';
 import {inspectWorkspace} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/context-ledger.mjs';
-import {stepPassed,stepReady,parentAcceptanceOf,planProgress,lightError,stepInScope,bindingOwnsStep,hasUserPauseCheckpoint} from './light-model.mjs';
+import {stepPassed,stepReady,parentAcceptanceOf,childrenOf,planProgress,lightError,stepInScope,bindingOwnsStep,hasUserPauseCheckpoint} from './light-model.mjs';
 import {digest} from './receipts.mjs';
 
 const activeStates=new Set(['running','pausing']);
@@ -17,9 +17,29 @@ const samePath=(a,b)=>process.platform==='win32'?path.resolve(a).toLowerCase()==
 const enabled=run=>run.enabled??['running','blocked'].includes(run.status);
 const threadBusy=thread=>thread.status?.type==='active'||thread.turns?.some(turn=>turn.status==='inProgress');
 function acceptanceCurrent(current,{binding,execution}){
-  const {adopted,delivery,turnId,turnDelivery,...stage}=current;
+  const {adopted,observeOnly,delivery,turnId,turnDelivery,workerId,...stage}=current;
   return {...stage,acceptanceOnly:true,transport:stage.transport??(adopted?'shared':'owned'),
     bindingId:binding.id,bindingRevision:binding.bindingRevision,executionId:execution.id};
+}
+function delegatedChildOf(s,step,threadId){
+  for(const child of childrenOf(s,step.key).filter(item=>item.required)){
+    if(!['running','blocked'].includes(child.status))continue;
+    const binding=s.bindings.find(item=>item.key===child.bindingKey);
+    const execution=s.executions.find(item=>item.key===child.executionKey);
+    if(binding?.state==='confirmed'&&!binding.revokedAt&&binding.context.threadId&&binding.context.threadId!==threadId
+      &&execution?.bindingKey===binding.key&&execution.outcome==='running'&&!execution.endedAt)return child;
+    const descendant=delegatedChildOf(s,child,threadId);
+    if(descendant)return descendant;
+  }
+  return null;
+}
+function waitingForDelegatedChild(child){
+  const blockers=child.blockers.filter(item=>!item.resolved).map(item=>item.reason);
+  return `等待 ${child.code} 验收通过后核验整包${blockers.length?`。当前阻塞：${blockers.join('；')}`:''}`;
+}
+function stageNotificationNeeded(s,step,current){
+  return step&&!stepPassed(s,step)&&(!current.adopted||(!current.observeOnly
+    &&!parentAcceptanceOf(s,step)&&!delegatedChildOf(s,step,current.threadId)));
 }
 function failureReason(error){
   const messages={CODEX_DESKTOP_BRIDGE_UNAVAILABLE:'当前后台未获得 Codex 桌面的会话控制连接；请从 Codex 启动任务岛后重试，或使用按阶段接续',CODEX_EXTERNAL_THREAD_REQUIRES_DESKTOP:'原会话需要通过 Codex 桌面连接，不能另起执行器接管',CODEX_ACTIVE_TURN_UNKNOWN:'无法确认原会话当前状态，请先核对该会话后重试',CODEX_THREAD_CONTEXT_MISMATCH:'原会话身份或目录与登记不一致，请先核对绑定',CODEX_THREAD_BUSY:'当前会话仍在执行，等待其结束后再接续',CODEX_INTERACTION_REQUIRED:'当前会话正在等待人工批准或输入，请处理后重试',CODEX_DELIVERY_UNKNOWN:'指令投递结果未知，请先核对原会话，避免重复发送',CODEX_DELIVERY_REJECTED:'原会话拒绝了连续执行指令，请处理该会话后重试',CODEX_UNAVAILABLE:'Codex 执行器不可用，请检查安装与登录状态',CODEX_DISCONNECTED:'Codex 执行器连接中断，请核对原会话后重试'};
@@ -216,15 +236,15 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
       if(closed)return;
       const value=state();run=value.runs.find(r=>r.id===id);current=run?.current;
       const s=snapshot(),step=s?.steps.find(x=>x.key===current?.stepKey);
-      if(!run||run.status!=='running'||run.mode!=='current_thread'||!current?.threadId||current.acceptanceOnly||!step
-        ||stepPassed(s,step)||(current.adopted&&parentAcceptanceOf(s,step)))return;
+      if(!run||run.status!=='running'||run.mode!=='current_thread'||!current?.threadId||current.acceptanceOnly
+        ||!stageNotificationNeeded(s,step,current))return;
       if(current.delivery?.state==='unknown')lightError('DELIVERY_UNKNOWN','上次指令投递结果未知，请先核对原会话，避免重复发送',409);
       if(current.delivery?.intent===run.intent&&['sending','sent'].includes(current.delivery.state))return;
       current.delivery={intent:run.intent,state:'sending',attemptId:randomUUID()};run.phase='notifying';
       persistence.write('lightContinuous',value);send=true;
     });
     if(!send)return;
-    const stillCurrent=()=>{const fresh=find(id),s=snapshot(),step=s.steps.find(x=>x.key===current.stepKey);return fresh?.status==='running'&&fresh.mode==='current_thread'&&fresh.intent===run.intent&&!fresh.current?.acceptanceOnly&&fresh.current?.stepKey===current.stepKey&&fresh.current?.threadId===current.threadId&&fresh.current?.delivery?.attemptId===current.delivery.attemptId&&step&&!stepPassed(s,step)&&!(current.adopted&&parentAcceptanceOf(s,step));};
+    const stillCurrent=()=>{const fresh=find(id),s=snapshot(),step=s.steps.find(x=>x.key===current.stepKey);return fresh?.status==='running'&&fresh.mode==='current_thread'&&fresh.intent===run.intent&&!fresh.current?.acceptanceOnly&&fresh.current?.stepKey===current.stepKey&&fresh.current?.threadId===current.threadId&&fresh.current?.delivery?.attemptId===current.delivery.attemptId&&stageNotificationNeeded(s,step,current);};
     const cancel=async()=>{await persistence.run(()=>{const value=state(),fresh=value.runs.find(r=>r.id===id);if(fresh?.current?.delivery?.attemptId===current.delivery.attemptId){fresh.current.delivery.state='cancelled';persistence.write('lightContinuous',value);}});};
     const plan=snapshot().plans.find(p=>p.key===run.planKey);
     const text=`日期：${new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai'}).format(new Date())}\n用户已在任务岛开启“立即通知当前会话持续执行”。请持续完成方案 ${plan.name}（${plan.id}）当前阶段 ${current.code} 及其必要子步骤，在既定范围内完成修复、验证与工作台状态同步，不因等待重复许可而停下。原文：${plan.source.path}。保留当前会话、绑定与执行身份，不重复登记或重复执行已通过步骤。当前阶段验收后，任务岛会在本会话继续派发后续阶段；不要提前越过依赖或自行派发。真正阻塞或需人工决定时如实报告。`;
@@ -246,7 +266,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
   async function pump(id){
     if(pumps.has(id)||closed)return;pumps.add(id);
     let client;
-    async function waitForAcceptance(reason){
+    async function waitForProgress(reason){
       const run=find(id);
       if(run?.status!=='running')return;
       if(run.phase!=='waiting'||run.reason!==reason)await update(id,{phase:'waiting',reason});
@@ -289,17 +309,20 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
             if(notifications.has(id)){await notifications.get(id);continue;}
             await update(id,{current:acceptanceCurrent(current,acceptance)});continue;
           }
+          // 日期：2026-11-19。父聊天空闲时，已由其他聊天接手的必要子步骤仍可回写结果。
+          const delegatedChild=delegatedChildOf(s,step,current.threadId);
+          if(delegatedChild){await waitForProgress(waitingForDelegatedChild(delegatedChild));continue;}
+          if(current.observeOnly)throw Error(`阶段 ${current.code} 仍有未验收的必要子步骤，请核对原执行`);
           if(run.mode==='current_thread'){
             const currentClient=connection(run.session?.transport??'shared');
             await notifyCurrent(id,currentClient);
-            const fresh=snapshot();
-            if(parentAcceptanceOf(fresh,fresh.steps.find(x=>x.key===current.stepKey)))continue;
             const thread=await currentClient.readThread(current.threadId),last=thread.turns?.at(-1);
             if(currentClient.interactionRequired)lightError('CODEX_INTERACTION_REQUIRED','当前会话正在等待人工批准或输入，请处理后重试',409);
+            const fresh=snapshot(),freshStep=fresh.steps.find(x=>x.key===current.stepKey);
+            if(freshStep&&(stepPassed(fresh,freshStep)||parentAcceptanceOf(fresh,freshStep)||delegatedChildOf(fresh,freshStep,current.threadId)))continue;
             if(thread.status?.type!=='active'&&last&&last.status!=='inProgress')throw Error('原阶段会话已结束但尚未通过验收，请在该会话处理后重试');
-          }else await update(id,{phase:'waiting',reason:'已开启，等待当前阶段完成并验收后接续'});
-          waiting.add(id);
-          try{await new Promise(resolve=>setTimeout(resolve,1000));}finally{waiting.delete(id);}
+          }
+          await waitForProgress('已开启，等待当前阶段完成并验收后接续');
           continue;
         }else if(current){
           if(!current.threadId)throw Error('THREAD_CREATION_RESULT_UNKNOWN');
@@ -317,7 +340,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
             if(!current.turnId){
               const owner=await principal();
               if(!acceptanceForDispatch(run,current,cwd,owner)){
-                await waitForAcceptance(`等待 ${current.code} 工作目录中的其他执行结束后验收整包`);continue;
+                await waitForProgress(`等待 ${current.code} 工作目录中的其他执行结束后验收整包`);continue;
               }
               acceptanceContext={cwd,owner};
             }
@@ -335,7 +358,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
             const thread=await client.readThread(current.threadId);
             if(client.interactionRequired||thread.status?.activeFlags?.some(flag=>['waitingOnApproval','waitingOnUserInput'].includes(flag)))lightError('CODEX_INTERACTION_REQUIRED','请在原整包验收会话处理人工交互',409);
             if(threadBusy(thread)){
-              await waitForAcceptance(`必要子步骤已通过，等待 ${current.code} 原会话空闲后验收整包`);continue;
+              await waitForProgress(`必要子步骤已通过，等待 ${current.code} 原会话空闲后验收整包`);continue;
             }
           }
           if(current.turnId&&(run.recovering||current.acceptanceOnly)){
@@ -386,7 +409,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
             let message;
             if(acceptanceContext){
               const dispatch=await prepareAcceptanceMessage(run,current,acceptanceContext);
-              if(!dispatch){await waitForAcceptance(`等待 ${current.code} 整包验收派发条件`);continue;}
+              if(!dispatch){await waitForProgress(`等待 ${current.code} 整包验收派发条件`);continue;}
               ({current,text:message}=dispatch);
             }else{
               current={...current,turnDelivery:'sending'};await update(id,{current});
@@ -403,7 +426,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
           if(!acceptanceContext||current.turnId||!['CODEX_THREAD_BUSY','CODEX_DELIVERY_REJECTED'].includes(error.code))throw error;
           await update(id,{current:{...current,turnDelivery:'cancelled'}});
           if(error.code==='CODEX_DELIVERY_REJECTED')throw error;
-          await waitForAcceptance(`等待 ${current.code} 原会话空闲后验收整包`);continue;
+          await waitForProgress(`等待 ${current.code} 原会话空闲后验收整包`);continue;
         }finally{waiting.delete(id);}
         if(notifications.has(id))await notifications.get(id);
         if(closed)return;
@@ -419,7 +442,12 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         if(!stepPassed(latest,step)){
           if(current.acceptanceOnly)throw Error(`阶段 ${current.code} 的整包验收仍未通过，请在原会话补齐证据并提交验收`);
           const acceptance=parentAcceptanceOf(latest,step);
-          if(!acceptance)throw Error('阶段会话已结束，但工作台验收未通过；请在该会话修复后继续');
+          if(!acceptance){
+            if(step.status==='running'&&delegatedChildOf(latest,step,current.threadId)){
+              await update(id,{current:{...current,adopted:true,observeOnly:true},recovering:false});continue;
+            }
+            throw Error('阶段会话已结束，但工作台验收未通过；请在该会话修复后继续');
+          }
           await update(id,{current:acceptanceCurrent(current,acceptance),recovering:false});continue;
         }
         await update(id,{current:null,recovering:false});
