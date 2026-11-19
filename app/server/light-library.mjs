@@ -78,7 +78,7 @@ function pausedTargets(value, key, runs) {
       ?? digest([step.key, step.updatedAt]);
     const targetPlan = snapshot.plans.find(item => item.key === step.planKey);
     target.steps.push({ projectId: project.id, planId: targetPlan.id, sourcePath: targetPlan.source.path,
-      stepId: step.id, stepKey: step.key, code: step.code, bindingId: binding.id,
+      stepId: step.id, stepKey: step.key, code: step.code, title: step.title, bindingId: binding.id,
       bindingRevision: binding.bindingRevision, executionId: execution.id, checkpoint });
     targets.set(threadId, target);
   }
@@ -131,8 +131,8 @@ export function createLightLibrary(persistence, { pauseContinuous, connectResume
             persistence.write('light', value);
           });
           try {
-            const codes = target.steps.map(step => step.code).join('、');
-            const message = `父任务 ${codes} 继续，并同步任务岛状态。`
+            const names = target.steps.map(step => `「${step.title}」`).join('、');
+            const message = `继续父任务 ${names}，并同步任务岛状态。`
               + '本次只同步父任务的恢复状态。回读任务岛，核对暂停点、依赖、绑定和原执行身份，复用原执行记录提交 running。'
               + '只解除本次的 user-pause，用户已再次暂停或仍有其他阻塞时保留相应状态。'
               + '同步完成后等待用户指定具体工作。不要选择、启动或执行任何子任务，也不要推进其他步骤。\n'
