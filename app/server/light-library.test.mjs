@@ -209,6 +209,9 @@ test('resume notifies the original chat once for both current and previously rel
   await createLightLibrary(reopened, options).change('resume', input);
   assert.equal(notifications.length, 1);
   assert.equal(notifications[0].threadId, 'test');
+  assert.match(notifications[0].message, /^父任务 A 继续，并同步任务岛状态。/);
+  assert.match(notifications[0].message, /同步完成后等待用户指定具体工作/);
+  assert.match(notifications[0].message, /不要选择、启动或执行任何子任务/);
   assert.match(notifications[0].message, /"executionId":"execution-id"/);
   assert.match(notifications[0].message, /"pauseCheckpoint":"light\/pause\//);
 

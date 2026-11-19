@@ -59,7 +59,7 @@ function pausedTargets(value, key, runs) {
   const plans = relatedPlans(snapshot, project, plan);
   const targets = new Map();
   for (const step of snapshot.steps) {
-    if (!plans.has(step.planKey) || !hasUserPauseCheckpoint(step)) continue;
+    if (!plans.has(step.planKey) || step.parentKey !== null || !hasUserPauseCheckpoint(step)) continue;
     const execution = snapshot.executions.find(item => item.planKey === step.planKey && item.stepKeys.includes(step.key)
       && !item.endedAt && item.outcome === 'running' && (!step.executionKey || item.key === step.executionKey));
     const binding = snapshot.bindings.find(item => item.key === execution?.bindingKey && item.planKey === step.planKey
@@ -95,7 +95,7 @@ export function createLightLibrary(persistence, { pauseContinuous, connectResume
     const initial = persistence.read('light');
     checkChange(initial?.snapshot, input);
     const targets = pausedTargets(initial, input.key, runs());
-    if (!targets.length) lightError('TASK_RESUME_CONTEXT', '当前没有可接续的暂停步骤，请核对其他阻塞', 409);
+    if (!targets.length) lightError('TASK_RESUME_CONTEXT', '当前没有可同步恢复状态的暂停父任务', 409);
     if (!connectResume) lightError('TASK_RESUME_UNAVAILABLE', '原会话连接不可用，请在原执行聊天继续', 409);
     resuming = true;
     try {
@@ -131,11 +131,11 @@ export function createLightLibrary(persistence, { pauseContinuous, connectResume
             persistence.write('light', value);
           });
           try {
-            const message = '用户点击了任务岛的“继续”，已授权本会话恢复以下原执行，请从暂停处接着做。'
-              + '请先通过工作台回读最新版本、方案、绑定及执行身份。按原步骤读取适用指引和已有工作，复用执行身份，'
-              + '按前置依赖顺序对可执行的暂停步骤提交 running。未解除的 user-pause 使用原阻塞内容提交 resolved=true，已解除的直接回报 running。'
-              + '核对暂停事件仍是此次授权的暂停点；若用户已再次暂停该步骤，继续保留暂停。保留其他阻塞，遵守依赖、权限和原验收条件。'
-              + '恢复后按实际进度同步；本次只接续列出的暂停工作。\n'
+            const codes = target.steps.map(step => step.code).join('、');
+            const message = `父任务 ${codes} 继续，并同步任务岛状态。`
+              + '本次只同步父任务的恢复状态。回读任务岛，核对暂停点、依赖、绑定和原执行身份，复用原执行记录提交 running。'
+              + '只解除本次的 user-pause，用户已再次暂停或仍有其他阻塞时保留相应状态。'
+              + '同步完成后等待用户指定具体工作。不要选择、启动或执行任何子任务，也不要推进其他步骤。\n'
               + JSON.stringify(target.steps.map(({ checkpoint, stepKey, ...identity }) => ({ ...identity, pauseCheckpoint: checkpoint })));
             const receipt = await client.notify(target.threadId, message);
             if (!receipt?.turnId) lightError('TASK_RESUME_UNKNOWN', '继续指令是否送达尚未确认，请在原执行聊天核对', 409);
