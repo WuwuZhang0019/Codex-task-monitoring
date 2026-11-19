@@ -70,7 +70,29 @@ test('normal service exit is rejected while active; forced termination recovers 
   assert.equal(checkpoint.steps[0].status,'blocked');
   assert.equal(checkpoint.executions[0].id,execution.executionId);
   assert.equal(checkpoint.executions[0].endedAt,null);
-  const cancel={...start,eventId:'cancel',expectedRevision:checkpoint.projects[0].revision,targetStatus:'cancelled',successorImpact:'隔离测试结束，无后继任务'};
+  // The original chat may resume directly with the saved blocker details.
+  await call('workbench_update_step_status',{...start,eventId:'direct-resume',expectedRevision:checkpoint.projects[0].revision,
+    blocker:{...checkpoint.steps[0].blockers[0],resolved:true}});
+  const running=await call('workbench_get_project',{projectId:registered.projectId});
+  assert.equal(running.steps[0].status,'running');
+  const owner = await connectOwner(root);
+  const change=async (action,s)=> {
+    const response=await fetch(`${record.endpoint}/api/light-library/${action}`,{method:'POST',
+      headers:{Authorization:`Bearer ${owner.token}`,'Content-Type':'application/json'},
+      body:JSON.stringify({key:s.plans[0].key,expectedRevision:s.revision,acknowledged:true})});
+    assert.equal(response.status,200,await response.text());
+  };
+  await change('pause',running);
+  await change('resume',await call('workbench_get_project',{projectId:registered.projectId}));
+  await stopService(root);
+  record=await startService(root);
+  const waiting=await call('workbench_get_project',{projectId:registered.projectId});
+  assert.equal(waiting.steps[0].status,'blocked');
+  assert.equal(waiting.steps[0].blockers[0].resolved,true);
+  const resumed=await call('workbench_update_step_status',{...start,eventId:'resume-after-island',expectedRevision:waiting.projects[0].revision});
+  assert.equal(resumed.executionId,execution.executionId);
+  await assert.rejects(stopService(root),/TASK_ACTIVE/);
+  const cancel={...start,eventId:'cancel',expectedRevision:resumed.revision,targetStatus:'cancelled',successorImpact:'隔离测试结束，无后继任务'};
   await call('workbench_update_step_status',cancel);
   await stopService(root);
 });

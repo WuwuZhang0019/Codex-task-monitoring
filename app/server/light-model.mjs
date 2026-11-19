@@ -54,6 +54,10 @@ export function stepReady(snapshot, step) {
   return step.status === 'pending' && !step.blockers.some(item => !item.resolved)
     && !waitingFor(snapshot, step).length && !unreadyAncestors(snapshot, step).length;
 }
+export function hasUserPauseCheckpoint(step) {
+  return step?.status === 'blocked' && step.blockers.some(item => item.blockerId === 'user-pause')
+    && step.blockers.every(item => item.resolved || item.blockerId === 'user-pause');
+}
 export function stepPassed(snapshot, step) {
   return step.status === 'completed' && step.acceptance === 'passed'
     && requiredConditions(step.conditions, step.evidence) && !step.blockers.some(item => !item.resolved)

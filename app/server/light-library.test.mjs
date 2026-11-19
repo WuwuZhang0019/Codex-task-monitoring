@@ -144,26 +144,10 @@ test('failed preparation rolls back deletion and committed interruption recovers
   }
 });
 
-test('pause preserves the checkpoint, and resume sends it once to the original chat without enabling continuous execution', async t => {
-  const { persistence, snapshot, key } = await fixture(t);
+test('resume releases a saved pause without starting a turn or continuous execution', async t => {
+  const { root, persistence, snapshot, key } = await fixture(t);
   const pausedPlans = [];
-  const messages = [];
-  let deliveryUnknown = false;
-  const options = {
-    pauseContinuous: plans => pausedPlans.push(...plans),
-    async connectResume(target) {
-      assert.equal(target.worktreePath, 'G:/test');
-      return {
-        async notify(threadId, text) {
-          messages.push({ threadId, text });
-          if (deliveryUnknown) throw Object.assign(Error('Timed out'), { code: 'CODEX_DELIVERY_UNKNOWN' });
-          return { turnId: 'resume-turn' };
-        },
-        close() {},
-      };
-    },
-  };
-  const library = createLightLibrary(persistence, options);
+  const library = createLightLibrary(persistence, { pauseContinuous: plans => pausedPlans.push(...plans) });
   await persistence.run(() => {
     const value = persistence.read('light'), s = value.snapshot, [first, second] = s.steps;
     const context = { sessionGroup: 'test', threadId: 'test', hostId: 'local', folderId: null, worktreeOrdinal: 1, worktreePath: 'G:/test', branch: 'main', head: null, trust: 'declared' };
@@ -192,26 +176,18 @@ test('pause preserves the checkpoint, and resume sends it once to the original c
 
   const input = { key, expectedRevision: after.revision, acknowledged: true };
   await assert.rejects(library.change('resume', { ...input, expectedRevision: after.revision - 1 }), /REVISION_CONFLICT/);
-  assert.equal(messages.length, 0);
   await library.change('resume', input);
-  await createLightLibrary(persistence, options).change('resume', input);
-  assert.equal(messages.length, 1);
-  assert.equal(messages[0].threadId, 'test');
-  assert.match(messages[0].text, /"executionId":"execution-id"/);
-  assert.deepEqual(persistence.read('light').snapshot, after);
-  assert.deepEqual(persistence.read('lightContinuous').runs, runs);
-
-  // A later pause creates a fresh checkpoint. An uncertain send is not replayed.
-  await persistence.run(() => {
-    const value = persistence.read('light');
-    value.snapshot.steps[0].status = 'running';
-    value.snapshot.steps[0].blockers[0].resolved = true;
-    persistence.write('light', value);
-  });
-  await library.change('pause', input);
-  deliveryUnknown = true;
-  const later = { ...input, expectedRevision: persistence.read('light').snapshot.revision };
-  await assert.rejects(library.change('resume', later), /TASK_RESUME_UNKNOWN/);
-  await assert.rejects(createLightLibrary(persistence, options).change('resume', later), /TASK_RESUME_UNKNOWN/);
-  assert.equal(messages.length, 2);
+  const reopened = await createPersistence(root);
+  const waiting = reopened.read('light').snapshot;
+  assert.equal(waiting.steps[0].status, 'blocked');
+  assert.equal(waiting.steps[0].blockers[0].resolved, true);
+  assert.equal(waiting.steps[1].status, after.steps[1].status);
+  assert.deepEqual(waiting.executions, after.executions);
+  assert.deepEqual(waiting.bindings, after.bindings);
+  assert.equal(waiting.events.at(-1).toStatus, 'blocked');
+  assert.deepEqual(reopened.read('lightContinuous').runs, runs);
+  assert.equal(runtimeExitStatus(waiting, runs).allowed, true);
+  const newInput = { ...input, expectedRevision: waiting.revision };
+  assert.equal((await createLightLibrary(reopened).change('resume', newInput)).revision, waiting.revision);
+  assert.deepEqual(reopened.read('light').snapshot, waiting);
 });

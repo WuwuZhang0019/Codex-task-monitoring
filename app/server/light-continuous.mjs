@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {createSessionClient} from './codex-session-client.mjs';
 import {inspectWorkspace} from '../../plugins/task-workbench/skills/workbench-handoff/scripts/context-ledger.mjs';
-import {stepPassed,stepReady,parentAcceptanceOf,planProgress,lightError,stepInScope,bindingOwnsStep} from './light-model.mjs';
+import {stepPassed,stepReady,parentAcceptanceOf,planProgress,lightError,stepInScope,bindingOwnsStep,hasUserPauseCheckpoint} from './light-model.mjs';
 import {digest} from './receipts.mjs';
 
 const activeStates=new Set(['running','pausing']);
@@ -82,7 +82,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
     const currentStep=s.steps.find(x=>x.key===run?.current?.stepKey),currentBinding=s.bindings.find(b=>b.key===currentStep?.bindingKey);
     let firstPath=mode==='current_thread'?(currentBinding?.context.worktreePath??(run?.mode==='current_thread'?run.session?.cwd:null)):null;
     for(const step of pending){const {cwd}=await workspace(plan,step);if(mode==='current_thread'){if(firstPath&&!samePath(firstPath,cwd))lightError('WORKSPACE_MISMATCH','当前会话模式不能跨不同工作树，请选择“阶段完成后接续新会话”',409);firstPath??=cwd;}}
-    const isUserPaused=step=>{const unresolved=(step?.blockers??[]).filter(b=>!b.resolved);return step?.status==='blocked'&&unresolved.length>0&&unresolved.every(b=>b.blockerId==='user-pause')&&s.executions.some(e=>e.key===step.executionKey&&!e.endedAt);};
+    const isUserPaused=step=>hasUserPauseCheckpoint(step)&&s.executions.some(e=>e.key===step.executionKey&&!e.endedAt);
     const ongoing=pending.filter(x=>x.status==='running'||isUserPaused(x));
     if(mode==='current_thread'&&new Set(ongoing.map(x=>s.bindings.find(b=>b.key===x.bindingKey)?.context.threadId)).size>1)lightError('MULTIPLE_ACTIVE_THREADS','多个会话正在执行，请使用按阶段接续或先处理现有会话',409);
     for(const step of ongoing){const binding=s.bindings.find(b=>b.key===step.bindingKey);if(!binding?.context.threadId)lightError('THREAD_ID_REQUIRED',`阶段 ${step.code} 缺少真实会话身份，请先核对绑定`,409);}
@@ -475,7 +475,7 @@ export function createContinuousRunner(persistence,service,{clientFactory=create
         else{
           const lightValue=persistence.read('light');
           if(lightValue?.snapshot){
-            const resumable=lightValue.snapshot.steps.filter(step=>step.planKey===plan.key&&step.status==='blocked'&&step.blockers.some(b=>!b.resolved)&&step.blockers.filter(b=>!b.resolved).every(b=>b.blockerId==='user-pause'));
+            const resumable=lightValue.snapshot.steps.filter(step=>step.planKey===plan.key&&hasUserPauseCheckpoint(step));
             if(resumable.length){
               const resumeTime=stamp();
               for(const step of resumable){

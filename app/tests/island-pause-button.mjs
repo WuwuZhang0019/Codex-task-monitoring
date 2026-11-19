@@ -1,4 +1,4 @@
-// Date: 2026-11-19. Verify the middle switch sends pause and resume as distinct actions.
+// Date: 2026-11-19. Verify the middle switch waits for the original chat to report running.
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -29,6 +29,10 @@ for (const group of ['projects', 'plans', 'steps', 'routes', 'bindings', 'execut
   for (const item of snapshot[group]) item.id = `${item.key}/real`;
 }
 for (const project of snapshot.projects) project.revision = 1;
+// Keep the scenario focused on one active plan. Other fixture plans may share its card.
+for (const step of snapshot.steps) {
+  if (step.planKey !== snapshot.plans[0].key && step.status === 'running') step.status = 'pending';
+}
 
 let preferences = { collapsed: [], selected: snapshot.steps[0].key, focus: [snapshot.routes[0].key], scroll: {}, y: {} };
 const libraryCalls = [];
@@ -64,7 +68,6 @@ try {
           const blocker = step.blockers.find(item => item.blockerId === 'user-pause');
           if (step.planKey === args.value.key && blocker && !blocker.resolved) {
             blocker.resolved = true;
-            step.status = 'running';
           }
         }
         snapshot.revision += 1;
@@ -119,10 +122,19 @@ try {
   await page.locator('[data-route-card]').first().screenshot({ path: path.join(output, 'card-after-pause.png') });
   assert.match(await pauseBtn.getAttribute('title'), /^继续：/);
   await pauseBtn.press('Space');
-  await page.waitForFunction(() => document.querySelector('.wb-route-pause')?.getAttribute('aria-checked') === 'true');
+  await page.getByText('请在原 Codex 聊天发送「继续」或点击继续').waitFor();
+  assert.equal(await pauseBtn.getAttribute('aria-checked'), 'false');
+  assert.equal(await pauseBtn.isDisabled(), true);
   assert.deepEqual(libraryCalls.map(call => call.action), ['pause', 'resume']);
   assert.equal(libraryCalls[1].value.key, libraryCalls[0].value.key);
-  await page.getByText(/继续指令已送达：/).waitFor();
+  for (const step of snapshot.steps) {
+    if (step.planKey === libraryCalls[1].value.key && step.blockers.some(item => item.blockerId === 'user-pause' && item.resolved)) {
+      step.status = 'running';
+    }
+  }
+  snapshot.revision += 1;
+  await page.waitForFunction(() => document.querySelector('.wb-route-pause')?.getAttribute('aria-checked') === 'true');
+  assert.equal(await page.getByText('请在原 Codex 聊天发送「继续」或点击继续').count(), 0);
   console.log(JSON.stringify({ passed: true, libraryCalls }));
 } finally {
   await browser?.close();

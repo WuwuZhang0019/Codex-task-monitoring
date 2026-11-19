@@ -18,7 +18,7 @@ import { runtimeExitStatus } from './runtime-lifecycle.mjs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { readFile, readdir, realpath } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { createStore } from './store.mjs';
 import { createModelStore } from './model-store.mjs';
 import { createAI } from './ai.mjs';
@@ -143,29 +143,7 @@ async function createOwnedServer(options) {
   const continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:continuousFactory,principalProvider:options.continuousPrincipalProvider,canRun:()=>!exitReserved}) : null;
   await continuous?.initialize();
   const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [], continuous:()=>continuous?.read()??[] });
-  const lightLibrary = createLightLibrary(persistence, {
-    pauseContinuous: plans => continuous?.pausePlans(plans),
-    async connectResume(target) {
-      const owned = target.ownedRunId && options.retainSessions;
-      const client = owned ? new RetainedSessionClient(directory, target.ownedRunId) : createSessionClient({ transport: 'shared' });
-      try {
-        const thread = owned ? (await client.resume(target.threadId)).thread : await client.attach(target.threadId);
-        const normalize = file => process.platform === 'win32' ? file.toLowerCase() : file;
-        if (thread?.id !== target.threadId || !thread.cwd
-          || normalize(await realpath(thread.cwd)) !== normalize(await realpath(target.worktreePath))) {
-          throw new HttpError(409, 'TASK_RESUME_CONTEXT: 原会话工作目录已变化，请核对绑定');
-        }
-        if (client.interactionRequired || thread.status?.activeFlags?.some(flag => ['waitingOnApproval', 'waitingOnUserInput'].includes(flag))) {
-          throw new HttpError(409, 'TASK_RESUME_UNAVAILABLE: 原会话正在等待人工处理，请在该聊天处理后重试');
-        }
-        return client;
-      } catch (error) {
-        client.detach ? client.detach() : await client.close();
-        if (error instanceof HttpError) throw error;
-        throw new HttpError(409, 'TASK_RESUME_UNAVAILABLE: 无法连接原会话，请在原执行聊天继续');
-      }
-    },
-  });
+  const lightLibrary = createLightLibrary(persistence, { pauseContinuous: plans => continuous?.pausePlans(plans) });
   const lightPublication = createLightPublication(persistence,requests,light,{authorize:lightAuthorize, automaticPublication:lightAccess?.automaticPublication});
   const ai = createAI({ env, fetchImpl: options.fetchImpl, timeoutMs: options.aiTimeoutMs });
   const exitStatus = () => runtimeExitStatus(persistence.read('light')?.snapshot, continuous?.read() ?? []);
@@ -210,12 +188,6 @@ async function createOwnedServer(options) {
         if(!continuous || typeof options.authorize!=='function')throw new HttpError(403,'FORBIDDEN');
         if(method!=='POST')throw new HttpError(405,'不支持的请求方法');
         respond(200,await continuous.change(await jsonBody(req)));
-      } else if (pathname === '/api/light-library/resume') {
-        if (!options.lightAccessEnabled || typeof options.authorize !== 'function') throw new HttpError(403, '需要桌面所有者');
-        if (method !== 'POST') throw new HttpError(405, '不支持的请求方法');
-        const input = await jsonBody(req);
-        if (exitReserved) throw new HttpError(503, exitReserved);
-        respond(200, await lightLibrary.change('resume', input));
       } else await persistence.run(async () => {
       if (exitReserved) throw new HttpError(503, exitReserved);
       if (pathname === '/api/runtime/exit-status') {
