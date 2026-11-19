@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "task-workbench",
-  "version": "0.1.28",
-  "description": "2026-11-18 支持父阶段整包验收提示与连续接续",
+  "version": "0.1.29",
+  "description": "2026-11-19 精简任务结束回执，支持父阶段整包验收提示与连续接续",
   "extensions": {
     "com.openai": {
       "requires_local_executor": true,
