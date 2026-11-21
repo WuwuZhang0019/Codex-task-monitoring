@@ -44,7 +44,7 @@ await preparePrivateDirectory(privateDirectory);
 const releaseLifecycle = acquireDataLease(privateDirectory);
 const standalone = process.env.WORKBENCH_OWNER_MODE === 'standalone';
 const runtimeId = process.env.WORKBENCH_RUNTIME_ID ?? 'source';
-const server = await createServer({ dataDir: root, env: {}, authorize, lightAccessEnabled: true, retainSessions: standalone });
+const server = await createServer({ dataDir: root, env: {}, authorize, lightAccessEnabled: true, retainSessions: standalone, claudeCliHooks: standalone });
 await writePrivateJson(path.join(privateDirectory, 'owner-session.json'), {
   version: 1, ownerGeneration: generation, token, release: { id: runtimeId, node: process.execPath, entry: fileURLToPath(import.meta.url) },
   codexEnvironment: captureCodexEnvironment(process.env),
@@ -52,6 +52,7 @@ await writePrivateJson(path.join(privateDirectory, 'owner-session.json'), {
 await writePrivateJson(path.join(privateDirectory, 'panel-session.json'), { version: 1, ownerGeneration: generation, token: panelToken });
 await unlink(stopped).catch(e => { if (e.code !== 'ENOENT') throw e; });
 await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
+await server.claudeCliHooks?.start();
 const record = { version: 1, ownerGeneration: generation, pid: process.pid, endpoint: `http://127.0.0.1:${server.address().port}`,
   nodeVersion: process.versions.node, lifetime: standalone ? 'standalone' : 'desktop', runtimeId,
   ...(standalone ? { liveUpdateProtocol } : {}) };
@@ -79,6 +80,7 @@ async function drainAndStop() {
   if (shuttingDown === 'STOPPED') {
     await writeFile(stopped, JSON.stringify({ ownerGeneration: generation, stoppedAt: new Date().toISOString(), reason: 'explicitExit' }), { mode: 0o600 });
   }
+  await server.claudeCliHooks?.close();
   server.closeIdleConnections();
   await new Promise(resolve => server.close(resolve));
   const current = JSON.parse(await readFile(discovery, 'utf8').catch(() => 'null'));

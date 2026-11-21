@@ -10,6 +10,7 @@ import {createLightMcp,createLightHandler} from '../mcp/light.mjs';
 import {createLightAccess} from './light-access.mjs';
 import { createLightOnboarding } from './light-onboarding.mjs';
 import {createLightPanel} from './light-panel.mjs';
+import { createClaudeCliMonitor } from './claude-cli-monitor.mjs';
 import {createLightLibrary} from './light-library.mjs';
 import {createContinuousRunner} from './light-continuous.mjs';
 import { RetainedSessionClient } from './retained-session.mjs';
@@ -27,6 +28,7 @@ export { HttpError };
 import {generateOutput,loadOutputTemplate} from './outputs.mjs';
 import { acquireDataLease } from './data-lease.mjs';
 import { existsSync } from 'node:fs';
+import { createClaudeCodeHookSettings } from './claude-code-hook-settings.mjs';
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BODY_LIMIT = 2 * 1024 * 1024;
@@ -144,7 +146,9 @@ async function createOwnedServer(options) {
     : undefined);
   continuous = options.lightAccessEnabled ? createContinuousRunner(persistence,light,{clientFactory:continuousFactory,principalProvider:options.continuousPrincipalProvider,canRun:()=>!exitReserved}) : null;
   await continuous?.initialize();
-  const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [], continuous:()=>continuous?.read({includeManual:false})??[] });
+  const claudeCli = options.claudeCliHooks ? createClaudeCliMonitor({ checkLocalRequest, jsonBody, ...options.claudeCliHooks }) : null;
+  const lightPanel = createLightPanel(persistence, { connections: () => lightAccess?.panelConnections() ?? [],
+    continuous: () => continuous?.read({ includeManual: false }) ?? [], claudeCliSessions: claudeCli?.read });
   const lightLibrary = createLightLibrary(persistence, {
     pauseContinuous: plans => continuous?.pausePlans(plans),
     async connectResume(target) {
@@ -174,6 +178,10 @@ async function createOwnedServer(options) {
     const status = runtimeExitStatus(persistence.read('light')?.snapshot, continuous?.read() ?? []);
     return lightLibrary.isResuming() ? { ...status, allowed: false } : status;
   };
+  const claudeHookSettings = createClaudeCodeHookSettings({
+    configDir: options.claudeCodeConfigDir,
+    receiverStatus: () => claudeCli?.status() ?? { listening: false, lastEventAt: null, error: null },
+  });
   const server = http.createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
@@ -187,7 +195,15 @@ async function createOwnedServer(options) {
       const method = req.method;
       if (exitReserved) throw new HttpError(503, exitReserved);
       // MCP 的业务失败由协议层包装，必须在领域事务提交/回滚之后包装。
-      if (pathname === '/api/light-onboarding' && lightOnboarding) {
+      if (pathname === '/api/claude-code/hooks') {
+        if (!lightAccess || typeof options.authorize !== 'function' || req.url !== pathname) throw new HttpError(403, '需要桌面所有者');
+        if (method === 'GET') respond(200, await claudeHookSettings.read());
+        else if (method === 'POST') {
+          const body = await jsonBody(req);
+          if (!body || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).length) throw new HttpError(400, '请求体必须为空对象');
+          respond(200, await claudeHookSettings.install());
+        } else throw new HttpError(405, '不支持的请求方法');
+      } else if (pathname === '/api/light-onboarding' && lightOnboarding) {
         if (method !== 'POST' || req.headers.origin !== undefined || req.url !== pathname) throw new HttpError(403, 'FORBIDDEN');
         respond(200, await lightOnboarding.redeem(await jsonBody(req)));
       } else if (pathname === '/api/light-mcp' && lightAccess) {
@@ -361,7 +377,11 @@ async function createOwnedServer(options) {
   server.requestTimeout = 30000;
   server.headersTimeout = 10000;
   server.keepAliveTimeout = 5000;
-  server.once('close',()=>continuous?.close());
+  server.claudeCliHooks = claudeCli;
+  server.once('close', () => {
+    continuous?.close();
+    if (claudeCli?.status().listening) void claudeCli.close();
+  });
   return server;
 }
 
