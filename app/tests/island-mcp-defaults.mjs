@@ -13,7 +13,7 @@ const server = spawn(bun, ['node_modules/vite/bin/vite.js', 'preview', '--port',
   cwd: root, windowsHide: true, stdio: 'pipe',
 });
 let browser;
-const report = { date: '2026-11-12', environment: 'Edge production UI with controlled native-command substitute; no native authorization issued', checks: [], errors: [] };
+const report = { date: new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date()), environment: 'Edge production UI with controlled native-command substitute; no native authorization issued', checks: [], errors: [] };
 await mkdir(output, { recursive: true });
 try {
   let ready = false;
@@ -30,6 +30,8 @@ try {
     window.__connection = { state: 'disabled', enabled: false };
     window.__connectionCalls = [];
     window.__onboardingCopies = [];
+    window.__cliHookRequests = [];
+    window.__cliHookConfigured = false;
     Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.__copiedInstruction=text;}}});
     window.__TAURI_INTERNALS__ = {
       metadata: { currentWindow: { label: 'settings' }, currentWebview: { label: 'settings' } },
@@ -51,6 +53,12 @@ try {
         if (command === 'island_agent_onboarding_instructions') {
           window.__onboardingCopies.push(args?.appId ?? "generic");
           return `请为当前应用完成任务岛接入。识别实际名称后 --describe 安装配置，完成后 --complete 自动开启连接，无需回来点击。`;
+        }
+        if (command === 'island_claude_cli_hooks') {
+          window.__cliHookRequests.push(args.install);
+          const changed = args.install && !window.__cliHookConfigured;
+          if (args.install) window.__cliHookConfigured = true;
+          return { configured: window.__cliHookConfigured, changed, listening: true, receiver: { lastEventAt: null } };
         }
         if (command === 'plugin:event|listen') return 1;
         return null;
@@ -92,6 +100,17 @@ try {
   await page.waitForTimeout(350);
   await page.screenshot({path:path.join(output,'two-column-defaults.png')});
   report.checks.push('11 agent applications in two columns; no icon library; unregistered shortcuts copy instructions without issuing grants; live and arbitrary applications merge dynamically');
+  const cli = page.locator('[data-claude-cli-connection]');
+  await cli.getByText('待安装会话 Hook', { exact: true }).waitFor();
+  const hookButton = cli.getByRole('button', { name: '检查并安装 Hook', exact: true });
+  await hookButton.click();
+  await cli.getByText('Hook 已配置，等待会话上报', { exact: true }).waitFor();
+  await cli.getByText('Hook 已写入。请新开一个 Claude Code 会话。', { exact: true }).waitFor();
+  await hookButton.click();
+  assert.equal(await page.evaluate(() => window.__cliHookRequests.filter(Boolean).length), 2);
+  assert.equal(await page.evaluate(() => window.__connectionCalls.length), 0);
+  assert.equal(await page.evaluate(() => window.__onboardingCopies.length), 1);
+  report.checks.push('Claude Code CLI hook installation stays separate from MCP credential and onboarding commands');
   assert.deepEqual(report.errors, []);
   report.passed = true;
 } finally {

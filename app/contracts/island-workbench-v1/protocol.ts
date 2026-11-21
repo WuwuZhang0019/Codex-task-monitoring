@@ -145,9 +145,19 @@ export interface WorkflowProgress {
 	runnableStepKeys: string[];
 	parentAcceptances: { stepKey: string; code: string; threadId: string }[];
 }
+const claudeCliStatuses = ["running", "waitingInput", "waitingApproval", "turnEnded", "ended"] as const;
+export interface ClaudeCliSession {
+	sessionId: string;
+	cwd: string | null;
+	status: (typeof claudeCliStatuses)[number];
+	event: string;
+	notificationType?: string;
+	updatedAt: string;
+}
 export interface WorkbenchEnvelope {
 	agentApps?: AgentConnection[];
 	bindingApps?: Record<string, AppId>;
+	claudeCliSessions?: ClaudeCliSession[];
 	workflow?: WorkflowProgress[];
 	protocolVersion: typeof PROTOCOL_VERSION;
 	mode: "simulation" | "service";
@@ -229,6 +239,24 @@ export function validateEnvelope(value: unknown): WorkbenchEnvelope {
 		(!object(e.bindingApps) || Object.values(e.bindingApps).some((app) => !validAppIdentity(app)))
 	)
 		fail("binding applications");
+	if (
+		e.claudeCliSessions !== undefined &&
+		(!Array.isArray(e.claudeCliSessions) ||
+			e.claudeCliSessions.some(
+				(session) =>
+					!object(session) ||
+					!text(session.sessionId) ||
+					!session.sessionId ||
+					!nullableText(session.cwd) ||
+					!claudeCliStatuses.includes(session.status) ||
+					!text(session.event) ||
+					(session.notificationType !== undefined && !text(session.notificationType)) ||
+					typeof session.updatedAt !== "string" ||
+					!Number.isFinite(Date.parse(session.updatedAt)),
+			) ||
+			new Set(e.claudeCliSessions.map((session) => session.sessionId)).size !== e.claudeCliSessions.length)
+	)
+		fail("Claude Code CLI sessions");
 	const s = e.snapshot;
 	if (s === null) {
 		if (e.connection.state === "ready") fail("ready requires a snapshot");

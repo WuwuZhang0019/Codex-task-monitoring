@@ -28,7 +28,7 @@ const panel = { snapshot, preferences: null, librarySupported: true, library: { 
 const server = spawn(bun, ['node_modules/vite/bin/vite.js','preview','--port','1468','--strictPort'], { cwd: root, windowsHide: true, stdio: 'pipe' });
 await mkdir(output, { recursive: true });
 let browser;
-const report = { date: '2026-11-12', environment: 'Edge UI with controlled native panel substitute', checks: [], pageErrors: [] };
+const report = { date: new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date()), environment: 'Edge UI with controlled native panel substitute', checks: [], pageErrors: [] };
 try {
   for (let i=0;i<80;i++) { try { if ((await fetch(base)).ok) break; } catch {} await new Promise(resolve => setTimeout(resolve,100)); }
   browser = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
@@ -80,6 +80,32 @@ try {
   assert.equal(await cards.count(), total);
   assert.equal(await tabs.locator('[aria-pressed="true"]').count(), 0);
   report.checks.push('Only real applications have pills; clicking the selected app again restores all tasks including unassigned history');
+  const firstSession = '88b90532-63d5-4bca-8504-859281eb439e';
+  const secondSession = '5d51d80c-ab5a-4a91-a48f-1287f48f24d4';
+  await page.evaluate(({ firstSession, secondSession }) => {
+    const baseSession = { cwd: 'G:/same-directory', updatedAt: new Date().toISOString() };
+    window.__agentPanel.claudeCliSessions = [
+      { ...baseSession, sessionId: firstSession, status:'running', event:'UserPromptSubmit' },
+      { ...baseSession, sessionId: secondSession, status:'waitingApproval', event:'Notification', notificationType:'permission_prompt' },
+    ];
+  }, { firstSession, secondSession });
+  const cliTab = tabs.locator('[data-agent-filter="claude-code-cli"]');
+  await cliTab.waitFor();
+  assert.equal(await cliTab.locator('[data-connected]').count(), 0);
+  await cliTab.click();
+  const firstCard = page.locator(`[data-claude-cli-session="${firstSession}"]`);
+  const secondCard = page.locator(`[data-claude-cli-session="${secondSession}"]`);
+  await firstCard.getByText('运行中', { exact: true }).waitFor();
+  await secondCard.getByText('等待授权', { exact: true }).waitFor();
+  await page.waitForFunction(() => !document.querySelector('[data-route-card]'));
+  await page.evaluate(() => {
+    window.__agentPanel.claudeCliSessions[0] = {
+      ...window.__agentPanel.claudeCliSessions[0], status:'turnEnded', event:'Stop', updatedAt: new Date().toISOString(),
+    };
+  });
+  await firstCard.getByText('本轮结束', { exact: true }).waitFor();
+  assert.equal(await secondCard.getAttribute('data-status'), 'waitingApproval');
+  report.checks.push('Read-only CLI sessions remain distinct in the same directory, show different events and update without a business revision');
   assert.deepEqual(report.pageErrors, []);
   report.passed = true;
 } finally {
