@@ -90,6 +90,22 @@ try {
   assert.equal(await copyButton.evaluate(el=>getComputedStyle(el,'::after').transform),'matrix(4, 0, 0, 4, 0, 0)');
   const cols=await page.locator('.mcp-connection-list').evaluate(el=>getComputedStyle(el).gridTemplateColumns);
   assert.equal(cols.split(' ').length,2);
+  const grid = page.locator('.mcp-connection-list');
+  const cli = grid.locator('[data-claude-cli-connection]');
+  const appOrder = await grid.locator(':scope > .mcp-connection-row').evaluateAll(cards => cards.map(card =>
+    card.hasAttribute('data-claude-cli-connection') ? 'claude-code-cli' : card.getAttribute('data-workbench-connection')));
+  assert.deepEqual(appOrder, ['codex', 'claude-desktop', 'claude-code-cli', 'opencode', 'pi', 'minimax-code', 'kimi-code',
+    'deepseek-harness', 'antigravity', 'oh-my-pi', 'copilot-cli', 'zcode']);
+  const viewport = page.viewportSize();
+  await page.setViewportSize({ width: 862, height: 622 });
+  const [codexBox, cliBox, openCodeBox] = await Promise.all([
+    grid.locator('[data-workbench-connection=codex]').boundingBox(), cli.boundingBox(),
+    grid.locator('[data-workbench-connection=opencode]').boundingBox(),
+  ]);
+  assert.ok(cliBox.x === codexBox.x && cliBox.y > codexBox.y);
+  assert.ok(openCodeBox.y === cliBox.y && openCodeBox.x > cliBox.x);
+  assert.ok(await cli.getByRole('heading').evaluate(heading => heading.scrollWidth <= heading.clientWidth));
+  await page.setViewportSize(viewport);
   await page.locator('[data-workbench-connection="claude-desktop"] button').click();
   assert.equal(await page.evaluate(()=>window.__connectionCalls.length),0);
   assert.match(await page.evaluate(()=>window.__copiedInstruction),/当前应用/);
@@ -99,8 +115,7 @@ try {
   await page.locator('[data-workbench-connection="codex"] [data-connection-tone="connected"]').waitFor();
   await page.waitForTimeout(350);
   await page.screenshot({path:path.join(output,'two-column-defaults.png')});
-  report.checks.push('11 agent applications in two columns; no icon library; unregistered shortcuts copy instructions without issuing grants; live and arbitrary applications merge dynamically');
-  const cli = page.locator('[data-claude-cli-connection]');
+  report.checks.push('Claude Code CLI is second-row left, OpenCode follows, and all other cards retain their relative order; live apps still merge dynamically');
   await cli.getByText('待安装会话 Hook', { exact: true }).waitFor();
   const hookButton = cli.getByRole('button', { name: '检查并安装 Hook', exact: true });
   await hookButton.click();
